@@ -1,0 +1,49 @@
+{
+  "data_one": [
+    {
+      "id": "a1b2c3-001",
+      "image": "https://media.licdn.com/dms/image/v2/D4E0BAQG-i2j7Q2WFIA/company-logo_200_200/company-logo_200_200/0/1694593112031/img_logo?e=2147483647&v=beta&t=EPGRytuEOVPFLctZkKdIxLl_1W7QhVFrLeS-GwWjJj0",
+      "product_name": "Bình Đun Siêu Tốc 2 Lớp Lock&amp, Locking Minayoko",
+      "rating": 5,
+      "price": 837000,
+      "promotion": 0,
+      "origin": "Korean"
+    },
+    {
+      "id": "a1b2c3-002",
+      "image": "https://media.licdn.com/dms/image/v2/D4E0BAQG-i2j7Q2WFIA/company-logo_200_200/company-logo_200_200/0/1694593112031/img_logo?e=2147483647&v=beta&t=EPGRytuEOVPFLctZkKdIxLl_1W7QhVFrLeS-GwWjJj0",
+      "product_name": "Bình Đun Siêu Tốc 2 Lớp Lock&amp, Locking Minayoko",
+      "rating": 4.5,
+      "price": 837000,
+      "promotion": 38,
+      "origin": "Korean"
+    },
+    {
+      "id": "a1b2c3-003",
+      "image": "https://media.licdn.com/dms/image/v2/D4E0BAQG-i2j7Q2WFIA/company-logo_200_200/company-logo_200_200/0/1694593112031/img_logo?e=2147483647&v=beta&t=EPGRytuEOVPFLctZkKdIxLl_1W7QhVFrLeS-GwWjJj0",
+      "product_name": "Bình Đun Siêu Tốc 2 Lớp Lock&amp, Locking Minayoko",
+      "rating": 3,
+      "price": 837000,
+      "promotion": 53,
+      "origin": "Korean"
+    },
+    {
+      "id": "a1b2c3-004",
+      "image": "https://media.licdn.com/dms/image/v2/D4E0BAQG-i2j7Q2WFIA/company-logo_200_200/company-logo_200_200/0/1694593112031/img_logo?e=2147483647&v=beta&t=EPGRytuEOVPFLctZkKdIxLl_1W7QhVFrLeS-GwWjJj0",
+      "product_name": "Bình Đun Siêu Tốc 2 Lớp Lock&amp, Locking Minayoko",
+      "rating": 5,
+      "price": 837000,
+      "promotion": 29,
+      "origin": "Korean"
+    },
+    {
+      "id": "a1b2c3-005",
+      "image": "https://media.licdn.com/dms/image/v2/D4E0BAQG-i2j7Q2WFIA/company-logo_200_200/company-logo_200_200/0/1694593112031/img_logo?e=2147483647&v=beta&t=EPGRytuEOVPFLctZkKdIxLl_1W7QhVFrLeS-GwWjJj0",
+      "product_name": "Bình Đun Siêu Tốc 2 Lớp Lock&amp, Locking Minayoko",
+      "rating": 0,
+      "price": 837000,
+      "promotion": 0,
+      "origin": "Korean"
+    }
+  ]
+}
