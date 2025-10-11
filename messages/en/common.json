@@ -1,0 +1,78 @@
+{
+  "layout": {
+    "language": "Language",
+    "label": "Vietnamese",
+    "icon": "https://img.icons8.com/color/48/vietnam.png",
+    "light_mode": "Light",
+    "dark_mode": "Dark",
+    "system_mode": "System"
+  },
+  "home_layout": {
+    "slogan": "good & fast",
+    "electronics": "home appliances",
+    "vehicles": "vehicles",
+    "mom_baby": "mom & baby",
+    "beauty": "beauty & health",
+    "house": "home",
+    "book": "books",
+    "sports": "sports",
+    "commitment": "commitment",
+    "genuine_goods": "100% authentic goods",
+    "freeship_all": "free shipping on all orders",
+    "refund_200": "200% refund if counterfeit",
+    "return_30_days": "30-day return policy",
+    "fast_delivery_2h": "2-hour fast delivery",
+    "super_cheap_price": "super cheap price",
+    "category": "Category",
+    "book_store": "2T3H Bookstore",
+    "house_life": "Home & Living",
+    "smartphone": "Smartphones & Tablets",
+    "toys_mom&baby": "Toys & Mom-Baby Items",
+    "devices_accessories": "Digital Devices & Accessories",
+    "household_appliances": "Home Appliances",
+    "beauty_healthy": "Beauty & Health",
+    "vehicle_types": "Cars - Motorbikes - Bicycles",
+    "woman_fashion": "Women's Fashion",
+    "grocery": "Online Grocery",
+    "sport_picnic": "Sports & Outdoor",
+    "man_fashion": "Men's Fashion",
+    "cross_border": "Cross-Border - International Goods",
+    "pc_accessory": "Laptops - Computers - Components",
+    "men_shoes": "Men's Shoes",
+    "electronics_refrigeration": "Electronics - Refrigeration",
+    "women_shoes": "Women's Shoes",
+    "cameras": "Cameras & Camcorders",
+    "accessory_fashion": "Fashion Accessories",
+    "delicious": "DELICIOUS",
+    "clock_jewelry": "Watches & Jewelry",
+    "balo_vali": "Backpacks & Suitcases",
+    "vouchers_services": "Vouchers & Services",
+    "extensions": "Utilities",
+    "promotion": "Card & E-Wallet Offers",
+    "pay_top_up": "Bill Payment & Top-up",
+    "pay_later": "Buy Now, Pay Later"
+  },
+  "category_promotion_panel": {
+    "deal_vip": "Exclusive VIP 50% Deal",
+    "super_sale": "Mega Sale — Super Deal 10K",
+    "cheap_morning": "2T3H Morning Cheap Deals",
+    "combo_super_sale": "Super Saving Combo",
+    "trading": "2T3H Trading",
+    "hot_coupon": "Hot Coupons",
+    "holiday": "Holiday Mega Sale",
+    "half_price": "Warehouse Clearance — Half Price",
+    "top_book": "Top Bestselling Books"
+  },
+  "top_deal_items": {
+    "title": "TOP DEAL + SUPER CHEAP",
+    "watch_more": "See More"
+  },
+  "hot_foreign": {
+    "title": "Hot Priced Imported Goods",
+    "watch_more": "See More"
+  },
+  "suggest_deal_today": {
+    "title": "Today's Recommendations",
+    "watch_more": "See More"
+  }
+}

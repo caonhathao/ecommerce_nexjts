@@ -1,0 +1,80 @@
+{
+  "layout": {
+    "language": "Ngôn ngữ",
+    "label": "Tiếng Việt",
+    "icon": "https://img.icons8.com/color/48/vietnam.png",
+    "search_button":"Tìm kiếm",
+    "search_placeholder":"Tìm kiếm...",
+    "light_mode": "Sáng",
+    "dark_mode": "Tối",
+    "system_mode": "Hệ thống"
+  },
+  "home_layout": {
+    "slogan": "Tốt & Nhanh",
+    "electronics": "điện gia dụng",
+    "vehicles": "xe cộ",
+    "mom_baby": "mẹ & bé",
+    "beauty": "khỏe đẹp",
+    "house": "nhà cửa",
+    "book": "sách",
+    "sports": "thể thao",
+    "commitment": "Cam kết",
+    "genuine_goods": "100% hàng thật",
+    "freeship_all": "Freeship mọi đơn",
+    "refund_200": "Hoàn 200% nếu hàng giả",
+    "return_30_days": "30 ngày đổi trả",
+    "fast_delivery_2h": "Giao nhanh 2h",
+    "super_cheap_price": "Giá siêu rẻ",
+    "category": "Danh mục",
+    "book_store": "Nhà sách 2T3H",
+    "house_life": "Nhà Cửa - Đời Sống",
+    "smartphone": "Điện Thoại - Máy TÍnh Bảng",
+    "toys_mom&baby": " Đồ Chơi - Mẹ & Bé",
+    "devices_accessories": " Thiết Bị Số - Phụ Kiện Số",
+    "household_appliances": "Điện Gia Dụng",
+    "beauty_healthy": "Làm Đẹp - Sức Khỏe",
+    "vehicle_types": "Ô tô - Xe Máy - Xe Đạp",
+    "woman_fashion": "Thời Trang Nữ",
+    "grocery": "Bách Hóa Online",
+    "sport_picnic": "Thể Thao - Dã Ngoại",
+    "man_fashion": "Thời Trang Nam",
+    "cross_border": "Cross Border - Hàng Quốc Tế",
+    "pc_accessory": "Laptop - Máy Vi Tính - Linh Kiện",
+    "men_shoes": "Giày - Dép Nam",
+    "electronics_refrigeration": "Điện Tử - Điện Lạnh",
+    "women_shoes": "Giày - Dép Nữ",
+    "cameras": "Máy Ảnh - Máy Quay Phim",
+    "accessory_fashion": "Phụ Kiện THời Trang",
+    "delicious": "NGON",
+    "clock_jewelry": "Đồng Hồ và Trang Sức",
+    "balo_vali": "Balo và Vali",
+    "vouchers_services": "Vouchers - Dịch vụ",
+    "extensions": "Tiện ích",
+    "promotion": "Ưu đãi thẻ, ví",
+    "pay_top_up": " Đóng tiền, nạp thẻ",
+    "pay_later": "Mua trước trả sau"
+  },
+  "category_promotion_panel": {
+    "deal_vip": "Deal riêng 50% VIP",
+    "super_sale": "Sale sập sàn Siêu deal 10k",
+    "cheap_morning": "2T3H sáng nay rẻ",
+    "combo_super_sale": "Combo siêu tiết kiệm",
+    "trading": "2T3H Trading",
+    "hot_coupon": "Coupon siêu hot",
+    "holiday": "Ngày lễ siêu sale",
+    "half_price": "Xả kho giảm nửa giá",
+    "top_book": "Top sách bán chạy"
+  },
+  "top_deal_items": {
+    "title": "TOP DEAL + SIÊU RẺ",
+    "watch_more": "Xem thêm"
+  },
+  "hot_foreign": {
+    "title": "Hàng ngoại giá hot",
+    "watch_more": "Xem thêm"
+  },
+  "suggest_deal_today": {
+    "title": "Gợi ý hôm nay",
+    "watch_more": "Xem thêm"
+  }
+}
