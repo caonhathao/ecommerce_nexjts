@@ -19,7 +19,7 @@ export default async function LocaleLayout({
   }
 
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-start">
+    <div className="">
       <NextIntlClientProvider locale={locale} messages={messages}>
         {children}
       </NextIntlClientProvider>
