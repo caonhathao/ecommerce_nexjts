@@ -1,9 +1,7 @@
 import {NextIntlClientProvider} from "next-intl";
 import {notFound} from "next/navigation";
 import React from "react";
-import {SidebarProvider} from "@/components/ui/sidebar";
-import Header from "@/app/[locale]/(public)/_components/Header";
-import {AppSidebar} from "@/components/custom/app-sidebar";
+import Header from "@/components/layout/Header";
 
 export default async function LocaleLayout({
                                                children,
