@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import logo from "../../../../../public/logo.png";
+import logo from "@/public/logo.png";
 const data = [
   {
     name: "deal_vip",

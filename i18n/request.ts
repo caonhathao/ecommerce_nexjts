@@ -1,14 +1,11 @@
-import { getRequestConfig } from 'next-intl/server';
-const DEFAULT_LOCALE = 'vi';
+import {getRequestConfig} from 'next-intl/server';
+import {getUserLocale} from "@/services/locale";
 
-export default getRequestConfig(async ({ locale }) => {
-  const currentLocale = locale ?? DEFAULT_LOCALE;
+export default getRequestConfig(async () => {
+  const locale = await getUserLocale();
 
   return {
-    locale: currentLocale,
-    messages: {
-      // gộp nhiều namespace
-      common: (await import(`../messages/${currentLocale}/common.json`)).default,
-    },
+    locale,
+    messages: (await import(`../messages/${locale}.json`)).default
   };
 });

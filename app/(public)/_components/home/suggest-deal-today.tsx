@@ -3,8 +3,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { productDataTypes } from "@/types/public.data-types";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { ProductItem } from "../../_components/product-item";
-import { data_one } from "./../_data/data_top.json";
+import { ProductItem } from "../product-item";
+import { data_one } from "@/app/(public)/_data/data_top.json";
 
 export const SuggestDealToday = () => {
   const t = useTranslations("suggest_deal_today");
