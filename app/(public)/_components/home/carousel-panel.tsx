@@ -5,7 +5,7 @@ import {
     CarouselItem
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import logo from "../../../../../public/logo-full.jpg";
+import logo from "@/public/logo-full.jpg";
 
 export const CarouselPanel = () => {
   return (

@@ -1,6 +1,6 @@
 "use client";
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import {
@@ -14,14 +14,11 @@ import {
 export const SelectLanguage = () => {
   const t = useTranslations("layout");
   const locale = useLocale();
-  const pathname = usePathname();
   const router = useRouter();
 
-  const changeLang = (event: string) => {
-    const lang = event;
-    console.log(lang);
-    const withoutLocale = pathname.replace(/^\/(vi|en|jp)(\/|$)/, "/");
-    router.push(`/${lang}${withoutLocale}`);
+  const changeLang = (newLocale: string) => {
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`; // 1 year
+    router.refresh();
   };
 
   const [width, setWidth] = useState<number>(

@@ -5,7 +5,7 @@ import { SelectLanguage } from "@/components/custom/select-language";
 import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import SearchingBar from "../../app/[locale]/(public)/_components/searching-bar";
+import SearchingBar from "../../app/(public)/_components/searching-bar";
 
 const Header = () => {
   const t = useTranslations("home_layout");
