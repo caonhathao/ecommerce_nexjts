@@ -7,6 +7,8 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import SearchingBar from "../../app/(public)/_components/searching-bar";
+import { Button } from "@/components/ui/button";
+import { ShoppingCartIcon } from "lucide-react";
 
 const Header = () => {
   const t = useTranslations("home_layout");
@@ -48,6 +50,11 @@ const Header = () => {
               <SearchingBar />
               <SelectLanguage />
               <ModeToogle />
+              <Button asChild variant="outline">
+                <Link href="/cart" className="inline-flex items-center">
+                  <ShoppingCartIcon className="w-5 h-5 text-primary" />
+                </Link>
+              </Button>
             </div>
             {/* tags  */}
             <div className="flex flex-row justify-start items-center gap-3">
