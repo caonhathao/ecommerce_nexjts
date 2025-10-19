@@ -1,12 +1,12 @@
 import {PrismaClient} from "@/lib/generated/prisma";
 import {NextRequest, NextResponse} from "next/server";
-import {withAuth} from "@/lib/with-auth";
 import {AddToCartRequest, UpdateCartRequest} from "@/types/cart.data-types";
+import {withAuth} from "@/lib/with-auth";
 
 const prisma = new PrismaClient();
 
 
-export const GET = withAuth(async (userId) => {
+export const GET = withAuth(async (userId: string, request: NextRequest) => {
     const cart = await prisma.cart.findUnique({
         where: {userId},
         include: {
@@ -132,7 +132,7 @@ export const PATCH = withAuth(async (userId: string, request: NextRequest) => {
     }
 });
 
-export const DELETE = withAuth(async (userId) => {
+export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
     try {
         const cartDel = await prisma.cart.delete({
             where: {userId}
