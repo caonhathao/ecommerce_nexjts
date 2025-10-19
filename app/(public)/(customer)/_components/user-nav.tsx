@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 
-// shadcn/ui
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -20,7 +19,6 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion';
 
-// icons
 import {
   User2, Bell, Package, RefreshCcw, MapPin, CreditCard, Star,
   Eye, Heart, MessageSquareText, Crown, Gift, Landmark, TicketPercent,
@@ -120,7 +118,7 @@ export default function UserNav({ user }: { user: UserMini }) {
 
               <Separator className="my-2" />
 
-              {/* Section 2 (Accordion) */}
+              {/* Section 2 - Membership */}
               <Accordion type="single" collapsible defaultValue="membership" className="w-full">
                 <AccordionItem value="membership" className="border-b-0">
                   <AccordionTrigger className="px-2 text-left text-xs font-semibold text-muted-foreground hover:no-underline">
@@ -138,7 +136,7 @@ export default function UserNav({ user }: { user: UserMini }) {
 
               <Separator className="my-2" />
 
-              {/* Section 3 (Accordion) */}
+              {/* Section 3 - Support */}
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="support" className="border-b-0">
                   <AccordionTrigger className="px-2 text-left text-xs font-semibold text-muted-foreground hover:no-underline">
@@ -191,7 +189,6 @@ function NavItem({
           </Link>
         </Button>
       </TooltipTrigger>
-      {/* Tooltip mirrors label; handy if label truncates */}
       <TooltipContent side="right" className="text-xs">
         {label}
       </TooltipContent>
