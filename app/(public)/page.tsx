@@ -1,10 +1,10 @@
 "use client";
 
-import { CarouselPanel } from "@/app/(public)/_components/home/carousel-panel";
-import { CategoryPromotionPanel } from "@/app/(public)/_components/home/category-promotion-panel";
-import { HotForeign } from "@/app/(public)/_components/home/hot-foreign";
-import { SuggestDealToday } from "@/app/(public)/_components/home/suggest-deal-today";
-import { TopDealItems } from "@/app/(public)/_components/home/top-deal-items";
+import { CarouselPanel } from "@/app/(public)/home/carousel-panel";
+import { CategoryPromotionPanel } from "@/app/(public)/home/category-promotion-panel";
+import { HotForeign } from "@/app/(public)/home/hot-foreign";
+import { SuggestDealToday } from "@/app/(public)/home/suggest-deal-today";
+import { TopDealItems } from "@/app/(public)/home/top-deal-items";
 
 export default function Home() {
   return (

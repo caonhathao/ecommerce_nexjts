@@ -25,7 +25,7 @@ export const ProductItem = ({ item }: ProductItemProps) => {
             <p className="font-medium">{formatPrice(item.price)}đ </p>
           )}
           {item.promotion !== 0 ? (
-            <p className="w-full flex flex-row gap-2 justify-start items-start">
+            <div className="w-full flex flex-row gap-2 justify-start items-start">
               {/* promotion */}
               <div className="bg-gray-200 rounded-lg w-fit text-sm">
                 {"-"}
@@ -36,7 +36,7 @@ export const ProductItem = ({ item }: ProductItemProps) => {
               <div className="text-[var(--muted-foreground)] line-through text-xs">
                 {formatPrice(item.price)}đ
               </div>
-            </p>
+            </div>
           ) : null}
         </div>
         <Separator />
