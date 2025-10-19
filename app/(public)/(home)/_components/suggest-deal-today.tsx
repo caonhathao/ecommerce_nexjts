@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ProductItem } from "../../_components/product-item";
 import { data_one } from "@/app/(public)/_data/data_top.json";
 
+
 export const SuggestDealToday = () => {
   const t = useTranslations("suggest_deal_today");
   return (

@@ -1,10 +1,11 @@
 "use client";
+import { data_one } from "@/app/(public)/_data/data_top.json";
 import { productDataTypes } from "@/types/public.data-types";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { AiFillLike } from "react-icons/ai";
 import { ProductItem } from "../../_components/product-item";
-import { data_one } from "@/app/(public)/_data/data_top.json";
+
 
 export const TopDealItems = () => {
   const t = useTranslations("top_deal_items");

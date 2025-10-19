@@ -1,9 +1,10 @@
 "use client";
+import { data_one } from "@/app/(public)/_data/data_top.json";
 import { productDataTypes } from "@/types/public.data-types";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { ProductItem } from "../../_components/product-item";
-import { data_one } from "@/app/(public)/_data/data_top.json";
+
 
 export const HotForeign = () => {
   const t = useTranslations("hot_foreign");
