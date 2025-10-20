@@ -5,6 +5,8 @@ import {admin, emailOTP} from "better-auth/plugins";
 import {EmailTemplate} from "@/components/email-template";
 import {resend} from "@/lib/resend";
 import {prisma} from "@/lib/db";
+import {NextRequest, NextResponse} from "next/server";
+import {headers} from "next/headers";
 
 const webName = env.NEXT_PUBLIC_WEB_NAME;
 export const auth = betterAuth({
@@ -38,3 +40,18 @@ export const auth = betterAuth({
         admin(),
     ],
 });
+
+export const checkAuth = async () => {
+
+
+    if (!userId) {
+        return {
+            error: NextResponse.json(
+                {error: 'Unauthorized', code: 'UNAUTHORIZED'},
+                {status: 401}
+            ),
+        };
+    }
+
+    return {userId: userId};
+}
