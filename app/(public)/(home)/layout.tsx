@@ -1,5 +1,5 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
-import Header from '@/app/(public)/_components/Header';
+import Header from '@/app/(public)/_components/header';
 import { AppSidebar } from '@/components/custom/app-sidebar';
 
 export default function HomeLayout({
