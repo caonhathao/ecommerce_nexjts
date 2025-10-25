@@ -1,20 +1,12 @@
 'use client';
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
-import { TicketIcon, Trash, TrashIcon } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { useEffect, useRef, useState } from 'react';
+import { TicketIcon, TrashIcon } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useDebounce } from '@/hooks/debounce';
 
 export default function Cart() {
   const [cart, setCart] = useState<any>(null);
@@ -36,6 +28,131 @@ export default function Cart() {
 
     fetchCart();
   }, []);
+
+  const [pendingUpdates, setPendingUpdates] = useState<Record<string, number>>(
+    {}
+  );
+
+  const updateLocalQuantity = (variantId: string, newQuantity: number) => {
+    if (newQuantity < 1) return;
+
+    setCart((prev: any) => ({
+      ...prev,
+      items: prev.items.map((item: any) =>
+        item.variant.id === variantId
+          ? { ...item, quantity: newQuantity }
+          : item
+      ),
+    }));
+
+    setPendingUpdates((prev) => ({
+      ...prev,
+      [variantId]: newQuantity,
+    }));
+  };
+
+  useEffect(() => {
+    if (pendingUpdates.length === 0) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/cart/update', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: pendingUpdates }),
+        });
+        if (res.ok) {
+          setPendingUpdates({});
+        }
+      } catch (err) {
+        console.error('Auto sync failed', err);
+      }
+    }, 60_000);
+
+    return () => clearInterval(interval);
+  }, [pendingUpdates]);
+
+  const updatesRef = useRef(pendingUpdates);
+  useEffect(() => {
+    updatesRef.current = pendingUpdates;
+  }, [pendingUpdates]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (updatesRef.current.length > 0) {
+        navigator.sendBeacon(
+          '/api/cart/update',
+          JSON.stringify({ items: updatesRef.current })
+        );
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
+  const debouncedUpdates = useDebounce(pendingUpdates, 1000);
+
+  useEffect(() => {
+    if (debouncedUpdates.length === 0) return;
+
+    fetch('/api/cart/update', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: debouncedUpdates }),
+    })
+      .then(() => setPendingUpdates({}))
+      .catch(console.error);
+  }, [debouncedUpdates]);
+
+  const removeItem = async (variantId: string) => {
+    if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
+
+    try {
+      const res = await fetch('/api/cart/item', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ variantId }),
+      });
+
+      if (res.ok) {
+        // Cập nhật UI: xóa item khỏi state
+        setCart((prev: any) => ({
+          ...prev,
+          items: prev.items.filter(
+            (item: any) => item.variant.id !== variantId
+          ),
+        }));
+        // Xóa khỏi pendingUpdates nếu có
+        setPendingUpdates((prev) => {
+          const newUpdates = { ...prev };
+          delete newUpdates[variantId];
+          return newUpdates;
+        });
+      } else {
+        alert('Xóa thất bại. Vui lòng thử lại.');
+      }
+    } catch (err) {
+      console.error('Lỗi khi xóa sản phẩm:', err);
+      alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+    }
+  };
+
+  const clearCart = async () => {
+    if (!confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')) return;
+
+    try {
+      const res = await fetch('/api/cart', { method: 'DELETE' });
+      if (res.ok) {
+        setCart((prev: any) => ({ ...prev, items: [] }));
+        setPendingUpdates({});
+      } else {
+        alert('Xóa giỏ hàng thất bại.');
+      }
+    } catch (err) {
+      console.error('Lỗi khi xóa giỏ hàng:', err);
+      alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+    }
+  };
 
   if (loading) return <div>Đang tải giỏ hàng...</div>;
   if (!cart) return <div>Không có giỏ hàng nào!</div>;
@@ -63,7 +180,7 @@ export default function Cart() {
               <div className="text-center font-semibold">Thành tiền</div>
               {/* col 5 */}
               <div className="text-center">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" onClick={() => clearCart()}>
                   <TrashIcon className="w-5 h-5 text-primary" />
                 </Button>
               </div>
@@ -71,7 +188,10 @@ export default function Cart() {
           </div>
           <div className="col-span-3 row-span-2 bg-blue-50 rounded-2xl shadow-xs">
             {cart.items.map((item: any) => (
-              <div className="grid grid-cols-[45%_15%_15%_15%_10%] p-4 gap-2 items-center">
+              <div
+                key={item.id}
+                className="grid grid-cols-[45%_15%_15%_15%_10%] p-4 gap-2 items-center"
+              >
                 <div className="flex items-center gap-3">
                   <Checkbox id={item.id} />
                   <img
@@ -88,18 +208,37 @@ export default function Cart() {
                 </div>
                 <div className="text-center">{item.variant.price} &#8363;</div>
                 <div className="flex gap-2 items-center justify-center">
-                  <Button variant="outline" size="icon-sm">
-                    +
+                  <Button
+                    variant="outline"
+                    size="icon-sm"
+                    disabled={item.quantity <= 1}
+                    onClick={() =>
+                      updateLocalQuantity(item.variant.id, item.quantity - 1)
+                    }
+                  >
+                    -
                   </Button>
                   <Label htmlFor={item.id}>{item.quantity}</Label>
-                  <Button variant="outline" size="icon-sm">
-                    -
+                  <Button
+                    variant="outline"
+                    size="icon-sm"
+                    disabled={item.quantity >= item.variant.stock}
+                    onClick={() =>
+                      updateLocalQuantity(item.variant.id, item.quantity + 1)
+                    }
+                  >
+                    +
                   </Button>
                 </div>
                 <div className="text-center">
                   {item.quantity * item.variant.price} &#8363;
                 </div>
-                <Button variant="ghost" size="icon" className="mx-auto">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="mx-auto"
+                  onClick={() => removeItem(item.variant.id)}
+                >
                   <TrashIcon className="w-5 h-5 text-primary" />
                 </Button>
               </div>
@@ -207,11 +346,13 @@ export default function Cart() {
               <p className="text-gray-400 cursor-not-allowed select-none text-sm">
                 Giảm giá trực tiếp
               </p>
-              <p className="text-green-400"> -
+              <p className="text-green-400">
+                {' '}
+                -
                 {cart.items
                   .reduce(
                     (total: number, item: any) =>
-                      total + Number(item.variant.price) * item.quantity/10,
+                      total + (Number(item.variant.price) * item.quantity) / 10,
                     0
                   )
                   .toLocaleString('vi-VN')}{' '}
@@ -222,11 +363,13 @@ export default function Cart() {
               <p className="text-gray-400 cursor-not-allowed select-none text-sm">
                 Mã khuyến mãi
               </p>
-              <p className="text-green-400"> -
+              <p className="text-green-400">
+                {' '}
+                -
                 {cart.items
                   .reduce(
                     (total: number, item: any) =>
-                      total + Number(item.variant.price) * item.quantity/20,
+                      total + (Number(item.variant.price) * item.quantity) / 20,
                     0
                   )
                   .toLocaleString('vi-VN')}{' '}
@@ -242,7 +385,7 @@ export default function Cart() {
                 {cart.items
                   .reduce(
                     (total: number, item: any) =>
-                      total + Number(item.variant.price) * item.quantity/20,
+                      total + (Number(item.variant.price) * item.quantity) / 20,
                     0
                   )
                   .toLocaleString('vi-VN')}{' '}
