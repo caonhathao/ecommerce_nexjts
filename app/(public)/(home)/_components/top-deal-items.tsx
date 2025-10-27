@@ -1,13 +1,15 @@
 'use client';
-import { data_one } from '@/app/(public)/_data/data_top.json';
-import { productDataTypes } from '@/types/public.data-types';
+import { productItemType } from '@/types/public.data-types';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { AiFillLike } from 'react-icons/ai';
 import { ProductItem } from '../../_components/product-item';
 
-export const TopDealItems = () => {
-  const t = useTranslations('top_deal_items');
+type TopDealItemsProps = {
+  data: productItemType[];
+};
+
+export const TopDealItems = ({ data }: TopDealItemsProps) => {  const t = useTranslations('top_deal_items');
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-2 mt-5 bg-[var(--background)] rounded-lg">
       {/* top title */}
@@ -22,7 +24,7 @@ export const TopDealItems = () => {
       </div>
       {/* item list */}
       <div className="w-full flex flex-row gap-2">
-        {data_one.map((item: productDataTypes, index) => (
+        {data.map((item: productItemType, index) => (
           <ProductItem item={item} />
         ))}
       </div>
