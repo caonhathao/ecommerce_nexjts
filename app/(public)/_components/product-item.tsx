@@ -9,8 +9,8 @@ interface ProductItemProps {
 
 export const ProductItem = ({ item }: ProductItemProps) => {
   return (
-    <div className="flex flex-col justify-start items-start flex-1/5 border border-gray-200 rounded-lg gap-1 hover:cursor-pointer">
-      <img src={item.image} alt="thumbnal" />
+    <div className="flex flex-col justify-start items-start flex-1/5 border border-gray-200 rounded-lg gap-1 hover:cursor-pointer p-1">
+      <img src={item.image} alt="thumbnail" />
       <Separator />
       <div className="p-1">
         <div className="p-2">
@@ -27,7 +27,7 @@ export const ProductItem = ({ item }: ProductItemProps) => {
           {item.promotion !== 0 ? (
             <div className="w-full flex flex-row gap-2 justify-start items-start">
               {/* promotion */}
-              <div className="bg-gray-200 rounded-lg w-fit text-sm">
+              <div className="bg-[var(--muted-foreground)] rounded-lg w-fit text-sm text-[var(--accent)] px-1">
                 {"-"}
                 {item.promotion}
                 {"%"}
