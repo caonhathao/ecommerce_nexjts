@@ -1,14 +1,14 @@
 "use client";
 
+import SearchingBar from '@/app/(public)/_components/searching-bar';
 import { ModeToogle } from "@/components/custom/mode-toogle";
 import { SelectLanguage } from "@/components/custom/select-language";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { ShoppingCartIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import SearchingBar from '@/app/(public)/_components/searching-bar';
-import { Button } from "@/components/ui/button";
-import { ShoppingCartIcon } from "lucide-react";
 
 const Header = () => {
   const t = useTranslations("home_layout");
@@ -28,13 +28,13 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="w-full h-fit p-2 flex flex-col justify-center items-center relative">
+    <div className="w-full h-fit p-2 flex flex-col justify-center items-center relative bg-[var(--background)]">
       {/* logo, searching zone and tags  */}
       <div
         className={`w-full flex justify-center items-center transition-all duration-300 ${
           isSticky
-            ? "fixed top-0 left-0 bg-white shadow-md z-50"
-            : "relative bg-transparent"
+            ? "fixed top-0 left-0 shadow-md z-50"
+            : "relative"
         }`}
       >
         <div className="w-[80%] h-fit p-2 flex flex-row justify-center items-center gap-4">
