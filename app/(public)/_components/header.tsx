@@ -31,7 +31,7 @@ const Header = () => {
     <div className="w-full h-fit p-2 flex flex-col justify-center items-center relative bg-[var(--background)]">
       {/* logo, searching zone and tags  */}
       <div
-        className={`w-full flex justify-center items-center transition-all duration-300 ${
+        className={`w-full flex justify-center items-center transition-all duration-300  bg-[var(--background)] ${
           isSticky
             ? "fixed top-0 left-0 shadow-md z-50"
             : "relative"

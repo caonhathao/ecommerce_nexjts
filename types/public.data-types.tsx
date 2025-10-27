@@ -1,9 +1,12 @@
-export interface productDataTypes {
+export interface productItemType {
   id: string;
-  image: string;
-  product_name: string;
+  imageUrl: string;
+  title: string;
+  minPrice: number;
   rating: number;
-  price: number;
-  promotion: number;
-  origin: string;
+  voucher: {
+    maxDiscount: number | null | undefined;
+    type: string|null;
+    value: number|null;
+  };
 }
