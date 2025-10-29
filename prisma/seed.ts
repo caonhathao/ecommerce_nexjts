@@ -431,7 +431,7 @@ async function main() {
   // ------------------------
   const cartItems = await Promise.all(
     carts.flatMap((cart) => {
-      const selectedVariants = faker.helpers.arrayElements(variants, 2);
+      const selectedVariants = faker.helpers.arrayElements(variants, 4);
       return selectedVariants.map((variant) =>
         prisma.cartItem.create({
           data: {

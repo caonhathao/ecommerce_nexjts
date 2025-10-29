@@ -8,7 +8,7 @@ export function withAuth(
     return async function (request: NextRequest) {
         // const session = await getServerSession(authOptions);
         // const userId = session?.user?.id;
-        const userId = "60a66e52-ebbe-40e5-9a74-f5a013ffb6ee"; // ✅ Dùng tạm để test
+        const userId = "5a5ed0a1-66db-41ce-a2c5-dece655d8166"; // ✅ Dùng tạm để test
 
         if (!userId) {
             return NextResponse.json({error: 'Unauthorized'}, {status: 401});
