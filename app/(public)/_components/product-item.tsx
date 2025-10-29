@@ -1,21 +1,35 @@
 import { Separator } from '@/components/ui/separator';
 import { productItemType } from '@/types/public.data-types';
+import { useRouter } from 'next/navigation';
 import { formatPrice } from './global-function';
 import { RatingStars } from './rating-starts';
 
 interface ProductItemProps {
   item: productItemType;
+  size: string;
+  renderSaleValue?: boolean;
 }
 
-export const ProductItem = ({ item }: ProductItemProps) => {
+export const ProductItem = ({
+  item,
+  size,
+  renderSaleValue = true,
+}: ProductItemProps) => {
+  const router = useRouter();
+  const handleOpenDetail = (id: string) => {
+    router.push(`/products/${id}`);
+  };
+
   const renderPromotionType = (type: string | null) => {
-    if (type === null) {
-      <div className="w-full flex flex-row gap-2 justify-start items-start">
-        {/* origin price */}
-        <div className="text-[var(--muted-foreground)] line-through text-xs">
-          {formatPrice(Number(item.minPrice))}
+    if (type === null || renderSaleValue == false) {
+      return (
+        <div className="w-full flex flex-row gap-2 justify-start items-start">
+          {/* origin price */}
+          <div className="text-[var(--muted-foreground)] line-through text-xs">
+            {formatPrice(Number(item.minPrice))}
+          </div>
         </div>
-      </div>;
+      );
     }
     if (type === 'PERCENT') {
       return (
@@ -28,7 +42,7 @@ export const ProductItem = ({ item }: ProductItemProps) => {
           </div>
           {/* origin price */}
           <div className="text-[var(--muted-foreground)] line-through text-xs">
-          {formatPrice(Number(item.minPrice))}
+            {formatPrice(Number(item.minPrice))}
           </div>
         </div>
       );
@@ -43,7 +57,7 @@ export const ProductItem = ({ item }: ProductItemProps) => {
           </div>
           {/* origin price */}
           <div className="text-[var(--muted-foreground)] line-through text-xs">
-          {formatPrice(Number(item.minPrice))}
+            {formatPrice(Number(item.minPrice))}
           </div>
         </div>
       );
@@ -71,7 +85,10 @@ export const ProductItem = ({ item }: ProductItemProps) => {
   };
 
   return (
-    <div className="flex flex-col justify-start items-start flex-1/5 border border-gray-200 rounded-lg gap-1 hover:cursor-pointer p-1">
+    <div
+      className={`w-${size} flex flex-col justify-start items-start flex-${size} border border-gray-200 rounded-lg gap-1 hover:cursor-pointer p-1`}
+      onClick={() => handleOpenDetail(item.id)}
+    >
       <img src={item.imageUrl} alt="thumbnail" />
       <Separator />
       <div className="p-1">

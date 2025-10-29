@@ -7,11 +7,18 @@ import { ProductItem } from '../../_components/product-item';
 
 type TopDealItemsProps = {
   data: productItemType[];
+  size: string;
+  renderSaleValue?: boolean;
 };
 
-export const TopDealItems = ({ data }: TopDealItemsProps) => {  const t = useTranslations('top_deal_items');
+export const TopDealItems = ({
+  data,
+  size,
+  renderSaleValue = true,
+}: TopDealItemsProps) => {
+  const t = useTranslations('top_deal_items');
   return (
-    <div className="w-full flex flex-col justify-start items-start gap-1 p-2 mt-5 bg-[var(--background)] rounded-lg">
+    <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-[var(--background)] rounded-lg">
       {/* top title */}
       <div className="w-full flex flex-row justify-between items-center">
         <p className="w-fit flex flex-row gap-2 text-[var(--destructive)] font-bold select-none">
@@ -25,7 +32,11 @@ export const TopDealItems = ({ data }: TopDealItemsProps) => {  const t = useTra
       {/* item list */}
       <div className="w-full flex flex-row gap-2">
         {data.map((item: productItemType, index) => (
-          <ProductItem item={item} />
+          <ProductItem
+            item={item}
+            size={size}
+            renderSaleValue={renderSaleValue}
+          />
         ))}
       </div>
     </div>

@@ -29,9 +29,9 @@ export default function Home() {
     <div className="w-full h-full flex flex-col justify-start items-center">
       <CarouselPanel />
       <CategoryPromotionPanel />
-      <TopDealItems data={data1} />
-      <HotForeign data={data1}/>
-      <SuggestDealToday data={data1}/>
+      <TopDealItems data={data1} size="1/5" />
+      <HotForeign data={data1} />
+      <SuggestDealToday data={data1} />
     </div>
   );
 }
