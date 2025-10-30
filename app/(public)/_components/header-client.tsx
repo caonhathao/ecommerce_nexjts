@@ -19,14 +19,17 @@ import {
 import { DropdownMenu, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { authClient } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
+import { useSignOut } from '@/hooks/use-signout';
 
 type Role = 'USER' | 'SELLER' | 'ADMIN'
 type HeaderUser = { name: string; email?: string; avatar_url?: string; role: Role } | null;
 
 const HeaderClient = ({user}:{user:HeaderUser}) => {
   const router = useRouter();
+
+  const handleSingout = useSignOut();
+
   const t = useTranslations("home_layout");
   const n = useTranslations("user_navbar");
   const [isSticky, setIsSticky] = useState(false);
@@ -39,21 +42,6 @@ const HeaderClient = ({user}:{user:HeaderUser}) => {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  async function signOut() {
-    try{
-      console.log('Signing out...');
-      await authClient.signOut({
-        fetchOptions: {
-          onSuccess: () => {
-            console.log('Signed out successfully');
-            router.push('/');
-          }
-      }});
-    } catch(e){
-      console.error('Error signing out:', e);
-    }
-  }
 
   return (
     <div className="w-full h-fit p-2 flex flex-col justify-center items-center relative">
@@ -138,7 +126,7 @@ const HeaderClient = ({user}:{user:HeaderUser}) => {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={signOut}
+                      onClick={handleSingout}
                       className="text-destructive focus:text-destructive"
                     >
                       <LogOut className="h-4 w-4 mr-2" />
