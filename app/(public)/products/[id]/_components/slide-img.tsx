@@ -1,9 +1,9 @@
 import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from '@/components/ui/carousel';
 
 interface ImgData {
@@ -13,7 +13,7 @@ interface ImgData {
 
 const SlideImg = ({ data }: { data: ImgData[] }) => {
   return (
-    <div>
+    <div className='w-full h-fit'>
       <Carousel>
         <CarouselContent>
           {data.map((value, index) => (

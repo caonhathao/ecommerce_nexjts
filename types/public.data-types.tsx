@@ -25,8 +25,8 @@ export interface productDetailType {
   attributes: string | null;
   description: string;
   id: string;
-  title:string;
-  soldCount:string;
+  title: string;
+  soldCount: string;
   images: {
     url: string;
     alt: string;
@@ -35,14 +35,6 @@ export interface productDetailType {
   minPrice: string;
   ratingCount: 0;
   ratingAvg: 0;
-  reviews: {
-    body: string;
-    createdAt: string;
-    id: string;
-    likes: number;
-    rating: number;
-    title: string;
-  }[];
   shop: {
     id: string;
     logoUrl: string;
@@ -55,6 +47,21 @@ export interface productDetailType {
     productId: string;
     sku: string;
     stock: number;
-    name:string;
+    name: string;
   }[];
+}
+
+export interface reviewsType {
+  body: string;
+  createdAt: string;
+  id: string;
+  likes: number;
+  rating: number;
+  title: string;
+  images: JSON | null;
+  user: {
+    id: string;
+    image: string;
+    name: string;
+  };
 }
