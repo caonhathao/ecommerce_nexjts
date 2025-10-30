@@ -1,15 +1,15 @@
 import { Card, CardContent } from "@/components/ui/card";
 import {
-    Carousel,
-    CarouselContent,
-    CarouselItem
+  Carousel,
+  CarouselContent,
+  CarouselItem
 } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 import logo from "@/public/logo-full.jpg";
+import Autoplay from "embla-carousel-autoplay";
 
 export const CarouselPanel = () => {
   return (
-    <div className="w-full flex justify-center items-center border border-gray-200 rounded-lg p-2">
+    <div className="w-full flex justify-center items-center bg-[var(--background)] rounded-lg p-2">
       <Carousel
         opts={{
           align: "center",
