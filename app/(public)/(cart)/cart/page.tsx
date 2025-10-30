@@ -62,27 +62,6 @@ export default function Cart() {
     }));
   };
 
-  // useEffect(() => {
-  //   if (pendingUpdates.length === 0) return;
-  //
-  //   const interval = setInterval(async () => {
-  //     try {
-  //       const res = await fetch('/api/cart/update', {
-  //         method: 'PATCH',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({ items: pendingUpdates }),
-  //       });
-  //       if (res.ok) {
-  //         setPendingUpdates({});
-  //       }
-  //     } catch (err) {
-  //       console.error('Auto sync failed', err);
-  //     }
-  //   }, 300_000);
-  //
-  //   return () => clearInterval(interval);
-  // }, [pendingUpdates]);
-
   const updatesRef = useRef(pendingUpdates);
   useEffect(() => {
     updatesRef.current = pendingUpdates;
@@ -133,14 +112,12 @@ export default function Cart() {
       });
 
       if (res.ok) {
-        // Cập nhật UI: xóa item khỏi state
         setCart((prev: any) => ({
           ...prev,
           items: prev.items.filter(
             (item: any) => item.variant.id !== variantId
           ),
         }));
-        // Xóa khỏi pendingUpdates nếu có
         setPendingUpdates((prev) => {
           const newUpdates = { ...prev };
           delete newUpdates[variantId];
