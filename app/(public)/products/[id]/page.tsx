@@ -1,11 +1,16 @@
 'use client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { fetchProductById, fetchProducts } from '@/funcs/fetch';
 import { productDetailType, productItemType } from '@/types/public.data-types';
 import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react';
+import { formatPrice } from '../../_components/global-function';
+import { Loading } from '../../_components/loading';
+import { RatingStars } from '../../_components/rating-starts';
+import SlideImg from './_components/slide-img';
+import { toast } from 'sonner';
+import { Separator } from '@/components/ui/separator';
 import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
 import {
   FaBoxOpen,
@@ -18,19 +23,14 @@ import { GrPowerCycle } from 'react-icons/gr';
 import { HiMiniCheckBadge } from 'react-icons/hi2';
 import { MdAttachMoney } from 'react-icons/md';
 import { PiTruckLight } from 'react-icons/pi';
-import { toast } from 'sonner';
-import { formatPrice } from '../../_components/global-function';
-import { Loading } from '../../_components/loading';
-import { RatingStars } from '../../_components/rating-starts';
-import SlideImg from './_components/slide-img';
 
-import { Prisma } from '@/lib/generated/prisma';
-import { AddToCartRequest } from '@/types/cart.data-types';
 import Link from 'next/link';
 import { TopDealItems } from '../../(home)/_components/top-deal-items';
 import Desc from './_components/desc';
 import Reviews from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
+import { AddToCartRequest } from '@/types/cart.data-types';
+import { Prisma } from '@/lib/generated/prisma';
 import Decimal = Prisma.Decimal;
 
 interface selectedVariant {
@@ -181,6 +181,9 @@ const detaiPage = () => {
   };
 
   if (!data) return <Loading />;
+  if (selVariant === null) {
+    return <Loading />;
+  }
 
   return (
     <div className="w-[80%] flex flex-col justify-center items-start gap-2 mt-5">
@@ -399,12 +402,9 @@ const detaiPage = () => {
               </div>
               <p className="font-semibold text-xl">Tạm tính</p>
               <p className="text-2xl font-bold">
-                {selVariant?.amount !== undefined &&
-                selVariant.price !== undefined
-                  ? formatPrice(
-                      Number(selVariant?.amount * Number(selVariant?.price))
-                    )
-                  : null}
+                {formatPrice(
+                  Number(selVariant.amount * Number(selVariant.price))
+                )}
               </p>
             </div>
             {/* payment buttons */}
