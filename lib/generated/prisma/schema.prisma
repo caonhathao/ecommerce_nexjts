@@ -92,9 +92,8 @@ enum Currency {
   USD
 }
 
-// ---------- Better Auth (unchanged from your schema) ----------
 model User {
-  id            String    @id
+  id            String    @id @default(uuid()) @db.Uuid
   name          String
   email         String
   emailVerified Boolean   @default(false)
@@ -109,7 +108,6 @@ model User {
   banReason  String?
   banExpires DateTime?
 
-  // marketplace relations
   profile                   UserProfile?
   addresses                 Address[]
   notifications             Notification[]
@@ -130,14 +128,14 @@ model User {
 }
 
 model Session {
-  id        String   @id
+  id        String   @id @default(uuid()) @db.Uuid
   expiresAt DateTime
   token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
-  userId    String
+  userId    String   @db.Uuid
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   impersonatedBy String?
@@ -146,10 +144,10 @@ model Session {
 }
 
 model Account {
-  id                    String    @id
+  id                    String    @id @default(uuid()) @db.Uuid
   accountId             String
   providerId            String
-  userId                String
+  userId                String    @db.Uuid
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
@@ -165,7 +163,7 @@ model Account {
 }
 
 model Verification {
-  id         String   @id
+  id         String   @id @default(uuid()) @db.Uuid
   identifier String
   value      String
   expiresAt  DateTime
@@ -175,10 +173,9 @@ model Verification {
   @@map("verification")
 }
 
-// ---------- User Extensions ----------
 model UserProfile {
-  id          String    @id @default(cuid())
-  userId      String    @unique
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String    @unique @db.Uuid
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   phone       String?
   birthDate   DateTime?
@@ -192,8 +189,8 @@ model UserProfile {
 }
 
 model Address {
-  id         String    @id @default(cuid())
-  userId     String
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @db.Uuid
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   fullName   String
   phone      String
@@ -215,8 +212,8 @@ model Address {
 }
 
 model Notification {
-  id        String    @id @default(cuid())
-  userId    String
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   type      String
   title     String
@@ -229,10 +226,9 @@ model Notification {
   @@map("notification")
 }
 
-// ---------- Shops (Sellers) ----------
 model Shop {
-  id           String     @id @default(cuid())
-  ownerId      String
+  id           String     @id @default(uuid()) @db.Uuid
+  ownerId      String     @db.Uuid
   owner        User       @relation("ShopsOwned", fields: [ownerId], references: [id], onDelete: Restrict)
   name         String
   slug         String     @unique
@@ -261,9 +257,9 @@ model Shop {
 }
 
 model ShopMember {
-  id        String   @id @default(cuid())
-  shopId    String
-  userId    String
+  id        String   @id @default(uuid()) @db.Uuid
+  shopId    String   @db.Uuid
+  userId    String   @db.Uuid
   role      Role     @default(SELLER)
   createdAt DateTime @default(now())
 
@@ -274,10 +270,9 @@ model ShopMember {
   @@map("shop_member")
 }
 
-// ---------- Catalog ----------
 model Category {
-  id        String     @id @default(cuid())
-  parentId  String?
+  id        String     @id @default(uuid()) @db.Uuid
+  parentId  String?    @db.Uuid
   parent    Category?  @relation("CategoryToCategory", fields: [parentId], references: [id], onDelete: SetNull)
   children  Category[] @relation("CategoryToCategory")
   name      String
@@ -285,7 +280,7 @@ model Category {
   position  Int        @default(0)
   isActive  Boolean    @default(true)
   createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  updatedAt DateTime   @default(now()) @updatedAt
 
   products        Product[]
   VoucherCategory VoucherCategory[]
@@ -295,7 +290,7 @@ model Category {
 }
 
 model Tag {
-  id   String @id @default(cuid())
+  id   String @id @default(uuid()) @db.Uuid
   name String
   slug String @unique
 
@@ -305,10 +300,10 @@ model Tag {
 }
 
 model Product {
-  id          String        @id @default(cuid())
-  shopId      String
+  id          String        @id @default(uuid()) @db.Uuid
+  shopId      String        @db.Uuid
   shop        Shop          @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  categoryId  String?
+  categoryId  String?       @db.Uuid
   category    Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   title       String
   slug        String        @unique
@@ -323,7 +318,7 @@ model Product {
   maxPrice    Decimal       @db.Decimal(14, 2)
   currency    Currency      @default(VND)
   createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  updatedAt   DateTime      @default(now()) @updatedAt
   deletedAt   DateTime?
 
   images         ProductImage[]
@@ -341,8 +336,8 @@ model Product {
 }
 
 model ProductImage {
-  id        String   @id @default(cuid())
-  productId String
+  id        String   @id @default(uuid()) @db.Uuid
+  productId String   @db.Uuid
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
   alt       String?
@@ -354,8 +349,8 @@ model ProductImage {
 }
 
 model ProductVariant {
-  id          String   @id @default(cuid())
-  productId   String
+  id          String   @id @default(uuid()) @db.Uuid
+  productId   String   @db.Uuid
   product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   sku         String   @unique
   name        String?
@@ -371,7 +366,7 @@ model ProductVariant {
   attributes  Json?
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime @default(now()) @updatedAt
 
   orderItems OrderItem[]
   cartItems  CartItem[]
@@ -381,8 +376,8 @@ model ProductVariant {
 }
 
 model ProductTag {
-  productId String
-  tagId     String
+  productId String  @db.Uuid
+  tagId     String  @db.Uuid
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
@@ -390,13 +385,12 @@ model ProductTag {
   @@map("product_tag")
 }
 
-// ---------- Cart & Wishlist ----------
 model Cart {
-  id        String   @id @default(cuid())
-  userId    String   @unique
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique @db.Uuid
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   items CartItem[]
 
@@ -404,9 +398,9 @@ model Cart {
 }
 
 model CartItem {
-  id        String   @id @default(cuid())
-  cartId    String
-  variantId String
+  id        String   @id @default(uuid()) @db.Uuid
+  cartId    String   @db.Uuid
+  variantId String   @db.Uuid
   quantity  Int      @default(1)
   priceSnap Decimal  @db.Decimal(14, 2)
   currency  Currency @default(VND)
@@ -420,8 +414,8 @@ model CartItem {
 }
 
 model Wishlist {
-  id        String   @id @default(cuid())
-  userId    String   @unique
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique @db.Uuid
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
@@ -431,9 +425,9 @@ model Wishlist {
 }
 
 model WishlistItem {
-  id         String   @id @default(cuid())
-  wishlistId String
-  productId  String
+  id         String   @id @default(uuid()) @db.Uuid
+  wishlistId String   @db.Uuid
+  productId  String   @db.Uuid
   createdAt  DateTime @default(now())
 
   wishlist Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
@@ -443,12 +437,11 @@ model WishlistItem {
   @@map("wishlist_item")
 }
 
-// ---------- Orders, Payments, Shipping, Returns ----------
 model Order {
-  id                String            @id @default(cuid())
+  id                String            @id @default(uuid()) @db.Uuid
   orderNumber       String            @unique
-  userId            String
-  shopId            String
+  userId            String            @db.Uuid
+  shopId            String            @db.Uuid
   status            OrderStatus       @default(PENDING)
   paymentStatus     PaymentStatus     @default(NOT_PAID)
   fulfillmentStatus FulfillmentStatus @default(NOT_FULFILLED)
@@ -467,7 +460,7 @@ model Order {
 
   notes      String?
   placedAt   DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  updatedAt  DateTime  @default(now()) @updatedAt
   canceledAt DateTime?
 
   user              User                @relation(fields: [userId], references: [id], onDelete: Restrict)
@@ -486,10 +479,10 @@ model Order {
 }
 
 model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  productId String
-  variantId String?
+  id        String  @id @default(uuid()) @db.Uuid
+  orderId   String  @db.Uuid
+  productId String  @db.Uuid
+  variantId String? @db.Uuid
   title     String
   sku       String?
   unitPrice Decimal @db.Decimal(14, 2)
@@ -509,8 +502,8 @@ model OrderItem {
 }
 
 model Payment {
-  id         String          @id @default(cuid())
-  orderId    String
+  id         String          @id @default(uuid()) @db.Uuid
+  orderId    String          @db.Uuid
   provider   PaymentProvider
   method     String?
   amount     Decimal         @db.Decimal(14, 2)
@@ -520,7 +513,7 @@ model Payment {
   reference  String?
   rawPayload Json?
   createdAt  DateTime        @default(now())
-  updatedAt  DateTime        @updatedAt
+  updatedAt  DateTime        @default(now()) @updatedAt
 
   order  Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   Refund Refund[]
@@ -530,8 +523,8 @@ model Payment {
 }
 
 model Shipment {
-  id             String    @id @default(cuid())
-  orderId        String
+  id             String    @id @default(uuid()) @db.Uuid
+  orderId        String    @db.Uuid
   carrier        String?
   trackingNumber String?
   status         String?
@@ -547,9 +540,9 @@ model Shipment {
 }
 
 model Refund {
-  id        String   @id @default(cuid())
-  orderId   String
-  paymentId String?
+  id        String   @id @default(uuid()) @db.Uuid
+  orderId   String   @db.Uuid
+  paymentId String?  @db.Uuid
   amount    Decimal  @db.Decimal(14, 2)
   reason    String?
   status    String   @default("PENDING")
@@ -563,9 +556,9 @@ model Refund {
 }
 
 model ReturnRequest {
-  id        String   @id @default(cuid())
-  orderId   String
-  userId    String
+  id        String   @id @default(uuid()) @db.Uuid
+  orderId   String   @db.Uuid
+  userId    String   @db.Uuid
   reason    String?
   status    String   @default("OPEN")
   createdAt DateTime @default(now())
@@ -579,9 +572,9 @@ model ReturnRequest {
 }
 
 model ReturnItem {
-  id              String  @id @default(cuid())
-  returnRequestId String
-  orderItemId     String
+  id              String  @id @default(uuid()) @db.Uuid
+  returnRequestId String  @db.Uuid
+  orderItemId     String  @db.Uuid
   quantity        Int
   reason          String?
 
@@ -591,19 +584,18 @@ model ReturnItem {
   @@map("return_item")
 }
 
-// ---------- Reviews & Q&A ----------
 model Review {
-  id          String   @id @default(cuid())
-  productId   String
-  userId      String
-  orderItemId String?  @unique
+  id          String   @id @default(uuid()) @db.Uuid
+  productId   String   @db.Uuid
+  userId      String   @db.Uuid
+  orderItemId String?  @unique @db.Uuid
   rating      Int
   title       String?
   body        String?
   images      Json?
   likes       Int      @default(0)
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime @default(now()) @updatedAt
 
   product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -615,9 +607,9 @@ model Review {
 }
 
 model ProductQuestion {
-  id         String    @id @default(cuid())
-  productId  String
-  userId     String
+  id         String    @id @default(uuid()) @db.Uuid
+  productId  String    @db.Uuid
+  userId     String    @db.Uuid
   body       String
   answer     String?
   answeredAt DateTime?
@@ -630,7 +622,6 @@ model ProductQuestion {
   @@map("product_question")
 }
 
-// ---------- Promotions / Vouchers ----------
 enum VoucherType {
   PERCENT
   FIXED
@@ -638,7 +629,7 @@ enum VoucherType {
 }
 
 model Voucher {
-  id           String      @id @default(cuid())
+  id           String      @id @default(uuid()) @db.Uuid
   code         String      @unique
   type         VoucherType
   value        Decimal     @db.Decimal(14, 2)
@@ -649,7 +640,7 @@ model Voucher {
   endAt        DateTime
   usageLimit   Int?
   perUserLimit Int?
-  shopId       String?
+  shopId       String?     @db.Uuid
   isActive     Boolean     @default(true)
   createdAt    DateTime    @default(now())
 
@@ -664,8 +655,8 @@ model Voucher {
 }
 
 model VoucherCategory {
-  voucherId  String
-  categoryId String
+  voucherId  String   @db.Uuid
+  categoryId String   @db.Uuid
   voucher    Voucher  @relation(fields: [voucherId], references: [id], onDelete: Cascade)
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
@@ -674,8 +665,8 @@ model VoucherCategory {
 }
 
 model VoucherProduct {
-  voucherId String
-  productId String
+  voucherId String  @db.Uuid
+  productId String  @db.Uuid
   voucher   Voucher @relation(fields: [voucherId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
@@ -684,10 +675,10 @@ model VoucherProduct {
 }
 
 model VoucherRedemption {
-  id        String   @id @default(cuid())
-  voucherId String
-  orderId   String
-  userId    String
+  id        String   @id @default(uuid()) @db.Uuid
+  voucherId String   @db.Uuid
+  orderId   String   @db.Uuid
+  userId    String   @db.Uuid
   usedAt    DateTime @default(now())
 
   voucher Voucher @relation(fields: [voucherId], references: [id], onDelete: Cascade)
@@ -699,8 +690,8 @@ model VoucherRedemption {
 }
 
 model OrderVoucher {
-  orderId   String
-  voucherId String
+  orderId   String  @db.Uuid
+  voucherId String  @db.Uuid
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   voucher   Voucher @relation(fields: [voucherId], references: [id], onDelete: Restrict)
 
@@ -708,13 +699,12 @@ model OrderVoucher {
   @@map("order_voucher")
 }
 
-// ---------- Chat ----------
 model Conversation {
-  id        String           @id @default(cuid())
+  id        String           @id @default(uuid()) @db.Uuid
   type      ConversationType
-  shopId    String?
+  shopId    String?          @db.Uuid
   createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  updatedAt DateTime         @default(now()) @updatedAt
 
   shop         Shop?                     @relation(fields: [shopId], references: [id], onDelete: SetNull)
   participants ConversationParticipant[]
@@ -725,10 +715,10 @@ model Conversation {
 }
 
 model ConversationParticipant {
-  id             String   @id @default(cuid())
-  conversationId String
-  userId         String?
-  shopId         String?
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @db.Uuid
+  userId         String?  @db.Uuid
+  shopId         String?  @db.Uuid
   role           String?
   joinedAt       DateTime @default(now())
 
@@ -741,10 +731,10 @@ model ConversationParticipant {
 }
 
 model Message {
-  id             String      @id @default(cuid())
-  conversationId String
-  senderUserId   String?
-  senderShopId   String?
+  id             String      @id @default(uuid()) @db.Uuid
+  conversationId String      @db.Uuid
+  senderUserId   String?     @db.Uuid
+  senderShopId   String?     @db.Uuid
   type           MessageType @default(TEXT)
   content        String
   attachments    Json?

@@ -22,7 +22,7 @@ export const HotForeign = ({ data }: TopDealItemsProps) => {
       {/* item list */}
       <div className="w-full flex flex-row gap-2">
         {data.map((item: productItemType, index) => (
-          <ProductItem item={item} />
+          <ProductItem item={item} size={'4'} />
         ))}
       </div>
     </div>

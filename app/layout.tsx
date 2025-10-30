@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
-import Header from "@/app/(public)/_components/header";
+import HeaderClient from "@/app/(public)/_components/header-client";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,8 +24,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  modal
 }: Readonly<{
   children: React.ReactNode;
+  modal?: React.ReactNode;
 }>) {
   const locale = await getLocale();
 
@@ -42,6 +44,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            {modal}
             <Toaster />
           </ThemeProvider>
         </NextIntlClientProvider>
