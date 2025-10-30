@@ -1,5 +1,5 @@
-import { useTranslations } from "next-intl";
 import logo from "@/public/logo.png";
+import { useTranslations } from "next-intl";
 const data = [
   {
     name: "deal_vip",
@@ -41,7 +41,7 @@ const data = [
 export const CategoryPromotionPanel = () => {
   const t = useTranslations("category_promotion_panel");
   return (
-    <div className="w-full flex flex-row justify-center items-start border border-gray-200 rounded-lg p-2 mt-5">
+    <div className="w-full flex flex-row justify-center items-start bg-[var(--background)] rounded-lg p-2 mt-5">
       {data.map((item, index) => (
         <div className="flex flex-col justify-center items-center hover:cursor-pointer">
           <img src={item.icon.src} alt="logo" className="w-[20%]"/>

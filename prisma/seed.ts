@@ -887,11 +887,26 @@ async function main() {
         refDate: startAt,
       });
 
+      // Tính giá trị voucher theo loại
+      let value;
+      switch (type) {
+        case 'PERCENT':
+          value = faker.number.int({ min: 5, max: 50 }); // %
+          break;
+        case 'FIXED':
+        case 'SHIPPING':
+          value = faker.number.int({ min: 50000, max: 500000 }); // VND
+          break;
+        default:
+          value = 0;
+      }
+
       return prisma.voucher.create({
         data: {
           code: `VC-${faker.string.alphanumeric(8).toUpperCase()}`,
           type,
-          value: faker.number.int({ min: 50000, max: 500000 }),
+          value,
+          maxDiscount: faker.helpers.maybe(() => faker.number.int({ min: 100000, max: 300000 })),
           minSubtotal: faker.helpers.maybe(
             () => faker.number.int({ min: 100000, max: 500000 }),
             { probability: 0.5 }

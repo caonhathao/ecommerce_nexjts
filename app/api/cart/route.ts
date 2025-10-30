@@ -18,6 +18,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
           priceSnap: true,
           variant: {
             select: {
+              id: true,
               name: true,
               sku: true,
               price: true,
