@@ -307,6 +307,7 @@ model Product {
   category    Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   title       String
   slug        String        @unique
+  origin      String?
   description String?
   status      ProductStatus @default(DRAFT)
   visibility  Visibility    @default(PUBLIC)
@@ -355,6 +356,7 @@ model ProductVariant {
   sku         String   @unique
   name        String?
   price       Decimal  @db.Decimal(14, 2)
+  image       String
   compareAt   Decimal? @db.Decimal(14, 2)
   currency    Currency @default(VND)
   stock       Int      @default(0)

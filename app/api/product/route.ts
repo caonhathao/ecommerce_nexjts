@@ -1,24 +1,24 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { prisma } from '@/lib/db';
+import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
 
     // Lấy pagination params
-    const page = Number(searchParams.get("page")) || 1;
-    const limit = Number(searchParams.get("limit")) || 10;
+    const page = Number(searchParams.get('page')) || 1;
+    const limit = Number(searchParams.get('limit')) || 10;
     const skip = (page - 1) * limit;
 
     // Truy vấn sản phẩm
     const products = await prisma.product.findMany({
       where: {
-        status: "PUBLISHED",
-        visibility: "PUBLIC",
+        status: 'PUBLISHED',
+        visibility: 'PUBLIC',
         VoucherProduct: {
           some: {
             voucher: {
-              type: { not: "SHIPPING" },
+              type: { not: 'SHIPPING' },
             },
           },
         },
@@ -27,6 +27,7 @@ export async function GET(req: Request) {
         id: true,
         title: true,
         minPrice: true,
+        ratingAvg: true,
         images: {
           take: 1,
           select: { url: true },
@@ -46,19 +47,19 @@ export async function GET(req: Request) {
       },
       skip,
       take: limit,
-      distinct: ["id"], // tương đương DISTINCT ON (p.id)
-      orderBy: { id: "asc" },
+      distinct: ['id'], // tương đương DISTINCT ON (p.id)
+      orderBy: { id: 'asc' },
     });
 
     // Tổng số bản ghi để tính tổng trang
     const total = await prisma.product.count({
       where: {
-        status: "PUBLISHED",
-        visibility: "PUBLIC",
+        status: 'PUBLISHED',
+        visibility: 'PUBLIC',
         VoucherProduct: {
           some: {
             voucher: {
-              type: { not: "SHIPPING" },
+              type: { not: 'SHIPPING' },
             },
           },
         },
@@ -66,10 +67,11 @@ export async function GET(req: Request) {
     });
 
     // Chuẩn hóa dữ liệu trả về
-    const formatted = products.map(p => ({
+    const formatted = products.map((p) => ({
       id: p.id,
       title: p.title,
       minPrice: p.minPrice,
+      ratingAvg: p.ratingAvg,
       imageUrl: p.images[0]?.url ?? null,
       voucher: p.VoucherProduct[0]?.voucher ?? null,
     }));
@@ -85,9 +87,9 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
-    console.error("GET /api/products error:", error);
+    console.error('GET /api/products error:', error);
     return NextResponse.json(
-      { success: false, error: "Internal Server Error" },
+      { success: false, error: 'Internal Server Error' },
       { status: 500 }
     );
   }
