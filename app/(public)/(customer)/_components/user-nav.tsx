@@ -89,7 +89,7 @@ export default function UserNav({ user }: { user: UserMini }) {
   return (
     <TooltipProvider>
       <Card className="overflow-hidden">
-        {/* Header */}
+        {/* HeaderClient */}
         <CardHeader className="flex-row items-center gap-3 space-y-0 p-4">
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.avatar_url} alt={user.name} />
