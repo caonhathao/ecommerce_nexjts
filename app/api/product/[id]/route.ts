@@ -48,23 +48,6 @@ export async function GET(
             name:true
           },
         },
-        reviews: {
-          select: {
-            id: true,
-            rating: true,
-            title: true,
-            body: true,
-            likes: true,
-            createdAt: true,
-            user: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-          },
-          take: 5,
-        },
         VoucherProduct: {
           select: {
             voucher: {
