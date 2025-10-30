@@ -907,8 +907,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.16.3
-   * Query Engine version: bb420e667c1820a8c05a38023385f6cc7ef8e83a
+   * Prisma Client JS version: 6.18.0
+   * Query Engine version: 34b5a692b7bd79939a9a2c3ef97d816e749cda2f
    */
   export type PrismaVersion = {
     client: string
@@ -921,6 +921,7 @@ export namespace Prisma {
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -47853,7 +47854,7 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    id?: StringFilter<"User"> | string
+    id?: UuidFilter<"User"> | string
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     emailVerified?: BoolFilter<"User"> | boolean
@@ -47966,7 +47967,7 @@ export namespace Prisma {
     AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"User"> | string
+    id?: UuidWithAggregatesFilter<"User"> | string
     name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     emailVerified?: BoolWithAggregatesFilter<"User"> | boolean
@@ -47983,14 +47984,14 @@ export namespace Prisma {
     AND?: SessionWhereInput | SessionWhereInput[]
     OR?: SessionWhereInput[]
     NOT?: SessionWhereInput | SessionWhereInput[]
-    id?: StringFilter<"Session"> | string
+    id?: UuidFilter<"Session"> | string
     expiresAt?: DateTimeFilter<"Session"> | Date | string
     token?: StringFilter<"Session"> | string
     createdAt?: DateTimeFilter<"Session"> | Date | string
     updatedAt?: DateTimeFilter<"Session"> | Date | string
     ipAddress?: StringNullableFilter<"Session"> | string | null
     userAgent?: StringNullableFilter<"Session"> | string | null
-    userId?: StringFilter<"Session"> | string
+    userId?: UuidFilter<"Session"> | string
     impersonatedBy?: StringNullableFilter<"Session"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -48019,7 +48020,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Session"> | Date | string
     ipAddress?: StringNullableFilter<"Session"> | string | null
     userAgent?: StringNullableFilter<"Session"> | string | null
-    userId?: StringFilter<"Session"> | string
+    userId?: UuidFilter<"Session"> | string
     impersonatedBy?: StringNullableFilter<"Session"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "token">
@@ -48043,14 +48044,14 @@ export namespace Prisma {
     AND?: SessionScalarWhereWithAggregatesInput | SessionScalarWhereWithAggregatesInput[]
     OR?: SessionScalarWhereWithAggregatesInput[]
     NOT?: SessionScalarWhereWithAggregatesInput | SessionScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Session"> | string
+    id?: UuidWithAggregatesFilter<"Session"> | string
     expiresAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
     token?: StringWithAggregatesFilter<"Session"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
     ipAddress?: StringNullableWithAggregatesFilter<"Session"> | string | null
     userAgent?: StringNullableWithAggregatesFilter<"Session"> | string | null
-    userId?: StringWithAggregatesFilter<"Session"> | string
+    userId?: UuidWithAggregatesFilter<"Session"> | string
     impersonatedBy?: StringNullableWithAggregatesFilter<"Session"> | string | null
   }
 
@@ -48058,10 +48059,10 @@ export namespace Prisma {
     AND?: AccountWhereInput | AccountWhereInput[]
     OR?: AccountWhereInput[]
     NOT?: AccountWhereInput | AccountWhereInput[]
-    id?: StringFilter<"Account"> | string
+    id?: UuidFilter<"Account"> | string
     accountId?: StringFilter<"Account"> | string
     providerId?: StringFilter<"Account"> | string
-    userId?: StringFilter<"Account"> | string
+    userId?: UuidFilter<"Account"> | string
     accessToken?: StringNullableFilter<"Account"> | string | null
     refreshToken?: StringNullableFilter<"Account"> | string | null
     idToken?: StringNullableFilter<"Account"> | string | null
@@ -48098,7 +48099,7 @@ export namespace Prisma {
     NOT?: AccountWhereInput | AccountWhereInput[]
     accountId?: StringFilter<"Account"> | string
     providerId?: StringFilter<"Account"> | string
-    userId?: StringFilter<"Account"> | string
+    userId?: UuidFilter<"Account"> | string
     accessToken?: StringNullableFilter<"Account"> | string | null
     refreshToken?: StringNullableFilter<"Account"> | string | null
     idToken?: StringNullableFilter<"Account"> | string | null
@@ -48134,10 +48135,10 @@ export namespace Prisma {
     AND?: AccountScalarWhereWithAggregatesInput | AccountScalarWhereWithAggregatesInput[]
     OR?: AccountScalarWhereWithAggregatesInput[]
     NOT?: AccountScalarWhereWithAggregatesInput | AccountScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Account"> | string
+    id?: UuidWithAggregatesFilter<"Account"> | string
     accountId?: StringWithAggregatesFilter<"Account"> | string
     providerId?: StringWithAggregatesFilter<"Account"> | string
-    userId?: StringWithAggregatesFilter<"Account"> | string
+    userId?: UuidWithAggregatesFilter<"Account"> | string
     accessToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
     refreshToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
     idToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
@@ -48153,7 +48154,7 @@ export namespace Prisma {
     AND?: VerificationWhereInput | VerificationWhereInput[]
     OR?: VerificationWhereInput[]
     NOT?: VerificationWhereInput | VerificationWhereInput[]
-    id?: StringFilter<"Verification"> | string
+    id?: UuidFilter<"Verification"> | string
     identifier?: StringFilter<"Verification"> | string
     value?: StringFilter<"Verification"> | string
     expiresAt?: DateTimeFilter<"Verification"> | Date | string
@@ -48198,7 +48199,7 @@ export namespace Prisma {
     AND?: VerificationScalarWhereWithAggregatesInput | VerificationScalarWhereWithAggregatesInput[]
     OR?: VerificationScalarWhereWithAggregatesInput[]
     NOT?: VerificationScalarWhereWithAggregatesInput | VerificationScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Verification"> | string
+    id?: UuidWithAggregatesFilter<"Verification"> | string
     identifier?: StringWithAggregatesFilter<"Verification"> | string
     value?: StringWithAggregatesFilter<"Verification"> | string
     expiresAt?: DateTimeWithAggregatesFilter<"Verification"> | Date | string
@@ -48210,8 +48211,8 @@ export namespace Prisma {
     AND?: UserProfileWhereInput | UserProfileWhereInput[]
     OR?: UserProfileWhereInput[]
     NOT?: UserProfileWhereInput | UserProfileWhereInput[]
-    id?: StringFilter<"UserProfile"> | string
-    userId?: StringFilter<"UserProfile"> | string
+    id?: UuidFilter<"UserProfile"> | string
+    userId?: UuidFilter<"UserProfile"> | string
     phone?: StringNullableFilter<"UserProfile"> | string | null
     birthDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     gender?: StringNullableFilter<"UserProfile"> | string | null
@@ -48270,8 +48271,8 @@ export namespace Prisma {
     AND?: UserProfileScalarWhereWithAggregatesInput | UserProfileScalarWhereWithAggregatesInput[]
     OR?: UserProfileScalarWhereWithAggregatesInput[]
     NOT?: UserProfileScalarWhereWithAggregatesInput | UserProfileScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"UserProfile"> | string
-    userId?: StringWithAggregatesFilter<"UserProfile"> | string
+    id?: UuidWithAggregatesFilter<"UserProfile"> | string
+    userId?: UuidWithAggregatesFilter<"UserProfile"> | string
     phone?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     birthDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     gender?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
@@ -48285,8 +48286,8 @@ export namespace Prisma {
     AND?: AddressWhereInput | AddressWhereInput[]
     OR?: AddressWhereInput[]
     NOT?: AddressWhereInput | AddressWhereInput[]
-    id?: StringFilter<"Address"> | string
-    userId?: StringFilter<"Address"> | string
+    id?: UuidFilter<"Address"> | string
+    userId?: UuidFilter<"Address"> | string
     fullName?: StringFilter<"Address"> | string
     phone?: StringFilter<"Address"> | string
     line1?: StringFilter<"Address"> | string
@@ -48329,7 +48330,7 @@ export namespace Prisma {
     AND?: AddressWhereInput | AddressWhereInput[]
     OR?: AddressWhereInput[]
     NOT?: AddressWhereInput | AddressWhereInput[]
-    userId?: StringFilter<"Address"> | string
+    userId?: UuidFilter<"Address"> | string
     fullName?: StringFilter<"Address"> | string
     phone?: StringFilter<"Address"> | string
     line1?: StringFilter<"Address"> | string
@@ -48373,8 +48374,8 @@ export namespace Prisma {
     AND?: AddressScalarWhereWithAggregatesInput | AddressScalarWhereWithAggregatesInput[]
     OR?: AddressScalarWhereWithAggregatesInput[]
     NOT?: AddressScalarWhereWithAggregatesInput | AddressScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Address"> | string
-    userId?: StringWithAggregatesFilter<"Address"> | string
+    id?: UuidWithAggregatesFilter<"Address"> | string
+    userId?: UuidWithAggregatesFilter<"Address"> | string
     fullName?: StringWithAggregatesFilter<"Address"> | string
     phone?: StringWithAggregatesFilter<"Address"> | string
     line1?: StringWithAggregatesFilter<"Address"> | string
@@ -48395,8 +48396,8 @@ export namespace Prisma {
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
-    id?: StringFilter<"Notification"> | string
-    userId?: StringFilter<"Notification"> | string
+    id?: UuidFilter<"Notification"> | string
+    userId?: UuidFilter<"Notification"> | string
     type?: StringFilter<"Notification"> | string
     title?: StringFilter<"Notification"> | string
     body?: StringFilter<"Notification"> | string
@@ -48423,7 +48424,7 @@ export namespace Prisma {
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
-    userId?: StringFilter<"Notification"> | string
+    userId?: UuidFilter<"Notification"> | string
     type?: StringFilter<"Notification"> | string
     title?: StringFilter<"Notification"> | string
     body?: StringFilter<"Notification"> | string
@@ -48451,8 +48452,8 @@ export namespace Prisma {
     AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
     OR?: NotificationScalarWhereWithAggregatesInput[]
     NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Notification"> | string
-    userId?: StringWithAggregatesFilter<"Notification"> | string
+    id?: UuidWithAggregatesFilter<"Notification"> | string
+    userId?: UuidWithAggregatesFilter<"Notification"> | string
     type?: StringWithAggregatesFilter<"Notification"> | string
     title?: StringWithAggregatesFilter<"Notification"> | string
     body?: StringWithAggregatesFilter<"Notification"> | string
@@ -48465,8 +48466,8 @@ export namespace Prisma {
     AND?: ShopWhereInput | ShopWhereInput[]
     OR?: ShopWhereInput[]
     NOT?: ShopWhereInput | ShopWhereInput[]
-    id?: StringFilter<"Shop"> | string
-    ownerId?: StringFilter<"Shop"> | string
+    id?: UuidFilter<"Shop"> | string
+    ownerId?: UuidFilter<"Shop"> | string
     name?: StringFilter<"Shop"> | string
     slug?: StringFilter<"Shop"> | string
     description?: StringNullableFilter<"Shop"> | string | null
@@ -48522,7 +48523,7 @@ export namespace Prisma {
     AND?: ShopWhereInput | ShopWhereInput[]
     OR?: ShopWhereInput[]
     NOT?: ShopWhereInput | ShopWhereInput[]
-    ownerId?: StringFilter<"Shop"> | string
+    ownerId?: UuidFilter<"Shop"> | string
     name?: StringFilter<"Shop"> | string
     description?: StringNullableFilter<"Shop"> | string | null
     logoUrl?: StringNullableFilter<"Shop"> | string | null
@@ -48572,8 +48573,8 @@ export namespace Prisma {
     AND?: ShopScalarWhereWithAggregatesInput | ShopScalarWhereWithAggregatesInput[]
     OR?: ShopScalarWhereWithAggregatesInput[]
     NOT?: ShopScalarWhereWithAggregatesInput | ShopScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Shop"> | string
-    ownerId?: StringWithAggregatesFilter<"Shop"> | string
+    id?: UuidWithAggregatesFilter<"Shop"> | string
+    ownerId?: UuidWithAggregatesFilter<"Shop"> | string
     name?: StringWithAggregatesFilter<"Shop"> | string
     slug?: StringWithAggregatesFilter<"Shop"> | string
     description?: StringNullableWithAggregatesFilter<"Shop"> | string | null
@@ -48593,9 +48594,9 @@ export namespace Prisma {
     AND?: ShopMemberWhereInput | ShopMemberWhereInput[]
     OR?: ShopMemberWhereInput[]
     NOT?: ShopMemberWhereInput | ShopMemberWhereInput[]
-    id?: StringFilter<"ShopMember"> | string
-    shopId?: StringFilter<"ShopMember"> | string
-    userId?: StringFilter<"ShopMember"> | string
+    id?: UuidFilter<"ShopMember"> | string
+    shopId?: UuidFilter<"ShopMember"> | string
+    userId?: UuidFilter<"ShopMember"> | string
     role?: EnumRoleFilter<"ShopMember"> | $Enums.Role
     createdAt?: DateTimeFilter<"ShopMember"> | Date | string
     shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
@@ -48618,8 +48619,8 @@ export namespace Prisma {
     AND?: ShopMemberWhereInput | ShopMemberWhereInput[]
     OR?: ShopMemberWhereInput[]
     NOT?: ShopMemberWhereInput | ShopMemberWhereInput[]
-    shopId?: StringFilter<"ShopMember"> | string
-    userId?: StringFilter<"ShopMember"> | string
+    shopId?: UuidFilter<"ShopMember"> | string
+    userId?: UuidFilter<"ShopMember"> | string
     role?: EnumRoleFilter<"ShopMember"> | $Enums.Role
     createdAt?: DateTimeFilter<"ShopMember"> | Date | string
     shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
@@ -48641,9 +48642,9 @@ export namespace Prisma {
     AND?: ShopMemberScalarWhereWithAggregatesInput | ShopMemberScalarWhereWithAggregatesInput[]
     OR?: ShopMemberScalarWhereWithAggregatesInput[]
     NOT?: ShopMemberScalarWhereWithAggregatesInput | ShopMemberScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ShopMember"> | string
-    shopId?: StringWithAggregatesFilter<"ShopMember"> | string
-    userId?: StringWithAggregatesFilter<"ShopMember"> | string
+    id?: UuidWithAggregatesFilter<"ShopMember"> | string
+    shopId?: UuidWithAggregatesFilter<"ShopMember"> | string
+    userId?: UuidWithAggregatesFilter<"ShopMember"> | string
     role?: EnumRoleWithAggregatesFilter<"ShopMember"> | $Enums.Role
     createdAt?: DateTimeWithAggregatesFilter<"ShopMember"> | Date | string
   }
@@ -48652,8 +48653,8 @@ export namespace Prisma {
     AND?: CategoryWhereInput | CategoryWhereInput[]
     OR?: CategoryWhereInput[]
     NOT?: CategoryWhereInput | CategoryWhereInput[]
-    id?: StringFilter<"Category"> | string
-    parentId?: StringNullableFilter<"Category"> | string | null
+    id?: UuidFilter<"Category"> | string
+    parentId?: UuidNullableFilter<"Category"> | string | null
     name?: StringFilter<"Category"> | string
     slug?: StringFilter<"Category"> | string
     position?: IntFilter<"Category"> | number
@@ -48687,7 +48688,7 @@ export namespace Prisma {
     AND?: CategoryWhereInput | CategoryWhereInput[]
     OR?: CategoryWhereInput[]
     NOT?: CategoryWhereInput | CategoryWhereInput[]
-    parentId?: StringNullableFilter<"Category"> | string | null
+    parentId?: UuidNullableFilter<"Category"> | string | null
     name?: StringFilter<"Category"> | string
     position?: IntFilter<"Category"> | number
     isActive?: BoolFilter<"Category"> | boolean
@@ -48719,8 +48720,8 @@ export namespace Prisma {
     AND?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
     OR?: CategoryScalarWhereWithAggregatesInput[]
     NOT?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Category"> | string
-    parentId?: StringNullableWithAggregatesFilter<"Category"> | string | null
+    id?: UuidWithAggregatesFilter<"Category"> | string
+    parentId?: UuidNullableWithAggregatesFilter<"Category"> | string | null
     name?: StringWithAggregatesFilter<"Category"> | string
     slug?: StringWithAggregatesFilter<"Category"> | string
     position?: IntWithAggregatesFilter<"Category"> | number
@@ -48733,7 +48734,7 @@ export namespace Prisma {
     AND?: TagWhereInput | TagWhereInput[]
     OR?: TagWhereInput[]
     NOT?: TagWhereInput | TagWhereInput[]
-    id?: StringFilter<"Tag"> | string
+    id?: UuidFilter<"Tag"> | string
     name?: StringFilter<"Tag"> | string
     slug?: StringFilter<"Tag"> | string
     products?: ProductTagListRelationFilter
@@ -48769,7 +48770,7 @@ export namespace Prisma {
     AND?: TagScalarWhereWithAggregatesInput | TagScalarWhereWithAggregatesInput[]
     OR?: TagScalarWhereWithAggregatesInput[]
     NOT?: TagScalarWhereWithAggregatesInput | TagScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Tag"> | string
+    id?: UuidWithAggregatesFilter<"Tag"> | string
     name?: StringWithAggregatesFilter<"Tag"> | string
     slug?: StringWithAggregatesFilter<"Tag"> | string
   }
@@ -48778,9 +48779,9 @@ export namespace Prisma {
     AND?: ProductWhereInput | ProductWhereInput[]
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
-    id?: StringFilter<"Product"> | string
-    shopId?: StringFilter<"Product"> | string
-    categoryId?: StringNullableFilter<"Product"> | string | null
+    id?: UuidFilter<"Product"> | string
+    shopId?: UuidFilter<"Product"> | string
+    categoryId?: UuidNullableFilter<"Product"> | string | null
     title?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
@@ -48845,8 +48846,8 @@ export namespace Prisma {
     AND?: ProductWhereInput | ProductWhereInput[]
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
-    shopId?: StringFilter<"Product"> | string
-    categoryId?: StringNullableFilter<"Product"> | string | null
+    shopId?: UuidFilter<"Product"> | string
+    categoryId?: UuidNullableFilter<"Product"> | string | null
     title?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
@@ -48903,9 +48904,9 @@ export namespace Prisma {
     AND?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
     OR?: ProductScalarWhereWithAggregatesInput[]
     NOT?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Product"> | string
-    shopId?: StringWithAggregatesFilter<"Product"> | string
-    categoryId?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    id?: UuidWithAggregatesFilter<"Product"> | string
+    shopId?: UuidWithAggregatesFilter<"Product"> | string
+    categoryId?: UuidNullableWithAggregatesFilter<"Product"> | string | null
     title?: StringWithAggregatesFilter<"Product"> | string
     slug?: StringWithAggregatesFilter<"Product"> | string
     description?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -48927,8 +48928,8 @@ export namespace Prisma {
     AND?: ProductImageWhereInput | ProductImageWhereInput[]
     OR?: ProductImageWhereInput[]
     NOT?: ProductImageWhereInput | ProductImageWhereInput[]
-    id?: StringFilter<"ProductImage"> | string
-    productId?: StringFilter<"ProductImage"> | string
+    id?: UuidFilter<"ProductImage"> | string
+    productId?: UuidFilter<"ProductImage"> | string
     url?: StringFilter<"ProductImage"> | string
     alt?: StringNullableFilter<"ProductImage"> | string | null
     position?: IntFilter<"ProductImage"> | number
@@ -48951,7 +48952,7 @@ export namespace Prisma {
     AND?: ProductImageWhereInput | ProductImageWhereInput[]
     OR?: ProductImageWhereInput[]
     NOT?: ProductImageWhereInput | ProductImageWhereInput[]
-    productId?: StringFilter<"ProductImage"> | string
+    productId?: UuidFilter<"ProductImage"> | string
     url?: StringFilter<"ProductImage"> | string
     alt?: StringNullableFilter<"ProductImage"> | string | null
     position?: IntFilter<"ProductImage"> | number
@@ -48977,8 +48978,8 @@ export namespace Prisma {
     AND?: ProductImageScalarWhereWithAggregatesInput | ProductImageScalarWhereWithAggregatesInput[]
     OR?: ProductImageScalarWhereWithAggregatesInput[]
     NOT?: ProductImageScalarWhereWithAggregatesInput | ProductImageScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ProductImage"> | string
-    productId?: StringWithAggregatesFilter<"ProductImage"> | string
+    id?: UuidWithAggregatesFilter<"ProductImage"> | string
+    productId?: UuidWithAggregatesFilter<"ProductImage"> | string
     url?: StringWithAggregatesFilter<"ProductImage"> | string
     alt?: StringNullableWithAggregatesFilter<"ProductImage"> | string | null
     position?: IntWithAggregatesFilter<"ProductImage"> | number
@@ -48989,8 +48990,8 @@ export namespace Prisma {
     AND?: ProductVariantWhereInput | ProductVariantWhereInput[]
     OR?: ProductVariantWhereInput[]
     NOT?: ProductVariantWhereInput | ProductVariantWhereInput[]
-    id?: StringFilter<"ProductVariant"> | string
-    productId?: StringFilter<"ProductVariant"> | string
+    id?: UuidFilter<"ProductVariant"> | string
+    productId?: UuidFilter<"ProductVariant"> | string
     sku?: StringFilter<"ProductVariant"> | string
     name?: StringNullableFilter<"ProductVariant"> | string | null
     price?: DecimalFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
@@ -49040,7 +49041,7 @@ export namespace Prisma {
     AND?: ProductVariantWhereInput | ProductVariantWhereInput[]
     OR?: ProductVariantWhereInput[]
     NOT?: ProductVariantWhereInput | ProductVariantWhereInput[]
-    productId?: StringFilter<"ProductVariant"> | string
+    productId?: UuidFilter<"ProductVariant"> | string
     name?: StringNullableFilter<"ProductVariant"> | string | null
     price?: DecimalFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
     compareAt?: DecimalNullableFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string | null
@@ -49089,8 +49090,8 @@ export namespace Prisma {
     AND?: ProductVariantScalarWhereWithAggregatesInput | ProductVariantScalarWhereWithAggregatesInput[]
     OR?: ProductVariantScalarWhereWithAggregatesInput[]
     NOT?: ProductVariantScalarWhereWithAggregatesInput | ProductVariantScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ProductVariant"> | string
-    productId?: StringWithAggregatesFilter<"ProductVariant"> | string
+    id?: UuidWithAggregatesFilter<"ProductVariant"> | string
+    productId?: UuidWithAggregatesFilter<"ProductVariant"> | string
     sku?: StringWithAggregatesFilter<"ProductVariant"> | string
     name?: StringNullableWithAggregatesFilter<"ProductVariant"> | string | null
     price?: DecimalWithAggregatesFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
@@ -49112,8 +49113,8 @@ export namespace Prisma {
     AND?: ProductTagWhereInput | ProductTagWhereInput[]
     OR?: ProductTagWhereInput[]
     NOT?: ProductTagWhereInput | ProductTagWhereInput[]
-    productId?: StringFilter<"ProductTag"> | string
-    tagId?: StringFilter<"ProductTag"> | string
+    productId?: UuidFilter<"ProductTag"> | string
+    tagId?: UuidFilter<"ProductTag"> | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     tag?: XOR<TagScalarRelationFilter, TagWhereInput>
   }
@@ -49130,8 +49131,8 @@ export namespace Prisma {
     AND?: ProductTagWhereInput | ProductTagWhereInput[]
     OR?: ProductTagWhereInput[]
     NOT?: ProductTagWhereInput | ProductTagWhereInput[]
-    productId?: StringFilter<"ProductTag"> | string
-    tagId?: StringFilter<"ProductTag"> | string
+    productId?: UuidFilter<"ProductTag"> | string
+    tagId?: UuidFilter<"ProductTag"> | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     tag?: XOR<TagScalarRelationFilter, TagWhereInput>
   }, "productId_tagId">
@@ -49148,16 +49149,16 @@ export namespace Prisma {
     AND?: ProductTagScalarWhereWithAggregatesInput | ProductTagScalarWhereWithAggregatesInput[]
     OR?: ProductTagScalarWhereWithAggregatesInput[]
     NOT?: ProductTagScalarWhereWithAggregatesInput | ProductTagScalarWhereWithAggregatesInput[]
-    productId?: StringWithAggregatesFilter<"ProductTag"> | string
-    tagId?: StringWithAggregatesFilter<"ProductTag"> | string
+    productId?: UuidWithAggregatesFilter<"ProductTag"> | string
+    tagId?: UuidWithAggregatesFilter<"ProductTag"> | string
   }
 
   export type CartWhereInput = {
     AND?: CartWhereInput | CartWhereInput[]
     OR?: CartWhereInput[]
     NOT?: CartWhereInput | CartWhereInput[]
-    id?: StringFilter<"Cart"> | string
-    userId?: StringFilter<"Cart"> | string
+    id?: UuidFilter<"Cart"> | string
+    userId?: UuidFilter<"Cart"> | string
     createdAt?: DateTimeFilter<"Cart"> | Date | string
     updatedAt?: DateTimeFilter<"Cart"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -49199,8 +49200,8 @@ export namespace Prisma {
     AND?: CartScalarWhereWithAggregatesInput | CartScalarWhereWithAggregatesInput[]
     OR?: CartScalarWhereWithAggregatesInput[]
     NOT?: CartScalarWhereWithAggregatesInput | CartScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Cart"> | string
-    userId?: StringWithAggregatesFilter<"Cart"> | string
+    id?: UuidWithAggregatesFilter<"Cart"> | string
+    userId?: UuidWithAggregatesFilter<"Cart"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Cart"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Cart"> | Date | string
   }
@@ -49209,9 +49210,9 @@ export namespace Prisma {
     AND?: CartItemWhereInput | CartItemWhereInput[]
     OR?: CartItemWhereInput[]
     NOT?: CartItemWhereInput | CartItemWhereInput[]
-    id?: StringFilter<"CartItem"> | string
-    cartId?: StringFilter<"CartItem"> | string
-    variantId?: StringFilter<"CartItem"> | string
+    id?: UuidFilter<"CartItem"> | string
+    cartId?: UuidFilter<"CartItem"> | string
+    variantId?: UuidFilter<"CartItem"> | string
     quantity?: IntFilter<"CartItem"> | number
     priceSnap?: DecimalFilter<"CartItem"> | Decimal | DecimalJsLike | number | string
     currency?: EnumCurrencyFilter<"CartItem"> | $Enums.Currency
@@ -49238,8 +49239,8 @@ export namespace Prisma {
     AND?: CartItemWhereInput | CartItemWhereInput[]
     OR?: CartItemWhereInput[]
     NOT?: CartItemWhereInput | CartItemWhereInput[]
-    cartId?: StringFilter<"CartItem"> | string
-    variantId?: StringFilter<"CartItem"> | string
+    cartId?: UuidFilter<"CartItem"> | string
+    variantId?: UuidFilter<"CartItem"> | string
     quantity?: IntFilter<"CartItem"> | number
     priceSnap?: DecimalFilter<"CartItem"> | Decimal | DecimalJsLike | number | string
     currency?: EnumCurrencyFilter<"CartItem"> | $Enums.Currency
@@ -49267,9 +49268,9 @@ export namespace Prisma {
     AND?: CartItemScalarWhereWithAggregatesInput | CartItemScalarWhereWithAggregatesInput[]
     OR?: CartItemScalarWhereWithAggregatesInput[]
     NOT?: CartItemScalarWhereWithAggregatesInput | CartItemScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"CartItem"> | string
-    cartId?: StringWithAggregatesFilter<"CartItem"> | string
-    variantId?: StringWithAggregatesFilter<"CartItem"> | string
+    id?: UuidWithAggregatesFilter<"CartItem"> | string
+    cartId?: UuidWithAggregatesFilter<"CartItem"> | string
+    variantId?: UuidWithAggregatesFilter<"CartItem"> | string
     quantity?: IntWithAggregatesFilter<"CartItem"> | number
     priceSnap?: DecimalWithAggregatesFilter<"CartItem"> | Decimal | DecimalJsLike | number | string
     currency?: EnumCurrencyWithAggregatesFilter<"CartItem"> | $Enums.Currency
@@ -49280,8 +49281,8 @@ export namespace Prisma {
     AND?: WishlistWhereInput | WishlistWhereInput[]
     OR?: WishlistWhereInput[]
     NOT?: WishlistWhereInput | WishlistWhereInput[]
-    id?: StringFilter<"Wishlist"> | string
-    userId?: StringFilter<"Wishlist"> | string
+    id?: UuidFilter<"Wishlist"> | string
+    userId?: UuidFilter<"Wishlist"> | string
     createdAt?: DateTimeFilter<"Wishlist"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     items?: WishlistItemListRelationFilter
@@ -49319,8 +49320,8 @@ export namespace Prisma {
     AND?: WishlistScalarWhereWithAggregatesInput | WishlistScalarWhereWithAggregatesInput[]
     OR?: WishlistScalarWhereWithAggregatesInput[]
     NOT?: WishlistScalarWhereWithAggregatesInput | WishlistScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Wishlist"> | string
-    userId?: StringWithAggregatesFilter<"Wishlist"> | string
+    id?: UuidWithAggregatesFilter<"Wishlist"> | string
+    userId?: UuidWithAggregatesFilter<"Wishlist"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Wishlist"> | Date | string
   }
 
@@ -49328,9 +49329,9 @@ export namespace Prisma {
     AND?: WishlistItemWhereInput | WishlistItemWhereInput[]
     OR?: WishlistItemWhereInput[]
     NOT?: WishlistItemWhereInput | WishlistItemWhereInput[]
-    id?: StringFilter<"WishlistItem"> | string
-    wishlistId?: StringFilter<"WishlistItem"> | string
-    productId?: StringFilter<"WishlistItem"> | string
+    id?: UuidFilter<"WishlistItem"> | string
+    wishlistId?: UuidFilter<"WishlistItem"> | string
+    productId?: UuidFilter<"WishlistItem"> | string
     createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
     wishlist?: XOR<WishlistScalarRelationFilter, WishlistWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -49351,8 +49352,8 @@ export namespace Prisma {
     AND?: WishlistItemWhereInput | WishlistItemWhereInput[]
     OR?: WishlistItemWhereInput[]
     NOT?: WishlistItemWhereInput | WishlistItemWhereInput[]
-    wishlistId?: StringFilter<"WishlistItem"> | string
-    productId?: StringFilter<"WishlistItem"> | string
+    wishlistId?: UuidFilter<"WishlistItem"> | string
+    productId?: UuidFilter<"WishlistItem"> | string
     createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
     wishlist?: XOR<WishlistScalarRelationFilter, WishlistWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -49372,9 +49373,9 @@ export namespace Prisma {
     AND?: WishlistItemScalarWhereWithAggregatesInput | WishlistItemScalarWhereWithAggregatesInput[]
     OR?: WishlistItemScalarWhereWithAggregatesInput[]
     NOT?: WishlistItemScalarWhereWithAggregatesInput | WishlistItemScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"WishlistItem"> | string
-    wishlistId?: StringWithAggregatesFilter<"WishlistItem"> | string
-    productId?: StringWithAggregatesFilter<"WishlistItem"> | string
+    id?: UuidWithAggregatesFilter<"WishlistItem"> | string
+    wishlistId?: UuidWithAggregatesFilter<"WishlistItem"> | string
+    productId?: UuidWithAggregatesFilter<"WishlistItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"WishlistItem"> | Date | string
   }
 
@@ -49382,10 +49383,10 @@ export namespace Prisma {
     AND?: OrderWhereInput | OrderWhereInput[]
     OR?: OrderWhereInput[]
     NOT?: OrderWhereInput | OrderWhereInput[]
-    id?: StringFilter<"Order"> | string
+    id?: UuidFilter<"Order"> | string
     orderNumber?: StringFilter<"Order"> | string
-    userId?: StringFilter<"Order"> | string
-    shopId?: StringFilter<"Order"> | string
+    userId?: UuidFilter<"Order"> | string
+    shopId?: UuidFilter<"Order"> | string
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFilter<"Order"> | $Enums.PaymentStatus
     fulfillmentStatus?: EnumFulfillmentStatusFilter<"Order"> | $Enums.FulfillmentStatus
@@ -49453,8 +49454,8 @@ export namespace Prisma {
     AND?: OrderWhereInput | OrderWhereInput[]
     OR?: OrderWhereInput[]
     NOT?: OrderWhereInput | OrderWhereInput[]
-    userId?: StringFilter<"Order"> | string
-    shopId?: StringFilter<"Order"> | string
+    userId?: UuidFilter<"Order"> | string
+    shopId?: UuidFilter<"Order"> | string
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFilter<"Order"> | $Enums.PaymentStatus
     fulfillmentStatus?: EnumFulfillmentStatusFilter<"Order"> | $Enums.FulfillmentStatus
@@ -49516,10 +49517,10 @@ export namespace Prisma {
     AND?: OrderScalarWhereWithAggregatesInput | OrderScalarWhereWithAggregatesInput[]
     OR?: OrderScalarWhereWithAggregatesInput[]
     NOT?: OrderScalarWhereWithAggregatesInput | OrderScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Order"> | string
+    id?: UuidWithAggregatesFilter<"Order"> | string
     orderNumber?: StringWithAggregatesFilter<"Order"> | string
-    userId?: StringWithAggregatesFilter<"Order"> | string
-    shopId?: StringWithAggregatesFilter<"Order"> | string
+    userId?: UuidWithAggregatesFilter<"Order"> | string
+    shopId?: UuidWithAggregatesFilter<"Order"> | string
     status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusWithAggregatesFilter<"Order"> | $Enums.PaymentStatus
     fulfillmentStatus?: EnumFulfillmentStatusWithAggregatesFilter<"Order"> | $Enums.FulfillmentStatus
@@ -49543,10 +49544,10 @@ export namespace Prisma {
     AND?: OrderItemWhereInput | OrderItemWhereInput[]
     OR?: OrderItemWhereInput[]
     NOT?: OrderItemWhereInput | OrderItemWhereInput[]
-    id?: StringFilter<"OrderItem"> | string
-    orderId?: StringFilter<"OrderItem"> | string
-    productId?: StringFilter<"OrderItem"> | string
-    variantId?: StringNullableFilter<"OrderItem"> | string | null
+    id?: UuidFilter<"OrderItem"> | string
+    orderId?: UuidFilter<"OrderItem"> | string
+    productId?: UuidFilter<"OrderItem"> | string
+    variantId?: UuidNullableFilter<"OrderItem"> | string | null
     title?: StringFilter<"OrderItem"> | string
     sku?: StringNullableFilter<"OrderItem"> | string | null
     unitPrice?: DecimalFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
@@ -49585,9 +49586,9 @@ export namespace Prisma {
     AND?: OrderItemWhereInput | OrderItemWhereInput[]
     OR?: OrderItemWhereInput[]
     NOT?: OrderItemWhereInput | OrderItemWhereInput[]
-    orderId?: StringFilter<"OrderItem"> | string
-    productId?: StringFilter<"OrderItem"> | string
-    variantId?: StringNullableFilter<"OrderItem"> | string | null
+    orderId?: UuidFilter<"OrderItem"> | string
+    productId?: UuidFilter<"OrderItem"> | string
+    variantId?: UuidNullableFilter<"OrderItem"> | string | null
     title?: StringFilter<"OrderItem"> | string
     sku?: StringNullableFilter<"OrderItem"> | string | null
     unitPrice?: DecimalFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
@@ -49625,10 +49626,10 @@ export namespace Prisma {
     AND?: OrderItemScalarWhereWithAggregatesInput | OrderItemScalarWhereWithAggregatesInput[]
     OR?: OrderItemScalarWhereWithAggregatesInput[]
     NOT?: OrderItemScalarWhereWithAggregatesInput | OrderItemScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"OrderItem"> | string
-    orderId?: StringWithAggregatesFilter<"OrderItem"> | string
-    productId?: StringWithAggregatesFilter<"OrderItem"> | string
-    variantId?: StringNullableWithAggregatesFilter<"OrderItem"> | string | null
+    id?: UuidWithAggregatesFilter<"OrderItem"> | string
+    orderId?: UuidWithAggregatesFilter<"OrderItem"> | string
+    productId?: UuidWithAggregatesFilter<"OrderItem"> | string
+    variantId?: UuidNullableWithAggregatesFilter<"OrderItem"> | string | null
     title?: StringWithAggregatesFilter<"OrderItem"> | string
     sku?: StringNullableWithAggregatesFilter<"OrderItem"> | string | null
     unitPrice?: DecimalWithAggregatesFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
@@ -49642,8 +49643,8 @@ export namespace Prisma {
     AND?: PaymentWhereInput | PaymentWhereInput[]
     OR?: PaymentWhereInput[]
     NOT?: PaymentWhereInput | PaymentWhereInput[]
-    id?: StringFilter<"Payment"> | string
-    orderId?: StringFilter<"Payment"> | string
+    id?: UuidFilter<"Payment"> | string
+    orderId?: UuidFilter<"Payment"> | string
     provider?: EnumPaymentProviderFilter<"Payment"> | $Enums.PaymentProvider
     method?: StringNullableFilter<"Payment"> | string | null
     amount?: DecimalFilter<"Payment"> | Decimal | DecimalJsLike | number | string
@@ -49680,7 +49681,7 @@ export namespace Prisma {
     AND?: PaymentWhereInput | PaymentWhereInput[]
     OR?: PaymentWhereInput[]
     NOT?: PaymentWhereInput | PaymentWhereInput[]
-    orderId?: StringFilter<"Payment"> | string
+    orderId?: UuidFilter<"Payment"> | string
     provider?: EnumPaymentProviderFilter<"Payment"> | $Enums.PaymentProvider
     method?: StringNullableFilter<"Payment"> | string | null
     amount?: DecimalFilter<"Payment"> | Decimal | DecimalJsLike | number | string
@@ -49719,8 +49720,8 @@ export namespace Prisma {
     AND?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
     OR?: PaymentScalarWhereWithAggregatesInput[]
     NOT?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Payment"> | string
-    orderId?: StringWithAggregatesFilter<"Payment"> | string
+    id?: UuidWithAggregatesFilter<"Payment"> | string
+    orderId?: UuidWithAggregatesFilter<"Payment"> | string
     provider?: EnumPaymentProviderWithAggregatesFilter<"Payment"> | $Enums.PaymentProvider
     method?: StringNullableWithAggregatesFilter<"Payment"> | string | null
     amount?: DecimalWithAggregatesFilter<"Payment"> | Decimal | DecimalJsLike | number | string
@@ -49737,8 +49738,8 @@ export namespace Prisma {
     AND?: ShipmentWhereInput | ShipmentWhereInput[]
     OR?: ShipmentWhereInput[]
     NOT?: ShipmentWhereInput | ShipmentWhereInput[]
-    id?: StringFilter<"Shipment"> | string
-    orderId?: StringFilter<"Shipment"> | string
+    id?: UuidFilter<"Shipment"> | string
+    orderId?: UuidFilter<"Shipment"> | string
     carrier?: StringNullableFilter<"Shipment"> | string | null
     trackingNumber?: StringNullableFilter<"Shipment"> | string | null
     status?: StringNullableFilter<"Shipment"> | string | null
@@ -49767,7 +49768,7 @@ export namespace Prisma {
     AND?: ShipmentWhereInput | ShipmentWhereInput[]
     OR?: ShipmentWhereInput[]
     NOT?: ShipmentWhereInput | ShipmentWhereInput[]
-    orderId?: StringFilter<"Shipment"> | string
+    orderId?: UuidFilter<"Shipment"> | string
     carrier?: StringNullableFilter<"Shipment"> | string | null
     trackingNumber?: StringNullableFilter<"Shipment"> | string | null
     status?: StringNullableFilter<"Shipment"> | string | null
@@ -49797,8 +49798,8 @@ export namespace Prisma {
     AND?: ShipmentScalarWhereWithAggregatesInput | ShipmentScalarWhereWithAggregatesInput[]
     OR?: ShipmentScalarWhereWithAggregatesInput[]
     NOT?: ShipmentScalarWhereWithAggregatesInput | ShipmentScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Shipment"> | string
-    orderId?: StringWithAggregatesFilter<"Shipment"> | string
+    id?: UuidWithAggregatesFilter<"Shipment"> | string
+    orderId?: UuidWithAggregatesFilter<"Shipment"> | string
     carrier?: StringNullableWithAggregatesFilter<"Shipment"> | string | null
     trackingNumber?: StringNullableWithAggregatesFilter<"Shipment"> | string | null
     status?: StringNullableWithAggregatesFilter<"Shipment"> | string | null
@@ -49812,9 +49813,9 @@ export namespace Prisma {
     AND?: RefundWhereInput | RefundWhereInput[]
     OR?: RefundWhereInput[]
     NOT?: RefundWhereInput | RefundWhereInput[]
-    id?: StringFilter<"Refund"> | string
-    orderId?: StringFilter<"Refund"> | string
-    paymentId?: StringNullableFilter<"Refund"> | string | null
+    id?: UuidFilter<"Refund"> | string
+    orderId?: UuidFilter<"Refund"> | string
+    paymentId?: UuidNullableFilter<"Refund"> | string | null
     amount?: DecimalFilter<"Refund"> | Decimal | DecimalJsLike | number | string
     reason?: StringNullableFilter<"Refund"> | string | null
     status?: StringFilter<"Refund"> | string
@@ -49840,8 +49841,8 @@ export namespace Prisma {
     AND?: RefundWhereInput | RefundWhereInput[]
     OR?: RefundWhereInput[]
     NOT?: RefundWhereInput | RefundWhereInput[]
-    orderId?: StringFilter<"Refund"> | string
-    paymentId?: StringNullableFilter<"Refund"> | string | null
+    orderId?: UuidFilter<"Refund"> | string
+    paymentId?: UuidNullableFilter<"Refund"> | string | null
     amount?: DecimalFilter<"Refund"> | Decimal | DecimalJsLike | number | string
     reason?: StringNullableFilter<"Refund"> | string | null
     status?: StringFilter<"Refund"> | string
@@ -49869,9 +49870,9 @@ export namespace Prisma {
     AND?: RefundScalarWhereWithAggregatesInput | RefundScalarWhereWithAggregatesInput[]
     OR?: RefundScalarWhereWithAggregatesInput[]
     NOT?: RefundScalarWhereWithAggregatesInput | RefundScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Refund"> | string
-    orderId?: StringWithAggregatesFilter<"Refund"> | string
-    paymentId?: StringNullableWithAggregatesFilter<"Refund"> | string | null
+    id?: UuidWithAggregatesFilter<"Refund"> | string
+    orderId?: UuidWithAggregatesFilter<"Refund"> | string
+    paymentId?: UuidNullableWithAggregatesFilter<"Refund"> | string | null
     amount?: DecimalWithAggregatesFilter<"Refund"> | Decimal | DecimalJsLike | number | string
     reason?: StringNullableWithAggregatesFilter<"Refund"> | string | null
     status?: StringWithAggregatesFilter<"Refund"> | string
@@ -49882,9 +49883,9 @@ export namespace Prisma {
     AND?: ReturnRequestWhereInput | ReturnRequestWhereInput[]
     OR?: ReturnRequestWhereInput[]
     NOT?: ReturnRequestWhereInput | ReturnRequestWhereInput[]
-    id?: StringFilter<"ReturnRequest"> | string
-    orderId?: StringFilter<"ReturnRequest"> | string
-    userId?: StringFilter<"ReturnRequest"> | string
+    id?: UuidFilter<"ReturnRequest"> | string
+    orderId?: UuidFilter<"ReturnRequest"> | string
+    userId?: UuidFilter<"ReturnRequest"> | string
     reason?: StringNullableFilter<"ReturnRequest"> | string | null
     status?: StringFilter<"ReturnRequest"> | string
     createdAt?: DateTimeFilter<"ReturnRequest"> | Date | string
@@ -49910,8 +49911,8 @@ export namespace Prisma {
     AND?: ReturnRequestWhereInput | ReturnRequestWhereInput[]
     OR?: ReturnRequestWhereInput[]
     NOT?: ReturnRequestWhereInput | ReturnRequestWhereInput[]
-    orderId?: StringFilter<"ReturnRequest"> | string
-    userId?: StringFilter<"ReturnRequest"> | string
+    orderId?: UuidFilter<"ReturnRequest"> | string
+    userId?: UuidFilter<"ReturnRequest"> | string
     reason?: StringNullableFilter<"ReturnRequest"> | string | null
     status?: StringFilter<"ReturnRequest"> | string
     createdAt?: DateTimeFilter<"ReturnRequest"> | Date | string
@@ -49936,9 +49937,9 @@ export namespace Prisma {
     AND?: ReturnRequestScalarWhereWithAggregatesInput | ReturnRequestScalarWhereWithAggregatesInput[]
     OR?: ReturnRequestScalarWhereWithAggregatesInput[]
     NOT?: ReturnRequestScalarWhereWithAggregatesInput | ReturnRequestScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ReturnRequest"> | string
-    orderId?: StringWithAggregatesFilter<"ReturnRequest"> | string
-    userId?: StringWithAggregatesFilter<"ReturnRequest"> | string
+    id?: UuidWithAggregatesFilter<"ReturnRequest"> | string
+    orderId?: UuidWithAggregatesFilter<"ReturnRequest"> | string
+    userId?: UuidWithAggregatesFilter<"ReturnRequest"> | string
     reason?: StringNullableWithAggregatesFilter<"ReturnRequest"> | string | null
     status?: StringWithAggregatesFilter<"ReturnRequest"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ReturnRequest"> | Date | string
@@ -49948,9 +49949,9 @@ export namespace Prisma {
     AND?: ReturnItemWhereInput | ReturnItemWhereInput[]
     OR?: ReturnItemWhereInput[]
     NOT?: ReturnItemWhereInput | ReturnItemWhereInput[]
-    id?: StringFilter<"ReturnItem"> | string
-    returnRequestId?: StringFilter<"ReturnItem"> | string
-    orderItemId?: StringFilter<"ReturnItem"> | string
+    id?: UuidFilter<"ReturnItem"> | string
+    returnRequestId?: UuidFilter<"ReturnItem"> | string
+    orderItemId?: UuidFilter<"ReturnItem"> | string
     quantity?: IntFilter<"ReturnItem"> | number
     reason?: StringNullableFilter<"ReturnItem"> | string | null
     returnRequest?: XOR<ReturnRequestScalarRelationFilter, ReturnRequestWhereInput>
@@ -49972,8 +49973,8 @@ export namespace Prisma {
     AND?: ReturnItemWhereInput | ReturnItemWhereInput[]
     OR?: ReturnItemWhereInput[]
     NOT?: ReturnItemWhereInput | ReturnItemWhereInput[]
-    returnRequestId?: StringFilter<"ReturnItem"> | string
-    orderItemId?: StringFilter<"ReturnItem"> | string
+    returnRequestId?: UuidFilter<"ReturnItem"> | string
+    orderItemId?: UuidFilter<"ReturnItem"> | string
     quantity?: IntFilter<"ReturnItem"> | number
     reason?: StringNullableFilter<"ReturnItem"> | string | null
     returnRequest?: XOR<ReturnRequestScalarRelationFilter, ReturnRequestWhereInput>
@@ -49997,9 +49998,9 @@ export namespace Prisma {
     AND?: ReturnItemScalarWhereWithAggregatesInput | ReturnItemScalarWhereWithAggregatesInput[]
     OR?: ReturnItemScalarWhereWithAggregatesInput[]
     NOT?: ReturnItemScalarWhereWithAggregatesInput | ReturnItemScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ReturnItem"> | string
-    returnRequestId?: StringWithAggregatesFilter<"ReturnItem"> | string
-    orderItemId?: StringWithAggregatesFilter<"ReturnItem"> | string
+    id?: UuidWithAggregatesFilter<"ReturnItem"> | string
+    returnRequestId?: UuidWithAggregatesFilter<"ReturnItem"> | string
+    orderItemId?: UuidWithAggregatesFilter<"ReturnItem"> | string
     quantity?: IntWithAggregatesFilter<"ReturnItem"> | number
     reason?: StringNullableWithAggregatesFilter<"ReturnItem"> | string | null
   }
@@ -50008,10 +50009,10 @@ export namespace Prisma {
     AND?: ReviewWhereInput | ReviewWhereInput[]
     OR?: ReviewWhereInput[]
     NOT?: ReviewWhereInput | ReviewWhereInput[]
-    id?: StringFilter<"Review"> | string
-    productId?: StringFilter<"Review"> | string
-    userId?: StringFilter<"Review"> | string
-    orderItemId?: StringNullableFilter<"Review"> | string | null
+    id?: UuidFilter<"Review"> | string
+    productId?: UuidFilter<"Review"> | string
+    userId?: UuidFilter<"Review"> | string
+    orderItemId?: UuidNullableFilter<"Review"> | string | null
     rating?: IntFilter<"Review"> | number
     title?: StringNullableFilter<"Review"> | string | null
     body?: StringNullableFilter<"Review"> | string | null
@@ -50048,8 +50049,8 @@ export namespace Prisma {
     AND?: ReviewWhereInput | ReviewWhereInput[]
     OR?: ReviewWhereInput[]
     NOT?: ReviewWhereInput | ReviewWhereInput[]
-    productId?: StringFilter<"Review"> | string
-    userId?: StringFilter<"Review"> | string
+    productId?: UuidFilter<"Review"> | string
+    userId?: UuidFilter<"Review"> | string
     rating?: IntFilter<"Review"> | number
     title?: StringNullableFilter<"Review"> | string | null
     body?: StringNullableFilter<"Review"> | string | null
@@ -50085,10 +50086,10 @@ export namespace Prisma {
     AND?: ReviewScalarWhereWithAggregatesInput | ReviewScalarWhereWithAggregatesInput[]
     OR?: ReviewScalarWhereWithAggregatesInput[]
     NOT?: ReviewScalarWhereWithAggregatesInput | ReviewScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Review"> | string
-    productId?: StringWithAggregatesFilter<"Review"> | string
-    userId?: StringWithAggregatesFilter<"Review"> | string
-    orderItemId?: StringNullableWithAggregatesFilter<"Review"> | string | null
+    id?: UuidWithAggregatesFilter<"Review"> | string
+    productId?: UuidWithAggregatesFilter<"Review"> | string
+    userId?: UuidWithAggregatesFilter<"Review"> | string
+    orderItemId?: UuidNullableWithAggregatesFilter<"Review"> | string | null
     rating?: IntWithAggregatesFilter<"Review"> | number
     title?: StringNullableWithAggregatesFilter<"Review"> | string | null
     body?: StringNullableWithAggregatesFilter<"Review"> | string | null
@@ -50102,9 +50103,9 @@ export namespace Prisma {
     AND?: ProductQuestionWhereInput | ProductQuestionWhereInput[]
     OR?: ProductQuestionWhereInput[]
     NOT?: ProductQuestionWhereInput | ProductQuestionWhereInput[]
-    id?: StringFilter<"ProductQuestion"> | string
-    productId?: StringFilter<"ProductQuestion"> | string
-    userId?: StringFilter<"ProductQuestion"> | string
+    id?: UuidFilter<"ProductQuestion"> | string
+    productId?: UuidFilter<"ProductQuestion"> | string
+    userId?: UuidFilter<"ProductQuestion"> | string
     body?: StringFilter<"ProductQuestion"> | string
     answer?: StringNullableFilter<"ProductQuestion"> | string | null
     answeredAt?: DateTimeNullableFilter<"ProductQuestion"> | Date | string | null
@@ -50130,8 +50131,8 @@ export namespace Prisma {
     AND?: ProductQuestionWhereInput | ProductQuestionWhereInput[]
     OR?: ProductQuestionWhereInput[]
     NOT?: ProductQuestionWhereInput | ProductQuestionWhereInput[]
-    productId?: StringFilter<"ProductQuestion"> | string
-    userId?: StringFilter<"ProductQuestion"> | string
+    productId?: UuidFilter<"ProductQuestion"> | string
+    userId?: UuidFilter<"ProductQuestion"> | string
     body?: StringFilter<"ProductQuestion"> | string
     answer?: StringNullableFilter<"ProductQuestion"> | string | null
     answeredAt?: DateTimeNullableFilter<"ProductQuestion"> | Date | string | null
@@ -50157,9 +50158,9 @@ export namespace Prisma {
     AND?: ProductQuestionScalarWhereWithAggregatesInput | ProductQuestionScalarWhereWithAggregatesInput[]
     OR?: ProductQuestionScalarWhereWithAggregatesInput[]
     NOT?: ProductQuestionScalarWhereWithAggregatesInput | ProductQuestionScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ProductQuestion"> | string
-    productId?: StringWithAggregatesFilter<"ProductQuestion"> | string
-    userId?: StringWithAggregatesFilter<"ProductQuestion"> | string
+    id?: UuidWithAggregatesFilter<"ProductQuestion"> | string
+    productId?: UuidWithAggregatesFilter<"ProductQuestion"> | string
+    userId?: UuidWithAggregatesFilter<"ProductQuestion"> | string
     body?: StringWithAggregatesFilter<"ProductQuestion"> | string
     answer?: StringNullableWithAggregatesFilter<"ProductQuestion"> | string | null
     answeredAt?: DateTimeNullableWithAggregatesFilter<"ProductQuestion"> | Date | string | null
@@ -50170,7 +50171,7 @@ export namespace Prisma {
     AND?: VoucherWhereInput | VoucherWhereInput[]
     OR?: VoucherWhereInput[]
     NOT?: VoucherWhereInput | VoucherWhereInput[]
-    id?: StringFilter<"Voucher"> | string
+    id?: UuidFilter<"Voucher"> | string
     code?: StringFilter<"Voucher"> | string
     type?: EnumVoucherTypeFilter<"Voucher"> | $Enums.VoucherType
     value?: DecimalFilter<"Voucher"> | Decimal | DecimalJsLike | number | string
@@ -50181,7 +50182,7 @@ export namespace Prisma {
     endAt?: DateTimeFilter<"Voucher"> | Date | string
     usageLimit?: IntNullableFilter<"Voucher"> | number | null
     perUserLimit?: IntNullableFilter<"Voucher"> | number | null
-    shopId?: StringNullableFilter<"Voucher"> | string | null
+    shopId?: UuidNullableFilter<"Voucher"> | string | null
     isActive?: BoolFilter<"Voucher"> | boolean
     createdAt?: DateTimeFilter<"Voucher"> | Date | string
     shop?: XOR<ShopNullableScalarRelationFilter, ShopWhereInput> | null
@@ -50228,7 +50229,7 @@ export namespace Prisma {
     endAt?: DateTimeFilter<"Voucher"> | Date | string
     usageLimit?: IntNullableFilter<"Voucher"> | number | null
     perUserLimit?: IntNullableFilter<"Voucher"> | number | null
-    shopId?: StringNullableFilter<"Voucher"> | string | null
+    shopId?: UuidNullableFilter<"Voucher"> | string | null
     isActive?: BoolFilter<"Voucher"> | boolean
     createdAt?: DateTimeFilter<"Voucher"> | Date | string
     shop?: XOR<ShopNullableScalarRelationFilter, ShopWhereInput> | null
@@ -50264,7 +50265,7 @@ export namespace Prisma {
     AND?: VoucherScalarWhereWithAggregatesInput | VoucherScalarWhereWithAggregatesInput[]
     OR?: VoucherScalarWhereWithAggregatesInput[]
     NOT?: VoucherScalarWhereWithAggregatesInput | VoucherScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Voucher"> | string
+    id?: UuidWithAggregatesFilter<"Voucher"> | string
     code?: StringWithAggregatesFilter<"Voucher"> | string
     type?: EnumVoucherTypeWithAggregatesFilter<"Voucher"> | $Enums.VoucherType
     value?: DecimalWithAggregatesFilter<"Voucher"> | Decimal | DecimalJsLike | number | string
@@ -50275,7 +50276,7 @@ export namespace Prisma {
     endAt?: DateTimeWithAggregatesFilter<"Voucher"> | Date | string
     usageLimit?: IntNullableWithAggregatesFilter<"Voucher"> | number | null
     perUserLimit?: IntNullableWithAggregatesFilter<"Voucher"> | number | null
-    shopId?: StringNullableWithAggregatesFilter<"Voucher"> | string | null
+    shopId?: UuidNullableWithAggregatesFilter<"Voucher"> | string | null
     isActive?: BoolWithAggregatesFilter<"Voucher"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Voucher"> | Date | string
   }
@@ -50284,8 +50285,8 @@ export namespace Prisma {
     AND?: VoucherCategoryWhereInput | VoucherCategoryWhereInput[]
     OR?: VoucherCategoryWhereInput[]
     NOT?: VoucherCategoryWhereInput | VoucherCategoryWhereInput[]
-    voucherId?: StringFilter<"VoucherCategory"> | string
-    categoryId?: StringFilter<"VoucherCategory"> | string
+    voucherId?: UuidFilter<"VoucherCategory"> | string
+    categoryId?: UuidFilter<"VoucherCategory"> | string
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
   }
@@ -50302,8 +50303,8 @@ export namespace Prisma {
     AND?: VoucherCategoryWhereInput | VoucherCategoryWhereInput[]
     OR?: VoucherCategoryWhereInput[]
     NOT?: VoucherCategoryWhereInput | VoucherCategoryWhereInput[]
-    voucherId?: StringFilter<"VoucherCategory"> | string
-    categoryId?: StringFilter<"VoucherCategory"> | string
+    voucherId?: UuidFilter<"VoucherCategory"> | string
+    categoryId?: UuidFilter<"VoucherCategory"> | string
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
   }, "voucherId_categoryId">
@@ -50320,16 +50321,16 @@ export namespace Prisma {
     AND?: VoucherCategoryScalarWhereWithAggregatesInput | VoucherCategoryScalarWhereWithAggregatesInput[]
     OR?: VoucherCategoryScalarWhereWithAggregatesInput[]
     NOT?: VoucherCategoryScalarWhereWithAggregatesInput | VoucherCategoryScalarWhereWithAggregatesInput[]
-    voucherId?: StringWithAggregatesFilter<"VoucherCategory"> | string
-    categoryId?: StringWithAggregatesFilter<"VoucherCategory"> | string
+    voucherId?: UuidWithAggregatesFilter<"VoucherCategory"> | string
+    categoryId?: UuidWithAggregatesFilter<"VoucherCategory"> | string
   }
 
   export type VoucherProductWhereInput = {
     AND?: VoucherProductWhereInput | VoucherProductWhereInput[]
     OR?: VoucherProductWhereInput[]
     NOT?: VoucherProductWhereInput | VoucherProductWhereInput[]
-    voucherId?: StringFilter<"VoucherProduct"> | string
-    productId?: StringFilter<"VoucherProduct"> | string
+    voucherId?: UuidFilter<"VoucherProduct"> | string
+    productId?: UuidFilter<"VoucherProduct"> | string
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
@@ -50346,8 +50347,8 @@ export namespace Prisma {
     AND?: VoucherProductWhereInput | VoucherProductWhereInput[]
     OR?: VoucherProductWhereInput[]
     NOT?: VoucherProductWhereInput | VoucherProductWhereInput[]
-    voucherId?: StringFilter<"VoucherProduct"> | string
-    productId?: StringFilter<"VoucherProduct"> | string
+    voucherId?: UuidFilter<"VoucherProduct"> | string
+    productId?: UuidFilter<"VoucherProduct"> | string
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "voucherId_productId">
@@ -50364,18 +50365,18 @@ export namespace Prisma {
     AND?: VoucherProductScalarWhereWithAggregatesInput | VoucherProductScalarWhereWithAggregatesInput[]
     OR?: VoucherProductScalarWhereWithAggregatesInput[]
     NOT?: VoucherProductScalarWhereWithAggregatesInput | VoucherProductScalarWhereWithAggregatesInput[]
-    voucherId?: StringWithAggregatesFilter<"VoucherProduct"> | string
-    productId?: StringWithAggregatesFilter<"VoucherProduct"> | string
+    voucherId?: UuidWithAggregatesFilter<"VoucherProduct"> | string
+    productId?: UuidWithAggregatesFilter<"VoucherProduct"> | string
   }
 
   export type VoucherRedemptionWhereInput = {
     AND?: VoucherRedemptionWhereInput | VoucherRedemptionWhereInput[]
     OR?: VoucherRedemptionWhereInput[]
     NOT?: VoucherRedemptionWhereInput | VoucherRedemptionWhereInput[]
-    id?: StringFilter<"VoucherRedemption"> | string
-    voucherId?: StringFilter<"VoucherRedemption"> | string
-    orderId?: StringFilter<"VoucherRedemption"> | string
-    userId?: StringFilter<"VoucherRedemption"> | string
+    id?: UuidFilter<"VoucherRedemption"> | string
+    voucherId?: UuidFilter<"VoucherRedemption"> | string
+    orderId?: UuidFilter<"VoucherRedemption"> | string
+    userId?: UuidFilter<"VoucherRedemption"> | string
     usedAt?: DateTimeFilter<"VoucherRedemption"> | Date | string
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
@@ -50399,9 +50400,9 @@ export namespace Prisma {
     AND?: VoucherRedemptionWhereInput | VoucherRedemptionWhereInput[]
     OR?: VoucherRedemptionWhereInput[]
     NOT?: VoucherRedemptionWhereInput | VoucherRedemptionWhereInput[]
-    voucherId?: StringFilter<"VoucherRedemption"> | string
-    orderId?: StringFilter<"VoucherRedemption"> | string
-    userId?: StringFilter<"VoucherRedemption"> | string
+    voucherId?: UuidFilter<"VoucherRedemption"> | string
+    orderId?: UuidFilter<"VoucherRedemption"> | string
+    userId?: UuidFilter<"VoucherRedemption"> | string
     usedAt?: DateTimeFilter<"VoucherRedemption"> | Date | string
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
@@ -50423,10 +50424,10 @@ export namespace Prisma {
     AND?: VoucherRedemptionScalarWhereWithAggregatesInput | VoucherRedemptionScalarWhereWithAggregatesInput[]
     OR?: VoucherRedemptionScalarWhereWithAggregatesInput[]
     NOT?: VoucherRedemptionScalarWhereWithAggregatesInput | VoucherRedemptionScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"VoucherRedemption"> | string
-    voucherId?: StringWithAggregatesFilter<"VoucherRedemption"> | string
-    orderId?: StringWithAggregatesFilter<"VoucherRedemption"> | string
-    userId?: StringWithAggregatesFilter<"VoucherRedemption"> | string
+    id?: UuidWithAggregatesFilter<"VoucherRedemption"> | string
+    voucherId?: UuidWithAggregatesFilter<"VoucherRedemption"> | string
+    orderId?: UuidWithAggregatesFilter<"VoucherRedemption"> | string
+    userId?: UuidWithAggregatesFilter<"VoucherRedemption"> | string
     usedAt?: DateTimeWithAggregatesFilter<"VoucherRedemption"> | Date | string
   }
 
@@ -50434,8 +50435,8 @@ export namespace Prisma {
     AND?: OrderVoucherWhereInput | OrderVoucherWhereInput[]
     OR?: OrderVoucherWhereInput[]
     NOT?: OrderVoucherWhereInput | OrderVoucherWhereInput[]
-    orderId?: StringFilter<"OrderVoucher"> | string
-    voucherId?: StringFilter<"OrderVoucher"> | string
+    orderId?: UuidFilter<"OrderVoucher"> | string
+    voucherId?: UuidFilter<"OrderVoucher"> | string
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
   }
@@ -50452,8 +50453,8 @@ export namespace Prisma {
     AND?: OrderVoucherWhereInput | OrderVoucherWhereInput[]
     OR?: OrderVoucherWhereInput[]
     NOT?: OrderVoucherWhereInput | OrderVoucherWhereInput[]
-    orderId?: StringFilter<"OrderVoucher"> | string
-    voucherId?: StringFilter<"OrderVoucher"> | string
+    orderId?: UuidFilter<"OrderVoucher"> | string
+    voucherId?: UuidFilter<"OrderVoucher"> | string
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
   }, "orderId_voucherId">
@@ -50470,17 +50471,17 @@ export namespace Prisma {
     AND?: OrderVoucherScalarWhereWithAggregatesInput | OrderVoucherScalarWhereWithAggregatesInput[]
     OR?: OrderVoucherScalarWhereWithAggregatesInput[]
     NOT?: OrderVoucherScalarWhereWithAggregatesInput | OrderVoucherScalarWhereWithAggregatesInput[]
-    orderId?: StringWithAggregatesFilter<"OrderVoucher"> | string
-    voucherId?: StringWithAggregatesFilter<"OrderVoucher"> | string
+    orderId?: UuidWithAggregatesFilter<"OrderVoucher"> | string
+    voucherId?: UuidWithAggregatesFilter<"OrderVoucher"> | string
   }
 
   export type ConversationWhereInput = {
     AND?: ConversationWhereInput | ConversationWhereInput[]
     OR?: ConversationWhereInput[]
     NOT?: ConversationWhereInput | ConversationWhereInput[]
-    id?: StringFilter<"Conversation"> | string
+    id?: UuidFilter<"Conversation"> | string
     type?: EnumConversationTypeFilter<"Conversation"> | $Enums.ConversationType
-    shopId?: StringNullableFilter<"Conversation"> | string | null
+    shopId?: UuidNullableFilter<"Conversation"> | string | null
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     shop?: XOR<ShopNullableScalarRelationFilter, ShopWhereInput> | null
@@ -50505,7 +50506,7 @@ export namespace Prisma {
     OR?: ConversationWhereInput[]
     NOT?: ConversationWhereInput | ConversationWhereInput[]
     type?: EnumConversationTypeFilter<"Conversation"> | $Enums.ConversationType
-    shopId?: StringNullableFilter<"Conversation"> | string | null
+    shopId?: UuidNullableFilter<"Conversation"> | string | null
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     shop?: XOR<ShopNullableScalarRelationFilter, ShopWhereInput> | null
@@ -50528,9 +50529,9 @@ export namespace Prisma {
     AND?: ConversationScalarWhereWithAggregatesInput | ConversationScalarWhereWithAggregatesInput[]
     OR?: ConversationScalarWhereWithAggregatesInput[]
     NOT?: ConversationScalarWhereWithAggregatesInput | ConversationScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Conversation"> | string
+    id?: UuidWithAggregatesFilter<"Conversation"> | string
     type?: EnumConversationTypeWithAggregatesFilter<"Conversation"> | $Enums.ConversationType
-    shopId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
+    shopId?: UuidNullableWithAggregatesFilter<"Conversation"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
   }
@@ -50539,10 +50540,10 @@ export namespace Prisma {
     AND?: ConversationParticipantWhereInput | ConversationParticipantWhereInput[]
     OR?: ConversationParticipantWhereInput[]
     NOT?: ConversationParticipantWhereInput | ConversationParticipantWhereInput[]
-    id?: StringFilter<"ConversationParticipant"> | string
-    conversationId?: StringFilter<"ConversationParticipant"> | string
-    userId?: StringNullableFilter<"ConversationParticipant"> | string | null
-    shopId?: StringNullableFilter<"ConversationParticipant"> | string | null
+    id?: UuidFilter<"ConversationParticipant"> | string
+    conversationId?: UuidFilter<"ConversationParticipant"> | string
+    userId?: UuidNullableFilter<"ConversationParticipant"> | string | null
+    shopId?: UuidNullableFilter<"ConversationParticipant"> | string | null
     role?: StringNullableFilter<"ConversationParticipant"> | string | null
     joinedAt?: DateTimeFilter<"ConversationParticipant"> | Date | string
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
@@ -50568,9 +50569,9 @@ export namespace Prisma {
     AND?: ConversationParticipantWhereInput | ConversationParticipantWhereInput[]
     OR?: ConversationParticipantWhereInput[]
     NOT?: ConversationParticipantWhereInput | ConversationParticipantWhereInput[]
-    conversationId?: StringFilter<"ConversationParticipant"> | string
-    userId?: StringNullableFilter<"ConversationParticipant"> | string | null
-    shopId?: StringNullableFilter<"ConversationParticipant"> | string | null
+    conversationId?: UuidFilter<"ConversationParticipant"> | string
+    userId?: UuidNullableFilter<"ConversationParticipant"> | string | null
+    shopId?: UuidNullableFilter<"ConversationParticipant"> | string | null
     role?: StringNullableFilter<"ConversationParticipant"> | string | null
     joinedAt?: DateTimeFilter<"ConversationParticipant"> | Date | string
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
@@ -50594,10 +50595,10 @@ export namespace Prisma {
     AND?: ConversationParticipantScalarWhereWithAggregatesInput | ConversationParticipantScalarWhereWithAggregatesInput[]
     OR?: ConversationParticipantScalarWhereWithAggregatesInput[]
     NOT?: ConversationParticipantScalarWhereWithAggregatesInput | ConversationParticipantScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ConversationParticipant"> | string
-    conversationId?: StringWithAggregatesFilter<"ConversationParticipant"> | string
-    userId?: StringNullableWithAggregatesFilter<"ConversationParticipant"> | string | null
-    shopId?: StringNullableWithAggregatesFilter<"ConversationParticipant"> | string | null
+    id?: UuidWithAggregatesFilter<"ConversationParticipant"> | string
+    conversationId?: UuidWithAggregatesFilter<"ConversationParticipant"> | string
+    userId?: UuidNullableWithAggregatesFilter<"ConversationParticipant"> | string | null
+    shopId?: UuidNullableWithAggregatesFilter<"ConversationParticipant"> | string | null
     role?: StringNullableWithAggregatesFilter<"ConversationParticipant"> | string | null
     joinedAt?: DateTimeWithAggregatesFilter<"ConversationParticipant"> | Date | string
   }
@@ -50606,10 +50607,10 @@ export namespace Prisma {
     AND?: MessageWhereInput | MessageWhereInput[]
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
-    id?: StringFilter<"Message"> | string
-    conversationId?: StringFilter<"Message"> | string
-    senderUserId?: StringNullableFilter<"Message"> | string | null
-    senderShopId?: StringNullableFilter<"Message"> | string | null
+    id?: UuidFilter<"Message"> | string
+    conversationId?: UuidFilter<"Message"> | string
+    senderUserId?: UuidNullableFilter<"Message"> | string | null
+    senderShopId?: UuidNullableFilter<"Message"> | string | null
     type?: EnumMessageTypeFilter<"Message"> | $Enums.MessageType
     content?: StringFilter<"Message"> | string
     attachments?: JsonNullableFilter<"Message">
@@ -50640,9 +50641,9 @@ export namespace Prisma {
     AND?: MessageWhereInput | MessageWhereInput[]
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
-    conversationId?: StringFilter<"Message"> | string
-    senderUserId?: StringNullableFilter<"Message"> | string | null
-    senderShopId?: StringNullableFilter<"Message"> | string | null
+    conversationId?: UuidFilter<"Message"> | string
+    senderUserId?: UuidNullableFilter<"Message"> | string | null
+    senderShopId?: UuidNullableFilter<"Message"> | string | null
     type?: EnumMessageTypeFilter<"Message"> | $Enums.MessageType
     content?: StringFilter<"Message"> | string
     attachments?: JsonNullableFilter<"Message">
@@ -50672,10 +50673,10 @@ export namespace Prisma {
     AND?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
     OR?: MessageScalarWhereWithAggregatesInput[]
     NOT?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Message"> | string
-    conversationId?: StringWithAggregatesFilter<"Message"> | string
-    senderUserId?: StringNullableWithAggregatesFilter<"Message"> | string | null
-    senderShopId?: StringNullableWithAggregatesFilter<"Message"> | string | null
+    id?: UuidWithAggregatesFilter<"Message"> | string
+    conversationId?: UuidWithAggregatesFilter<"Message"> | string
+    senderUserId?: UuidNullableWithAggregatesFilter<"Message"> | string | null
+    senderShopId?: UuidNullableWithAggregatesFilter<"Message"> | string | null
     type?: EnumMessageTypeWithAggregatesFilter<"Message"> | $Enums.MessageType
     content?: StringWithAggregatesFilter<"Message"> | string
     attachments?: JsonNullableWithAggregatesFilter<"Message">
@@ -50684,7 +50685,7 @@ export namespace Prisma {
   }
 
   export type UserCreateInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -50714,7 +50715,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -50804,7 +50805,7 @@ export namespace Prisma {
   }
 
   export type UserCreateManyInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -50846,7 +50847,7 @@ export namespace Prisma {
   }
 
   export type SessionCreateInput = {
-    id: string
+    id?: string
     expiresAt: Date | string
     token: string
     createdAt?: Date | string
@@ -50858,7 +50859,7 @@ export namespace Prisma {
   }
 
   export type SessionUncheckedCreateInput = {
-    id: string
+    id?: string
     expiresAt: Date | string
     token: string
     createdAt?: Date | string
@@ -50894,7 +50895,7 @@ export namespace Prisma {
   }
 
   export type SessionCreateManyInput = {
-    id: string
+    id?: string
     expiresAt: Date | string
     token: string
     createdAt?: Date | string
@@ -50929,7 +50930,7 @@ export namespace Prisma {
   }
 
   export type AccountCreateInput = {
-    id: string
+    id?: string
     accountId: string
     providerId: string
     accessToken?: string | null
@@ -50945,7 +50946,7 @@ export namespace Prisma {
   }
 
   export type AccountUncheckedCreateInput = {
-    id: string
+    id?: string
     accountId: string
     providerId: string
     userId: string
@@ -50993,7 +50994,7 @@ export namespace Prisma {
   }
 
   export type AccountCreateManyInput = {
-    id: string
+    id?: string
     accountId: string
     providerId: string
     userId: string
@@ -51040,7 +51041,7 @@ export namespace Prisma {
   }
 
   export type VerificationCreateInput = {
-    id: string
+    id?: string
     identifier: string
     value: string
     expiresAt: Date | string
@@ -51049,7 +51050,7 @@ export namespace Prisma {
   }
 
   export type VerificationUncheckedCreateInput = {
-    id: string
+    id?: string
     identifier: string
     value: string
     expiresAt: Date | string
@@ -51076,7 +51077,7 @@ export namespace Prisma {
   }
 
   export type VerificationCreateManyInput = {
-    id: string
+    id?: string
     identifier: string
     value: string
     expiresAt: Date | string
@@ -53697,6 +53698,18 @@ export namespace Prisma {
     readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type UuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidFilter<$PrismaModel> | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -53954,6 +53967,21 @@ export namespace Prisma {
     banned?: SortOrder
     banReason?: SortOrder
     banExpires?: SortOrder
+  }
+
+  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -54541,6 +54569,18 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
+  export type UuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
   export type CategoryNullableScalarRelationFilter = {
     is?: CategoryWhereInput | null
     isNot?: CategoryWhereInput | null
@@ -54605,6 +54645,21 @@ export namespace Prisma {
 
   export type CategorySumOrderByAggregateInput = {
     position?: SortOrder
+  }
+
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type ProductTagListRelationFilter = {
@@ -59311,6 +59366,17 @@ export namespace Prisma {
     update?: XOR<XOR<ShopUpdateToOneWithWhereWithoutMessageInput, ShopUpdateWithoutMessageInput>, ShopUncheckedUpdateWithoutMessageInput>
   }
 
+  export type NestedUuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidFilter<$PrismaModel> | string
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -59371,6 +59437,31 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -59386,17 +59477,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -59580,6 +59660,31 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumProductStatusFilter<$PrismaModel = never> = {
@@ -59830,7 +59935,7 @@ export namespace Prisma {
   }
 
   export type SessionCreateWithoutUserInput = {
-    id: string
+    id?: string
     expiresAt: Date | string
     token: string
     createdAt?: Date | string
@@ -59841,7 +59946,7 @@ export namespace Prisma {
   }
 
   export type SessionUncheckedCreateWithoutUserInput = {
-    id: string
+    id?: string
     expiresAt: Date | string
     token: string
     createdAt?: Date | string
@@ -59862,7 +59967,7 @@ export namespace Prisma {
   }
 
   export type AccountCreateWithoutUserInput = {
-    id: string
+    id?: string
     accountId: string
     providerId: string
     accessToken?: string | null
@@ -59877,7 +59982,7 @@ export namespace Prisma {
   }
 
   export type AccountUncheckedCreateWithoutUserInput = {
-    id: string
+    id?: string
     accountId: string
     providerId: string
     accessToken?: string | null
@@ -60391,14 +60496,14 @@ export namespace Prisma {
     AND?: SessionScalarWhereInput | SessionScalarWhereInput[]
     OR?: SessionScalarWhereInput[]
     NOT?: SessionScalarWhereInput | SessionScalarWhereInput[]
-    id?: StringFilter<"Session"> | string
+    id?: UuidFilter<"Session"> | string
     expiresAt?: DateTimeFilter<"Session"> | Date | string
     token?: StringFilter<"Session"> | string
     createdAt?: DateTimeFilter<"Session"> | Date | string
     updatedAt?: DateTimeFilter<"Session"> | Date | string
     ipAddress?: StringNullableFilter<"Session"> | string | null
     userAgent?: StringNullableFilter<"Session"> | string | null
-    userId?: StringFilter<"Session"> | string
+    userId?: UuidFilter<"Session"> | string
     impersonatedBy?: StringNullableFilter<"Session"> | string | null
   }
 
@@ -60422,10 +60527,10 @@ export namespace Prisma {
     AND?: AccountScalarWhereInput | AccountScalarWhereInput[]
     OR?: AccountScalarWhereInput[]
     NOT?: AccountScalarWhereInput | AccountScalarWhereInput[]
-    id?: StringFilter<"Account"> | string
+    id?: UuidFilter<"Account"> | string
     accountId?: StringFilter<"Account"> | string
     providerId?: StringFilter<"Account"> | string
-    userId?: StringFilter<"Account"> | string
+    userId?: UuidFilter<"Account"> | string
     accessToken?: StringNullableFilter<"Account"> | string | null
     refreshToken?: StringNullableFilter<"Account"> | string | null
     idToken?: StringNullableFilter<"Account"> | string | null
@@ -60490,8 +60595,8 @@ export namespace Prisma {
     AND?: AddressScalarWhereInput | AddressScalarWhereInput[]
     OR?: AddressScalarWhereInput[]
     NOT?: AddressScalarWhereInput | AddressScalarWhereInput[]
-    id?: StringFilter<"Address"> | string
-    userId?: StringFilter<"Address"> | string
+    id?: UuidFilter<"Address"> | string
+    userId?: UuidFilter<"Address"> | string
     fullName?: StringFilter<"Address"> | string
     phone?: StringFilter<"Address"> | string
     line1?: StringFilter<"Address"> | string
@@ -60528,8 +60633,8 @@ export namespace Prisma {
     AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
     OR?: NotificationScalarWhereInput[]
     NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
-    id?: StringFilter<"Notification"> | string
-    userId?: StringFilter<"Notification"> | string
+    id?: UuidFilter<"Notification"> | string
+    userId?: UuidFilter<"Notification"> | string
     type?: StringFilter<"Notification"> | string
     title?: StringFilter<"Notification"> | string
     body?: StringFilter<"Notification"> | string
@@ -60558,8 +60663,8 @@ export namespace Prisma {
     AND?: CartScalarWhereInput | CartScalarWhereInput[]
     OR?: CartScalarWhereInput[]
     NOT?: CartScalarWhereInput | CartScalarWhereInput[]
-    id?: StringFilter<"Cart"> | string
-    userId?: StringFilter<"Cart"> | string
+    id?: UuidFilter<"Cart"> | string
+    userId?: UuidFilter<"Cart"> | string
     createdAt?: DateTimeFilter<"Cart"> | Date | string
     updatedAt?: DateTimeFilter<"Cart"> | Date | string
   }
@@ -60607,8 +60712,8 @@ export namespace Prisma {
     AND?: ShopScalarWhereInput | ShopScalarWhereInput[]
     OR?: ShopScalarWhereInput[]
     NOT?: ShopScalarWhereInput | ShopScalarWhereInput[]
-    id?: StringFilter<"Shop"> | string
-    ownerId?: StringFilter<"Shop"> | string
+    id?: UuidFilter<"Shop"> | string
+    ownerId?: UuidFilter<"Shop"> | string
     name?: StringFilter<"Shop"> | string
     slug?: StringFilter<"Shop"> | string
     description?: StringNullableFilter<"Shop"> | string | null
@@ -60644,9 +60749,9 @@ export namespace Prisma {
     AND?: ShopMemberScalarWhereInput | ShopMemberScalarWhereInput[]
     OR?: ShopMemberScalarWhereInput[]
     NOT?: ShopMemberScalarWhereInput | ShopMemberScalarWhereInput[]
-    id?: StringFilter<"ShopMember"> | string
-    shopId?: StringFilter<"ShopMember"> | string
-    userId?: StringFilter<"ShopMember"> | string
+    id?: UuidFilter<"ShopMember"> | string
+    shopId?: UuidFilter<"ShopMember"> | string
+    userId?: UuidFilter<"ShopMember"> | string
     role?: EnumRoleFilter<"ShopMember"> | $Enums.Role
     createdAt?: DateTimeFilter<"ShopMember"> | Date | string
   }
@@ -60671,10 +60776,10 @@ export namespace Prisma {
     AND?: OrderScalarWhereInput | OrderScalarWhereInput[]
     OR?: OrderScalarWhereInput[]
     NOT?: OrderScalarWhereInput | OrderScalarWhereInput[]
-    id?: StringFilter<"Order"> | string
+    id?: UuidFilter<"Order"> | string
     orderNumber?: StringFilter<"Order"> | string
-    userId?: StringFilter<"Order"> | string
-    shopId?: StringFilter<"Order"> | string
+    userId?: UuidFilter<"Order"> | string
+    shopId?: UuidFilter<"Order"> | string
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFilter<"Order"> | $Enums.PaymentStatus
     fulfillmentStatus?: EnumFulfillmentStatusFilter<"Order"> | $Enums.FulfillmentStatus
@@ -60714,10 +60819,10 @@ export namespace Prisma {
     AND?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
     OR?: ReviewScalarWhereInput[]
     NOT?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-    id?: StringFilter<"Review"> | string
-    productId?: StringFilter<"Review"> | string
-    userId?: StringFilter<"Review"> | string
-    orderItemId?: StringNullableFilter<"Review"> | string | null
+    id?: UuidFilter<"Review"> | string
+    productId?: UuidFilter<"Review"> | string
+    userId?: UuidFilter<"Review"> | string
+    orderItemId?: UuidNullableFilter<"Review"> | string | null
     rating?: IntFilter<"Review"> | number
     title?: StringNullableFilter<"Review"> | string | null
     body?: StringNullableFilter<"Review"> | string | null
@@ -60747,9 +60852,9 @@ export namespace Prisma {
     AND?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
     OR?: ProductQuestionScalarWhereInput[]
     NOT?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
-    id?: StringFilter<"ProductQuestion"> | string
-    productId?: StringFilter<"ProductQuestion"> | string
-    userId?: StringFilter<"ProductQuestion"> | string
+    id?: UuidFilter<"ProductQuestion"> | string
+    productId?: UuidFilter<"ProductQuestion"> | string
+    userId?: UuidFilter<"ProductQuestion"> | string
     body?: StringFilter<"ProductQuestion"> | string
     answer?: StringNullableFilter<"ProductQuestion"> | string | null
     answeredAt?: DateTimeNullableFilter<"ProductQuestion"> | Date | string | null
@@ -60776,10 +60881,10 @@ export namespace Prisma {
     AND?: ConversationParticipantScalarWhereInput | ConversationParticipantScalarWhereInput[]
     OR?: ConversationParticipantScalarWhereInput[]
     NOT?: ConversationParticipantScalarWhereInput | ConversationParticipantScalarWhereInput[]
-    id?: StringFilter<"ConversationParticipant"> | string
-    conversationId?: StringFilter<"ConversationParticipant"> | string
-    userId?: StringNullableFilter<"ConversationParticipant"> | string | null
-    shopId?: StringNullableFilter<"ConversationParticipant"> | string | null
+    id?: UuidFilter<"ConversationParticipant"> | string
+    conversationId?: UuidFilter<"ConversationParticipant"> | string
+    userId?: UuidNullableFilter<"ConversationParticipant"> | string | null
+    shopId?: UuidNullableFilter<"ConversationParticipant"> | string | null
     role?: StringNullableFilter<"ConversationParticipant"> | string | null
     joinedAt?: DateTimeFilter<"ConversationParticipant"> | Date | string
   }
@@ -60804,10 +60909,10 @@ export namespace Prisma {
     AND?: MessageScalarWhereInput | MessageScalarWhereInput[]
     OR?: MessageScalarWhereInput[]
     NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
-    id?: StringFilter<"Message"> | string
-    conversationId?: StringFilter<"Message"> | string
-    senderUserId?: StringNullableFilter<"Message"> | string | null
-    senderShopId?: StringNullableFilter<"Message"> | string | null
+    id?: UuidFilter<"Message"> | string
+    conversationId?: UuidFilter<"Message"> | string
+    senderUserId?: UuidNullableFilter<"Message"> | string | null
+    senderShopId?: UuidNullableFilter<"Message"> | string | null
     type?: EnumMessageTypeFilter<"Message"> | $Enums.MessageType
     content?: StringFilter<"Message"> | string
     attachments?: JsonNullableFilter<"Message">
@@ -60835,9 +60940,9 @@ export namespace Prisma {
     AND?: ReturnRequestScalarWhereInput | ReturnRequestScalarWhereInput[]
     OR?: ReturnRequestScalarWhereInput[]
     NOT?: ReturnRequestScalarWhereInput | ReturnRequestScalarWhereInput[]
-    id?: StringFilter<"ReturnRequest"> | string
-    orderId?: StringFilter<"ReturnRequest"> | string
-    userId?: StringFilter<"ReturnRequest"> | string
+    id?: UuidFilter<"ReturnRequest"> | string
+    orderId?: UuidFilter<"ReturnRequest"> | string
+    userId?: UuidFilter<"ReturnRequest"> | string
     reason?: StringNullableFilter<"ReturnRequest"> | string | null
     status?: StringFilter<"ReturnRequest"> | string
     createdAt?: DateTimeFilter<"ReturnRequest"> | Date | string
@@ -60863,15 +60968,15 @@ export namespace Prisma {
     AND?: VoucherRedemptionScalarWhereInput | VoucherRedemptionScalarWhereInput[]
     OR?: VoucherRedemptionScalarWhereInput[]
     NOT?: VoucherRedemptionScalarWhereInput | VoucherRedemptionScalarWhereInput[]
-    id?: StringFilter<"VoucherRedemption"> | string
-    voucherId?: StringFilter<"VoucherRedemption"> | string
-    orderId?: StringFilter<"VoucherRedemption"> | string
-    userId?: StringFilter<"VoucherRedemption"> | string
+    id?: UuidFilter<"VoucherRedemption"> | string
+    voucherId?: UuidFilter<"VoucherRedemption"> | string
+    orderId?: UuidFilter<"VoucherRedemption"> | string
+    userId?: UuidFilter<"VoucherRedemption"> | string
     usedAt?: DateTimeFilter<"VoucherRedemption"> | Date | string
   }
 
   export type UserCreateWithoutSessionsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -60900,7 +61005,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61003,7 +61108,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutAccountsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61032,7 +61137,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61135,7 +61240,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutProfileInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61164,7 +61269,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61267,7 +61372,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutAddressesInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61296,7 +61401,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61399,7 +61504,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutNotificationsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61428,7 +61533,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61531,7 +61636,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutShopsOwnedInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61560,7 +61665,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutShopsOwnedInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -61994,9 +62099,9 @@ export namespace Prisma {
     AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
     OR?: ProductScalarWhereInput[]
     NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
-    id?: StringFilter<"Product"> | string
-    shopId?: StringFilter<"Product"> | string
-    categoryId?: StringNullableFilter<"Product"> | string | null
+    id?: UuidFilter<"Product"> | string
+    shopId?: UuidFilter<"Product"> | string
+    categoryId?: UuidNullableFilter<"Product"> | string | null
     title?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
@@ -62050,9 +62155,9 @@ export namespace Prisma {
     AND?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
     OR?: ConversationScalarWhereInput[]
     NOT?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
-    id?: StringFilter<"Conversation"> | string
+    id?: UuidFilter<"Conversation"> | string
     type?: EnumConversationTypeFilter<"Conversation"> | $Enums.ConversationType
-    shopId?: StringNullableFilter<"Conversation"> | string | null
+    shopId?: UuidNullableFilter<"Conversation"> | string | null
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
   }
@@ -62077,7 +62182,7 @@ export namespace Prisma {
     AND?: VoucherScalarWhereInput | VoucherScalarWhereInput[]
     OR?: VoucherScalarWhereInput[]
     NOT?: VoucherScalarWhereInput | VoucherScalarWhereInput[]
-    id?: StringFilter<"Voucher"> | string
+    id?: UuidFilter<"Voucher"> | string
     code?: StringFilter<"Voucher"> | string
     type?: EnumVoucherTypeFilter<"Voucher"> | $Enums.VoucherType
     value?: DecimalFilter<"Voucher"> | Decimal | DecimalJsLike | number | string
@@ -62088,7 +62193,7 @@ export namespace Prisma {
     endAt?: DateTimeFilter<"Voucher"> | Date | string
     usageLimit?: IntNullableFilter<"Voucher"> | number | null
     perUserLimit?: IntNullableFilter<"Voucher"> | number | null
-    shopId?: StringNullableFilter<"Voucher"> | string | null
+    shopId?: UuidNullableFilter<"Voucher"> | string | null
     isActive?: BoolFilter<"Voucher"> | boolean
     createdAt?: DateTimeFilter<"Voucher"> | Date | string
   }
@@ -62179,7 +62284,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutShopMembershipsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -62208,7 +62313,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutShopMembershipsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -62577,8 +62682,8 @@ export namespace Prisma {
     AND?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
     OR?: CategoryScalarWhereInput[]
     NOT?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
-    id?: StringFilter<"Category"> | string
-    parentId?: StringNullableFilter<"Category"> | string | null
+    id?: UuidFilter<"Category"> | string
+    parentId?: UuidNullableFilter<"Category"> | string | null
     name?: StringFilter<"Category"> | string
     slug?: StringFilter<"Category"> | string
     position?: IntFilter<"Category"> | number
@@ -62623,8 +62728,8 @@ export namespace Prisma {
     AND?: VoucherCategoryScalarWhereInput | VoucherCategoryScalarWhereInput[]
     OR?: VoucherCategoryScalarWhereInput[]
     NOT?: VoucherCategoryScalarWhereInput | VoucherCategoryScalarWhereInput[]
-    voucherId?: StringFilter<"VoucherCategory"> | string
-    categoryId?: StringFilter<"VoucherCategory"> | string
+    voucherId?: UuidFilter<"VoucherCategory"> | string
+    categoryId?: UuidFilter<"VoucherCategory"> | string
   }
 
   export type ProductTagCreateWithoutTagInput = {
@@ -62665,8 +62770,8 @@ export namespace Prisma {
     AND?: ProductTagScalarWhereInput | ProductTagScalarWhereInput[]
     OR?: ProductTagScalarWhereInput[]
     NOT?: ProductTagScalarWhereInput | ProductTagScalarWhereInput[]
-    productId?: StringFilter<"ProductTag"> | string
-    tagId?: StringFilter<"ProductTag"> | string
+    productId?: UuidFilter<"ProductTag"> | string
+    tagId?: UuidFilter<"ProductTag"> | string
   }
 
   export type ShopCreateWithoutProductsInput = {
@@ -63109,8 +63214,8 @@ export namespace Prisma {
     AND?: ProductImageScalarWhereInput | ProductImageScalarWhereInput[]
     OR?: ProductImageScalarWhereInput[]
     NOT?: ProductImageScalarWhereInput | ProductImageScalarWhereInput[]
-    id?: StringFilter<"ProductImage"> | string
-    productId?: StringFilter<"ProductImage"> | string
+    id?: UuidFilter<"ProductImage"> | string
+    productId?: UuidFilter<"ProductImage"> | string
     url?: StringFilter<"ProductImage"> | string
     alt?: StringNullableFilter<"ProductImage"> | string | null
     position?: IntFilter<"ProductImage"> | number
@@ -63137,8 +63242,8 @@ export namespace Prisma {
     AND?: ProductVariantScalarWhereInput | ProductVariantScalarWhereInput[]
     OR?: ProductVariantScalarWhereInput[]
     NOT?: ProductVariantScalarWhereInput | ProductVariantScalarWhereInput[]
-    id?: StringFilter<"ProductVariant"> | string
-    productId?: StringFilter<"ProductVariant"> | string
+    id?: UuidFilter<"ProductVariant"> | string
+    productId?: UuidFilter<"ProductVariant"> | string
     sku?: StringFilter<"ProductVariant"> | string
     name?: StringNullableFilter<"ProductVariant"> | string | null
     price?: DecimalFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
@@ -63224,9 +63329,9 @@ export namespace Prisma {
     AND?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
     OR?: WishlistItemScalarWhereInput[]
     NOT?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
-    id?: StringFilter<"WishlistItem"> | string
-    wishlistId?: StringFilter<"WishlistItem"> | string
-    productId?: StringFilter<"WishlistItem"> | string
+    id?: UuidFilter<"WishlistItem"> | string
+    wishlistId?: UuidFilter<"WishlistItem"> | string
+    productId?: UuidFilter<"WishlistItem"> | string
     createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
   }
 
@@ -63250,10 +63355,10 @@ export namespace Prisma {
     AND?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
     OR?: OrderItemScalarWhereInput[]
     NOT?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
-    id?: StringFilter<"OrderItem"> | string
-    orderId?: StringFilter<"OrderItem"> | string
-    productId?: StringFilter<"OrderItem"> | string
-    variantId?: StringNullableFilter<"OrderItem"> | string | null
+    id?: UuidFilter<"OrderItem"> | string
+    orderId?: UuidFilter<"OrderItem"> | string
+    productId?: UuidFilter<"OrderItem"> | string
+    variantId?: UuidNullableFilter<"OrderItem"> | string | null
     title?: StringFilter<"OrderItem"> | string
     sku?: StringNullableFilter<"OrderItem"> | string | null
     unitPrice?: DecimalFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
@@ -63283,8 +63388,8 @@ export namespace Prisma {
     AND?: VoucherProductScalarWhereInput | VoucherProductScalarWhereInput[]
     OR?: VoucherProductScalarWhereInput[]
     NOT?: VoucherProductScalarWhereInput | VoucherProductScalarWhereInput[]
-    voucherId?: StringFilter<"VoucherProduct"> | string
-    productId?: StringFilter<"VoucherProduct"> | string
+    voucherId?: UuidFilter<"VoucherProduct"> | string
+    productId?: UuidFilter<"VoucherProduct"> | string
   }
 
   export type ProductCreateWithoutImagesInput = {
@@ -63647,9 +63752,9 @@ export namespace Prisma {
     AND?: CartItemScalarWhereInput | CartItemScalarWhereInput[]
     OR?: CartItemScalarWhereInput[]
     NOT?: CartItemScalarWhereInput | CartItemScalarWhereInput[]
-    id?: StringFilter<"CartItem"> | string
-    cartId?: StringFilter<"CartItem"> | string
-    variantId?: StringFilter<"CartItem"> | string
+    id?: UuidFilter<"CartItem"> | string
+    cartId?: UuidFilter<"CartItem"> | string
+    variantId?: UuidFilter<"CartItem"> | string
     quantity?: IntFilter<"CartItem"> | number
     priceSnap?: DecimalFilter<"CartItem"> | Decimal | DecimalJsLike | number | string
     currency?: EnumCurrencyFilter<"CartItem"> | $Enums.Currency
@@ -63825,7 +63930,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutCartsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -63854,7 +63959,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutCartsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -64145,7 +64250,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutWishlistInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -64174,7 +64279,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutWishlistInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -64483,7 +64588,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutOrdersInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -64512,7 +64617,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -64972,8 +65077,8 @@ export namespace Prisma {
     AND?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
     OR?: PaymentScalarWhereInput[]
     NOT?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
-    id?: StringFilter<"Payment"> | string
-    orderId?: StringFilter<"Payment"> | string
+    id?: UuidFilter<"Payment"> | string
+    orderId?: UuidFilter<"Payment"> | string
     provider?: EnumPaymentProviderFilter<"Payment"> | $Enums.PaymentProvider
     method?: StringNullableFilter<"Payment"> | string | null
     amount?: DecimalFilter<"Payment"> | Decimal | DecimalJsLike | number | string
@@ -65006,8 +65111,8 @@ export namespace Prisma {
     AND?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
     OR?: ShipmentScalarWhereInput[]
     NOT?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
-    id?: StringFilter<"Shipment"> | string
-    orderId?: StringFilter<"Shipment"> | string
+    id?: UuidFilter<"Shipment"> | string
+    orderId?: UuidFilter<"Shipment"> | string
     carrier?: StringNullableFilter<"Shipment"> | string | null
     trackingNumber?: StringNullableFilter<"Shipment"> | string | null
     status?: StringNullableFilter<"Shipment"> | string | null
@@ -65037,9 +65142,9 @@ export namespace Prisma {
     AND?: RefundScalarWhereInput | RefundScalarWhereInput[]
     OR?: RefundScalarWhereInput[]
     NOT?: RefundScalarWhereInput | RefundScalarWhereInput[]
-    id?: StringFilter<"Refund"> | string
-    orderId?: StringFilter<"Refund"> | string
-    paymentId?: StringNullableFilter<"Refund"> | string | null
+    id?: UuidFilter<"Refund"> | string
+    orderId?: UuidFilter<"Refund"> | string
+    paymentId?: UuidNullableFilter<"Refund"> | string | null
     amount?: DecimalFilter<"Refund"> | Decimal | DecimalJsLike | number | string
     reason?: StringNullableFilter<"Refund"> | string | null
     status?: StringFilter<"Refund"> | string
@@ -65066,8 +65171,8 @@ export namespace Prisma {
     AND?: OrderVoucherScalarWhereInput | OrderVoucherScalarWhereInput[]
     OR?: OrderVoucherScalarWhereInput[]
     NOT?: OrderVoucherScalarWhereInput | OrderVoucherScalarWhereInput[]
-    orderId?: StringFilter<"OrderVoucher"> | string
-    voucherId?: StringFilter<"OrderVoucher"> | string
+    orderId?: UuidFilter<"OrderVoucher"> | string
+    voucherId?: UuidFilter<"OrderVoucher"> | string
   }
 
   export type ReturnRequestUpsertWithWhereUniqueWithoutOrderInput = {
@@ -65578,9 +65683,9 @@ export namespace Prisma {
     AND?: ReturnItemScalarWhereInput | ReturnItemScalarWhereInput[]
     OR?: ReturnItemScalarWhereInput[]
     NOT?: ReturnItemScalarWhereInput | ReturnItemScalarWhereInput[]
-    id?: StringFilter<"ReturnItem"> | string
-    returnRequestId?: StringFilter<"ReturnItem"> | string
-    orderItemId?: StringFilter<"ReturnItem"> | string
+    id?: UuidFilter<"ReturnItem"> | string
+    returnRequestId?: UuidFilter<"ReturnItem"> | string
+    orderItemId?: UuidFilter<"ReturnItem"> | string
     quantity?: IntFilter<"ReturnItem"> | number
     reason?: StringNullableFilter<"ReturnItem"> | string | null
   }
@@ -66179,7 +66284,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutReturnRequestInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -66208,7 +66313,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutReturnRequestInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -66611,7 +66716,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutReviewsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -66640,7 +66745,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -66947,7 +67052,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutProductQuestionsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -66976,7 +67081,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutProductQuestionsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -67898,7 +68003,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutVoucherRedemptionInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -67927,7 +68032,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutVoucherRedemptionInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -68609,7 +68714,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutConversationsParticipantsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -68638,7 +68743,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutConversationsParticipantsInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -68905,7 +69010,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutMessagesSentUserInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -68934,7 +69039,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutMessagesSentUserInput = {
-    id: string
+    id?: string
     name: string
     email: string
     emailVerified?: boolean
@@ -69178,7 +69283,7 @@ export namespace Prisma {
   }
 
   export type SessionCreateManyUserInput = {
-    id: string
+    id?: string
     expiresAt: Date | string
     token: string
     createdAt?: Date | string
@@ -69189,7 +69294,7 @@ export namespace Prisma {
   }
 
   export type AccountCreateManyUserInput = {
-    id: string
+    id?: string
     accountId: string
     providerId: string
     accessToken?: string | null
