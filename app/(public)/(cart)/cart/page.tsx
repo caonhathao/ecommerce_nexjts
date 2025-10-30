@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useDebounce } from '@/hooks/debounce';
 import { CartType } from '@/types/cart.data-types';
+import Image from 'next/image';
 
 const emptyCart: CartType = {
   id: '',
@@ -220,7 +221,7 @@ export default function Cart() {
                       }}
                     />
                     <img
-                      src={item.variant.product.images[0]}
+                      src={item.variant.product.images[0].url}
                       alt={item.variant.product.alt}
                       className="w-16 h-16 object-cover rounded-md"
                     />
@@ -302,7 +303,9 @@ export default function Cart() {
                 {/* voucher 2 */}
                 <div className="flex items-center justify-between bg-blue-50 border border-blue-300 rounded-xl p-3 shadow-sm">
                   <div className="flex-shrink-0 w-12 h-12 bg-[#2f9e44] rounded-lg flex items-center justify-center">
-                    <img
+                    <Image
+                      width={8}
+                      height={8}
                       src="/free-shipping-100.png"
                       alt="..."
                       className="w-8 h-8 object-contain"

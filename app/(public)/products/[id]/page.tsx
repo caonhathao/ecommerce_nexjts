@@ -9,7 +9,7 @@ import { formatPrice } from '../../_components/global-function';
 import { Loading } from '../../_components/loading';
 import { RatingStars } from '../../_components/rating-starts';
 import SlideImg from './_components/slide-img';
-import { toast } from "sonner"
+import { toast } from 'sonner';
 import { Separator } from '@/components/ui/separator';
 import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
 import {
@@ -156,7 +156,7 @@ const detaiPage = () => {
     console.log(data);
   }, [data]);
 
-  const addProductToCart =  async (params: AddToCartRequest)=> {
+  const addProductToCart = async (params: AddToCartRequest) => {
     try {
       const response = await fetch('/api/cart', {
         method: 'POST',
@@ -165,21 +165,25 @@ const detaiPage = () => {
         },
         body: JSON.stringify(params),
       });
-      if (response.ok) {toast.success("Thêm vào giỏ hàng thành công",{
+      if (response.ok) {
+        toast.success('Thêm vào giỏ hàng thành công', {
+          duration: 3000,
+          position: 'top-right',
+        });
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Có lỗi xảy ra';
+      toast.error(`Thêm vào giỏ hàng thất bại: ${message}`, {
         duration: 3000,
-        position: "top-right",
-      })
-      }
-        } catch (error) {
-          const message = error instanceof Error ? error.message : "Có lỗi xảy ra";
-          toast.error(`Thêm vào giỏ hàng thất bại: ${message}`,{
-            duration: 3000,
-            position: "top-right",
-          });
-      }
-    };
+        position: 'top-right',
+      });
+    }
+  };
 
   if (!data) return <Loading />;
+  if (selVariant === null) {
+    return <Loading />;
+  }
 
   return (
     <div className="w-[80%] flex flex-col justify-center items-start gap-2 mt-5">
@@ -398,7 +402,9 @@ const detaiPage = () => {
               </div>
               <p className="font-semibold text-xl">Tạm tính</p>
               <p className="text-2xl font-bold">
-                {formatPrice(Number(selVariant?.amount * selVariant?.price))}
+                {formatPrice(
+                  Number(selVariant.amount * Number(selVariant.price))
+                )}
               </p>
             </div>
             {/* payment buttons */}
@@ -415,7 +421,7 @@ const detaiPage = () => {
                       variantId: selVariant.id,
                       quantity: selVariant.amount,
                       priceSnap: Decimal(selVariant.price),
-                      currency: "VND",
+                      currency: 'VND',
                     };
                     addProductToCart(payload);
                   }
