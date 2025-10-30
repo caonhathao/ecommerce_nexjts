@@ -907,8 +907,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.18.0
-   * Query Engine version: 34b5a692b7bd79939a9a2c3ef97d816e749cda2f
+   * Prisma Client JS version: 6.16.3
+   * Query Engine version: bb420e667c1820a8c05a38023385f6cc7ef8e83a
    */
   export type PrismaVersion = {
     client: string
@@ -921,7 +921,6 @@ export namespace Prisma {
    */
 
 
-  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -18054,6 +18053,7 @@ export namespace Prisma {
     categoryId: string | null
     title: string | null
     slug: string | null
+    origin: string | null
     description: string | null
     status: $Enums.ProductStatus | null
     visibility: $Enums.Visibility | null
@@ -18074,6 +18074,7 @@ export namespace Prisma {
     categoryId: string | null
     title: string | null
     slug: string | null
+    origin: string | null
     description: string | null
     status: $Enums.ProductStatus | null
     visibility: $Enums.Visibility | null
@@ -18094,6 +18095,7 @@ export namespace Prisma {
     categoryId: number
     title: number
     slug: number
+    origin: number
     description: number
     status: number
     visibility: number
@@ -18133,6 +18135,7 @@ export namespace Prisma {
     categoryId?: true
     title?: true
     slug?: true
+    origin?: true
     description?: true
     status?: true
     visibility?: true
@@ -18153,6 +18156,7 @@ export namespace Prisma {
     categoryId?: true
     title?: true
     slug?: true
+    origin?: true
     description?: true
     status?: true
     visibility?: true
@@ -18173,6 +18177,7 @@ export namespace Prisma {
     categoryId?: true
     title?: true
     slug?: true
+    origin?: true
     description?: true
     status?: true
     visibility?: true
@@ -18281,6 +18286,7 @@ export namespace Prisma {
     categoryId: string | null
     title: string
     slug: string
+    origin: string | null
     description: string | null
     status: $Enums.ProductStatus
     visibility: $Enums.Visibility
@@ -18321,6 +18327,7 @@ export namespace Prisma {
     categoryId?: boolean
     title?: boolean
     slug?: boolean
+    origin?: boolean
     description?: boolean
     status?: boolean
     visibility?: boolean
@@ -18353,6 +18360,7 @@ export namespace Prisma {
     categoryId?: boolean
     title?: boolean
     slug?: boolean
+    origin?: boolean
     description?: boolean
     status?: boolean
     visibility?: boolean
@@ -18376,6 +18384,7 @@ export namespace Prisma {
     categoryId?: boolean
     title?: boolean
     slug?: boolean
+    origin?: boolean
     description?: boolean
     status?: boolean
     visibility?: boolean
@@ -18399,6 +18408,7 @@ export namespace Prisma {
     categoryId?: boolean
     title?: boolean
     slug?: boolean
+    origin?: boolean
     description?: boolean
     status?: boolean
     visibility?: boolean
@@ -18414,7 +18424,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "categoryId" | "title" | "slug" | "description" | "status" | "visibility" | "attributes" | "ratingAvg" | "ratingCount" | "soldCount" | "minPrice" | "maxPrice" | "currency" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "categoryId" | "title" | "slug" | "origin" | "description" | "status" | "visibility" | "attributes" | "ratingAvg" | "ratingCount" | "soldCount" | "minPrice" | "maxPrice" | "currency" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     shop?: boolean | ShopDefaultArgs<ExtArgs>
     category?: boolean | Product$categoryArgs<ExtArgs>
@@ -18457,6 +18467,7 @@ export namespace Prisma {
       categoryId: string | null
       title: string
       slug: string
+      origin: string | null
       description: string | null
       status: $Enums.ProductStatus
       visibility: $Enums.Visibility
@@ -18908,6 +18919,7 @@ export namespace Prisma {
     readonly categoryId: FieldRef<"Product", 'String'>
     readonly title: FieldRef<"Product", 'String'>
     readonly slug: FieldRef<"Product", 'String'>
+    readonly origin: FieldRef<"Product", 'String'>
     readonly description: FieldRef<"Product", 'String'>
     readonly status: FieldRef<"Product", 'ProductStatus'>
     readonly visibility: FieldRef<"Product", 'Visibility'>
@@ -20691,6 +20703,7 @@ export namespace Prisma {
     sku: string | null
     name: string | null
     price: Decimal | null
+    image: string | null
     compareAt: Decimal | null
     currency: $Enums.Currency | null
     stock: number | null
@@ -20710,6 +20723,7 @@ export namespace Prisma {
     sku: string | null
     name: string | null
     price: Decimal | null
+    image: string | null
     compareAt: Decimal | null
     currency: $Enums.Currency | null
     stock: number | null
@@ -20729,6 +20743,7 @@ export namespace Prisma {
     sku: number
     name: number
     price: number
+    image: number
     compareAt: number
     currency: number
     stock: number
@@ -20773,6 +20788,7 @@ export namespace Prisma {
     sku?: true
     name?: true
     price?: true
+    image?: true
     compareAt?: true
     currency?: true
     stock?: true
@@ -20792,6 +20808,7 @@ export namespace Prisma {
     sku?: true
     name?: true
     price?: true
+    image?: true
     compareAt?: true
     currency?: true
     stock?: true
@@ -20811,6 +20828,7 @@ export namespace Prisma {
     sku?: true
     name?: true
     price?: true
+    image?: true
     compareAt?: true
     currency?: true
     stock?: true
@@ -20918,6 +20936,7 @@ export namespace Prisma {
     sku: string
     name: string | null
     price: Decimal
+    image: string
     compareAt: Decimal | null
     currency: $Enums.Currency
     stock: number
@@ -20957,6 +20976,7 @@ export namespace Prisma {
     sku?: boolean
     name?: boolean
     price?: boolean
+    image?: boolean
     compareAt?: boolean
     currency?: boolean
     stock?: boolean
@@ -20981,6 +21001,7 @@ export namespace Prisma {
     sku?: boolean
     name?: boolean
     price?: boolean
+    image?: boolean
     compareAt?: boolean
     currency?: boolean
     stock?: boolean
@@ -21002,6 +21023,7 @@ export namespace Prisma {
     sku?: boolean
     name?: boolean
     price?: boolean
+    image?: boolean
     compareAt?: boolean
     currency?: boolean
     stock?: boolean
@@ -21023,6 +21045,7 @@ export namespace Prisma {
     sku?: boolean
     name?: boolean
     price?: boolean
+    image?: boolean
     compareAt?: boolean
     currency?: boolean
     stock?: boolean
@@ -21037,7 +21060,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "sku" | "name" | "price" | "compareAt" | "currency" | "stock" | "reserved" | "weightGrams" | "lengthMm" | "widthMm" | "heightMm" | "attributes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
+  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "sku" | "name" | "price" | "image" | "compareAt" | "currency" | "stock" | "reserved" | "weightGrams" | "lengthMm" | "widthMm" | "heightMm" | "attributes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
   export type ProductVariantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     orderItems?: boolean | ProductVariant$orderItemsArgs<ExtArgs>
@@ -21064,6 +21087,7 @@ export namespace Prisma {
       sku: string
       name: string | null
       price: Prisma.Decimal
+      image: string
       compareAt: Prisma.Decimal | null
       currency: $Enums.Currency
       stock: number
@@ -21507,6 +21531,7 @@ export namespace Prisma {
     readonly sku: FieldRef<"ProductVariant", 'String'>
     readonly name: FieldRef<"ProductVariant", 'String'>
     readonly price: FieldRef<"ProductVariant", 'Decimal'>
+    readonly image: FieldRef<"ProductVariant", 'String'>
     readonly compareAt: FieldRef<"ProductVariant", 'Decimal'>
     readonly currency: FieldRef<"ProductVariant", 'Currency'>
     readonly stock: FieldRef<"ProductVariant", 'Int'>
@@ -47196,6 +47221,7 @@ export namespace Prisma {
     categoryId: 'categoryId',
     title: 'title',
     slug: 'slug',
+    origin: 'origin',
     description: 'description',
     status: 'status',
     visibility: 'visibility',
@@ -47232,6 +47258,7 @@ export namespace Prisma {
     sku: 'sku',
     name: 'name',
     price: 'price',
+    image: 'image',
     compareAt: 'compareAt',
     currency: 'currency',
     stock: 'stock',
@@ -48784,6 +48811,7 @@ export namespace Prisma {
     categoryId?: UuidNullableFilter<"Product"> | string | null
     title?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
+    origin?: StringNullableFilter<"Product"> | string | null
     description?: StringNullableFilter<"Product"> | string | null
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     visibility?: EnumVisibilityFilter<"Product"> | $Enums.Visibility
@@ -48815,6 +48843,7 @@ export namespace Prisma {
     categoryId?: SortOrderInput | SortOrder
     title?: SortOrder
     slug?: SortOrder
+    origin?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     visibility?: SortOrder
@@ -48849,6 +48878,7 @@ export namespace Prisma {
     shopId?: UuidFilter<"Product"> | string
     categoryId?: UuidNullableFilter<"Product"> | string | null
     title?: StringFilter<"Product"> | string
+    origin?: StringNullableFilter<"Product"> | string | null
     description?: StringNullableFilter<"Product"> | string | null
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     visibility?: EnumVisibilityFilter<"Product"> | $Enums.Visibility
@@ -48880,6 +48910,7 @@ export namespace Prisma {
     categoryId?: SortOrderInput | SortOrder
     title?: SortOrder
     slug?: SortOrder
+    origin?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     visibility?: SortOrder
@@ -48909,6 +48940,7 @@ export namespace Prisma {
     categoryId?: UuidNullableWithAggregatesFilter<"Product"> | string | null
     title?: StringWithAggregatesFilter<"Product"> | string
     slug?: StringWithAggregatesFilter<"Product"> | string
+    origin?: StringNullableWithAggregatesFilter<"Product"> | string | null
     description?: StringNullableWithAggregatesFilter<"Product"> | string | null
     status?: EnumProductStatusWithAggregatesFilter<"Product"> | $Enums.ProductStatus
     visibility?: EnumVisibilityWithAggregatesFilter<"Product"> | $Enums.Visibility
@@ -48995,6 +49027,7 @@ export namespace Prisma {
     sku?: StringFilter<"ProductVariant"> | string
     name?: StringNullableFilter<"ProductVariant"> | string | null
     price?: DecimalFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
+    image?: StringFilter<"ProductVariant"> | string
     compareAt?: DecimalNullableFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFilter<"ProductVariant"> | $Enums.Currency
     stock?: IntFilter<"ProductVariant"> | number
@@ -49018,6 +49051,7 @@ export namespace Prisma {
     sku?: SortOrder
     name?: SortOrderInput | SortOrder
     price?: SortOrder
+    image?: SortOrder
     compareAt?: SortOrderInput | SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -49044,6 +49078,7 @@ export namespace Prisma {
     productId?: UuidFilter<"ProductVariant"> | string
     name?: StringNullableFilter<"ProductVariant"> | string | null
     price?: DecimalFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
+    image?: StringFilter<"ProductVariant"> | string
     compareAt?: DecimalNullableFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFilter<"ProductVariant"> | $Enums.Currency
     stock?: IntFilter<"ProductVariant"> | number
@@ -49067,6 +49102,7 @@ export namespace Prisma {
     sku?: SortOrder
     name?: SortOrderInput | SortOrder
     price?: SortOrder
+    image?: SortOrder
     compareAt?: SortOrderInput | SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -49095,6 +49131,7 @@ export namespace Prisma {
     sku?: StringWithAggregatesFilter<"ProductVariant"> | string
     name?: StringNullableWithAggregatesFilter<"ProductVariant"> | string | null
     price?: DecimalWithAggregatesFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
+    image?: StringWithAggregatesFilter<"ProductVariant"> | string
     compareAt?: DecimalNullableWithAggregatesFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyWithAggregatesFilter<"ProductVariant"> | $Enums.Currency
     stock?: IntWithAggregatesFilter<"ProductVariant"> | number
@@ -51739,6 +51776,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -51770,6 +51808,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -51797,6 +51836,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -51828,6 +51868,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -51857,6 +51898,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -51876,6 +51918,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -51897,6 +51940,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -51979,6 +52023,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -52002,6 +52047,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -52023,6 +52069,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -52046,6 +52093,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -52068,6 +52116,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -52087,6 +52136,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -52107,6 +52157,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -54767,6 +54818,7 @@ export namespace Prisma {
     categoryId?: SortOrder
     title?: SortOrder
     slug?: SortOrder
+    origin?: SortOrder
     description?: SortOrder
     status?: SortOrder
     visibility?: SortOrder
@@ -54796,6 +54848,7 @@ export namespace Prisma {
     categoryId?: SortOrder
     title?: SortOrder
     slug?: SortOrder
+    origin?: SortOrder
     description?: SortOrder
     status?: SortOrder
     visibility?: SortOrder
@@ -54816,6 +54869,7 @@ export namespace Prisma {
     categoryId?: SortOrder
     title?: SortOrder
     slug?: SortOrder
+    origin?: SortOrder
     description?: SortOrder
     status?: SortOrder
     visibility?: SortOrder
@@ -54946,6 +55000,7 @@ export namespace Prisma {
     sku?: SortOrder
     name?: SortOrder
     price?: SortOrder
+    image?: SortOrder
     compareAt?: SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -54977,6 +55032,7 @@ export namespace Prisma {
     sku?: SortOrder
     name?: SortOrder
     price?: SortOrder
+    image?: SortOrder
     compareAt?: SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -54996,6 +55052,7 @@ export namespace Prisma {
     sku?: SortOrder
     name?: SortOrder
     price?: SortOrder
+    image?: SortOrder
     compareAt?: SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -61726,6 +61783,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -61755,6 +61813,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -62104,6 +62163,7 @@ export namespace Prisma {
     categoryId?: UuidNullableFilter<"Product"> | string | null
     title?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
+    origin?: StringNullableFilter<"Product"> | string | null
     description?: StringNullableFilter<"Product"> | string | null
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     visibility?: EnumVisibilityFilter<"Product"> | $Enums.Visibility
@@ -62545,6 +62605,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -62574,6 +62635,7 @@ export namespace Prisma {
     shopId: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -62889,6 +62951,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -62910,6 +62973,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -63247,6 +63311,7 @@ export namespace Prisma {
     sku?: StringFilter<"ProductVariant"> | string
     name?: StringNullableFilter<"ProductVariant"> | string | null
     price?: DecimalFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
+    image?: StringFilter<"ProductVariant"> | string
     compareAt?: DecimalNullableFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFilter<"ProductVariant"> | $Enums.Currency
     stock?: IntFilter<"ProductVariant"> | number
@@ -63396,6 +63461,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -63426,6 +63492,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -63468,6 +63535,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -63498,6 +63566,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -63524,6 +63593,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -63554,6 +63624,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -63664,6 +63735,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -63694,6 +63766,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -63765,6 +63838,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -63795,6 +63869,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -63854,6 +63929,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -63884,6 +63960,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -64129,6 +64206,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -64151,6 +64229,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -64212,6 +64291,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -64234,6 +64314,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -64440,6 +64521,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -64470,6 +64552,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -64535,6 +64618,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -64565,6 +64649,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -65276,6 +65361,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -65306,6 +65392,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -65338,6 +65425,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -65360,6 +65448,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -65521,6 +65610,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -65551,6 +65641,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -65589,6 +65680,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -65611,6 +65703,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -66658,6 +66751,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -66688,6 +66782,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -66828,6 +66923,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -66858,6 +66954,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -66994,6 +67091,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -67024,6 +67122,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -67129,6 +67228,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -67159,6 +67259,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -67717,6 +67818,7 @@ export namespace Prisma {
     id?: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -67747,6 +67849,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -67840,6 +67943,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -67870,6 +67974,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -69978,6 +70083,7 @@ export namespace Prisma {
     categoryId?: string | null
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -70083,6 +70189,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -70112,6 +70219,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -70140,6 +70248,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -70391,6 +70500,7 @@ export namespace Prisma {
     shopId: string
     title: string
     slug: string
+    origin?: string | null
     description?: string | null
     status?: $Enums.ProductStatus
     visibility?: $Enums.Visibility
@@ -70450,6 +70560,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -70479,6 +70590,7 @@ export namespace Prisma {
     shopId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -70507,6 +70619,7 @@ export namespace Prisma {
     shopId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     visibility?: EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
@@ -70563,6 +70676,7 @@ export namespace Prisma {
     sku: string
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
+    image: string
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -70655,6 +70769,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -70676,6 +70791,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -70697,6 +70813,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image?: StringFieldUpdateOperationsInput | string
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
