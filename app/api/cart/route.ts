@@ -139,7 +139,7 @@ export const PATCH = withAuth(async (userId: string, request: NextRequest) => {
         where: {
           cartId_variantId: {
             cartId: cart.id,
-            variantId: item.variantId,
+            variantId: item.variant.id,
           },
         },
         data: {
