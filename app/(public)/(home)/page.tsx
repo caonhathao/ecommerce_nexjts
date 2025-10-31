@@ -21,7 +21,7 @@ export default function Home() {
   //   console.log('Fetched Products:', data1);
   // }, []);
 
-  if (data1.length < 1) {
+  if (!data1 || data1.length < 1 ) {
     return <Loading />;
   }
 
