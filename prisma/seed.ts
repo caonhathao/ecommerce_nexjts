@@ -4,6 +4,7 @@ import {
   MessageType,
   PaymentProvider,
   PaymentStatus,
+  Prisma,
   PrismaClient,
   VoucherType,
 } from '@/lib/generated/prisma';
@@ -339,6 +340,7 @@ async function main() {
             '-' +
             faker.string.alphanumeric(6).toLowerCase(),
           description: faker.commerce.productDescription(),
+          origin: faker.location.country(),
           minPrice,
           maxPrice,
           status: 'PUBLISHED',
@@ -381,6 +383,7 @@ async function main() {
           productId: product.id,
           sku: `SKU-${faker.string.alphanumeric(8)}-${Date.now()}`,
           name: faker.commerce.productMaterial(),
+          image: faker.image.urlPicsumPhotos({ width: 600, height: 600 }),
           price: faker.number.float({
             min: 100_000,
             max: 300_000,
@@ -827,6 +830,26 @@ async function main() {
 
   console.log(`✅ Created ${reviewsData.length} reviews`);
 
+  console.log('🧮 Đang cập nhật ratingAvg và ratingCount cho từng product...');
+
+  const ratingStats = await prisma.review.groupBy({
+    by: ['productId'],
+    _avg: { rating: true },
+    _count: { rating: true },
+  });
+
+  for (const stat of ratingStats) {
+    await prisma.product.update({
+      where: { id: stat.productId },
+      data: {
+        ratingAvg: new Prisma.Decimal(stat._avg.rating?.toFixed(1) || 0),
+        ratingCount: stat._count.rating,
+      },
+    });
+  }
+
+  console.log(`✅ Đã cập nhật rating cho ${ratingStats.length} products`);
+
   // ------------------------
   // 8️⃣ PRODUCT QUESTIONS
   // ------------------------
@@ -906,7 +929,9 @@ async function main() {
           code: `VC-${faker.string.alphanumeric(8).toUpperCase()}`,
           type,
           value,
-          maxDiscount: faker.helpers.maybe(() => faker.number.int({ min: 100000, max: 300000 })),
+          maxDiscount: faker.helpers.maybe(() =>
+            faker.number.int({ min: 100000, max: 300000 })
+          ),
           minSubtotal: faker.helpers.maybe(
             () => faker.number.int({ min: 100000, max: 500000 }),
             { probability: 0.5 }

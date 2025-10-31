@@ -94,7 +94,7 @@ export const ProductItem = ({
       <div className="p-1">
         <div className="p-2">
           <p>{item.title}</p>
-          <RatingStars value={item.rating} />
+          <RatingStars value={item.ratingAvg} />
           {/* render sale price if items has */}
           {renderSalePrice(item.voucher.type, item.voucher.value)}
           {renderPromotionType(item.voucher.type)}

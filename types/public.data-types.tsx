@@ -3,7 +3,7 @@ export interface productItemType {
   imageUrl: string;
   title: string;
   minPrice: number;
-  rating: number;
+  ratingAvg: number;
   voucher: {
     maxDiscount: number | null | undefined;
     type: string | null;

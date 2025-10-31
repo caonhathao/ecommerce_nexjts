@@ -9,6 +9,7 @@ export const fetchProducts = async (
     const response = await fetch(`/api/product?page=${page}&limit=${limit}`);
     const data = await response.json();
     setData(data.data);
+    console.log(data.data)
   } catch (error) {
     console.error('Error fetching products:', error);
   }

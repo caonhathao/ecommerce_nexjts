@@ -17,9 +17,9 @@ export default function Home() {
     fetchProducts(1, 5, setData1);
   }, []);
 
-  // useEffect(() => {
-  //   console.log('Fetched Products:', data1);
-  // }, []);
+  useEffect(() => {
+    console.log('Fetched Products:', data1);
+  }, [data1]);
 
   if (!data1 || data1.length < 1 ) {
     return <Loading />;
