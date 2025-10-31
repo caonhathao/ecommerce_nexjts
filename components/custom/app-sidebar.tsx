@@ -174,13 +174,13 @@ export const AppSidebar = ({
         <div className="flex flex-col jus-end items-end">
           <div className="w-[70%] p-2 bg-[var(--background)] rounded-lg border border-gray-200 flex flex-col justify-start items-start">
             {/* title */}
-            <p className="font-medium text-lg text-[var(--primary)]">{t("category")}</p>
+            <p className="font-medium text-base px-5 py-1 text-[var(--primary)]">{t("category")}</p>
 
             <div className="flex flex-col justify-start items-start pl-2 gap-2 w-full">
               {category.map((item, key) => (
                 <div
                   key={key}
-                  className="w-full hover:bg-[var(--primary-foreground)] px-3 py-2 rounded-lg transition-all"
+                  className="w-full hover:bg-[var(--primary-foreground)] px-3 my-1.5 rounded-lg transition-all"
                 >
                   <a
                     href={item.url}
