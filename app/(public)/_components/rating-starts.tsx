@@ -12,10 +12,10 @@ export const RatingStars = ({ value, max = 5 }: RatingProps) => {
   const stars = Array.from({ length: max }, (_, i) => {
     const starValue = i + 1;
     if (starValue <= rounded)
-      return <FaStar key={i} className="text-yellow-400" size={10} />;
+      return <FaStar key={i} className="text-yellow-400" size={15} />;
     if (starValue - 0.5 === rounded)
-      return <FaStarHalfAlt key={i} className="text-yellow-400" size={10} />;
-    return <FaRegStar key={i} className="text-gray-300" size={10} />;
+      return <FaStarHalfAlt key={i} className="text-yellow-400" size={15} />;
+    return <FaRegStar key={i} className="text-gray-300" size={15} />;
   });
 
   return <div className="flex items-center gap-1">{stars}</div>;

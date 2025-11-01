@@ -32,6 +32,7 @@ import { SuggestDealToday } from './_components/suggest-deal-today';
 import { AddToCartRequest } from '@/types/cart.data-types';
 import { Prisma } from '@/lib/generated/prisma';
 import Decimal = Prisma.Decimal;
+import Image from 'next/image';
 
 interface selectedVariant {
   name: string;
@@ -193,12 +194,14 @@ const detaiPage = () => {
             {/* product's image */}
             <div className="w-[40%] h-fit bg-[var(--background)] rounded-lg flex flex-col p-2 sticky top-3">
               {/* slider */}
-              <div className="w-full border border-gray-200 p-2">
+              <div className="w-full p-2">
                 <SlideImg data={data.images} />
               </div>
+              <Separator />
+
               {/* desc */}
               <div className="flex flex-col justify-start items-start p-2">
-                <p className="text-xl font-bold mb-2">Đặc điểm nổi bậc</p>
+                {/*<p className="text-xl font-bold mb-2">Đặc điểm nổi bậc</p>*/}
                 <div className="flex flex-row justify-start items-center gap-1">
                   <FaCheckCircle color="var(--priamry)" size={15} />
                   Ôi holy cái này làm thế nào z?
@@ -216,25 +219,34 @@ const detaiPage = () => {
             {/* name and variants, shipping info, suggestions and description  */}
             <div className="w-[60%] flex flex-col gap-4">
               {/* name and variants*/}
-              <div className="bg-[var(--background)] rounded-lg p-3 flex flex-col justify-start items-start">
+              <div className="relative bg-[var(--background)] rounded-lg p-3 flex flex-col justify-start items-start">
                 {/* badges */}
-                <div className="flex flex-row justify-start items-start gap-2">
-                  <Badge variant={'destructive'} className="font-bold">
-                    TOP DEAL
-                  </Badge>
-                  <Badge className="bg-yellow-300 text-blue-500 font-bold">
-                    30 NGÀY ĐỔI TRẢ
-                  </Badge>
-                  <Badge className="bg-blue-300 text-blue-600 font-bold">
-                    CHÍNH HÃNG
-                  </Badge>
+                <div className="absolute top-0 left-3 flex gap-2">
+                  {[
+                    'https://salt.tikicdn.com/ts/upload/be/67/48/04a82ab8df178e1a13bde38316081865.png',
+                    'https://salt.tikicdn.com/ts/ta/b1/3f/4e/cc3d0a2dd751a7b06dd97d868d6afa56.png',
+                    'https://salt.tikicdn.com/ts/upload/d7/56/04/b93b8c666e13f49971483596ef14800f.png',
+                  ].map((src, i) => (
+                    <div key={i} className="relative w-20 h-10">
+                      <Image
+                        src={src}
+                        alt={`banner-${i}`}
+                        fill
+                        className="object-contain rounded-md"
+                      />
+                    </div>
+                  ))}
                 </div>
+
                 {/* title */}
-                <div className="text-xl font-medium">{data.title}</div>
+                <div className="text-xl font-medium mt-5">{data.title}</div>
                 {/* ratingAvg, ratingCount, sold */}
-                <div className="flex flex-row justify-start items-center gap-2 text-[var(--muted-background)]">
-                  {data.ratingAvg} <RatingStars value={data.ratingAvg} /> |
-                  {'(' + data.ratingCount + ')'} |{' Đã bán ' + data.soldCount}
+                <div className="flex flex-row justify-start items-center gap-2 text-[var(--muted-background)] text-sm mt-2">
+                  {data.ratingAvg} <RatingStars value={data.ratingAvg} />
+                  {'(' + data.ratingCount + ')'} |
+                  <p className="text-secondary">
+                    {' Đã bán ' + data.soldCount}
+                  </p>
                 </div>
                 {/* price-after-sale, sale-value, origin-price */}
                 <div className="flex flex-row gap-2">
@@ -247,11 +259,11 @@ const detaiPage = () => {
                 </div>
                 <div className="mt-2">
                   <p className="font-semibold">Kiểu sản phẩm</p>
-                  <div className="flex flex-row flex-wrap justify-start items-start gap-2">
+                  <div className="flex flex-row flex-wrap justify-start items-start gap-2 mt-2">
                     {data.variants.map((value, index) => (
                       <div
                         key={index}
-                        className="p-1 rounded-lg border-2 border-[var(--muted-foreground)]"
+                        className="p-1 rounded-sm bg-border cursor-pointer border-2 hover:border-secondary hover:bg-transparent border-border transition duration-700"
                         onClick={() =>
                           handleSelectVariant(
                             value.id,

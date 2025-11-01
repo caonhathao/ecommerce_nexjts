@@ -174,20 +174,20 @@ export const AppSidebar = ({
         <div className="flex flex-col jus-end items-end">
           <div className="w-[70%] p-2 bg-[var(--background)] rounded-lg border border-gray-200 flex flex-col justify-start items-start">
             {/* title */}
-            <p className="font-medium text-base px-5 py-1 text-[var(--primary)]">{t("category")}</p>
+            <p className="font-bold text-base px-5 py-1 text-[var(--primary)]">{t("category")}</p>
 
-            <div className="flex flex-col justify-start items-start pl-2 gap-2 w-full">
+            <div className="flex flex-col justify-start items-start pl-2">
               {category.map((item, key) => (
                 <div
                   key={key}
-                  className="w-full hover:bg-[var(--primary-foreground)] px-3 my-1.5 rounded-lg transition-all"
+                  className="w-full hover:bg-[var(--primary-foreground)] px-3 py-4 rounded-lg transition-all"
                 >
                   <a
                     href={item.url}
-                    className="flex flex-row gap-2 justify-start items-center"
+                    className="flex flex-row gap-1.5 justify-start items-center"
                   >
                     <item.icon size={20} color="var(--primary)"/>
-                    <p>{t(item.title)}</p>
+                    <p className="text-sm">{t(item.title)}</p>
                   </a>
                 </div>
               ))}
@@ -196,20 +196,20 @@ export const AppSidebar = ({
 
           <div className="w-[70%] p-2 bg-[var(--background)] rounded-lg border border-gray-200 flex flex-col justify-start items-start mt-4">
             {/* title */}
-            <p className="font-medium text-lg text-[var(--primary)]">{t("extensions")}</p>
+            <p className="font-bold text-base px-5 py-1 text-primary">{t("extensions")}</p>
 
             <div className="flex flex-col justify-start items-start pl-2 gap-2 w-full">
               {extensions.map((item, key) => (
                 <div
                   key={key}
-                  className="w-full hover:bg-[var(--primary-foreground)] px-3 py-2 rounded-lg transition-all"
+                  className="w-full hover:bg-[var(--primary-foreground)] px-3 py-4 rounded-lg transition-all"
                 >
                   <a
                     href={item.url}
-                    className="flex flex-row gap-2 justify-start items-center"
+                    className="flex flex-row gap-1.5 justify-start items-center"
                   >
                     <item.icon size={20}  color="var(--primary)"/>
-                    <p>{t(item.title)}</p>
+                    <p className="text-sm">{t(item.title)}</p>
                   </a>
                 </div>
               ))}

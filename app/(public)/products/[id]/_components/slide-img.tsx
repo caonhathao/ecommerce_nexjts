@@ -1,10 +1,10 @@
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
+import { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
 
 interface ImgData {
   alt: string;
@@ -12,22 +12,48 @@ interface ImgData {
 }
 
 const SlideImg = ({ data }: { data: ImgData[] }) => {
+  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+
   return (
-    <div className='w-full h-fit'>
-      <Carousel>
-        <CarouselContent>
-          {data.map((value, index) => (
-            <CarouselItem>
-              <div key={index}>
-                <img src={value.url} alt={value.alt} />
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+    <div className="w-full flex flex-col gap-2">
+      <Swiper
+        spaceBetween={10}
+        thumbs={{ swiper: thumbsSwiper }}
+        modules={[FreeMode, Navigation, Thumbs]}
+        className="w-full rounded-lg"
+      >
+        {data.map((item, index) => (
+          <SwiperSlide key={index}>
+            <img
+              src={item.url}
+              alt={item.alt || `image-${index}`}
+              className="w-full h-full object-cover rounded-lg"
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      <Swiper
+        onSwiper={setThumbsSwiper}
+        spaceBetween={10}
+        slidesPerView={6}
+        freeMode
+        watchSlidesProgress
+        modules={[FreeMode, Navigation, Thumbs]}
+        className="w-full"
+      >
+        {data.map((item, index) => (
+          <SwiperSlide key={index} className="cursor-pointer">
+            <img
+              src={item.url}
+              alt={item.alt || `thumb-${index}`}
+              className="w-full object-contain rounded-lg"
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };
+
 export default SlideImg;
