@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -21,6 +21,28 @@ export async function middleware(request: NextRequest) {
     const url = new URL('/auth/login', request.url);
     url.searchParams.set('next', pathname);
     return NextResponse.redirect(url);
+  }
+
+  //check role
+  const roleProtectedPaths = {
+    admin: ['/manager'],
+  };
+
+  const userRole = session.user.role;
+
+  const isRestricted = Object.entries(roleProtectedPaths).some(
+    ([role, paths]) => paths.some((p) => pathname.startsWith(p + '/'))
+  );
+
+  if (isRestricted) {
+    const allowedRole = Object.entries(roleProtectedPaths).find(([_, paths]) =>
+      paths.some((p) => pathname.startsWith(p + '/'))
+    )?.[0];
+
+    if (allowedRole && userRole !== allowedRole) {
+      const url = new URL('/403', request.url);
+      return NextResponse.redirect(url);
+    }
   }
 
   return NextResponse.next();
