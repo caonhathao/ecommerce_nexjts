@@ -281,7 +281,7 @@ const detaiPage = () => {
               </div>
               {/* shipping info */}
               <div className="bg-[var(--background)] p-3 rounded-lg flex flex-col justify-start items-start gap-1">
-                <p className="font-bold text-xl">Thông tin vân chuyển</p>
+                <p className="font-semibold text-xl">Thông tin vân chuyển</p>
                 <p>Giao đến thị trấn Teyvalt</p>
                 <Separator />
                 <div className="flex flex-row justify-start items-center gap-1">
@@ -301,10 +301,10 @@ const detaiPage = () => {
               {/* vouchers (if has) */}
               {data.VoucherProduct.length !== 0 ? (
                 <div className="flex flex-col p-2 gap-2 bg-[var(--background)] rounded-lg">
-                  <p className="text-xl font-bold">Ưu đã khác</p>
+                  <p className="text-xl font-semibold">Ưu đãi khác</p>
                   <div className="w-full flex justify-between items-center">
                     <p>{data.VoucherProduct.length} Mã Giảm Giá</p>
-                    <Button variant="outline" color="var(--primary)">
+                    <Button variant="outline" className="hover: cursor-pointer">
                       Xem Thêm
                     </Button>
                   </div>
@@ -313,7 +313,7 @@ const detaiPage = () => {
 
               {/* others services */}
               <div className="bg-[var(--background)] p-2 rounded-lg">
-                <p className="font-bold text-xl">Dịch vụ bổ sung</p>
+                <p className="font-semibold text-xl">Dịch vụ bổ sung</p>
                 <div className="flex flex-row justify-start items-center gap-2">
                   <CiCreditCard1 color="var(--primary)" size={15} />
                   Ưu đãi đến 600k với thẻ TikiCard
@@ -326,14 +326,10 @@ const detaiPage = () => {
               </div>
 
               {/* top deals */}
-              <TopDealItems
-                data={dTopDeal}
-                size="1/4"
-                renderSaleValue={false}
-              />
+              <TopDealItems data={dTopDeal} size="1" renderSaleValue={false} />
               {/* slo-gan */}
               <div className="bg-[var(--background)] p-3 rounded-lg">
-                <p className="font-bold text-xl">An tâm mua sắm</p>
+                <p className="font-semibold text-xl">An tâm mua sắm</p>
                 <div className="flex flex-row justify-start items-center gap-2 py-1">
                   <FaBoxOpen color="var(--primary)" size={15} />
                   Được đồng kiểm khi nhận hàng
@@ -372,15 +368,17 @@ const detaiPage = () => {
             <div className="flex flex-row justify-start items-center gap-2">
               <p>2T3H</p>
               <div className="flex flex-col justify-start items-start">
-                <p className="font-semibold">2T3H Trading</p>
+                {/*<p className="font-semibold">2T3H Trading</p>*/}
                 <div className="flex flex-row justify-start items-start gap-2">
-                  <Badge className="flex flex-row gap-2 justify-start items-start bg-blue-200 text-[var(--primary)] font-semibold">
-                    <HiMiniCheckBadge color="var(--primary)" size={15} />
+                  <Badge className="flex flex-row gap-2 justify-start items-center bg-blue-200 text-[var(--primary)] font-semibold">
+                    <HiMiniCheckBadge color="var(--primary)" size={20} />
                     OFFICAL
                   </Badge>
                   <Separator orientation="vertical" />
-                  <div className="flex flex-row gap-2">
-                    {'4.7'} <FaStar color="yellow" size={15} />{' '}
+                  <div className="flex flex-row gap-2 items-center">
+                    {'4.7'}
+                    <FaStar color="var(--chart-4)" size={15} />
+                    {'| '}
                     {'5.5tr+ đánh giá'}
                   </div>
                 </div>
@@ -389,31 +387,33 @@ const detaiPage = () => {
             <Separator />
             {/* payment info */}
             <div className="flex flex-col justify-start items-start gap-2">
-              <div className="p-1 rounded-lg border-2 border-[var(--muted-foreground)]">
+              <div className="p-2 rounded-sm bg-primary-foreground text-secondary-foreground text-center">
                 {selVariant?.name}
               </div>
               <p className="font-semibold">Số lượng</p>
               <div className="flex flex-row gap-2 justify-start items-start">
                 <button
                   className={`w-10 h-10 border border-[var(--muted-foreground)] rounded-lg font-bold flex justify-center items-center ${
-                    amount === 1 ? 'opacity-50 cursor-not-allowed' : ''
+                    amount === 1
+                      ? 'opacity-50 cursor-not-allowed'
+                      : 'cursor-pointer '
                   }`}
                   onClick={() => handleMinus()}
                 >
-                  <FaMinus size={15} />
+                  <FaMinus size={10} />
                 </button>
                 <button className="w-10 h-10 border border-[var(--muted-foreground)] rounded-lg flex justify-center items-center">
                   {selVariant?.amount}
                 </button>
                 <button
-                  className="w-10 h-10 border border-[var(--muted-foreground)] rounded-lg font-bold flex justify-center items-center"
+                  className="w-10 h-10 border border-[var(--muted-foreground)] rounded-lg font-bold flex justify-center items-center cursor-pointer"
                   onClick={() => handlePlus()}
                 >
-                  <FaPlus size={15} />
+                  <FaPlus size={10} />
                 </button>
               </div>
-              <p className="font-semibold text-xl">Tạm tính</p>
-              <p className="text-2xl font-bold">
+              <p className="font-semibold text-lg">Tạm tính</p>
+              <p className="text-lg font-medium text-gray-700">
                 {formatPrice(
                   Number(selVariant.amount * Number(selVariant.price))
                 )}
@@ -421,12 +421,15 @@ const detaiPage = () => {
             </div>
             {/* payment buttons */}
             <div className="flex flex-col justify-start items-start gap-2 w-full">
-              <Button variant={'destructive'} className="w-full">
+              <Button
+                variant={'destructive'}
+                className="w-full hover:cursor-pointer hover:bg-primary transition-colors duration-750"
+              >
                 Mua ngay
               </Button>
               <Button
                 variant={'outline'}
-                className="border border-[var(--primary)] text-[var(--primary)] w-full"
+                className="border border-[var(--primary)] text-[var(--primary)] w-full cursor-pointer"
                 onClick={() => {
                   if (selVariant) {
                     const payload: AddToCartRequest = {
@@ -443,7 +446,7 @@ const detaiPage = () => {
               </Button>
               <Button
                 variant={'outline'}
-                className="border border-[var(--primary)] text-[var(--primary)] w-full"
+                className="border border-[var(--primary)] text-[var(--primary)] w-full cursor-pointer"
               >
                 Mua trước trả sau
               </Button>

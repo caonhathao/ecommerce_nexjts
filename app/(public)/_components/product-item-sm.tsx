@@ -20,11 +20,11 @@ interface ProductItemProps {
   renderSaleValue?: boolean;
 }
 
-export const ProductItem = ({
-  item,
-  size,
-  renderSaleValue = true,
-}: ProductItemProps) => {
+export const ProductItemSm = ({
+                              item,
+                              size,
+                              renderSaleValue = true,
+                            }: ProductItemProps) => {
   const router = useRouter();
   const handleOpenDetail = (id: string) => {
     router.push(`/products/${id}`);
@@ -38,37 +38,17 @@ export const ProductItem = ({
 
     if (!type || value === null || !renderSaleValue) {
       return (
-        <div className="flex items-center gap-2">
-          <span className="font-medium">{formatPrice(item.minPrice)}đ</span>
+        <div className="flex items-start">
+          <span className="font-normal">{formatPrice(item.minPrice)}đ</span>
         </div>
       );
     }
 
-    const discountedPrice =
-      type === 'PERCENT'
-        ? item.minPrice - (item.minPrice * value) / 100
-        : item.minPrice - value;
-
-    const promotionBadge =
-      type === 'PERCENT' ? (
-        <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-[2px] rounded-md">
-          -{value}%
-        </span>
-      ) : (
-        <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-[2px] rounded-md">
-          -{formatPrice(value)}
-        </span>
-      );
-
     return (
-      <div className="flex flex-col items-start gap-2">
-        <div className="flex flex-row items-center gap-2">
-          <p className="text-[var(--destructive)] font-medium text-sm">
-            {formatPrice(discountedPrice)}
-          </p>
+      <div className="flex flex-col items-start">
+        <div className="flex flex-row items-start">
           {originalPrice}
         </div>
-        {promotionBadge}
       </div>
     );
   };
@@ -86,8 +66,8 @@ export const ProductItem = ({
           className="object-cover"
         />
       </div>
-      <Card className="w-full max-w-sm shadow-none border-none rounded-t-none flex-shrink-0">
-        <CardHeader>
+      <Card className="w-full gap-2 p-0 max-w-sm shadow-none border-none rounded-t-none flex-shrink-0">
+        <CardHeader className="p-2">
           <CardTitle className="overflow-hidden">
             <p className="text-base font-normal line-clamp-1">{item.title}</p>
           </CardTitle>
@@ -98,20 +78,12 @@ export const ProductItem = ({
                 quắc quắc quặc qucặ
               </p>
             </div>
-            <RatingStars value={item.ratingAvg} size={15}/>
+            <RatingStars value={item.ratingAvg} size={10}/>
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col justify-start items-start">
-          {/*{renderSalePrice(item.voucher.type, item.voucher.value)}*/}
-          {/*{renderPromotionType(item.voucher.type)}*/}
+        <CardContent className="flex flex-col justify-start items-start px-2 py-1">
           {renderSaleInfo(item.voucher.type, item.voucher.value)}
         </CardContent>
-        <CardFooter className="flex-col flex justify-center items-start">
-          <Separator />
-          <p className="p-2 text-[var(--muted-foreground)] text-xs">
-            Made in {'VN'}
-          </p>
-        </CardFooter>
       </Card>
     </div>
   );

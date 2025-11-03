@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { AiFillLike } from 'react-icons/ai';
 import { ProductItem } from '../../_components/product-item';
+import { ProductItemSm } from '@/app/(public)/_components/product-item-sm';
 
 type TopDealItemsProps = {
   data: productItemType[];
@@ -32,7 +33,7 @@ export const TopDealItems = ({
       {/* item list */}
       <div className="w-full flex flex-row justify-between p-2 gap-3 overflow-x-auto">
         {data.map((item: productItemType, index) => (
-          <ProductItem
+          <ProductItemSm
             item={item}
             size={size}
             renderSaleValue={renderSaleValue}
