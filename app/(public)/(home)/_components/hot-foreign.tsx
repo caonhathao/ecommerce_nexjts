@@ -13,16 +13,16 @@ export const HotForeign = ({ data }: TopDealItemsProps) => {
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-2 mt-5 bg-[var(--background)] rounded-lg">
       {/* top title */}
-      <div className="w-full flex flex-row justify-between items-center">
-        <p className="w-fit flex flex-row gap-2 font-bold">{t('title')}</p>
+      <div className="w-full flex flex-row justify-between items-center p-2 text-base">
+        <p className="w-fit flex flex-row gap-2 text-lg font-bold select-none">{t('title')}</p>
         <Link href="#" className="text-[var(--primary)] hover:cursor-pointer">
           {t('watch_more')}
         </Link>
       </div>
       {/* item list */}
-      <div className="w-full flex flex-row gap-2">
+      <div className="w-full flex flex-row gap-3 p-2 justify-between overflow-x-auto">
         {data.map((item: productItemType, index) => (
-          <ProductItem item={item} size={'1/4'} />
+          <ProductItem item={item} size={'1'} />
         ))}
       </div>
     </div>

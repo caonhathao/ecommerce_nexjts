@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import "./globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale } from "next-intl/server";
-import HeaderClient from "@/app/(public)/_components/header-client";
+import { getLocale, getMessages } from 'next-intl/server';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
   subsets: ["latin"],
-});
+  variable: "--font-inter",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,13 +26,14 @@ export default async function RootLayout({
   modal?: React.ReactNode;
 }>) {
   const locale = await getLocale();
+  const message = await getMessages();
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={inter.className}
       >
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={message}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

@@ -34,7 +34,7 @@ const SearchingBar = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-row gap-4 w-full border border-gray-300 rounded-lg p-2"
+          className="flex flex-row gap-4 w-full border border-gray-300 rounded-2xl p-1"
         >
           <FormField
             control={form.control}

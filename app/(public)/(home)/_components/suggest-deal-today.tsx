@@ -14,11 +14,11 @@ export const SuggestDealToday = ({ data }: TopDealItemsProps) => {
   return (
     <div className="w-full flex flex-col justify-center items-center gap-2 bg-[var(--background)] rounded-lg mt-5 p-2">
       {/* top-title */}
-      <p className="w-full text-left font-bold">{t('title')}</p>
+      <p className="w-full p-2 text-lg text-left font-bold">{t('title')}</p>
       {/* content here */}
-      <div className="w-full flex flex-row gap-2">
+      <div className="w-full flex flex-row gap-3 p-2 overflow-x-auto">
         {data.map((item: productItemType, index) => (
-          <ProductItem item={item} size='1/5'/>
+          <ProductItem item={item} size='1'/>
         ))}
       </div>
       {/* watch more */}
