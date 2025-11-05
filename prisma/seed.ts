@@ -296,7 +296,7 @@ async function main() {
   // ------------------------
   // 3️⃣ TAGS
   // ------------------------
-  const tag = await Promise.all(
+  const tags = await Promise.all(
     Array.from({ length: 5 }).map(() => {
       const name = faker.commerce.department();
       const slug = faker.helpers.slugify(name.toLowerCase());
@@ -312,7 +312,7 @@ async function main() {
     })
   );
 
-  console.log(`✅ Created ${tag.length} tags`);
+  console.log(`✅ Created ${tags.length} tags`);
 
   // ------------------------
   // 4️⃣ PRODUCTS
@@ -401,18 +401,26 @@ async function main() {
   // ------------------------
   // 5️⃣ PRODUCT TAGS
   // ------------------------
-  const productTags = await Promise.all(
-    Array.from({ length: 5 }).map(() => {
-      return prisma.productTag.create({
-        data: {
-          productId: faker.helpers.arrayElement(products).id,
-          tagId: faker.helpers.arrayElement(tag).id,
-        },
-      });
-    })
-  );
+  const pairs = new Set<string>();
+  const productTagData = [];
 
-  console.log(`✅ Created ${productTags.length} product variants`);
+  while (productTagData.length < 5) {
+    const product = faker.helpers.arrayElement(products);
+    const tag = faker.helpers.arrayElement(tags);
+    const key = `${product.id}-${tag.id}`;
+
+    if (!pairs.has(key)) {
+      pairs.add(key);
+      productTagData.push({ productId: product.id, tagId: tag.id });
+    }
+  }
+
+  const productTags = await prisma.productTag.createMany({
+    data: productTagData,
+    skipDuplicates: true,
+  });
+
+  console.log(`✅ Created ${productTags.count} product variants`);
 
   // ------------------------
   // 7️⃣ CARTS
@@ -1092,7 +1100,10 @@ async function main() {
   );
 
   await prisma.orderVoucher.createMany({
-    data: orderVoucher,
+    data: orderVoucher.map((ov) => ({
+      id: faker.string.uuid(),
+      ...ov,
+    })),
     skipDuplicates: true,
   });
 

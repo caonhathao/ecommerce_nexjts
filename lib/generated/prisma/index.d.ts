@@ -119,6 +119,11 @@ export type Order = $Result.DefaultSelection<Prisma.$OrderPayload>
  */
 export type OrderItem = $Result.DefaultSelection<Prisma.$OrderItemPayload>
 /**
+ * Model OrderDraft
+ * 
+ */
+export type OrderDraft = $Result.DefaultSelection<Prisma.$OrderDraftPayload>
+/**
  * Model Payment
  * 
  */
@@ -699,6 +704,16 @@ export class PrismaClient<
     * ```
     */
   get orderItem(): Prisma.OrderItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.orderDraft`: Exposes CRUD operations for the **OrderDraft** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrderDrafts
+    * const orderDrafts = await prisma.orderDraft.findMany()
+    * ```
+    */
+  get orderDraft(): Prisma.OrderDraftDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.payment`: Exposes CRUD operations for the **Payment** model.
@@ -1310,6 +1325,7 @@ export namespace Prisma {
     WishlistItem: 'WishlistItem',
     Order: 'Order',
     OrderItem: 'OrderItem',
+    OrderDraft: 'OrderDraft',
     Payment: 'Payment',
     Shipment: 'Shipment',
     Refund: 'Refund',
@@ -1343,7 +1359,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "userProfile" | "address" | "notification" | "shop" | "shopMember" | "category" | "tag" | "product" | "productImage" | "productVariant" | "productTag" | "cart" | "cartItem" | "wishlist" | "wishlistItem" | "order" | "orderItem" | "payment" | "shipment" | "refund" | "returnRequest" | "returnItem" | "review" | "productQuestion" | "voucher" | "voucherCategory" | "voucherProduct" | "voucherRedemption" | "orderVoucher" | "conversation" | "conversationParticipant" | "message"
+      modelProps: "user" | "session" | "account" | "verification" | "userProfile" | "address" | "notification" | "shop" | "shopMember" | "category" | "tag" | "product" | "productImage" | "productVariant" | "productTag" | "cart" | "cartItem" | "wishlist" | "wishlistItem" | "order" | "orderItem" | "orderDraft" | "payment" | "shipment" | "refund" | "returnRequest" | "returnItem" | "review" | "productQuestion" | "voucher" | "voucherCategory" | "voucherProduct" | "voucherRedemption" | "orderVoucher" | "conversation" | "conversationParticipant" | "message"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2901,6 +2917,80 @@ export namespace Prisma {
           }
         }
       }
+      OrderDraft: {
+        payload: Prisma.$OrderDraftPayload<ExtArgs>
+        fields: Prisma.OrderDraftFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrderDraftFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrderDraftFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload>
+          }
+          findFirst: {
+            args: Prisma.OrderDraftFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrderDraftFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload>
+          }
+          findMany: {
+            args: Prisma.OrderDraftFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload>[]
+          }
+          create: {
+            args: Prisma.OrderDraftCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload>
+          }
+          createMany: {
+            args: Prisma.OrderDraftCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrderDraftCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload>[]
+          }
+          delete: {
+            args: Prisma.OrderDraftDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload>
+          }
+          update: {
+            args: Prisma.OrderDraftUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload>
+          }
+          deleteMany: {
+            args: Prisma.OrderDraftDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrderDraftUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrderDraftUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload>[]
+          }
+          upsert: {
+            args: Prisma.OrderDraftUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDraftPayload>
+          }
+          aggregate: {
+            args: Prisma.OrderDraftAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrderDraft>
+          }
+          groupBy: {
+            args: Prisma.OrderDraftGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrderDraftGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrderDraftCountArgs<ExtArgs>
+            result: $Utils.Optional<OrderDraftCountAggregateOutputType> | number
+          }
+        }
+      }
       Payment: {
         payload: Prisma.$PaymentPayload<ExtArgs>
         fields: Prisma.PaymentFieldRefs
@@ -4128,6 +4218,7 @@ export namespace Prisma {
     wishlistItem?: WishlistItemOmit
     order?: OrderOmit
     orderItem?: OrderItemOmit
+    orderDraft?: OrderDraftOmit
     payment?: PaymentOmit
     shipment?: ShipmentOmit
     refund?: RefundOmit
@@ -4237,6 +4328,7 @@ export namespace Prisma {
     messagesSentUser: number
     ReturnRequest: number
     VoucherRedemption: number
+    OrderDraft: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4254,6 +4346,7 @@ export namespace Prisma {
     messagesSentUser?: boolean | UserCountOutputTypeCountMessagesSentUserArgs
     ReturnRequest?: boolean | UserCountOutputTypeCountReturnRequestArgs
     VoucherRedemption?: boolean | UserCountOutputTypeCountVoucherRedemptionArgs
+    OrderDraft?: boolean | UserCountOutputTypeCountOrderDraftArgs
   }
 
   // Custom InputTypes
@@ -4363,6 +4456,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountVoucherRedemptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: VoucherRedemptionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOrderDraftArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderDraftWhereInput
   }
 
 
@@ -4844,6 +4944,46 @@ export namespace Prisma {
 
 
   /**
+   * Count Type OrderDraftCountOutputType
+   */
+
+  export type OrderDraftCountOutputType = {
+    items: number
+    vouchers: number
+  }
+
+  export type OrderDraftCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | OrderDraftCountOutputTypeCountItemsArgs
+    vouchers?: boolean | OrderDraftCountOutputTypeCountVouchersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OrderDraftCountOutputType without action
+   */
+  export type OrderDraftCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraftCountOutputType
+     */
+    select?: OrderDraftCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OrderDraftCountOutputType without action
+   */
+  export type OrderDraftCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderItemWhereInput
+  }
+
+  /**
+   * OrderDraftCountOutputType without action
+   */
+  export type OrderDraftCountOutputTypeCountVouchersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderVoucherWhereInput
+  }
+
+
+  /**
    * Count Type PaymentCountOutputType
    */
 
@@ -5235,6 +5375,7 @@ export namespace Prisma {
     messagesSentUser?: boolean | User$messagesSentUserArgs<ExtArgs>
     ReturnRequest?: boolean | User$ReturnRequestArgs<ExtArgs>
     VoucherRedemption?: boolean | User$VoucherRedemptionArgs<ExtArgs>
+    OrderDraft?: boolean | User$OrderDraftArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5298,6 +5439,7 @@ export namespace Prisma {
     messagesSentUser?: boolean | User$messagesSentUserArgs<ExtArgs>
     ReturnRequest?: boolean | User$ReturnRequestArgs<ExtArgs>
     VoucherRedemption?: boolean | User$VoucherRedemptionArgs<ExtArgs>
+    OrderDraft?: boolean | User$OrderDraftArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5322,6 +5464,7 @@ export namespace Prisma {
       messagesSentUser: Prisma.$MessagePayload<ExtArgs>[]
       ReturnRequest: Prisma.$ReturnRequestPayload<ExtArgs>[]
       VoucherRedemption: Prisma.$VoucherRedemptionPayload<ExtArgs>[]
+      OrderDraft: Prisma.$OrderDraftPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5745,6 +5888,7 @@ export namespace Prisma {
     messagesSentUser<T extends User$messagesSentUserArgs<ExtArgs> = {}>(args?: Subset<T, User$messagesSentUserArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ReturnRequest<T extends User$ReturnRequestArgs<ExtArgs> = {}>(args?: Subset<T, User$ReturnRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReturnRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     VoucherRedemption<T extends User$VoucherRedemptionArgs<ExtArgs> = {}>(args?: Subset<T, User$VoucherRedemptionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherRedemptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    OrderDraft<T extends User$OrderDraftArgs<ExtArgs> = {}>(args?: Subset<T, User$OrderDraftArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6544,6 +6688,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: VoucherRedemptionScalarFieldEnum | VoucherRedemptionScalarFieldEnum[]
+  }
+
+  /**
+   * User.OrderDraft
+   */
+  export type User$OrderDraftArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    where?: OrderDraftWhereInput
+    orderBy?: OrderDraftOrderByWithRelationInput | OrderDraftOrderByWithRelationInput[]
+    cursor?: OrderDraftWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderDraftScalarFieldEnum | OrderDraftScalarFieldEnum[]
   }
 
   /**
@@ -27696,6 +27864,7 @@ export namespace Prisma {
     vouchers?: boolean | Order$vouchersArgs<ExtArgs>
     ReturnRequest?: boolean | Order$ReturnRequestArgs<ExtArgs>
     VoucherRedemption?: boolean | Order$VoucherRedemptionArgs<ExtArgs>
+    drafts?: boolean | Order$draftsArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
@@ -27786,6 +27955,7 @@ export namespace Prisma {
     vouchers?: boolean | Order$vouchersArgs<ExtArgs>
     ReturnRequest?: boolean | Order$ReturnRequestArgs<ExtArgs>
     VoucherRedemption?: boolean | Order$VoucherRedemptionArgs<ExtArgs>
+    drafts?: boolean | Order$draftsArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -27809,6 +27979,7 @@ export namespace Prisma {
       vouchers: Prisma.$OrderVoucherPayload<ExtArgs>[]
       ReturnRequest: Prisma.$ReturnRequestPayload<ExtArgs>[]
       VoucherRedemption: Prisma.$VoucherRedemptionPayload<ExtArgs>[]
+      drafts: Prisma.$OrderDraftPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -28235,6 +28406,7 @@ export namespace Prisma {
     vouchers<T extends Order$vouchersArgs<ExtArgs> = {}>(args?: Subset<T, Order$vouchersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderVoucherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ReturnRequest<T extends Order$ReturnRequestArgs<ExtArgs> = {}>(args?: Subset<T, Order$ReturnRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReturnRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     VoucherRedemption<T extends Order$VoucherRedemptionArgs<ExtArgs> = {}>(args?: Subset<T, Order$VoucherRedemptionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherRedemptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    drafts<T extends Order$draftsArgs<ExtArgs> = {}>(args?: Subset<T, Order$draftsArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -28849,6 +29021,25 @@ export namespace Prisma {
   }
 
   /**
+   * Order.drafts
+   */
+  export type Order$draftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    where?: OrderDraftWhereInput
+  }
+
+  /**
    * Order without action
    */
   export type OrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -28896,6 +29087,7 @@ export namespace Prisma {
   export type OrderItemMinAggregateOutputType = {
     id: string | null
     orderId: string | null
+    orderDraftId: string | null
     productId: string | null
     variantId: string | null
     title: string | null
@@ -28909,6 +29101,7 @@ export namespace Prisma {
   export type OrderItemMaxAggregateOutputType = {
     id: string | null
     orderId: string | null
+    orderDraftId: string | null
     productId: string | null
     variantId: string | null
     title: string | null
@@ -28922,6 +29115,7 @@ export namespace Prisma {
   export type OrderItemCountAggregateOutputType = {
     id: number
     orderId: number
+    orderDraftId: number
     productId: number
     variantId: number
     title: number
@@ -28952,6 +29146,7 @@ export namespace Prisma {
   export type OrderItemMinAggregateInputType = {
     id?: true
     orderId?: true
+    orderDraftId?: true
     productId?: true
     variantId?: true
     title?: true
@@ -28965,6 +29160,7 @@ export namespace Prisma {
   export type OrderItemMaxAggregateInputType = {
     id?: true
     orderId?: true
+    orderDraftId?: true
     productId?: true
     variantId?: true
     title?: true
@@ -28978,6 +29174,7 @@ export namespace Prisma {
   export type OrderItemCountAggregateInputType = {
     id?: true
     orderId?: true
+    orderDraftId?: true
     productId?: true
     variantId?: true
     title?: true
@@ -29078,7 +29275,8 @@ export namespace Prisma {
 
   export type OrderItemGroupByOutputType = {
     id: string
-    orderId: string
+    orderId: string | null
+    orderDraftId: string | null
     productId: string
     variantId: string | null
     title: string
@@ -29112,6 +29310,7 @@ export namespace Prisma {
   export type OrderItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     orderId?: boolean
+    orderDraftId?: boolean
     productId?: boolean
     variantId?: boolean
     title?: boolean
@@ -29121,7 +29320,8 @@ export namespace Prisma {
     discount?: boolean
     total?: boolean
     metadata?: boolean
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    order?: boolean | OrderItem$orderArgs<ExtArgs>
+    orderDraft?: boolean | OrderItem$orderDraftArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
     variant?: boolean | OrderItem$variantArgs<ExtArgs>
     review?: boolean | OrderItem$reviewArgs<ExtArgs>
@@ -29132,6 +29332,7 @@ export namespace Prisma {
   export type OrderItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     orderId?: boolean
+    orderDraftId?: boolean
     productId?: boolean
     variantId?: boolean
     title?: boolean
@@ -29141,7 +29342,8 @@ export namespace Prisma {
     discount?: boolean
     total?: boolean
     metadata?: boolean
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    order?: boolean | OrderItem$orderArgs<ExtArgs>
+    orderDraft?: boolean | OrderItem$orderDraftArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
     variant?: boolean | OrderItem$variantArgs<ExtArgs>
   }, ExtArgs["result"]["orderItem"]>
@@ -29149,6 +29351,7 @@ export namespace Prisma {
   export type OrderItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     orderId?: boolean
+    orderDraftId?: boolean
     productId?: boolean
     variantId?: boolean
     title?: boolean
@@ -29158,7 +29361,8 @@ export namespace Prisma {
     discount?: boolean
     total?: boolean
     metadata?: boolean
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    order?: boolean | OrderItem$orderArgs<ExtArgs>
+    orderDraft?: boolean | OrderItem$orderDraftArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
     variant?: boolean | OrderItem$variantArgs<ExtArgs>
   }, ExtArgs["result"]["orderItem"]>
@@ -29166,6 +29370,7 @@ export namespace Prisma {
   export type OrderItemSelectScalar = {
     id?: boolean
     orderId?: boolean
+    orderDraftId?: boolean
     productId?: boolean
     variantId?: boolean
     title?: boolean
@@ -29177,9 +29382,10 @@ export namespace Prisma {
     metadata?: boolean
   }
 
-  export type OrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "productId" | "variantId" | "title" | "sku" | "unitPrice" | "quantity" | "discount" | "total" | "metadata", ExtArgs["result"]["orderItem"]>
+  export type OrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "orderDraftId" | "productId" | "variantId" | "title" | "sku" | "unitPrice" | "quantity" | "discount" | "total" | "metadata", ExtArgs["result"]["orderItem"]>
   export type OrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    order?: boolean | OrderItem$orderArgs<ExtArgs>
+    orderDraft?: boolean | OrderItem$orderDraftArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
     variant?: boolean | OrderItem$variantArgs<ExtArgs>
     review?: boolean | OrderItem$reviewArgs<ExtArgs>
@@ -29187,12 +29393,14 @@ export namespace Prisma {
     _count?: boolean | OrderItemCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrderItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    order?: boolean | OrderItem$orderArgs<ExtArgs>
+    orderDraft?: boolean | OrderItem$orderDraftArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
     variant?: boolean | OrderItem$variantArgs<ExtArgs>
   }
   export type OrderItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    order?: boolean | OrderItem$orderArgs<ExtArgs>
+    orderDraft?: boolean | OrderItem$orderDraftArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
     variant?: boolean | OrderItem$variantArgs<ExtArgs>
   }
@@ -29200,7 +29408,8 @@ export namespace Prisma {
   export type $OrderItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OrderItem"
     objects: {
-      order: Prisma.$OrderPayload<ExtArgs>
+      order: Prisma.$OrderPayload<ExtArgs> | null
+      orderDraft: Prisma.$OrderDraftPayload<ExtArgs> | null
       product: Prisma.$ProductPayload<ExtArgs>
       variant: Prisma.$ProductVariantPayload<ExtArgs> | null
       review: Prisma.$ReviewPayload<ExtArgs> | null
@@ -29208,7 +29417,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      orderId: string
+      orderId: string | null
+      orderDraftId: string | null
       productId: string
       variantId: string | null
       title: string
@@ -29612,7 +29822,8 @@ export namespace Prisma {
    */
   export interface Prisma__OrderItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    order<T extends OrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderDefaultArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    order<T extends OrderItem$orderArgs<ExtArgs> = {}>(args?: Subset<T, OrderItem$orderArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    orderDraft<T extends OrderItem$orderDraftArgs<ExtArgs> = {}>(args?: Subset<T, OrderItem$orderDraftArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     variant<T extends OrderItem$variantArgs<ExtArgs> = {}>(args?: Subset<T, OrderItem$variantArgs<ExtArgs>>): Prisma__ProductVariantClient<$Result.GetResult<Prisma.$ProductVariantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     review<T extends OrderItem$reviewArgs<ExtArgs> = {}>(args?: Subset<T, OrderItem$reviewArgs<ExtArgs>>): Prisma__ReviewClient<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -29648,6 +29859,7 @@ export namespace Prisma {
   interface OrderItemFieldRefs {
     readonly id: FieldRef<"OrderItem", 'String'>
     readonly orderId: FieldRef<"OrderItem", 'String'>
+    readonly orderDraftId: FieldRef<"OrderItem", 'String'>
     readonly productId: FieldRef<"OrderItem", 'String'>
     readonly variantId: FieldRef<"OrderItem", 'String'>
     readonly title: FieldRef<"OrderItem", 'String'>
@@ -30053,6 +30265,44 @@ export namespace Prisma {
   }
 
   /**
+   * OrderItem.order
+   */
+  export type OrderItem$orderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    where?: OrderWhereInput
+  }
+
+  /**
+   * OrderItem.orderDraft
+   */
+  export type OrderItem$orderDraftArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    where?: OrderDraftWhereInput
+  }
+
+  /**
    * OrderItem.variant
    */
   export type OrderItem$variantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -30130,6 +30380,1321 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: OrderItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OrderDraft
+   */
+
+  export type AggregateOrderDraft = {
+    _count: OrderDraftCountAggregateOutputType | null
+    _avg: OrderDraftAvgAggregateOutputType | null
+    _sum: OrderDraftSumAggregateOutputType | null
+    _min: OrderDraftMinAggregateOutputType | null
+    _max: OrderDraftMaxAggregateOutputType | null
+  }
+
+  export type OrderDraftAvgAggregateOutputType = {
+    itemsTotal: Decimal | null
+    shippingFee: Decimal | null
+    discountTotal: Decimal | null
+    grandTotal: Decimal | null
+  }
+
+  export type OrderDraftSumAggregateOutputType = {
+    itemsTotal: Decimal | null
+    shippingFee: Decimal | null
+    discountTotal: Decimal | null
+    grandTotal: Decimal | null
+  }
+
+  export type OrderDraftMinAggregateOutputType = {
+    id: string | null
+    orderNumber: string | null
+    orderId: string | null
+    userId: string | null
+    placedAt: Date | null
+    updatedAt: Date | null
+    status: $Enums.OrderStatus | null
+    paymentStatus: $Enums.PaymentStatus | null
+    currency: $Enums.Currency | null
+    itemsTotal: Decimal | null
+    shippingFee: Decimal | null
+    discountTotal: Decimal | null
+    grandTotal: Decimal | null
+    notes: string | null
+  }
+
+  export type OrderDraftMaxAggregateOutputType = {
+    id: string | null
+    orderNumber: string | null
+    orderId: string | null
+    userId: string | null
+    placedAt: Date | null
+    updatedAt: Date | null
+    status: $Enums.OrderStatus | null
+    paymentStatus: $Enums.PaymentStatus | null
+    currency: $Enums.Currency | null
+    itemsTotal: Decimal | null
+    shippingFee: Decimal | null
+    discountTotal: Decimal | null
+    grandTotal: Decimal | null
+    notes: string | null
+  }
+
+  export type OrderDraftCountAggregateOutputType = {
+    id: number
+    orderNumber: number
+    orderId: number
+    userId: number
+    placedAt: number
+    updatedAt: number
+    status: number
+    paymentStatus: number
+    currency: number
+    itemsTotal: number
+    shippingFee: number
+    discountTotal: number
+    grandTotal: number
+    shippingInfor: number
+    notes: number
+    _all: number
+  }
+
+
+  export type OrderDraftAvgAggregateInputType = {
+    itemsTotal?: true
+    shippingFee?: true
+    discountTotal?: true
+    grandTotal?: true
+  }
+
+  export type OrderDraftSumAggregateInputType = {
+    itemsTotal?: true
+    shippingFee?: true
+    discountTotal?: true
+    grandTotal?: true
+  }
+
+  export type OrderDraftMinAggregateInputType = {
+    id?: true
+    orderNumber?: true
+    orderId?: true
+    userId?: true
+    placedAt?: true
+    updatedAt?: true
+    status?: true
+    paymentStatus?: true
+    currency?: true
+    itemsTotal?: true
+    shippingFee?: true
+    discountTotal?: true
+    grandTotal?: true
+    notes?: true
+  }
+
+  export type OrderDraftMaxAggregateInputType = {
+    id?: true
+    orderNumber?: true
+    orderId?: true
+    userId?: true
+    placedAt?: true
+    updatedAt?: true
+    status?: true
+    paymentStatus?: true
+    currency?: true
+    itemsTotal?: true
+    shippingFee?: true
+    discountTotal?: true
+    grandTotal?: true
+    notes?: true
+  }
+
+  export type OrderDraftCountAggregateInputType = {
+    id?: true
+    orderNumber?: true
+    orderId?: true
+    userId?: true
+    placedAt?: true
+    updatedAt?: true
+    status?: true
+    paymentStatus?: true
+    currency?: true
+    itemsTotal?: true
+    shippingFee?: true
+    discountTotal?: true
+    grandTotal?: true
+    shippingInfor?: true
+    notes?: true
+    _all?: true
+  }
+
+  export type OrderDraftAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrderDraft to aggregate.
+     */
+    where?: OrderDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderDrafts to fetch.
+     */
+    orderBy?: OrderDraftOrderByWithRelationInput | OrderDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrderDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderDrafts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OrderDrafts
+    **/
+    _count?: true | OrderDraftCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrderDraftAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrderDraftSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrderDraftMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrderDraftMaxAggregateInputType
+  }
+
+  export type GetOrderDraftAggregateType<T extends OrderDraftAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrderDraft]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrderDraft[P]>
+      : GetScalarType<T[P], AggregateOrderDraft[P]>
+  }
+
+
+
+
+  export type OrderDraftGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderDraftWhereInput
+    orderBy?: OrderDraftOrderByWithAggregationInput | OrderDraftOrderByWithAggregationInput[]
+    by: OrderDraftScalarFieldEnum[] | OrderDraftScalarFieldEnum
+    having?: OrderDraftScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrderDraftCountAggregateInputType | true
+    _avg?: OrderDraftAvgAggregateInputType
+    _sum?: OrderDraftSumAggregateInputType
+    _min?: OrderDraftMinAggregateInputType
+    _max?: OrderDraftMaxAggregateInputType
+  }
+
+  export type OrderDraftGroupByOutputType = {
+    id: string
+    orderNumber: string
+    orderId: string | null
+    userId: string
+    placedAt: Date
+    updatedAt: Date
+    status: $Enums.OrderStatus
+    paymentStatus: $Enums.PaymentStatus
+    currency: $Enums.Currency
+    itemsTotal: Decimal
+    shippingFee: Decimal
+    discountTotal: Decimal
+    grandTotal: Decimal
+    shippingInfor: JsonValue
+    notes: string | null
+    _count: OrderDraftCountAggregateOutputType | null
+    _avg: OrderDraftAvgAggregateOutputType | null
+    _sum: OrderDraftSumAggregateOutputType | null
+    _min: OrderDraftMinAggregateOutputType | null
+    _max: OrderDraftMaxAggregateOutputType | null
+  }
+
+  type GetOrderDraftGroupByPayload<T extends OrderDraftGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrderDraftGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrderDraftGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrderDraftGroupByOutputType[P]>
+            : GetScalarType<T[P], OrderDraftGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrderDraftSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderNumber?: boolean
+    orderId?: boolean
+    userId?: boolean
+    placedAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+    paymentStatus?: boolean
+    currency?: boolean
+    itemsTotal?: boolean
+    shippingFee?: boolean
+    discountTotal?: boolean
+    grandTotal?: boolean
+    shippingInfor?: boolean
+    notes?: boolean
+    items?: boolean | OrderDraft$itemsArgs<ExtArgs>
+    vouchers?: boolean | OrderDraft$vouchersArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDraft$orderArgs<ExtArgs>
+    _count?: boolean | OrderDraftCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderDraft"]>
+
+  export type OrderDraftSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderNumber?: boolean
+    orderId?: boolean
+    userId?: boolean
+    placedAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+    paymentStatus?: boolean
+    currency?: boolean
+    itemsTotal?: boolean
+    shippingFee?: boolean
+    discountTotal?: boolean
+    grandTotal?: boolean
+    shippingInfor?: boolean
+    notes?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDraft$orderArgs<ExtArgs>
+  }, ExtArgs["result"]["orderDraft"]>
+
+  export type OrderDraftSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderNumber?: boolean
+    orderId?: boolean
+    userId?: boolean
+    placedAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+    paymentStatus?: boolean
+    currency?: boolean
+    itemsTotal?: boolean
+    shippingFee?: boolean
+    discountTotal?: boolean
+    grandTotal?: boolean
+    shippingInfor?: boolean
+    notes?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDraft$orderArgs<ExtArgs>
+  }, ExtArgs["result"]["orderDraft"]>
+
+  export type OrderDraftSelectScalar = {
+    id?: boolean
+    orderNumber?: boolean
+    orderId?: boolean
+    userId?: boolean
+    placedAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+    paymentStatus?: boolean
+    currency?: boolean
+    itemsTotal?: boolean
+    shippingFee?: boolean
+    discountTotal?: boolean
+    grandTotal?: boolean
+    shippingInfor?: boolean
+    notes?: boolean
+  }
+
+  export type OrderDraftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "orderId" | "userId" | "placedAt" | "updatedAt" | "status" | "paymentStatus" | "currency" | "itemsTotal" | "shippingFee" | "discountTotal" | "grandTotal" | "shippingInfor" | "notes", ExtArgs["result"]["orderDraft"]>
+  export type OrderDraftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | OrderDraft$itemsArgs<ExtArgs>
+    vouchers?: boolean | OrderDraft$vouchersArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDraft$orderArgs<ExtArgs>
+    _count?: boolean | OrderDraftCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type OrderDraftIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDraft$orderArgs<ExtArgs>
+  }
+  export type OrderDraftIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    order?: boolean | OrderDraft$orderArgs<ExtArgs>
+  }
+
+  export type $OrderDraftPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OrderDraft"
+    objects: {
+      items: Prisma.$OrderItemPayload<ExtArgs>[]
+      vouchers: Prisma.$OrderVoucherPayload<ExtArgs>[]
+      user: Prisma.$UserPayload<ExtArgs>
+      order: Prisma.$OrderPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      orderNumber: string
+      orderId: string | null
+      userId: string
+      placedAt: Date
+      updatedAt: Date
+      status: $Enums.OrderStatus
+      paymentStatus: $Enums.PaymentStatus
+      currency: $Enums.Currency
+      itemsTotal: Prisma.Decimal
+      shippingFee: Prisma.Decimal
+      discountTotal: Prisma.Decimal
+      grandTotal: Prisma.Decimal
+      shippingInfor: Prisma.JsonValue
+      notes: string | null
+    }, ExtArgs["result"]["orderDraft"]>
+    composites: {}
+  }
+
+  type OrderDraftGetPayload<S extends boolean | null | undefined | OrderDraftDefaultArgs> = $Result.GetResult<Prisma.$OrderDraftPayload, S>
+
+  type OrderDraftCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrderDraftFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrderDraftCountAggregateInputType | true
+    }
+
+  export interface OrderDraftDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OrderDraft'], meta: { name: 'OrderDraft' } }
+    /**
+     * Find zero or one OrderDraft that matches the filter.
+     * @param {OrderDraftFindUniqueArgs} args - Arguments to find a OrderDraft
+     * @example
+     * // Get one OrderDraft
+     * const orderDraft = await prisma.orderDraft.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrderDraftFindUniqueArgs>(args: SelectSubset<T, OrderDraftFindUniqueArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OrderDraft that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrderDraftFindUniqueOrThrowArgs} args - Arguments to find a OrderDraft
+     * @example
+     * // Get one OrderDraft
+     * const orderDraft = await prisma.orderDraft.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrderDraftFindUniqueOrThrowArgs>(args: SelectSubset<T, OrderDraftFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrderDraft that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDraftFindFirstArgs} args - Arguments to find a OrderDraft
+     * @example
+     * // Get one OrderDraft
+     * const orderDraft = await prisma.orderDraft.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrderDraftFindFirstArgs>(args?: SelectSubset<T, OrderDraftFindFirstArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrderDraft that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDraftFindFirstOrThrowArgs} args - Arguments to find a OrderDraft
+     * @example
+     * // Get one OrderDraft
+     * const orderDraft = await prisma.orderDraft.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrderDraftFindFirstOrThrowArgs>(args?: SelectSubset<T, OrderDraftFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OrderDrafts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDraftFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OrderDrafts
+     * const orderDrafts = await prisma.orderDraft.findMany()
+     * 
+     * // Get first 10 OrderDrafts
+     * const orderDrafts = await prisma.orderDraft.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orderDraftWithIdOnly = await prisma.orderDraft.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrderDraftFindManyArgs>(args?: SelectSubset<T, OrderDraftFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OrderDraft.
+     * @param {OrderDraftCreateArgs} args - Arguments to create a OrderDraft.
+     * @example
+     * // Create one OrderDraft
+     * const OrderDraft = await prisma.orderDraft.create({
+     *   data: {
+     *     // ... data to create a OrderDraft
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrderDraftCreateArgs>(args: SelectSubset<T, OrderDraftCreateArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OrderDrafts.
+     * @param {OrderDraftCreateManyArgs} args - Arguments to create many OrderDrafts.
+     * @example
+     * // Create many OrderDrafts
+     * const orderDraft = await prisma.orderDraft.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrderDraftCreateManyArgs>(args?: SelectSubset<T, OrderDraftCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OrderDrafts and returns the data saved in the database.
+     * @param {OrderDraftCreateManyAndReturnArgs} args - Arguments to create many OrderDrafts.
+     * @example
+     * // Create many OrderDrafts
+     * const orderDraft = await prisma.orderDraft.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OrderDrafts and only return the `id`
+     * const orderDraftWithIdOnly = await prisma.orderDraft.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrderDraftCreateManyAndReturnArgs>(args?: SelectSubset<T, OrderDraftCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OrderDraft.
+     * @param {OrderDraftDeleteArgs} args - Arguments to delete one OrderDraft.
+     * @example
+     * // Delete one OrderDraft
+     * const OrderDraft = await prisma.orderDraft.delete({
+     *   where: {
+     *     // ... filter to delete one OrderDraft
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrderDraftDeleteArgs>(args: SelectSubset<T, OrderDraftDeleteArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OrderDraft.
+     * @param {OrderDraftUpdateArgs} args - Arguments to update one OrderDraft.
+     * @example
+     * // Update one OrderDraft
+     * const orderDraft = await prisma.orderDraft.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrderDraftUpdateArgs>(args: SelectSubset<T, OrderDraftUpdateArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OrderDrafts.
+     * @param {OrderDraftDeleteManyArgs} args - Arguments to filter OrderDrafts to delete.
+     * @example
+     * // Delete a few OrderDrafts
+     * const { count } = await prisma.orderDraft.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrderDraftDeleteManyArgs>(args?: SelectSubset<T, OrderDraftDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrderDrafts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDraftUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OrderDrafts
+     * const orderDraft = await prisma.orderDraft.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrderDraftUpdateManyArgs>(args: SelectSubset<T, OrderDraftUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrderDrafts and returns the data updated in the database.
+     * @param {OrderDraftUpdateManyAndReturnArgs} args - Arguments to update many OrderDrafts.
+     * @example
+     * // Update many OrderDrafts
+     * const orderDraft = await prisma.orderDraft.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OrderDrafts and only return the `id`
+     * const orderDraftWithIdOnly = await prisma.orderDraft.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrderDraftUpdateManyAndReturnArgs>(args: SelectSubset<T, OrderDraftUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OrderDraft.
+     * @param {OrderDraftUpsertArgs} args - Arguments to update or create a OrderDraft.
+     * @example
+     * // Update or create a OrderDraft
+     * const orderDraft = await prisma.orderDraft.upsert({
+     *   create: {
+     *     // ... data to create a OrderDraft
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OrderDraft we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrderDraftUpsertArgs>(args: SelectSubset<T, OrderDraftUpsertArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OrderDrafts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDraftCountArgs} args - Arguments to filter OrderDrafts to count.
+     * @example
+     * // Count the number of OrderDrafts
+     * const count = await prisma.orderDraft.count({
+     *   where: {
+     *     // ... the filter for the OrderDrafts we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrderDraftCountArgs>(
+      args?: Subset<T, OrderDraftCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrderDraftCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OrderDraft.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDraftAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrderDraftAggregateArgs>(args: Subset<T, OrderDraftAggregateArgs>): Prisma.PrismaPromise<GetOrderDraftAggregateType<T>>
+
+    /**
+     * Group by OrderDraft.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDraftGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrderDraftGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrderDraftGroupByArgs['orderBy'] }
+        : { orderBy?: OrderDraftGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrderDraftGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderDraftGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OrderDraft model
+   */
+  readonly fields: OrderDraftFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OrderDraft.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrderDraftClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    items<T extends OrderDraft$itemsArgs<ExtArgs> = {}>(args?: Subset<T, OrderDraft$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    vouchers<T extends OrderDraft$vouchersArgs<ExtArgs> = {}>(args?: Subset<T, OrderDraft$vouchersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderVoucherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    order<T extends OrderDraft$orderArgs<ExtArgs> = {}>(args?: Subset<T, OrderDraft$orderArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OrderDraft model
+   */
+  interface OrderDraftFieldRefs {
+    readonly id: FieldRef<"OrderDraft", 'String'>
+    readonly orderNumber: FieldRef<"OrderDraft", 'String'>
+    readonly orderId: FieldRef<"OrderDraft", 'String'>
+    readonly userId: FieldRef<"OrderDraft", 'String'>
+    readonly placedAt: FieldRef<"OrderDraft", 'DateTime'>
+    readonly updatedAt: FieldRef<"OrderDraft", 'DateTime'>
+    readonly status: FieldRef<"OrderDraft", 'OrderStatus'>
+    readonly paymentStatus: FieldRef<"OrderDraft", 'PaymentStatus'>
+    readonly currency: FieldRef<"OrderDraft", 'Currency'>
+    readonly itemsTotal: FieldRef<"OrderDraft", 'Decimal'>
+    readonly shippingFee: FieldRef<"OrderDraft", 'Decimal'>
+    readonly discountTotal: FieldRef<"OrderDraft", 'Decimal'>
+    readonly grandTotal: FieldRef<"OrderDraft", 'Decimal'>
+    readonly shippingInfor: FieldRef<"OrderDraft", 'Json'>
+    readonly notes: FieldRef<"OrderDraft", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OrderDraft findUnique
+   */
+  export type OrderDraftFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDraft to fetch.
+     */
+    where: OrderDraftWhereUniqueInput
+  }
+
+  /**
+   * OrderDraft findUniqueOrThrow
+   */
+  export type OrderDraftFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDraft to fetch.
+     */
+    where: OrderDraftWhereUniqueInput
+  }
+
+  /**
+   * OrderDraft findFirst
+   */
+  export type OrderDraftFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDraft to fetch.
+     */
+    where?: OrderDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderDrafts to fetch.
+     */
+    orderBy?: OrderDraftOrderByWithRelationInput | OrderDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrderDrafts.
+     */
+    cursor?: OrderDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderDrafts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderDrafts.
+     */
+    distinct?: OrderDraftScalarFieldEnum | OrderDraftScalarFieldEnum[]
+  }
+
+  /**
+   * OrderDraft findFirstOrThrow
+   */
+  export type OrderDraftFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDraft to fetch.
+     */
+    where?: OrderDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderDrafts to fetch.
+     */
+    orderBy?: OrderDraftOrderByWithRelationInput | OrderDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrderDrafts.
+     */
+    cursor?: OrderDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderDrafts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderDrafts.
+     */
+    distinct?: OrderDraftScalarFieldEnum | OrderDraftScalarFieldEnum[]
+  }
+
+  /**
+   * OrderDraft findMany
+   */
+  export type OrderDraftFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDrafts to fetch.
+     */
+    where?: OrderDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderDrafts to fetch.
+     */
+    orderBy?: OrderDraftOrderByWithRelationInput | OrderDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OrderDrafts.
+     */
+    cursor?: OrderDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderDrafts.
+     */
+    skip?: number
+    distinct?: OrderDraftScalarFieldEnum | OrderDraftScalarFieldEnum[]
+  }
+
+  /**
+   * OrderDraft create
+   */
+  export type OrderDraftCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OrderDraft.
+     */
+    data: XOR<OrderDraftCreateInput, OrderDraftUncheckedCreateInput>
+  }
+
+  /**
+   * OrderDraft createMany
+   */
+  export type OrderDraftCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OrderDrafts.
+     */
+    data: OrderDraftCreateManyInput | OrderDraftCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OrderDraft createManyAndReturn
+   */
+  export type OrderDraftCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * The data used to create many OrderDrafts.
+     */
+    data: OrderDraftCreateManyInput | OrderDraftCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrderDraft update
+   */
+  export type OrderDraftUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OrderDraft.
+     */
+    data: XOR<OrderDraftUpdateInput, OrderDraftUncheckedUpdateInput>
+    /**
+     * Choose, which OrderDraft to update.
+     */
+    where: OrderDraftWhereUniqueInput
+  }
+
+  /**
+   * OrderDraft updateMany
+   */
+  export type OrderDraftUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OrderDrafts.
+     */
+    data: XOR<OrderDraftUpdateManyMutationInput, OrderDraftUncheckedUpdateManyInput>
+    /**
+     * Filter which OrderDrafts to update
+     */
+    where?: OrderDraftWhereInput
+    /**
+     * Limit how many OrderDrafts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrderDraft updateManyAndReturn
+   */
+  export type OrderDraftUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * The data used to update OrderDrafts.
+     */
+    data: XOR<OrderDraftUpdateManyMutationInput, OrderDraftUncheckedUpdateManyInput>
+    /**
+     * Filter which OrderDrafts to update
+     */
+    where?: OrderDraftWhereInput
+    /**
+     * Limit how many OrderDrafts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrderDraft upsert
+   */
+  export type OrderDraftUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OrderDraft to update in case it exists.
+     */
+    where: OrderDraftWhereUniqueInput
+    /**
+     * In case the OrderDraft found by the `where` argument doesn't exist, create a new OrderDraft with this data.
+     */
+    create: XOR<OrderDraftCreateInput, OrderDraftUncheckedCreateInput>
+    /**
+     * In case the OrderDraft was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrderDraftUpdateInput, OrderDraftUncheckedUpdateInput>
+  }
+
+  /**
+   * OrderDraft delete
+   */
+  export type OrderDraftDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter which OrderDraft to delete.
+     */
+    where: OrderDraftWhereUniqueInput
+  }
+
+  /**
+   * OrderDraft deleteMany
+   */
+  export type OrderDraftDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrderDrafts to delete
+     */
+    where?: OrderDraftWhereInput
+    /**
+     * Limit how many OrderDrafts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrderDraft.items
+   */
+  export type OrderDraft$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderItem
+     */
+    select?: OrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderItem
+     */
+    omit?: OrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderItemInclude<ExtArgs> | null
+    where?: OrderItemWhereInput
+    orderBy?: OrderItemOrderByWithRelationInput | OrderItemOrderByWithRelationInput[]
+    cursor?: OrderItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderItemScalarFieldEnum | OrderItemScalarFieldEnum[]
+  }
+
+  /**
+   * OrderDraft.vouchers
+   */
+  export type OrderDraft$vouchersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderVoucher
+     */
+    select?: OrderVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderVoucher
+     */
+    omit?: OrderVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderVoucherInclude<ExtArgs> | null
+    where?: OrderVoucherWhereInput
+    orderBy?: OrderVoucherOrderByWithRelationInput | OrderVoucherOrderByWithRelationInput[]
+    cursor?: OrderVoucherWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderVoucherScalarFieldEnum | OrderVoucherScalarFieldEnum[]
+  }
+
+  /**
+   * OrderDraft.order
+   */
+  export type OrderDraft$orderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    where?: OrderWhereInput
+  }
+
+  /**
+   * OrderDraft without action
+   */
+  export type OrderDraftDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
   }
 
 
@@ -42596,35 +44161,47 @@ export namespace Prisma {
   }
 
   export type OrderVoucherMinAggregateOutputType = {
+    id: string | null
     orderId: string | null
     voucherId: string | null
+    orderDraftId: string | null
   }
 
   export type OrderVoucherMaxAggregateOutputType = {
+    id: string | null
     orderId: string | null
     voucherId: string | null
+    orderDraftId: string | null
   }
 
   export type OrderVoucherCountAggregateOutputType = {
+    id: number
     orderId: number
     voucherId: number
+    orderDraftId: number
     _all: number
   }
 
 
   export type OrderVoucherMinAggregateInputType = {
+    id?: true
     orderId?: true
     voucherId?: true
+    orderDraftId?: true
   }
 
   export type OrderVoucherMaxAggregateInputType = {
+    id?: true
     orderId?: true
     voucherId?: true
+    orderDraftId?: true
   }
 
   export type OrderVoucherCountAggregateInputType = {
+    id?: true
     orderId?: true
     voucherId?: true
+    orderDraftId?: true
     _all?: true
   }
 
@@ -42701,8 +44278,10 @@ export namespace Prisma {
   }
 
   export type OrderVoucherGroupByOutputType = {
-    orderId: string
+    id: string
+    orderId: string | null
     voucherId: string
+    orderDraftId: string | null
     _count: OrderVoucherCountAggregateOutputType | null
     _min: OrderVoucherMinAggregateOutputType | null
     _max: OrderVoucherMaxAggregateOutputType | null
@@ -42723,54 +44302,71 @@ export namespace Prisma {
 
 
   export type OrderVoucherSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     orderId?: boolean
     voucherId?: boolean
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    orderDraftId?: boolean
+    order?: boolean | OrderVoucher$orderArgs<ExtArgs>
     voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    orderDraft?: boolean | OrderVoucher$orderDraftArgs<ExtArgs>
   }, ExtArgs["result"]["orderVoucher"]>
 
   export type OrderVoucherSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     orderId?: boolean
     voucherId?: boolean
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    orderDraftId?: boolean
+    order?: boolean | OrderVoucher$orderArgs<ExtArgs>
     voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    orderDraft?: boolean | OrderVoucher$orderDraftArgs<ExtArgs>
   }, ExtArgs["result"]["orderVoucher"]>
 
   export type OrderVoucherSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     orderId?: boolean
     voucherId?: boolean
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    orderDraftId?: boolean
+    order?: boolean | OrderVoucher$orderArgs<ExtArgs>
     voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    orderDraft?: boolean | OrderVoucher$orderDraftArgs<ExtArgs>
   }, ExtArgs["result"]["orderVoucher"]>
 
   export type OrderVoucherSelectScalar = {
+    id?: boolean
     orderId?: boolean
     voucherId?: boolean
+    orderDraftId?: boolean
   }
 
-  export type OrderVoucherOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"orderId" | "voucherId", ExtArgs["result"]["orderVoucher"]>
+  export type OrderVoucherOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "voucherId" | "orderDraftId", ExtArgs["result"]["orderVoucher"]>
   export type OrderVoucherInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    order?: boolean | OrderVoucher$orderArgs<ExtArgs>
     voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    orderDraft?: boolean | OrderVoucher$orderDraftArgs<ExtArgs>
   }
   export type OrderVoucherIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    order?: boolean | OrderVoucher$orderArgs<ExtArgs>
     voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    orderDraft?: boolean | OrderVoucher$orderDraftArgs<ExtArgs>
   }
   export type OrderVoucherIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    order?: boolean | OrderDefaultArgs<ExtArgs>
+    order?: boolean | OrderVoucher$orderArgs<ExtArgs>
     voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    orderDraft?: boolean | OrderVoucher$orderDraftArgs<ExtArgs>
   }
 
   export type $OrderVoucherPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OrderVoucher"
     objects: {
-      order: Prisma.$OrderPayload<ExtArgs>
+      order: Prisma.$OrderPayload<ExtArgs> | null
       voucher: Prisma.$VoucherPayload<ExtArgs>
+      orderDraft: Prisma.$OrderDraftPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
-      orderId: string
+      id: string
+      orderId: string | null
       voucherId: string
+      orderDraftId: string | null
     }, ExtArgs["result"]["orderVoucher"]>
     composites: {}
   }
@@ -42854,8 +44450,8 @@ export namespace Prisma {
      * // Get first 10 OrderVouchers
      * const orderVouchers = await prisma.orderVoucher.findMany({ take: 10 })
      * 
-     * // Only select the `orderId`
-     * const orderVoucherWithOrderIdOnly = await prisma.orderVoucher.findMany({ select: { orderId: true } })
+     * // Only select the `id`
+     * const orderVoucherWithIdOnly = await prisma.orderVoucher.findMany({ select: { id: true } })
      * 
      */
     findMany<T extends OrderVoucherFindManyArgs>(args?: SelectSubset<T, OrderVoucherFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderVoucherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -42899,9 +44495,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many OrderVouchers and only return the `orderId`
-     * const orderVoucherWithOrderIdOnly = await prisma.orderVoucher.createManyAndReturn({
-     *   select: { orderId: true },
+     * // Create many OrderVouchers and only return the `id`
+     * const orderVoucherWithIdOnly = await prisma.orderVoucher.createManyAndReturn({
+     *   select: { id: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -42990,9 +44586,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more OrderVouchers and only return the `orderId`
-     * const orderVoucherWithOrderIdOnly = await prisma.orderVoucher.updateManyAndReturn({
-     *   select: { orderId: true },
+     * // Update zero or more OrderVouchers and only return the `id`
+     * const orderVoucherWithIdOnly = await prisma.orderVoucher.updateManyAndReturn({
+     *   select: { id: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -43165,8 +44761,9 @@ export namespace Prisma {
    */
   export interface Prisma__OrderVoucherClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    order<T extends OrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderDefaultArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    order<T extends OrderVoucher$orderArgs<ExtArgs> = {}>(args?: Subset<T, OrderVoucher$orderArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     voucher<T extends VoucherDefaultArgs<ExtArgs> = {}>(args?: Subset<T, VoucherDefaultArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    orderDraft<T extends OrderVoucher$orderDraftArgs<ExtArgs> = {}>(args?: Subset<T, OrderVoucher$orderDraftArgs<ExtArgs>>): Prisma__OrderDraftClient<$Result.GetResult<Prisma.$OrderDraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -43196,8 +44793,10 @@ export namespace Prisma {
    * Fields of the OrderVoucher model
    */
   interface OrderVoucherFieldRefs {
+    readonly id: FieldRef<"OrderVoucher", 'String'>
     readonly orderId: FieldRef<"OrderVoucher", 'String'>
     readonly voucherId: FieldRef<"OrderVoucher", 'String'>
+    readonly orderDraftId: FieldRef<"OrderVoucher", 'String'>
   }
     
 
@@ -43591,6 +45190,44 @@ export namespace Prisma {
      * Limit how many OrderVouchers to delete.
      */
     limit?: number
+  }
+
+  /**
+   * OrderVoucher.order
+   */
+  export type OrderVoucher$orderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    where?: OrderWhereInput
+  }
+
+  /**
+   * OrderVoucher.orderDraft
+   */
+  export type OrderVoucher$orderDraftArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDraft
+     */
+    select?: OrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDraft
+     */
+    omit?: OrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDraftInclude<ExtArgs> | null
+    where?: OrderDraftWhereInput
   }
 
   /**
@@ -47356,6 +48993,7 @@ export namespace Prisma {
   export const OrderItemScalarFieldEnum: {
     id: 'id',
     orderId: 'orderId',
+    orderDraftId: 'orderDraftId',
     productId: 'productId',
     variantId: 'variantId',
     title: 'title',
@@ -47368,6 +49006,27 @@ export namespace Prisma {
   };
 
   export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
+
+
+  export const OrderDraftScalarFieldEnum: {
+    id: 'id',
+    orderNumber: 'orderNumber',
+    orderId: 'orderId',
+    userId: 'userId',
+    placedAt: 'placedAt',
+    updatedAt: 'updatedAt',
+    status: 'status',
+    paymentStatus: 'paymentStatus',
+    currency: 'currency',
+    itemsTotal: 'itemsTotal',
+    shippingFee: 'shippingFee',
+    discountTotal: 'discountTotal',
+    grandTotal: 'grandTotal',
+    shippingInfor: 'shippingInfor',
+    notes: 'notes'
+  };
+
+  export type OrderDraftScalarFieldEnum = (typeof OrderDraftScalarFieldEnum)[keyof typeof OrderDraftScalarFieldEnum]
 
 
   export const PaymentScalarFieldEnum: {
@@ -47517,8 +49176,10 @@ export namespace Prisma {
 
 
   export const OrderVoucherScalarFieldEnum: {
+    id: 'id',
     orderId: 'orderId',
-    voucherId: 'voucherId'
+    voucherId: 'voucherId',
+    orderDraftId: 'orderDraftId'
   };
 
   export type OrderVoucherScalarFieldEnum = (typeof OrderVoucherScalarFieldEnum)[keyof typeof OrderVoucherScalarFieldEnum]
@@ -47908,6 +49569,7 @@ export namespace Prisma {
     messagesSentUser?: MessageListRelationFilter
     ReturnRequest?: ReturnRequestListRelationFilter
     VoucherRedemption?: VoucherRedemptionListRelationFilter
+    OrderDraft?: OrderDraftListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -47938,6 +49600,7 @@ export namespace Prisma {
     messagesSentUser?: MessageOrderByRelationAggregateInput
     ReturnRequest?: ReturnRequestOrderByRelationAggregateInput
     VoucherRedemption?: VoucherRedemptionOrderByRelationAggregateInput
+    OrderDraft?: OrderDraftOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -47971,6 +49634,7 @@ export namespace Prisma {
     messagesSentUser?: MessageListRelationFilter
     ReturnRequest?: ReturnRequestListRelationFilter
     VoucherRedemption?: VoucherRedemptionListRelationFilter
+    OrderDraft?: OrderDraftListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -49450,6 +51114,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherListRelationFilter
     ReturnRequest?: ReturnRequestListRelationFilter
     VoucherRedemption?: VoucherRedemptionListRelationFilter
+    drafts?: XOR<OrderDraftNullableScalarRelationFilter, OrderDraftWhereInput> | null
   }
 
   export type OrderOrderByWithRelationInput = {
@@ -49483,6 +51148,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherOrderByRelationAggregateInput
     ReturnRequest?: ReturnRequestOrderByRelationAggregateInput
     VoucherRedemption?: VoucherRedemptionOrderByRelationAggregateInput
+    drafts?: OrderDraftOrderByWithRelationInput
   }
 
   export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -49519,6 +51185,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherListRelationFilter
     ReturnRequest?: ReturnRequestListRelationFilter
     VoucherRedemption?: VoucherRedemptionListRelationFilter
+    drafts?: XOR<OrderDraftNullableScalarRelationFilter, OrderDraftWhereInput> | null
   }, "id" | "orderNumber">
 
   export type OrderOrderByWithAggregationInput = {
@@ -49582,7 +51249,8 @@ export namespace Prisma {
     OR?: OrderItemWhereInput[]
     NOT?: OrderItemWhereInput | OrderItemWhereInput[]
     id?: UuidFilter<"OrderItem"> | string
-    orderId?: UuidFilter<"OrderItem"> | string
+    orderId?: UuidNullableFilter<"OrderItem"> | string | null
+    orderDraftId?: UuidNullableFilter<"OrderItem"> | string | null
     productId?: UuidFilter<"OrderItem"> | string
     variantId?: UuidNullableFilter<"OrderItem"> | string | null
     title?: StringFilter<"OrderItem"> | string
@@ -49592,7 +51260,8 @@ export namespace Prisma {
     discount?: DecimalFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
     total?: DecimalFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
     metadata?: JsonNullableFilter<"OrderItem">
-    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
+    orderDraft?: XOR<OrderDraftNullableScalarRelationFilter, OrderDraftWhereInput> | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     variant?: XOR<ProductVariantNullableScalarRelationFilter, ProductVariantWhereInput> | null
     review?: XOR<ReviewNullableScalarRelationFilter, ReviewWhereInput> | null
@@ -49601,7 +51270,8 @@ export namespace Prisma {
 
   export type OrderItemOrderByWithRelationInput = {
     id?: SortOrder
-    orderId?: SortOrder
+    orderId?: SortOrderInput | SortOrder
+    orderDraftId?: SortOrderInput | SortOrder
     productId?: SortOrder
     variantId?: SortOrderInput | SortOrder
     title?: SortOrder
@@ -49612,6 +51282,7 @@ export namespace Prisma {
     total?: SortOrder
     metadata?: SortOrderInput | SortOrder
     order?: OrderOrderByWithRelationInput
+    orderDraft?: OrderDraftOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
     variant?: ProductVariantOrderByWithRelationInput
     review?: ReviewOrderByWithRelationInput
@@ -49623,7 +51294,8 @@ export namespace Prisma {
     AND?: OrderItemWhereInput | OrderItemWhereInput[]
     OR?: OrderItemWhereInput[]
     NOT?: OrderItemWhereInput | OrderItemWhereInput[]
-    orderId?: UuidFilter<"OrderItem"> | string
+    orderId?: UuidNullableFilter<"OrderItem"> | string | null
+    orderDraftId?: UuidNullableFilter<"OrderItem"> | string | null
     productId?: UuidFilter<"OrderItem"> | string
     variantId?: UuidNullableFilter<"OrderItem"> | string | null
     title?: StringFilter<"OrderItem"> | string
@@ -49633,7 +51305,8 @@ export namespace Prisma {
     discount?: DecimalFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
     total?: DecimalFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
     metadata?: JsonNullableFilter<"OrderItem">
-    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
+    orderDraft?: XOR<OrderDraftNullableScalarRelationFilter, OrderDraftWhereInput> | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     variant?: XOR<ProductVariantNullableScalarRelationFilter, ProductVariantWhereInput> | null
     review?: XOR<ReviewNullableScalarRelationFilter, ReviewWhereInput> | null
@@ -49642,7 +51315,8 @@ export namespace Prisma {
 
   export type OrderItemOrderByWithAggregationInput = {
     id?: SortOrder
-    orderId?: SortOrder
+    orderId?: SortOrderInput | SortOrder
+    orderDraftId?: SortOrderInput | SortOrder
     productId?: SortOrder
     variantId?: SortOrderInput | SortOrder
     title?: SortOrder
@@ -49664,7 +51338,8 @@ export namespace Prisma {
     OR?: OrderItemScalarWhereWithAggregatesInput[]
     NOT?: OrderItemScalarWhereWithAggregatesInput | OrderItemScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"OrderItem"> | string
-    orderId?: UuidWithAggregatesFilter<"OrderItem"> | string
+    orderId?: UuidNullableWithAggregatesFilter<"OrderItem"> | string | null
+    orderDraftId?: UuidNullableWithAggregatesFilter<"OrderItem"> | string | null
     productId?: UuidWithAggregatesFilter<"OrderItem"> | string
     variantId?: UuidNullableWithAggregatesFilter<"OrderItem"> | string | null
     title?: StringWithAggregatesFilter<"OrderItem"> | string
@@ -49674,6 +51349,122 @@ export namespace Prisma {
     discount?: DecimalWithAggregatesFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
     total?: DecimalWithAggregatesFilter<"OrderItem"> | Decimal | DecimalJsLike | number | string
     metadata?: JsonNullableWithAggregatesFilter<"OrderItem">
+  }
+
+  export type OrderDraftWhereInput = {
+    AND?: OrderDraftWhereInput | OrderDraftWhereInput[]
+    OR?: OrderDraftWhereInput[]
+    NOT?: OrderDraftWhereInput | OrderDraftWhereInput[]
+    id?: UuidFilter<"OrderDraft"> | string
+    orderNumber?: StringFilter<"OrderDraft"> | string
+    orderId?: UuidNullableFilter<"OrderDraft"> | string | null
+    userId?: UuidFilter<"OrderDraft"> | string
+    placedAt?: DateTimeFilter<"OrderDraft"> | Date | string
+    updatedAt?: DateTimeFilter<"OrderDraft"> | Date | string
+    status?: EnumOrderStatusFilter<"OrderDraft"> | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFilter<"OrderDraft"> | $Enums.PaymentStatus
+    currency?: EnumCurrencyFilter<"OrderDraft"> | $Enums.Currency
+    itemsTotal?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonFilter<"OrderDraft">
+    notes?: StringNullableFilter<"OrderDraft"> | string | null
+    items?: OrderItemListRelationFilter
+    vouchers?: OrderVoucherListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
+  }
+
+  export type OrderDraftOrderByWithRelationInput = {
+    id?: SortOrder
+    orderNumber?: SortOrder
+    orderId?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    placedAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    paymentStatus?: SortOrder
+    currency?: SortOrder
+    itemsTotal?: SortOrder
+    shippingFee?: SortOrder
+    discountTotal?: SortOrder
+    grandTotal?: SortOrder
+    shippingInfor?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    items?: OrderItemOrderByRelationAggregateInput
+    vouchers?: OrderVoucherOrderByRelationAggregateInput
+    user?: UserOrderByWithRelationInput
+    order?: OrderOrderByWithRelationInput
+  }
+
+  export type OrderDraftWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    orderNumber?: string
+    orderId?: string
+    AND?: OrderDraftWhereInput | OrderDraftWhereInput[]
+    OR?: OrderDraftWhereInput[]
+    NOT?: OrderDraftWhereInput | OrderDraftWhereInput[]
+    userId?: UuidFilter<"OrderDraft"> | string
+    placedAt?: DateTimeFilter<"OrderDraft"> | Date | string
+    updatedAt?: DateTimeFilter<"OrderDraft"> | Date | string
+    status?: EnumOrderStatusFilter<"OrderDraft"> | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFilter<"OrderDraft"> | $Enums.PaymentStatus
+    currency?: EnumCurrencyFilter<"OrderDraft"> | $Enums.Currency
+    itemsTotal?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonFilter<"OrderDraft">
+    notes?: StringNullableFilter<"OrderDraft"> | string | null
+    items?: OrderItemListRelationFilter
+    vouchers?: OrderVoucherListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
+  }, "id" | "orderNumber" | "orderId">
+
+  export type OrderDraftOrderByWithAggregationInput = {
+    id?: SortOrder
+    orderNumber?: SortOrder
+    orderId?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    placedAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    paymentStatus?: SortOrder
+    currency?: SortOrder
+    itemsTotal?: SortOrder
+    shippingFee?: SortOrder
+    discountTotal?: SortOrder
+    grandTotal?: SortOrder
+    shippingInfor?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    _count?: OrderDraftCountOrderByAggregateInput
+    _avg?: OrderDraftAvgOrderByAggregateInput
+    _max?: OrderDraftMaxOrderByAggregateInput
+    _min?: OrderDraftMinOrderByAggregateInput
+    _sum?: OrderDraftSumOrderByAggregateInput
+  }
+
+  export type OrderDraftScalarWhereWithAggregatesInput = {
+    AND?: OrderDraftScalarWhereWithAggregatesInput | OrderDraftScalarWhereWithAggregatesInput[]
+    OR?: OrderDraftScalarWhereWithAggregatesInput[]
+    NOT?: OrderDraftScalarWhereWithAggregatesInput | OrderDraftScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"OrderDraft"> | string
+    orderNumber?: StringWithAggregatesFilter<"OrderDraft"> | string
+    orderId?: UuidNullableWithAggregatesFilter<"OrderDraft"> | string | null
+    userId?: UuidWithAggregatesFilter<"OrderDraft"> | string
+    placedAt?: DateTimeWithAggregatesFilter<"OrderDraft"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OrderDraft"> | Date | string
+    status?: EnumOrderStatusWithAggregatesFilter<"OrderDraft"> | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusWithAggregatesFilter<"OrderDraft"> | $Enums.PaymentStatus
+    currency?: EnumCurrencyWithAggregatesFilter<"OrderDraft"> | $Enums.Currency
+    itemsTotal?: DecimalWithAggregatesFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalWithAggregatesFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalWithAggregatesFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalWithAggregatesFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonWithAggregatesFilter<"OrderDraft">
+    notes?: StringNullableWithAggregatesFilter<"OrderDraft"> | string | null
   }
 
   export type PaymentWhereInput = {
@@ -50472,33 +52263,45 @@ export namespace Prisma {
     AND?: OrderVoucherWhereInput | OrderVoucherWhereInput[]
     OR?: OrderVoucherWhereInput[]
     NOT?: OrderVoucherWhereInput | OrderVoucherWhereInput[]
-    orderId?: UuidFilter<"OrderVoucher"> | string
+    id?: UuidFilter<"OrderVoucher"> | string
+    orderId?: UuidNullableFilter<"OrderVoucher"> | string | null
     voucherId?: UuidFilter<"OrderVoucher"> | string
-    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    orderDraftId?: UuidNullableFilter<"OrderVoucher"> | string | null
+    order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
+    orderDraft?: XOR<OrderDraftNullableScalarRelationFilter, OrderDraftWhereInput> | null
   }
 
   export type OrderVoucherOrderByWithRelationInput = {
-    orderId?: SortOrder
+    id?: SortOrder
+    orderId?: SortOrderInput | SortOrder
     voucherId?: SortOrder
+    orderDraftId?: SortOrderInput | SortOrder
     order?: OrderOrderByWithRelationInput
     voucher?: VoucherOrderByWithRelationInput
+    orderDraft?: OrderDraftOrderByWithRelationInput
   }
 
   export type OrderVoucherWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
     orderId_voucherId?: OrderVoucherOrderIdVoucherIdCompoundUniqueInput
+    voucherId_orderDraftId?: OrderVoucherVoucherIdOrderDraftIdCompoundUniqueInput
     AND?: OrderVoucherWhereInput | OrderVoucherWhereInput[]
     OR?: OrderVoucherWhereInput[]
     NOT?: OrderVoucherWhereInput | OrderVoucherWhereInput[]
-    orderId?: UuidFilter<"OrderVoucher"> | string
+    orderId?: UuidNullableFilter<"OrderVoucher"> | string | null
     voucherId?: UuidFilter<"OrderVoucher"> | string
-    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    orderDraftId?: UuidNullableFilter<"OrderVoucher"> | string | null
+    order?: XOR<OrderNullableScalarRelationFilter, OrderWhereInput> | null
     voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
-  }, "orderId_voucherId">
+    orderDraft?: XOR<OrderDraftNullableScalarRelationFilter, OrderDraftWhereInput> | null
+  }, "id" | "orderId_voucherId" | "voucherId_orderDraftId">
 
   export type OrderVoucherOrderByWithAggregationInput = {
-    orderId?: SortOrder
+    id?: SortOrder
+    orderId?: SortOrderInput | SortOrder
     voucherId?: SortOrder
+    orderDraftId?: SortOrderInput | SortOrder
     _count?: OrderVoucherCountOrderByAggregateInput
     _max?: OrderVoucherMaxOrderByAggregateInput
     _min?: OrderVoucherMinOrderByAggregateInput
@@ -50508,8 +52311,10 @@ export namespace Prisma {
     AND?: OrderVoucherScalarWhereWithAggregatesInput | OrderVoucherScalarWhereWithAggregatesInput[]
     OR?: OrderVoucherScalarWhereWithAggregatesInput[]
     NOT?: OrderVoucherScalarWhereWithAggregatesInput | OrderVoucherScalarWhereWithAggregatesInput[]
-    orderId?: UuidWithAggregatesFilter<"OrderVoucher"> | string
+    id?: UuidWithAggregatesFilter<"OrderVoucher"> | string
+    orderId?: UuidNullableWithAggregatesFilter<"OrderVoucher"> | string | null
     voucherId?: UuidWithAggregatesFilter<"OrderVoucher"> | string
+    orderDraftId?: UuidNullableWithAggregatesFilter<"OrderVoucher"> | string | null
   }
 
   export type ConversationWhereInput = {
@@ -50749,6 +52554,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -50779,6 +52585,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -50809,6 +52616,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -50839,6 +52647,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -52447,6 +54256,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateInput = {
@@ -52478,6 +54288,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUpdateInput = {
@@ -52509,6 +54320,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateInput = {
@@ -52540,6 +54352,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderCreateManyInput = {
@@ -52621,7 +54434,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order: OrderCreateNestedOneWithoutItemsInput
+    order?: OrderCreateNestedOneWithoutItemsInput
+    orderDraft?: OrderDraftCreateNestedOneWithoutItemsInput
     product: ProductCreateNestedOneWithoutOrderItemsInput
     variant?: ProductVariantCreateNestedOneWithoutOrderItemsInput
     review?: ReviewCreateNestedOneWithoutOrderItemInput
@@ -52630,7 +54444,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedCreateInput = {
     id?: string
-    orderId: string
+    orderId?: string | null
+    orderDraftId?: string | null
     productId: string
     variantId?: string | null
     title: string
@@ -52653,7 +54468,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order?: OrderUpdateOneRequiredWithoutItemsNestedInput
+    order?: OrderUpdateOneWithoutItemsNestedInput
+    orderDraft?: OrderDraftUpdateOneWithoutItemsNestedInput
     product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
     variant?: ProductVariantUpdateOneWithoutOrderItemsNestedInput
     review?: ReviewUpdateOneWithoutOrderItemNestedInput
@@ -52662,7 +54478,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     variantId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
@@ -52678,7 +54495,8 @@ export namespace Prisma {
 
   export type OrderItemCreateManyInput = {
     id?: string
-    orderId: string
+    orderId?: string | null
+    orderDraftId?: string | null
     productId: string
     variantId?: string | null
     title: string
@@ -52703,7 +54521,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     variantId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
@@ -52713,6 +54532,138 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type OrderDraftCreateInput = {
+    id?: string
+    orderNumber: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    items?: OrderItemCreateNestedManyWithoutOrderDraftInput
+    vouchers?: OrderVoucherCreateNestedManyWithoutOrderDraftInput
+    user: UserCreateNestedOneWithoutOrderDraftInput
+    order?: OrderCreateNestedOneWithoutDraftsInput
+  }
+
+  export type OrderDraftUncheckedCreateInput = {
+    id?: string
+    orderNumber: string
+    orderId?: string | null
+    userId: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    items?: OrderItemUncheckedCreateNestedManyWithoutOrderDraftInput
+    vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderDraftInput
+  }
+
+  export type OrderDraftUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUpdateManyWithoutOrderDraftNestedInput
+    vouchers?: OrderVoucherUpdateManyWithoutOrderDraftNestedInput
+    user?: UserUpdateOneRequiredWithoutOrderDraftNestedInput
+    order?: OrderUpdateOneWithoutDraftsNestedInput
+  }
+
+  export type OrderDraftUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUncheckedUpdateManyWithoutOrderDraftNestedInput
+    vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderDraftNestedInput
+  }
+
+  export type OrderDraftCreateManyInput = {
+    id?: string
+    orderNumber: string
+    orderId?: string | null
+    userId: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+  }
+
+  export type OrderDraftUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type OrderDraftUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PaymentCreateInput = {
@@ -53512,37 +55463,49 @@ export namespace Prisma {
   }
 
   export type OrderVoucherCreateInput = {
-    order: OrderCreateNestedOneWithoutVouchersInput
+    id?: string
+    order?: OrderCreateNestedOneWithoutVouchersInput
     voucher: VoucherCreateNestedOneWithoutOrdersInput
+    orderDraft?: OrderDraftCreateNestedOneWithoutVouchersInput
   }
 
   export type OrderVoucherUncheckedCreateInput = {
-    orderId: string
+    id?: string
+    orderId?: string | null
     voucherId: string
+    orderDraftId?: string | null
   }
 
   export type OrderVoucherUpdateInput = {
-    order?: OrderUpdateOneRequiredWithoutVouchersNestedInput
+    id?: StringFieldUpdateOperationsInput | string
+    order?: OrderUpdateOneWithoutVouchersNestedInput
     voucher?: VoucherUpdateOneRequiredWithoutOrdersNestedInput
+    orderDraft?: OrderDraftUpdateOneWithoutVouchersNestedInput
   }
 
   export type OrderVoucherUncheckedUpdateInput = {
-    orderId?: StringFieldUpdateOperationsInput | string
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
     voucherId?: StringFieldUpdateOperationsInput | string
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderVoucherCreateManyInput = {
-    orderId: string
+    id?: string
+    orderId?: string | null
     voucherId: string
+    orderDraftId?: string | null
   }
 
   export type OrderVoucherUpdateManyMutationInput = {
-
+    id?: StringFieldUpdateOperationsInput | string
   }
 
   export type OrderVoucherUncheckedUpdateManyInput = {
-    orderId?: StringFieldUpdateOperationsInput | string
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
     voucherId?: StringFieldUpdateOperationsInput | string
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ConversationCreateInput = {
@@ -53917,6 +55880,12 @@ export namespace Prisma {
     none?: VoucherRedemptionWhereInput
   }
 
+  export type OrderDraftListRelationFilter = {
+    every?: OrderDraftWhereInput
+    some?: OrderDraftWhereInput
+    none?: OrderDraftWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -53975,6 +55944,10 @@ export namespace Prisma {
   }
 
   export type VoucherRedemptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrderDraftOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -55327,6 +57300,11 @@ export namespace Prisma {
     none?: OrderVoucherWhereInput
   }
 
+  export type OrderDraftNullableScalarRelationFilter = {
+    is?: OrderDraftWhereInput | null
+    isNot?: OrderDraftWhereInput | null
+  }
+
   export type PaymentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -55483,9 +57461,9 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
-  export type OrderScalarRelationFilter = {
-    is?: OrderWhereInput
-    isNot?: OrderWhereInput
+  export type OrderNullableScalarRelationFilter = {
+    is?: OrderWhereInput | null
+    isNot?: OrderWhereInput | null
   }
 
   export type ProductVariantNullableScalarRelationFilter = {
@@ -55511,6 +57489,7 @@ export namespace Prisma {
   export type OrderItemCountOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
+    orderDraftId?: SortOrder
     productId?: SortOrder
     variantId?: SortOrder
     title?: SortOrder
@@ -55532,6 +57511,7 @@ export namespace Prisma {
   export type OrderItemMaxOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
+    orderDraftId?: SortOrder
     productId?: SortOrder
     variantId?: SortOrder
     title?: SortOrder
@@ -55545,6 +57525,7 @@ export namespace Prisma {
   export type OrderItemMinOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
+    orderDraftId?: SortOrder
     productId?: SortOrder
     variantId?: SortOrder
     title?: SortOrder
@@ -55562,11 +57543,82 @@ export namespace Prisma {
     total?: SortOrder
   }
 
+  export type OrderDraftCountOrderByAggregateInput = {
+    id?: SortOrder
+    orderNumber?: SortOrder
+    orderId?: SortOrder
+    userId?: SortOrder
+    placedAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    paymentStatus?: SortOrder
+    currency?: SortOrder
+    itemsTotal?: SortOrder
+    shippingFee?: SortOrder
+    discountTotal?: SortOrder
+    grandTotal?: SortOrder
+    shippingInfor?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type OrderDraftAvgOrderByAggregateInput = {
+    itemsTotal?: SortOrder
+    shippingFee?: SortOrder
+    discountTotal?: SortOrder
+    grandTotal?: SortOrder
+  }
+
+  export type OrderDraftMaxOrderByAggregateInput = {
+    id?: SortOrder
+    orderNumber?: SortOrder
+    orderId?: SortOrder
+    userId?: SortOrder
+    placedAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    paymentStatus?: SortOrder
+    currency?: SortOrder
+    itemsTotal?: SortOrder
+    shippingFee?: SortOrder
+    discountTotal?: SortOrder
+    grandTotal?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type OrderDraftMinOrderByAggregateInput = {
+    id?: SortOrder
+    orderNumber?: SortOrder
+    orderId?: SortOrder
+    userId?: SortOrder
+    placedAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    paymentStatus?: SortOrder
+    currency?: SortOrder
+    itemsTotal?: SortOrder
+    shippingFee?: SortOrder
+    discountTotal?: SortOrder
+    grandTotal?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type OrderDraftSumOrderByAggregateInput = {
+    itemsTotal?: SortOrder
+    shippingFee?: SortOrder
+    discountTotal?: SortOrder
+    grandTotal?: SortOrder
+  }
+
   export type EnumPaymentProviderFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentProvider | EnumPaymentProviderFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentProvider[] | ListEnumPaymentProviderFieldRefInput<$PrismaModel>
     notIn?: $Enums.PaymentProvider[] | ListEnumPaymentProviderFieldRefInput<$PrismaModel>
     not?: NestedEnumPaymentProviderFilter<$PrismaModel> | $Enums.PaymentProvider
+  }
+
+  export type OrderScalarRelationFilter = {
+    is?: OrderWhereInput
+    isNot?: OrderWhereInput
   }
 
   export type PaymentCountOrderByAggregateInput = {
@@ -56041,19 +58093,30 @@ export namespace Prisma {
     voucherId: string
   }
 
+  export type OrderVoucherVoucherIdOrderDraftIdCompoundUniqueInput = {
+    voucherId: string
+    orderDraftId: string
+  }
+
   export type OrderVoucherCountOrderByAggregateInput = {
+    id?: SortOrder
     orderId?: SortOrder
     voucherId?: SortOrder
+    orderDraftId?: SortOrder
   }
 
   export type OrderVoucherMaxOrderByAggregateInput = {
+    id?: SortOrder
     orderId?: SortOrder
     voucherId?: SortOrder
+    orderDraftId?: SortOrder
   }
 
   export type OrderVoucherMinOrderByAggregateInput = {
+    id?: SortOrder
     orderId?: SortOrder
     voucherId?: SortOrder
+    orderDraftId?: SortOrder
   }
 
   export type EnumConversationTypeFilter<$PrismaModel = never> = {
@@ -56301,6 +58364,13 @@ export namespace Prisma {
     connect?: VoucherRedemptionWhereUniqueInput | VoucherRedemptionWhereUniqueInput[]
   }
 
+  export type OrderDraftCreateNestedManyWithoutUserInput = {
+    create?: XOR<OrderDraftCreateWithoutUserInput, OrderDraftUncheckedCreateWithoutUserInput> | OrderDraftCreateWithoutUserInput[] | OrderDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutUserInput | OrderDraftCreateOrConnectWithoutUserInput[]
+    createMany?: OrderDraftCreateManyUserInputEnvelope
+    connect?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
+  }
+
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -56409,6 +58479,13 @@ export namespace Prisma {
     connectOrCreate?: VoucherRedemptionCreateOrConnectWithoutUserInput | VoucherRedemptionCreateOrConnectWithoutUserInput[]
     createMany?: VoucherRedemptionCreateManyUserInputEnvelope
     connect?: VoucherRedemptionWhereUniqueInput | VoucherRedemptionWhereUniqueInput[]
+  }
+
+  export type OrderDraftUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<OrderDraftCreateWithoutUserInput, OrderDraftUncheckedCreateWithoutUserInput> | OrderDraftCreateWithoutUserInput[] | OrderDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutUserInput | OrderDraftCreateOrConnectWithoutUserInput[]
+    createMany?: OrderDraftCreateManyUserInputEnvelope
+    connect?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -56651,6 +58728,20 @@ export namespace Prisma {
     deleteMany?: VoucherRedemptionScalarWhereInput | VoucherRedemptionScalarWhereInput[]
   }
 
+  export type OrderDraftUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OrderDraftCreateWithoutUserInput, OrderDraftUncheckedCreateWithoutUserInput> | OrderDraftCreateWithoutUserInput[] | OrderDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutUserInput | OrderDraftCreateOrConnectWithoutUserInput[]
+    upsert?: OrderDraftUpsertWithWhereUniqueWithoutUserInput | OrderDraftUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OrderDraftCreateManyUserInputEnvelope
+    set?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
+    disconnect?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
+    delete?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
+    connect?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
+    update?: OrderDraftUpdateWithWhereUniqueWithoutUserInput | OrderDraftUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OrderDraftUpdateManyWithWhereWithoutUserInput | OrderDraftUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OrderDraftScalarWhereInput | OrderDraftScalarWhereInput[]
+  }
+
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -56865,6 +58956,20 @@ export namespace Prisma {
     update?: VoucherRedemptionUpdateWithWhereUniqueWithoutUserInput | VoucherRedemptionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: VoucherRedemptionUpdateManyWithWhereWithoutUserInput | VoucherRedemptionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: VoucherRedemptionScalarWhereInput | VoucherRedemptionScalarWhereInput[]
+  }
+
+  export type OrderDraftUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OrderDraftCreateWithoutUserInput, OrderDraftUncheckedCreateWithoutUserInput> | OrderDraftCreateWithoutUserInput[] | OrderDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutUserInput | OrderDraftCreateOrConnectWithoutUserInput[]
+    upsert?: OrderDraftUpsertWithWhereUniqueWithoutUserInput | OrderDraftUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OrderDraftCreateManyUserInputEnvelope
+    set?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
+    disconnect?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
+    delete?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
+    connect?: OrderDraftWhereUniqueInput | OrderDraftWhereUniqueInput[]
+    update?: OrderDraftUpdateWithWhereUniqueWithoutUserInput | OrderDraftUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OrderDraftUpdateManyWithWhereWithoutUserInput | OrderDraftUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OrderDraftScalarWhereInput | OrderDraftScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSessionsInput = {
@@ -58244,6 +60349,12 @@ export namespace Prisma {
     connect?: VoucherRedemptionWhereUniqueInput | VoucherRedemptionWhereUniqueInput[]
   }
 
+  export type OrderDraftCreateNestedOneWithoutOrderInput = {
+    create?: XOR<OrderDraftCreateWithoutOrderInput, OrderDraftUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutOrderInput
+    connect?: OrderDraftWhereUniqueInput
+  }
+
   export type OrderItemUncheckedCreateNestedManyWithoutOrderInput = {
     create?: XOR<OrderItemCreateWithoutOrderInput, OrderItemUncheckedCreateWithoutOrderInput> | OrderItemCreateWithoutOrderInput[] | OrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: OrderItemCreateOrConnectWithoutOrderInput | OrderItemCreateOrConnectWithoutOrderInput[]
@@ -58291,6 +60402,12 @@ export namespace Prisma {
     connectOrCreate?: VoucherRedemptionCreateOrConnectWithoutOrderInput | VoucherRedemptionCreateOrConnectWithoutOrderInput[]
     createMany?: VoucherRedemptionCreateManyOrderInputEnvelope
     connect?: VoucherRedemptionWhereUniqueInput | VoucherRedemptionWhereUniqueInput[]
+  }
+
+  export type OrderDraftUncheckedCreateNestedOneWithoutOrderInput = {
+    create?: XOR<OrderDraftCreateWithoutOrderInput, OrderDraftUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutOrderInput
+    connect?: OrderDraftWhereUniqueInput
   }
 
   export type EnumOrderStatusFieldUpdateOperationsInput = {
@@ -58419,6 +60536,16 @@ export namespace Prisma {
     deleteMany?: VoucherRedemptionScalarWhereInput | VoucherRedemptionScalarWhereInput[]
   }
 
+  export type OrderDraftUpdateOneWithoutOrderNestedInput = {
+    create?: XOR<OrderDraftCreateWithoutOrderInput, OrderDraftUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutOrderInput
+    upsert?: OrderDraftUpsertWithoutOrderInput
+    disconnect?: OrderDraftWhereInput | boolean
+    delete?: OrderDraftWhereInput | boolean
+    connect?: OrderDraftWhereUniqueInput
+    update?: XOR<XOR<OrderDraftUpdateToOneWithWhereWithoutOrderInput, OrderDraftUpdateWithoutOrderInput>, OrderDraftUncheckedUpdateWithoutOrderInput>
+  }
+
   export type OrderItemUncheckedUpdateManyWithoutOrderNestedInput = {
     create?: XOR<OrderItemCreateWithoutOrderInput, OrderItemUncheckedCreateWithoutOrderInput> | OrderItemCreateWithoutOrderInput[] | OrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: OrderItemCreateOrConnectWithoutOrderInput | OrderItemCreateOrConnectWithoutOrderInput[]
@@ -58517,10 +60644,26 @@ export namespace Prisma {
     deleteMany?: VoucherRedemptionScalarWhereInput | VoucherRedemptionScalarWhereInput[]
   }
 
+  export type OrderDraftUncheckedUpdateOneWithoutOrderNestedInput = {
+    create?: XOR<OrderDraftCreateWithoutOrderInput, OrderDraftUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutOrderInput
+    upsert?: OrderDraftUpsertWithoutOrderInput
+    disconnect?: OrderDraftWhereInput | boolean
+    delete?: OrderDraftWhereInput | boolean
+    connect?: OrderDraftWhereUniqueInput
+    update?: XOR<XOR<OrderDraftUpdateToOneWithWhereWithoutOrderInput, OrderDraftUpdateWithoutOrderInput>, OrderDraftUncheckedUpdateWithoutOrderInput>
+  }
+
   export type OrderCreateNestedOneWithoutItemsInput = {
     create?: XOR<OrderCreateWithoutItemsInput, OrderUncheckedCreateWithoutItemsInput>
     connectOrCreate?: OrderCreateOrConnectWithoutItemsInput
     connect?: OrderWhereUniqueInput
+  }
+
+  export type OrderDraftCreateNestedOneWithoutItemsInput = {
+    create?: XOR<OrderDraftCreateWithoutItemsInput, OrderDraftUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutItemsInput
+    connect?: OrderDraftWhereUniqueInput
   }
 
   export type ProductCreateNestedOneWithoutOrderItemsInput = {
@@ -58561,12 +60704,24 @@ export namespace Prisma {
     connect?: ReturnItemWhereUniqueInput | ReturnItemWhereUniqueInput[]
   }
 
-  export type OrderUpdateOneRequiredWithoutItemsNestedInput = {
+  export type OrderUpdateOneWithoutItemsNestedInput = {
     create?: XOR<OrderCreateWithoutItemsInput, OrderUncheckedCreateWithoutItemsInput>
     connectOrCreate?: OrderCreateOrConnectWithoutItemsInput
     upsert?: OrderUpsertWithoutItemsInput
+    disconnect?: OrderWhereInput | boolean
+    delete?: OrderWhereInput | boolean
     connect?: OrderWhereUniqueInput
     update?: XOR<XOR<OrderUpdateToOneWithWhereWithoutItemsInput, OrderUpdateWithoutItemsInput>, OrderUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type OrderDraftUpdateOneWithoutItemsNestedInput = {
+    create?: XOR<OrderDraftCreateWithoutItemsInput, OrderDraftUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutItemsInput
+    upsert?: OrderDraftUpsertWithoutItemsInput
+    disconnect?: OrderDraftWhereInput | boolean
+    delete?: OrderDraftWhereInput | boolean
+    connect?: OrderDraftWhereUniqueInput
+    update?: XOR<XOR<OrderDraftUpdateToOneWithWhereWithoutItemsInput, OrderDraftUpdateWithoutItemsInput>, OrderDraftUncheckedUpdateWithoutItemsInput>
   }
 
   export type ProductUpdateOneRequiredWithoutOrderItemsNestedInput = {
@@ -58633,6 +60788,120 @@ export namespace Prisma {
     update?: ReturnItemUpdateWithWhereUniqueWithoutOrderItemInput | ReturnItemUpdateWithWhereUniqueWithoutOrderItemInput[]
     updateMany?: ReturnItemUpdateManyWithWhereWithoutOrderItemInput | ReturnItemUpdateManyWithWhereWithoutOrderItemInput[]
     deleteMany?: ReturnItemScalarWhereInput | ReturnItemScalarWhereInput[]
+  }
+
+  export type OrderItemCreateNestedManyWithoutOrderDraftInput = {
+    create?: XOR<OrderItemCreateWithoutOrderDraftInput, OrderItemUncheckedCreateWithoutOrderDraftInput> | OrderItemCreateWithoutOrderDraftInput[] | OrderItemUncheckedCreateWithoutOrderDraftInput[]
+    connectOrCreate?: OrderItemCreateOrConnectWithoutOrderDraftInput | OrderItemCreateOrConnectWithoutOrderDraftInput[]
+    createMany?: OrderItemCreateManyOrderDraftInputEnvelope
+    connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+  }
+
+  export type OrderVoucherCreateNestedManyWithoutOrderDraftInput = {
+    create?: XOR<OrderVoucherCreateWithoutOrderDraftInput, OrderVoucherUncheckedCreateWithoutOrderDraftInput> | OrderVoucherCreateWithoutOrderDraftInput[] | OrderVoucherUncheckedCreateWithoutOrderDraftInput[]
+    connectOrCreate?: OrderVoucherCreateOrConnectWithoutOrderDraftInput | OrderVoucherCreateOrConnectWithoutOrderDraftInput[]
+    createMany?: OrderVoucherCreateManyOrderDraftInputEnvelope
+    connect?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedOneWithoutOrderDraftInput = {
+    create?: XOR<UserCreateWithoutOrderDraftInput, UserUncheckedCreateWithoutOrderDraftInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOrderDraftInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OrderCreateNestedOneWithoutDraftsInput = {
+    create?: XOR<OrderCreateWithoutDraftsInput, OrderUncheckedCreateWithoutDraftsInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutDraftsInput
+    connect?: OrderWhereUniqueInput
+  }
+
+  export type OrderItemUncheckedCreateNestedManyWithoutOrderDraftInput = {
+    create?: XOR<OrderItemCreateWithoutOrderDraftInput, OrderItemUncheckedCreateWithoutOrderDraftInput> | OrderItemCreateWithoutOrderDraftInput[] | OrderItemUncheckedCreateWithoutOrderDraftInput[]
+    connectOrCreate?: OrderItemCreateOrConnectWithoutOrderDraftInput | OrderItemCreateOrConnectWithoutOrderDraftInput[]
+    createMany?: OrderItemCreateManyOrderDraftInputEnvelope
+    connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+  }
+
+  export type OrderVoucherUncheckedCreateNestedManyWithoutOrderDraftInput = {
+    create?: XOR<OrderVoucherCreateWithoutOrderDraftInput, OrderVoucherUncheckedCreateWithoutOrderDraftInput> | OrderVoucherCreateWithoutOrderDraftInput[] | OrderVoucherUncheckedCreateWithoutOrderDraftInput[]
+    connectOrCreate?: OrderVoucherCreateOrConnectWithoutOrderDraftInput | OrderVoucherCreateOrConnectWithoutOrderDraftInput[]
+    createMany?: OrderVoucherCreateManyOrderDraftInputEnvelope
+    connect?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+  }
+
+  export type OrderItemUpdateManyWithoutOrderDraftNestedInput = {
+    create?: XOR<OrderItemCreateWithoutOrderDraftInput, OrderItemUncheckedCreateWithoutOrderDraftInput> | OrderItemCreateWithoutOrderDraftInput[] | OrderItemUncheckedCreateWithoutOrderDraftInput[]
+    connectOrCreate?: OrderItemCreateOrConnectWithoutOrderDraftInput | OrderItemCreateOrConnectWithoutOrderDraftInput[]
+    upsert?: OrderItemUpsertWithWhereUniqueWithoutOrderDraftInput | OrderItemUpsertWithWhereUniqueWithoutOrderDraftInput[]
+    createMany?: OrderItemCreateManyOrderDraftInputEnvelope
+    set?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    disconnect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    delete?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    update?: OrderItemUpdateWithWhereUniqueWithoutOrderDraftInput | OrderItemUpdateWithWhereUniqueWithoutOrderDraftInput[]
+    updateMany?: OrderItemUpdateManyWithWhereWithoutOrderDraftInput | OrderItemUpdateManyWithWhereWithoutOrderDraftInput[]
+    deleteMany?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
+  }
+
+  export type OrderVoucherUpdateManyWithoutOrderDraftNestedInput = {
+    create?: XOR<OrderVoucherCreateWithoutOrderDraftInput, OrderVoucherUncheckedCreateWithoutOrderDraftInput> | OrderVoucherCreateWithoutOrderDraftInput[] | OrderVoucherUncheckedCreateWithoutOrderDraftInput[]
+    connectOrCreate?: OrderVoucherCreateOrConnectWithoutOrderDraftInput | OrderVoucherCreateOrConnectWithoutOrderDraftInput[]
+    upsert?: OrderVoucherUpsertWithWhereUniqueWithoutOrderDraftInput | OrderVoucherUpsertWithWhereUniqueWithoutOrderDraftInput[]
+    createMany?: OrderVoucherCreateManyOrderDraftInputEnvelope
+    set?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+    disconnect?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+    delete?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+    connect?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+    update?: OrderVoucherUpdateWithWhereUniqueWithoutOrderDraftInput | OrderVoucherUpdateWithWhereUniqueWithoutOrderDraftInput[]
+    updateMany?: OrderVoucherUpdateManyWithWhereWithoutOrderDraftInput | OrderVoucherUpdateManyWithWhereWithoutOrderDraftInput[]
+    deleteMany?: OrderVoucherScalarWhereInput | OrderVoucherScalarWhereInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutOrderDraftNestedInput = {
+    create?: XOR<UserCreateWithoutOrderDraftInput, UserUncheckedCreateWithoutOrderDraftInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOrderDraftInput
+    upsert?: UserUpsertWithoutOrderDraftInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOrderDraftInput, UserUpdateWithoutOrderDraftInput>, UserUncheckedUpdateWithoutOrderDraftInput>
+  }
+
+  export type OrderUpdateOneWithoutDraftsNestedInput = {
+    create?: XOR<OrderCreateWithoutDraftsInput, OrderUncheckedCreateWithoutDraftsInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutDraftsInput
+    upsert?: OrderUpsertWithoutDraftsInput
+    disconnect?: OrderWhereInput | boolean
+    delete?: OrderWhereInput | boolean
+    connect?: OrderWhereUniqueInput
+    update?: XOR<XOR<OrderUpdateToOneWithWhereWithoutDraftsInput, OrderUpdateWithoutDraftsInput>, OrderUncheckedUpdateWithoutDraftsInput>
+  }
+
+  export type OrderItemUncheckedUpdateManyWithoutOrderDraftNestedInput = {
+    create?: XOR<OrderItemCreateWithoutOrderDraftInput, OrderItemUncheckedCreateWithoutOrderDraftInput> | OrderItemCreateWithoutOrderDraftInput[] | OrderItemUncheckedCreateWithoutOrderDraftInput[]
+    connectOrCreate?: OrderItemCreateOrConnectWithoutOrderDraftInput | OrderItemCreateOrConnectWithoutOrderDraftInput[]
+    upsert?: OrderItemUpsertWithWhereUniqueWithoutOrderDraftInput | OrderItemUpsertWithWhereUniqueWithoutOrderDraftInput[]
+    createMany?: OrderItemCreateManyOrderDraftInputEnvelope
+    set?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    disconnect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    delete?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
+    update?: OrderItemUpdateWithWhereUniqueWithoutOrderDraftInput | OrderItemUpdateWithWhereUniqueWithoutOrderDraftInput[]
+    updateMany?: OrderItemUpdateManyWithWhereWithoutOrderDraftInput | OrderItemUpdateManyWithWhereWithoutOrderDraftInput[]
+    deleteMany?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
+  }
+
+  export type OrderVoucherUncheckedUpdateManyWithoutOrderDraftNestedInput = {
+    create?: XOR<OrderVoucherCreateWithoutOrderDraftInput, OrderVoucherUncheckedCreateWithoutOrderDraftInput> | OrderVoucherCreateWithoutOrderDraftInput[] | OrderVoucherUncheckedCreateWithoutOrderDraftInput[]
+    connectOrCreate?: OrderVoucherCreateOrConnectWithoutOrderDraftInput | OrderVoucherCreateOrConnectWithoutOrderDraftInput[]
+    upsert?: OrderVoucherUpsertWithWhereUniqueWithoutOrderDraftInput | OrderVoucherUpsertWithWhereUniqueWithoutOrderDraftInput[]
+    createMany?: OrderVoucherCreateManyOrderDraftInputEnvelope
+    set?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+    disconnect?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+    delete?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+    connect?: OrderVoucherWhereUniqueInput | OrderVoucherWhereUniqueInput[]
+    update?: OrderVoucherUpdateWithWhereUniqueWithoutOrderDraftInput | OrderVoucherUpdateWithWhereUniqueWithoutOrderDraftInput[]
+    updateMany?: OrderVoucherUpdateManyWithWhereWithoutOrderDraftInput | OrderVoucherUpdateManyWithWhereWithoutOrderDraftInput[]
+    deleteMany?: OrderVoucherScalarWhereInput | OrderVoucherScalarWhereInput[]
   }
 
   export type OrderCreateNestedOneWithoutPaymentsInput = {
@@ -59207,10 +61476,18 @@ export namespace Prisma {
     connect?: VoucherWhereUniqueInput
   }
 
-  export type OrderUpdateOneRequiredWithoutVouchersNestedInput = {
+  export type OrderDraftCreateNestedOneWithoutVouchersInput = {
+    create?: XOR<OrderDraftCreateWithoutVouchersInput, OrderDraftUncheckedCreateWithoutVouchersInput>
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutVouchersInput
+    connect?: OrderDraftWhereUniqueInput
+  }
+
+  export type OrderUpdateOneWithoutVouchersNestedInput = {
     create?: XOR<OrderCreateWithoutVouchersInput, OrderUncheckedCreateWithoutVouchersInput>
     connectOrCreate?: OrderCreateOrConnectWithoutVouchersInput
     upsert?: OrderUpsertWithoutVouchersInput
+    disconnect?: OrderWhereInput | boolean
+    delete?: OrderWhereInput | boolean
     connect?: OrderWhereUniqueInput
     update?: XOR<XOR<OrderUpdateToOneWithWhereWithoutVouchersInput, OrderUpdateWithoutVouchersInput>, OrderUncheckedUpdateWithoutVouchersInput>
   }
@@ -59221,6 +61498,16 @@ export namespace Prisma {
     upsert?: VoucherUpsertWithoutOrdersInput
     connect?: VoucherWhereUniqueInput
     update?: XOR<XOR<VoucherUpdateToOneWithWhereWithoutOrdersInput, VoucherUpdateWithoutOrdersInput>, VoucherUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type OrderDraftUpdateOneWithoutVouchersNestedInput = {
+    create?: XOR<OrderDraftCreateWithoutVouchersInput, OrderDraftUncheckedCreateWithoutVouchersInput>
+    connectOrCreate?: OrderDraftCreateOrConnectWithoutVouchersInput
+    upsert?: OrderDraftUpsertWithoutVouchersInput
+    disconnect?: OrderDraftWhereInput | boolean
+    delete?: OrderDraftWhereInput | boolean
+    connect?: OrderDraftWhereUniqueInput
+    update?: XOR<XOR<OrderDraftUpdateToOneWithWhereWithoutVouchersInput, OrderDraftUpdateWithoutVouchersInput>, OrderDraftUncheckedUpdateWithoutVouchersInput>
   }
 
   export type ShopCreateNestedOneWithoutConversationsInput = {
@@ -60317,6 +62604,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutUserInput = {
@@ -60347,6 +62635,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutUserInput = {
@@ -60530,6 +62819,54 @@ export namespace Prisma {
 
   export type VoucherRedemptionCreateManyUserInputEnvelope = {
     data: VoucherRedemptionCreateManyUserInput | VoucherRedemptionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrderDraftCreateWithoutUserInput = {
+    id?: string
+    orderNumber: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    items?: OrderItemCreateNestedManyWithoutOrderDraftInput
+    vouchers?: OrderVoucherCreateNestedManyWithoutOrderDraftInput
+    order?: OrderCreateNestedOneWithoutDraftsInput
+  }
+
+  export type OrderDraftUncheckedCreateWithoutUserInput = {
+    id?: string
+    orderNumber: string
+    orderId?: string | null
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    items?: OrderItemUncheckedCreateNestedManyWithoutOrderDraftInput
+    vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderDraftInput
+  }
+
+  export type OrderDraftCreateOrConnectWithoutUserInput = {
+    where: OrderDraftWhereUniqueInput
+    create: XOR<OrderDraftCreateWithoutUserInput, OrderDraftUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrderDraftCreateManyUserInputEnvelope = {
+    data: OrderDraftCreateManyUserInput | OrderDraftCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -61032,6 +63369,43 @@ export namespace Prisma {
     usedAt?: DateTimeFilter<"VoucherRedemption"> | Date | string
   }
 
+  export type OrderDraftUpsertWithWhereUniqueWithoutUserInput = {
+    where: OrderDraftWhereUniqueInput
+    update: XOR<OrderDraftUpdateWithoutUserInput, OrderDraftUncheckedUpdateWithoutUserInput>
+    create: XOR<OrderDraftCreateWithoutUserInput, OrderDraftUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrderDraftUpdateWithWhereUniqueWithoutUserInput = {
+    where: OrderDraftWhereUniqueInput
+    data: XOR<OrderDraftUpdateWithoutUserInput, OrderDraftUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OrderDraftUpdateManyWithWhereWithoutUserInput = {
+    where: OrderDraftScalarWhereInput
+    data: XOR<OrderDraftUpdateManyMutationInput, OrderDraftUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type OrderDraftScalarWhereInput = {
+    AND?: OrderDraftScalarWhereInput | OrderDraftScalarWhereInput[]
+    OR?: OrderDraftScalarWhereInput[]
+    NOT?: OrderDraftScalarWhereInput | OrderDraftScalarWhereInput[]
+    id?: UuidFilter<"OrderDraft"> | string
+    orderNumber?: StringFilter<"OrderDraft"> | string
+    orderId?: UuidNullableFilter<"OrderDraft"> | string | null
+    userId?: UuidFilter<"OrderDraft"> | string
+    placedAt?: DateTimeFilter<"OrderDraft"> | Date | string
+    updatedAt?: DateTimeFilter<"OrderDraft"> | Date | string
+    status?: EnumOrderStatusFilter<"OrderDraft"> | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFilter<"OrderDraft"> | $Enums.PaymentStatus
+    currency?: EnumCurrencyFilter<"OrderDraft"> | $Enums.Currency
+    itemsTotal?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFilter<"OrderDraft"> | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonFilter<"OrderDraft">
+    notes?: StringNullableFilter<"OrderDraft"> | string | null
+  }
+
   export type UserCreateWithoutSessionsInput = {
     id?: string
     name: string
@@ -61059,6 +63433,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -61088,6 +63463,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -61133,6 +63509,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -61162,6 +63539,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -61191,6 +63569,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -61220,6 +63599,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -61265,6 +63645,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -61294,6 +63675,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutProfileInput = {
@@ -61323,6 +63705,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
@@ -61352,6 +63735,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProfileInput = {
@@ -61397,6 +63781,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProfileInput = {
@@ -61426,6 +63811,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAddressesInput = {
@@ -61455,6 +63841,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
@@ -61484,6 +63871,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
@@ -61529,6 +63917,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -61558,6 +63947,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -61587,6 +63977,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -61616,6 +64007,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -61661,6 +64053,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -61690,6 +64083,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutShopsOwnedInput = {
@@ -61719,6 +64113,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutShopsOwnedInput = {
@@ -61748,6 +64143,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutShopsOwnedInput = {
@@ -61875,6 +64271,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutShopInput = {
@@ -61905,6 +64302,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutShopInput = {
@@ -62091,6 +64489,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutShopsOwnedInput = {
@@ -62120,6 +64519,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ShopMemberUpsertWithWhereUniqueWithoutShopInput = {
@@ -62370,6 +64770,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutShopMembershipsInput = {
@@ -62399,6 +64800,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutShopMembershipsInput = {
@@ -62503,6 +64905,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutShopMembershipsInput = {
@@ -62532,6 +64935,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CategoryCreateWithoutChildrenInput = {
@@ -63113,7 +65517,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order: OrderCreateNestedOneWithoutItemsInput
+    order?: OrderCreateNestedOneWithoutItemsInput
+    orderDraft?: OrderDraftCreateNestedOneWithoutItemsInput
     variant?: ProductVariantCreateNestedOneWithoutOrderItemsInput
     review?: ReviewCreateNestedOneWithoutOrderItemInput
     ReturnItem?: ReturnItemCreateNestedManyWithoutOrderItemInput
@@ -63121,7 +65526,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedCreateWithoutProductInput = {
     id?: string
-    orderId: string
+    orderId?: string | null
+    orderDraftId?: string | null
     variantId?: string | null
     title: string
     sku?: string | null
@@ -63421,7 +65827,8 @@ export namespace Prisma {
     OR?: OrderItemScalarWhereInput[]
     NOT?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
     id?: UuidFilter<"OrderItem"> | string
-    orderId?: UuidFilter<"OrderItem"> | string
+    orderId?: UuidNullableFilter<"OrderItem"> | string | null
+    orderDraftId?: UuidNullableFilter<"OrderItem"> | string | null
     productId?: UuidFilter<"OrderItem"> | string
     variantId?: UuidNullableFilter<"OrderItem"> | string | null
     title?: StringFilter<"OrderItem"> | string
@@ -63661,7 +66068,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order: OrderCreateNestedOneWithoutItemsInput
+    order?: OrderCreateNestedOneWithoutItemsInput
+    orderDraft?: OrderDraftCreateNestedOneWithoutItemsInput
     product: ProductCreateNestedOneWithoutOrderItemsInput
     review?: ReviewCreateNestedOneWithoutOrderItemInput
     ReturnItem?: ReturnItemCreateNestedManyWithoutOrderItemInput
@@ -63669,7 +66077,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedCreateWithoutVariantInput = {
     id?: string
-    orderId: string
+    orderId?: string | null
+    orderDraftId?: string | null
     productId: string
     title: string
     sku?: string | null
@@ -64033,6 +66442,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCartsInput = {
@@ -64062,6 +66472,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCartsInput = {
@@ -64135,6 +66546,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCartsInput = {
@@ -64164,6 +66576,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CartItemUpsertWithWhereUniqueWithoutCartInput = {
@@ -64357,6 +66770,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWishlistInput = {
@@ -64386,6 +66800,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWishlistInput = {
@@ -64453,6 +66868,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistInput = {
@@ -64482,6 +66898,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WishlistItemUpsertWithWhereUniqueWithoutWishlistInput = {
@@ -64699,6 +67116,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -64728,6 +67146,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -64797,6 +67216,7 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    orderDraft?: OrderDraftCreateNestedOneWithoutItemsInput
     product: ProductCreateNestedOneWithoutOrderItemsInput
     variant?: ProductVariantCreateNestedOneWithoutOrderItemsInput
     review?: ReviewCreateNestedOneWithoutOrderItemInput
@@ -64805,6 +67225,7 @@ export namespace Prisma {
 
   export type OrderItemUncheckedCreateWithoutOrderInput = {
     id?: string
+    orderDraftId?: string | null
     productId: string
     variantId?: string | null
     title: string
@@ -64929,11 +67350,15 @@ export namespace Prisma {
   }
 
   export type OrderVoucherCreateWithoutOrderInput = {
+    id?: string
     voucher: VoucherCreateNestedOneWithoutOrdersInput
+    orderDraft?: OrderDraftCreateNestedOneWithoutVouchersInput
   }
 
   export type OrderVoucherUncheckedCreateWithoutOrderInput = {
+    id?: string
     voucherId: string
+    orderDraftId?: string | null
   }
 
   export type OrderVoucherCreateOrConnectWithoutOrderInput = {
@@ -64998,6 +67423,49 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrderDraftCreateWithoutOrderInput = {
+    id?: string
+    orderNumber: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    items?: OrderItemCreateNestedManyWithoutOrderDraftInput
+    vouchers?: OrderVoucherCreateNestedManyWithoutOrderDraftInput
+    user: UserCreateNestedOneWithoutOrderDraftInput
+  }
+
+  export type OrderDraftUncheckedCreateWithoutOrderInput = {
+    id?: string
+    orderNumber: string
+    userId: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    items?: OrderItemUncheckedCreateNestedManyWithoutOrderDraftInput
+    vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderDraftInput
+  }
+
+  export type OrderDraftCreateOrConnectWithoutOrderInput = {
+    where: OrderDraftWhereUniqueInput
+    create: XOR<OrderDraftCreateWithoutOrderInput, OrderDraftUncheckedCreateWithoutOrderInput>
+  }
+
   export type UserUpsertWithoutOrdersInput = {
     update: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>
     create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
@@ -65036,6 +67504,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -65065,6 +67534,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ShopUpsertWithoutOrdersInput = {
@@ -65256,8 +67726,10 @@ export namespace Prisma {
     AND?: OrderVoucherScalarWhereInput | OrderVoucherScalarWhereInput[]
     OR?: OrderVoucherScalarWhereInput[]
     NOT?: OrderVoucherScalarWhereInput | OrderVoucherScalarWhereInput[]
-    orderId?: UuidFilter<"OrderVoucher"> | string
+    id?: UuidFilter<"OrderVoucher"> | string
+    orderId?: UuidNullableFilter<"OrderVoucher"> | string | null
     voucherId?: UuidFilter<"OrderVoucher"> | string
+    orderDraftId?: UuidNullableFilter<"OrderVoucher"> | string | null
   }
 
   export type ReturnRequestUpsertWithWhereUniqueWithoutOrderInput = {
@@ -65292,6 +67764,55 @@ export namespace Prisma {
     data: XOR<VoucherRedemptionUpdateManyMutationInput, VoucherRedemptionUncheckedUpdateManyWithoutOrderInput>
   }
 
+  export type OrderDraftUpsertWithoutOrderInput = {
+    update: XOR<OrderDraftUpdateWithoutOrderInput, OrderDraftUncheckedUpdateWithoutOrderInput>
+    create: XOR<OrderDraftCreateWithoutOrderInput, OrderDraftUncheckedCreateWithoutOrderInput>
+    where?: OrderDraftWhereInput
+  }
+
+  export type OrderDraftUpdateToOneWithWhereWithoutOrderInput = {
+    where?: OrderDraftWhereInput
+    data: XOR<OrderDraftUpdateWithoutOrderInput, OrderDraftUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type OrderDraftUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUpdateManyWithoutOrderDraftNestedInput
+    vouchers?: OrderVoucherUpdateManyWithoutOrderDraftNestedInput
+    user?: UserUpdateOneRequiredWithoutOrderDraftNestedInput
+  }
+
+  export type OrderDraftUncheckedUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUncheckedUpdateManyWithoutOrderDraftNestedInput
+    vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderDraftNestedInput
+  }
+
   export type OrderCreateWithoutItemsInput = {
     id?: string
     orderNumber: string
@@ -65320,6 +67841,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutItemsInput = {
@@ -65350,11 +67872,55 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutItemsInput = {
     where: OrderWhereUniqueInput
     create: XOR<OrderCreateWithoutItemsInput, OrderUncheckedCreateWithoutItemsInput>
+  }
+
+  export type OrderDraftCreateWithoutItemsInput = {
+    id?: string
+    orderNumber: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    vouchers?: OrderVoucherCreateNestedManyWithoutOrderDraftInput
+    user: UserCreateNestedOneWithoutOrderDraftInput
+    order?: OrderCreateNestedOneWithoutDraftsInput
+  }
+
+  export type OrderDraftUncheckedCreateWithoutItemsInput = {
+    id?: string
+    orderNumber: string
+    orderId?: string | null
+    userId: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderDraftInput
+  }
+
+  export type OrderDraftCreateOrConnectWithoutItemsInput = {
+    where: OrderDraftWhereUniqueInput
+    create: XOR<OrderDraftCreateWithoutItemsInput, OrderDraftUncheckedCreateWithoutItemsInput>
   }
 
   export type ProductCreateWithoutOrderItemsInput = {
@@ -65563,6 +68129,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutItemsInput = {
@@ -65593,6 +68160,56 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
+  }
+
+  export type OrderDraftUpsertWithoutItemsInput = {
+    update: XOR<OrderDraftUpdateWithoutItemsInput, OrderDraftUncheckedUpdateWithoutItemsInput>
+    create: XOR<OrderDraftCreateWithoutItemsInput, OrderDraftUncheckedCreateWithoutItemsInput>
+    where?: OrderDraftWhereInput
+  }
+
+  export type OrderDraftUpdateToOneWithWhereWithoutItemsInput = {
+    where?: OrderDraftWhereInput
+    data: XOR<OrderDraftUpdateWithoutItemsInput, OrderDraftUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type OrderDraftUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    vouchers?: OrderVoucherUpdateManyWithoutOrderDraftNestedInput
+    user?: UserUpdateOneRequiredWithoutOrderDraftNestedInput
+    order?: OrderUpdateOneWithoutDraftsNestedInput
+  }
+
+  export type OrderDraftUncheckedUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderDraftNestedInput
   }
 
   export type ProductUpsertWithoutOrderItemsInput = {
@@ -65783,6 +68400,378 @@ export namespace Prisma {
     reason?: StringNullableFilter<"ReturnItem"> | string | null
   }
 
+  export type OrderItemCreateWithoutOrderDraftInput = {
+    id?: string
+    title: string
+    sku?: string | null
+    unitPrice: Decimal | DecimalJsLike | number | string
+    quantity: number
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    order?: OrderCreateNestedOneWithoutItemsInput
+    product: ProductCreateNestedOneWithoutOrderItemsInput
+    variant?: ProductVariantCreateNestedOneWithoutOrderItemsInput
+    review?: ReviewCreateNestedOneWithoutOrderItemInput
+    ReturnItem?: ReturnItemCreateNestedManyWithoutOrderItemInput
+  }
+
+  export type OrderItemUncheckedCreateWithoutOrderDraftInput = {
+    id?: string
+    orderId?: string | null
+    productId: string
+    variantId?: string | null
+    title: string
+    sku?: string | null
+    unitPrice: Decimal | DecimalJsLike | number | string
+    quantity: number
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    review?: ReviewUncheckedCreateNestedOneWithoutOrderItemInput
+    ReturnItem?: ReturnItemUncheckedCreateNestedManyWithoutOrderItemInput
+  }
+
+  export type OrderItemCreateOrConnectWithoutOrderDraftInput = {
+    where: OrderItemWhereUniqueInput
+    create: XOR<OrderItemCreateWithoutOrderDraftInput, OrderItemUncheckedCreateWithoutOrderDraftInput>
+  }
+
+  export type OrderItemCreateManyOrderDraftInputEnvelope = {
+    data: OrderItemCreateManyOrderDraftInput | OrderItemCreateManyOrderDraftInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrderVoucherCreateWithoutOrderDraftInput = {
+    id?: string
+    order?: OrderCreateNestedOneWithoutVouchersInput
+    voucher: VoucherCreateNestedOneWithoutOrdersInput
+  }
+
+  export type OrderVoucherUncheckedCreateWithoutOrderDraftInput = {
+    id?: string
+    orderId?: string | null
+    voucherId: string
+  }
+
+  export type OrderVoucherCreateOrConnectWithoutOrderDraftInput = {
+    where: OrderVoucherWhereUniqueInput
+    create: XOR<OrderVoucherCreateWithoutOrderDraftInput, OrderVoucherUncheckedCreateWithoutOrderDraftInput>
+  }
+
+  export type OrderVoucherCreateManyOrderDraftInputEnvelope = {
+    data: OrderVoucherCreateManyOrderDraftInput | OrderVoucherCreateManyOrderDraftInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutOrderDraftInput = {
+    id?: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: string | null
+    banned?: boolean | null
+    banReason?: string | null
+    banExpires?: Date | string | null
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    profile?: UserProfileCreateNestedOneWithoutUserInput
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    carts?: CartCreateNestedManyWithoutUserInput
+    wishlist?: WishlistCreateNestedOneWithoutUserInput
+    shopsOwned?: ShopCreateNestedManyWithoutOwnerInput
+    shopMemberships?: ShopMemberCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    conversationsParticipants?: ConversationParticipantCreateNestedManyWithoutUserInput
+    messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
+    ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
+    VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOrderDraftInput = {
+    id?: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: string | null
+    banned?: boolean | null
+    banReason?: string | null
+    banExpires?: Date | string | null
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    profile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    carts?: CartUncheckedCreateNestedManyWithoutUserInput
+    wishlist?: WishlistUncheckedCreateNestedOneWithoutUserInput
+    shopsOwned?: ShopUncheckedCreateNestedManyWithoutOwnerInput
+    shopMemberships?: ShopMemberUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    conversationsParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
+    ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
+    VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOrderDraftInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOrderDraftInput, UserUncheckedCreateWithoutOrderDraftInput>
+  }
+
+  export type OrderCreateWithoutDraftsInput = {
+    id?: string
+    orderNumber: string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    fulfillmentStatus?: $Enums.FulfillmentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    taxTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingAddress: JsonNullValueInput | InputJsonValue
+    billingAddress?: NullableJsonNullValueInput | InputJsonValue
+    contactEmail?: string | null
+    contactPhone?: string | null
+    notes?: string | null
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    canceledAt?: Date | string | null
+    user: UserCreateNestedOneWithoutOrdersInput
+    shop: ShopCreateNestedOneWithoutOrdersInput
+    items?: OrderItemCreateNestedManyWithoutOrderInput
+    payments?: PaymentCreateNestedManyWithoutOrderInput
+    shipments?: ShipmentCreateNestedManyWithoutOrderInput
+    refunds?: RefundCreateNestedManyWithoutOrderInput
+    vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
+    ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
+    VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderUncheckedCreateWithoutDraftsInput = {
+    id?: string
+    orderNumber: string
+    userId: string
+    shopId: string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    fulfillmentStatus?: $Enums.FulfillmentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    taxTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingAddress: JsonNullValueInput | InputJsonValue
+    billingAddress?: NullableJsonNullValueInput | InputJsonValue
+    contactEmail?: string | null
+    contactPhone?: string | null
+    notes?: string | null
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    canceledAt?: Date | string | null
+    items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
+    shipments?: ShipmentUncheckedCreateNestedManyWithoutOrderInput
+    refunds?: RefundUncheckedCreateNestedManyWithoutOrderInput
+    vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
+    ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
+    VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderCreateOrConnectWithoutDraftsInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutDraftsInput, OrderUncheckedCreateWithoutDraftsInput>
+  }
+
+  export type OrderItemUpsertWithWhereUniqueWithoutOrderDraftInput = {
+    where: OrderItemWhereUniqueInput
+    update: XOR<OrderItemUpdateWithoutOrderDraftInput, OrderItemUncheckedUpdateWithoutOrderDraftInput>
+    create: XOR<OrderItemCreateWithoutOrderDraftInput, OrderItemUncheckedCreateWithoutOrderDraftInput>
+  }
+
+  export type OrderItemUpdateWithWhereUniqueWithoutOrderDraftInput = {
+    where: OrderItemWhereUniqueInput
+    data: XOR<OrderItemUpdateWithoutOrderDraftInput, OrderItemUncheckedUpdateWithoutOrderDraftInput>
+  }
+
+  export type OrderItemUpdateManyWithWhereWithoutOrderDraftInput = {
+    where: OrderItemScalarWhereInput
+    data: XOR<OrderItemUpdateManyMutationInput, OrderItemUncheckedUpdateManyWithoutOrderDraftInput>
+  }
+
+  export type OrderVoucherUpsertWithWhereUniqueWithoutOrderDraftInput = {
+    where: OrderVoucherWhereUniqueInput
+    update: XOR<OrderVoucherUpdateWithoutOrderDraftInput, OrderVoucherUncheckedUpdateWithoutOrderDraftInput>
+    create: XOR<OrderVoucherCreateWithoutOrderDraftInput, OrderVoucherUncheckedCreateWithoutOrderDraftInput>
+  }
+
+  export type OrderVoucherUpdateWithWhereUniqueWithoutOrderDraftInput = {
+    where: OrderVoucherWhereUniqueInput
+    data: XOR<OrderVoucherUpdateWithoutOrderDraftInput, OrderVoucherUncheckedUpdateWithoutOrderDraftInput>
+  }
+
+  export type OrderVoucherUpdateManyWithWhereWithoutOrderDraftInput = {
+    where: OrderVoucherScalarWhereInput
+    data: XOR<OrderVoucherUpdateManyMutationInput, OrderVoucherUncheckedUpdateManyWithoutOrderDraftInput>
+  }
+
+  export type UserUpsertWithoutOrderDraftInput = {
+    update: XOR<UserUpdateWithoutOrderDraftInput, UserUncheckedUpdateWithoutOrderDraftInput>
+    create: XOR<UserCreateWithoutOrderDraftInput, UserUncheckedCreateWithoutOrderDraftInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOrderDraftInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOrderDraftInput, UserUncheckedUpdateWithoutOrderDraftInput>
+  }
+
+  export type UserUpdateWithoutOrderDraftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null
+    banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    profile?: UserProfileUpdateOneWithoutUserNestedInput
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    carts?: CartUpdateManyWithoutUserNestedInput
+    wishlist?: WishlistUpdateOneWithoutUserNestedInput
+    shopsOwned?: ShopUpdateManyWithoutOwnerNestedInput
+    shopMemberships?: ShopMemberUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    conversationsParticipants?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
+    ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
+    VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOrderDraftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null
+    banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    carts?: CartUncheckedUpdateManyWithoutUserNestedInput
+    wishlist?: WishlistUncheckedUpdateOneWithoutUserNestedInput
+    shopsOwned?: ShopUncheckedUpdateManyWithoutOwnerNestedInput
+    shopMemberships?: ShopMemberUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    conversationsParticipants?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
+    ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
+    VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OrderUpsertWithoutDraftsInput = {
+    update: XOR<OrderUpdateWithoutDraftsInput, OrderUncheckedUpdateWithoutDraftsInput>
+    create: XOR<OrderCreateWithoutDraftsInput, OrderUncheckedCreateWithoutDraftsInput>
+    where?: OrderWhereInput
+  }
+
+  export type OrderUpdateToOneWithWhereWithoutDraftsInput = {
+    where?: OrderWhereInput
+    data: XOR<OrderUpdateWithoutDraftsInput, OrderUncheckedUpdateWithoutDraftsInput>
+  }
+
+  export type OrderUpdateWithoutDraftsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    fulfillmentStatus?: EnumFulfillmentStatusFieldUpdateOperationsInput | $Enums.FulfillmentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingAddress?: JsonNullValueInput | InputJsonValue
+    billingAddress?: NullableJsonNullValueInput | InputJsonValue
+    contactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    canceledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    shop?: ShopUpdateOneRequiredWithoutOrdersNestedInput
+    items?: OrderItemUpdateManyWithoutOrderNestedInput
+    payments?: PaymentUpdateManyWithoutOrderNestedInput
+    shipments?: ShipmentUpdateManyWithoutOrderNestedInput
+    refunds?: RefundUpdateManyWithoutOrderNestedInput
+    vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
+    ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
+    VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutDraftsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    shopId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    fulfillmentStatus?: EnumFulfillmentStatusFieldUpdateOperationsInput | $Enums.FulfillmentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    taxTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingAddress?: JsonNullValueInput | InputJsonValue
+    billingAddress?: NullableJsonNullValueInput | InputJsonValue
+    contactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    canceledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
+    shipments?: ShipmentUncheckedUpdateManyWithoutOrderNestedInput
+    refunds?: RefundUncheckedUpdateManyWithoutOrderNestedInput
+    vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
+    ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
+    VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+  }
+
   export type OrderCreateWithoutPaymentsInput = {
     id?: string
     orderNumber: string
@@ -65811,6 +68800,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutPaymentsInput = {
@@ -65841,6 +68831,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutPaymentsInput = {
@@ -65915,6 +68906,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutPaymentsInput = {
@@ -65945,6 +68937,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type RefundUpsertWithWhereUniqueWithoutPaymentInput = {
@@ -65991,6 +68984,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutShipmentsInput = {
@@ -66021,6 +69015,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutShipmentsInput = {
@@ -66067,6 +69062,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutShipmentsInput = {
@@ -66097,6 +69093,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderCreateWithoutRefundsInput = {
@@ -66127,6 +69124,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutRefundsInput = {
@@ -66157,6 +69155,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutRefundsInput = {
@@ -66238,6 +69237,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutRefundsInput = {
@@ -66268,6 +69268,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type PaymentUpsertWithoutRefundInput = {
@@ -66339,6 +69340,7 @@ export namespace Prisma {
     refunds?: RefundCreateNestedManyWithoutOrderInput
     vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutReturnRequestInput = {
@@ -66369,6 +69371,7 @@ export namespace Prisma {
     refunds?: RefundUncheckedCreateNestedManyWithoutOrderInput
     vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutReturnRequestInput = {
@@ -66403,6 +69406,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantCreateNestedManyWithoutUserInput
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReturnRequestInput = {
@@ -66432,6 +69436,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReturnRequestInput = {
@@ -66502,6 +69507,7 @@ export namespace Prisma {
     refunds?: RefundUpdateManyWithoutOrderNestedInput
     vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutReturnRequestInput = {
@@ -66532,6 +69538,7 @@ export namespace Prisma {
     refunds?: RefundUncheckedUpdateManyWithoutOrderNestedInput
     vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type UserUpsertWithoutReturnRequestInput = {
@@ -66572,6 +69579,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantUpdateManyWithoutUserNestedInput
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReturnRequestInput = {
@@ -66601,6 +69609,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReturnItemUpsertWithWhereUniqueWithoutReturnRequestInput = {
@@ -66651,7 +69660,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order: OrderCreateNestedOneWithoutItemsInput
+    order?: OrderCreateNestedOneWithoutItemsInput
+    orderDraft?: OrderDraftCreateNestedOneWithoutItemsInput
     product: ProductCreateNestedOneWithoutOrderItemsInput
     variant?: ProductVariantCreateNestedOneWithoutOrderItemsInput
     review?: ReviewCreateNestedOneWithoutOrderItemInput
@@ -66659,7 +69669,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedCreateWithoutReturnItemInput = {
     id?: string
-    orderId: string
+    orderId?: string | null
+    orderDraftId?: string | null
     productId: string
     variantId?: string | null
     title: string
@@ -66726,7 +69737,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order?: OrderUpdateOneRequiredWithoutItemsNestedInput
+    order?: OrderUpdateOneWithoutItemsNestedInput
+    orderDraft?: OrderDraftUpdateOneWithoutItemsNestedInput
     product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
     variant?: ProductVariantUpdateOneWithoutOrderItemsNestedInput
     review?: ReviewUpdateOneWithoutOrderItemNestedInput
@@ -66734,7 +69746,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateWithoutReturnItemInput = {
     id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     variantId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
@@ -66837,6 +69850,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -66866,6 +69880,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -66882,7 +69897,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order: OrderCreateNestedOneWithoutItemsInput
+    order?: OrderCreateNestedOneWithoutItemsInput
+    orderDraft?: OrderDraftCreateNestedOneWithoutItemsInput
     product: ProductCreateNestedOneWithoutOrderItemsInput
     variant?: ProductVariantCreateNestedOneWithoutOrderItemsInput
     ReturnItem?: ReturnItemCreateNestedManyWithoutOrderItemInput
@@ -66890,7 +69906,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedCreateWithoutReviewInput = {
     id?: string
-    orderId: string
+    orderId?: string | null
+    orderDraftId?: string | null
     productId: string
     variantId?: string | null
     title: string
@@ -67015,6 +70032,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -67044,6 +70062,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderItemUpsertWithoutReviewInput = {
@@ -67066,7 +70085,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order?: OrderUpdateOneRequiredWithoutItemsNestedInput
+    order?: OrderUpdateOneWithoutItemsNestedInput
+    orderDraft?: OrderDraftUpdateOneWithoutItemsNestedInput
     product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
     variant?: ProductVariantUpdateOneWithoutOrderItemsNestedInput
     ReturnItem?: ReturnItemUpdateManyWithoutOrderItemNestedInput
@@ -67074,7 +70094,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     variantId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
@@ -67177,6 +70198,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProductQuestionsInput = {
@@ -67206,6 +70228,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProductQuestionsInput = {
@@ -67320,6 +70343,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductQuestionsInput = {
@@ -67349,6 +70373,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ShopCreateWithoutVoucherInput = {
@@ -67465,11 +70490,15 @@ export namespace Prisma {
   }
 
   export type OrderVoucherCreateWithoutVoucherInput = {
-    order: OrderCreateNestedOneWithoutVouchersInput
+    id?: string
+    order?: OrderCreateNestedOneWithoutVouchersInput
+    orderDraft?: OrderDraftCreateNestedOneWithoutVouchersInput
   }
 
   export type OrderVoucherUncheckedCreateWithoutVoucherInput = {
-    orderId: string
+    id?: string
+    orderId?: string | null
+    orderDraftId?: string | null
   }
 
   export type OrderVoucherCreateOrConnectWithoutVoucherInput = {
@@ -68070,6 +71099,7 @@ export namespace Prisma {
     refunds?: RefundCreateNestedManyWithoutOrderInput
     vouchers?: OrderVoucherCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutVoucherRedemptionInput = {
@@ -68100,6 +71130,7 @@ export namespace Prisma {
     refunds?: RefundUncheckedCreateNestedManyWithoutOrderInput
     vouchers?: OrderVoucherUncheckedCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutVoucherRedemptionInput = {
@@ -68134,6 +71165,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantCreateNestedManyWithoutUserInput
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVoucherRedemptionInput = {
@@ -68163,6 +71195,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVoucherRedemptionInput = {
@@ -68260,6 +71293,7 @@ export namespace Prisma {
     refunds?: RefundUpdateManyWithoutOrderNestedInput
     vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutVoucherRedemptionInput = {
@@ -68290,6 +71324,7 @@ export namespace Prisma {
     refunds?: RefundUncheckedUpdateManyWithoutOrderNestedInput
     vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type UserUpsertWithoutVoucherRedemptionInput = {
@@ -68330,6 +71365,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantUpdateManyWithoutUserNestedInput
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVoucherRedemptionInput = {
@@ -68359,6 +71395,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderCreateWithoutVouchersInput = {
@@ -68389,6 +71426,7 @@ export namespace Prisma {
     refunds?: RefundCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftCreateNestedOneWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutVouchersInput = {
@@ -68419,6 +71457,7 @@ export namespace Prisma {
     refunds?: RefundUncheckedCreateNestedManyWithoutOrderInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutOrderInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutOrderInput
+    drafts?: OrderDraftUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutVouchersInput = {
@@ -68471,6 +71510,49 @@ export namespace Prisma {
     create: XOR<VoucherCreateWithoutOrdersInput, VoucherUncheckedCreateWithoutOrdersInput>
   }
 
+  export type OrderDraftCreateWithoutVouchersInput = {
+    id?: string
+    orderNumber: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    items?: OrderItemCreateNestedManyWithoutOrderDraftInput
+    user: UserCreateNestedOneWithoutOrderDraftInput
+    order?: OrderCreateNestedOneWithoutDraftsInput
+  }
+
+  export type OrderDraftUncheckedCreateWithoutVouchersInput = {
+    id?: string
+    orderNumber: string
+    orderId?: string | null
+    userId: string
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    items?: OrderItemUncheckedCreateNestedManyWithoutOrderDraftInput
+  }
+
+  export type OrderDraftCreateOrConnectWithoutVouchersInput = {
+    where: OrderDraftWhereUniqueInput
+    create: XOR<OrderDraftCreateWithoutVouchersInput, OrderDraftUncheckedCreateWithoutVouchersInput>
+  }
+
   export type OrderUpsertWithoutVouchersInput = {
     update: XOR<OrderUpdateWithoutVouchersInput, OrderUncheckedUpdateWithoutVouchersInput>
     create: XOR<OrderCreateWithoutVouchersInput, OrderUncheckedCreateWithoutVouchersInput>
@@ -68510,6 +71592,7 @@ export namespace Prisma {
     refunds?: RefundUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutVouchersInput = {
@@ -68540,6 +71623,7 @@ export namespace Prisma {
     refunds?: RefundUncheckedUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type VoucherUpsertWithoutOrdersInput = {
@@ -68591,6 +71675,55 @@ export namespace Prisma {
     categories?: VoucherCategoryUncheckedUpdateManyWithoutVoucherNestedInput
     products?: VoucherProductUncheckedUpdateManyWithoutVoucherNestedInput
     redemptions?: VoucherRedemptionUncheckedUpdateManyWithoutVoucherNestedInput
+  }
+
+  export type OrderDraftUpsertWithoutVouchersInput = {
+    update: XOR<OrderDraftUpdateWithoutVouchersInput, OrderDraftUncheckedUpdateWithoutVouchersInput>
+    create: XOR<OrderDraftCreateWithoutVouchersInput, OrderDraftUncheckedCreateWithoutVouchersInput>
+    where?: OrderDraftWhereInput
+  }
+
+  export type OrderDraftUpdateToOneWithWhereWithoutVouchersInput = {
+    where?: OrderDraftWhereInput
+    data: XOR<OrderDraftUpdateWithoutVouchersInput, OrderDraftUncheckedUpdateWithoutVouchersInput>
+  }
+
+  export type OrderDraftUpdateWithoutVouchersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUpdateManyWithoutOrderDraftNestedInput
+    user?: UserUpdateOneRequiredWithoutOrderDraftNestedInput
+    order?: OrderUpdateOneWithoutDraftsNestedInput
+  }
+
+  export type OrderDraftUncheckedUpdateWithoutVouchersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUncheckedUpdateManyWithoutOrderDraftNestedInput
   }
 
   export type ShopCreateWithoutConversationsInput = {
@@ -68845,6 +71978,7 @@ export namespace Prisma {
     messagesSentUser?: MessageCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConversationsParticipantsInput = {
@@ -68874,6 +72008,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConversationsParticipantsInput = {
@@ -69001,6 +72136,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConversationsParticipantsInput = {
@@ -69030,6 +72166,7 @@ export namespace Prisma {
     messagesSentUser?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ShopUpsertWithoutConversationParticipantInput = {
@@ -69141,6 +72278,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantCreateNestedManyWithoutUserInput
     ReturnRequest?: ReturnRequestCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMessagesSentUserInput = {
@@ -69170,6 +72308,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     ReturnRequest?: ReturnRequestUncheckedCreateNestedManyWithoutUserInput
     VoucherRedemption?: VoucherRedemptionUncheckedCreateNestedManyWithoutUserInput
+    OrderDraft?: OrderDraftUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMessagesSentUserInput = {
@@ -69297,6 +72436,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantUpdateManyWithoutUserNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessagesSentUserInput = {
@@ -69326,6 +72466,7 @@ export namespace Prisma {
     conversationsParticipants?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutUserNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    OrderDraft?: OrderDraftUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ShopUpsertWithoutMessageInput = {
@@ -69548,6 +72689,23 @@ export namespace Prisma {
     voucherId: string
     orderId: string
     usedAt?: Date | string
+  }
+
+  export type OrderDraftCreateManyUserInput = {
+    id?: string
+    orderNumber: string
+    orderId?: string | null
+    placedAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.OrderStatus
+    paymentStatus?: $Enums.PaymentStatus
+    currency?: $Enums.Currency
+    itemsTotal: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discountTotal?: Decimal | DecimalJsLike | number | string
+    grandTotal: Decimal | DecimalJsLike | number | string
+    shippingInfor: JsonNullValueInput | InputJsonValue
+    notes?: string | null
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -69846,6 +73004,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutUserInput = {
@@ -69876,6 +73035,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateManyWithoutUserInput = {
@@ -70069,6 +73229,61 @@ export namespace Prisma {
     voucherId?: StringFieldUpdateOperationsInput | string
     orderId?: StringFieldUpdateOperationsInput | string
     usedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderDraftUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUpdateManyWithoutOrderDraftNestedInput
+    vouchers?: OrderVoucherUpdateManyWithoutOrderDraftNestedInput
+    order?: OrderUpdateOneWithoutDraftsNestedInput
+  }
+
+  export type OrderDraftUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUncheckedUpdateManyWithoutOrderDraftNestedInput
+    vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderDraftNestedInput
+  }
+
+  export type OrderDraftUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    placedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    itemsTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    grandTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingInfor?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShopMemberCreateManyShopInput = {
@@ -70292,6 +73507,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutShopInput = {
@@ -70322,6 +73538,7 @@ export namespace Prisma {
     vouchers?: OrderVoucherUncheckedUpdateManyWithoutOrderNestedInput
     ReturnRequest?: ReturnRequestUncheckedUpdateManyWithoutOrderNestedInput
     VoucherRedemption?: VoucherRedemptionUncheckedUpdateManyWithoutOrderNestedInput
+    drafts?: OrderDraftUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateManyWithoutShopInput = {
@@ -70725,7 +73942,8 @@ export namespace Prisma {
 
   export type OrderItemCreateManyProductInput = {
     id?: string
-    orderId: string
+    orderId?: string | null
+    orderDraftId?: string | null
     variantId?: string | null
     title: string
     sku?: string | null
@@ -70933,7 +74151,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order?: OrderUpdateOneRequiredWithoutItemsNestedInput
+    order?: OrderUpdateOneWithoutItemsNestedInput
+    orderDraft?: OrderDraftUpdateOneWithoutItemsNestedInput
     variant?: ProductVariantUpdateOneWithoutOrderItemsNestedInput
     review?: ReviewUpdateOneWithoutOrderItemNestedInput
     ReturnItem?: ReturnItemUpdateManyWithoutOrderItemNestedInput
@@ -70941,7 +74160,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     variantId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70956,7 +74176,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     variantId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70981,7 +74202,8 @@ export namespace Prisma {
 
   export type OrderItemCreateManyVariantInput = {
     id?: string
-    orderId: string
+    orderId?: string | null
+    orderDraftId?: string | null
     productId: string
     title: string
     sku?: string | null
@@ -71010,7 +74232,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    order?: OrderUpdateOneRequiredWithoutItemsNestedInput
+    order?: OrderUpdateOneWithoutItemsNestedInput
+    orderDraft?: OrderDraftUpdateOneWithoutItemsNestedInput
     product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
     review?: ReviewUpdateOneWithoutOrderItemNestedInput
     ReturnItem?: ReturnItemUpdateManyWithoutOrderItemNestedInput
@@ -71018,7 +74241,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71033,7 +74257,8 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateManyWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71133,6 +74358,7 @@ export namespace Prisma {
 
   export type OrderItemCreateManyOrderInput = {
     id?: string
+    orderDraftId?: string | null
     productId: string
     variantId?: string | null
     title: string
@@ -71179,7 +74405,9 @@ export namespace Prisma {
   }
 
   export type OrderVoucherCreateManyOrderInput = {
+    id?: string
     voucherId: string
+    orderDraftId?: string | null
   }
 
   export type ReturnRequestCreateManyOrderInput = {
@@ -71206,6 +74434,7 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    orderDraft?: OrderDraftUpdateOneWithoutItemsNestedInput
     product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
     variant?: ProductVariantUpdateOneWithoutOrderItemsNestedInput
     review?: ReviewUpdateOneWithoutOrderItemNestedInput
@@ -71214,6 +74443,7 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     variantId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
@@ -71229,6 +74459,7 @@ export namespace Prisma {
 
   export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     variantId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
@@ -71345,15 +74576,21 @@ export namespace Prisma {
   }
 
   export type OrderVoucherUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
     voucher?: VoucherUpdateOneRequiredWithoutOrdersNestedInput
+    orderDraft?: OrderDraftUpdateOneWithoutVouchersNestedInput
   }
 
   export type OrderVoucherUncheckedUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
     voucherId?: StringFieldUpdateOperationsInput | string
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderVoucherUncheckedUpdateManyWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
     voucherId?: StringFieldUpdateOperationsInput | string
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ReturnRequestUpdateWithoutOrderInput = {
@@ -71429,6 +74666,90 @@ export namespace Prisma {
     returnRequestId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type OrderItemCreateManyOrderDraftInput = {
+    id?: string
+    orderId?: string | null
+    productId: string
+    variantId?: string | null
+    title: string
+    sku?: string | null
+    unitPrice: Decimal | DecimalJsLike | number | string
+    quantity: number
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type OrderVoucherCreateManyOrderDraftInput = {
+    id?: string
+    orderId?: string | null
+    voucherId: string
+  }
+
+  export type OrderItemUpdateWithoutOrderDraftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    order?: OrderUpdateOneWithoutItemsNestedInput
+    product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
+    variant?: ProductVariantUpdateOneWithoutOrderItemsNestedInput
+    review?: ReviewUpdateOneWithoutOrderItemNestedInput
+    ReturnItem?: ReturnItemUpdateManyWithoutOrderItemNestedInput
+  }
+
+  export type OrderItemUncheckedUpdateWithoutOrderDraftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    productId?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    review?: ReviewUncheckedUpdateOneWithoutOrderItemNestedInput
+    ReturnItem?: ReturnItemUncheckedUpdateManyWithoutOrderItemNestedInput
+  }
+
+  export type OrderItemUncheckedUpdateManyWithoutOrderDraftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    productId?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type OrderVoucherUpdateWithoutOrderDraftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order?: OrderUpdateOneWithoutVouchersNestedInput
+    voucher?: VoucherUpdateOneRequiredWithoutOrdersNestedInput
+  }
+
+  export type OrderVoucherUncheckedUpdateWithoutOrderDraftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type OrderVoucherUncheckedUpdateManyWithoutOrderDraftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherId?: StringFieldUpdateOperationsInput | string
   }
 
   export type RefundCreateManyPaymentInput = {
@@ -71511,7 +74832,9 @@ export namespace Prisma {
   }
 
   export type OrderVoucherCreateManyVoucherInput = {
-    orderId: string
+    id?: string
+    orderId?: string | null
+    orderDraftId?: string | null
   }
 
   export type VoucherCategoryUpdateWithoutVoucherInput = {
@@ -71560,15 +74883,21 @@ export namespace Prisma {
   }
 
   export type OrderVoucherUpdateWithoutVoucherInput = {
-    order?: OrderUpdateOneRequiredWithoutVouchersNestedInput
+    id?: StringFieldUpdateOperationsInput | string
+    order?: OrderUpdateOneWithoutVouchersNestedInput
+    orderDraft?: OrderDraftUpdateOneWithoutVouchersNestedInput
   }
 
   export type OrderVoucherUncheckedUpdateWithoutVoucherInput = {
-    orderId?: StringFieldUpdateOperationsInput | string
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderVoucherUncheckedUpdateManyWithoutVoucherInput = {
-    orderId?: StringFieldUpdateOperationsInput | string
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDraftId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ConversationParticipantCreateManyConversationInput = {
