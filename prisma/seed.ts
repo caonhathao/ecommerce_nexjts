@@ -6,7 +6,7 @@ import {
   PaymentStatus,
   Prisma,
   PrismaClient,
-  VoucherType,
+  VoucherType
 } from '@/lib/generated/prisma';
 import { faker } from '@faker-js/faker';
 import { Currency, OrderStatus } from '../lib/generated/prisma';
@@ -318,7 +318,7 @@ async function main() {
   // 4️⃣ PRODUCTS
   // ------------------------
   const products = await Promise.all(
-    Array.from({ length: 10 }).map(() => {
+    Array.from({ length: 50 }).map(() => {
       const shop = faker.helpers.arrayElement(shops);
       const category = faker.helpers.arrayElement(categories);
       const minPrice = faker.number.float({
@@ -343,8 +343,10 @@ async function main() {
           origin: faker.location.country(),
           minPrice,
           maxPrice,
-          status: 'PUBLISHED',
-          visibility: 'PUBLIC',
+          // status: faker.helpers.arrayElement(Object.values(ProductStatus)),
+          // visibility: faker.helpers.arrayElement(Object.values(Visibility)),
+          status: 'ARCHIVED',
+          visibility: 'PRIVATE',
         },
       });
     })
@@ -401,15 +403,22 @@ async function main() {
   // ------------------------
   // 5️⃣ PRODUCT TAGS
   // ------------------------
+  const productTagsSet = new Set();
+  const productTagsData = [];
+
+  while (productTagsData.length < 20) {
+    const product = faker.helpers.arrayElement(products);
+    const tagItem = faker.helpers.arrayElement(tag);
+    const key = `${product.id}-${tagItem.id}`;
+
+    if (!productTagsSet.has(key)) {
+      productTagsSet.add(key);
+      productTagsData.push({ productId: product.id, tagId: tagItem.id });
+    }
+  }
+
   const productTags = await Promise.all(
-    Array.from({ length: 5 }).map(() => {
-      return prisma.productTag.create({
-        data: {
-          productId: faker.helpers.arrayElement(products).id,
-          tagId: faker.helpers.arrayElement(tag).id,
-        },
-      });
-    })
+    productTagsData.map((data) => prisma.productTag.create({ data }))
   );
 
   console.log(`✅ Created ${productTags.length} product variants`);

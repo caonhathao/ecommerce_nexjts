@@ -69,7 +69,7 @@ const data = {
       items: [
         {
           title: 'Duyệt sản phẩm',
-          url: '#',
+          url: '/manager/accept-prod',
         },
         {
           title: 'Quản lí sản phẩm',
