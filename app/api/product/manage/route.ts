@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db';
+import { Prisma, Visibility } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -9,12 +10,20 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 10;
   const skip = (page - 1) * limit;
-  
+
+  const visible = searchParams.get('visibility')?.toString();
+
+  const whereClause: Prisma.ProductWhereInput = {};
+
+  // Conditionally add the visibility filter
+  if (visible !== null) {
+    const check = visible?.toUpperCase();
+    if (check && check in Visibility)
+      whereClause.visibility = check as Visibility;
+  }
+
   const data = await prisma.product.findMany({
-    where: {
-      status: 'ARCHIVED',
-      visibility: 'PRIVATE',
-    },
+    where: whereClause,
     select: {
       id: true,
       shop: {
@@ -26,6 +35,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
       title: true,
       status: true,
+      visibility: true,
       _count: {
         select: {
           variants: true,
