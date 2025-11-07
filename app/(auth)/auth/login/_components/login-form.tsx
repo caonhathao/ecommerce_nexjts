@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { authClient } from "@/lib/auth-client";
-import { SiGithub } from "@icons-pack/react-simple-icons";
-import { Loader, Send } from "lucide-react";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { authClient } from '@/lib/auth-client';
+import { SiGithub } from '@icons-pack/react-simple-icons';
+import { Loader, Send } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
-import { AppLoader } from "@/components/ui/loader";
+import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
+import { AppLoader } from '@/components/ui/loader';
 
 export function LoginForm() {
   const router = useRouter();
@@ -24,20 +24,39 @@ export function LoginForm() {
   const searchParams = useSearchParams();
   const [githubPending, startGithubTransition] = useTransition();
   const [emailPending, startEmailTransition] = useTransition();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
+
+  async function handlePostLogin(
+    userId: string,
+    email: string | null,
+    name: string | null,
+    image: string | null,
+    phone: string | null
+  ) {
+    try {
+      await fetch('/api/user/initialize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, email, name, image, phone }),
+      });
+    } catch (err) {
+      console.error('Failed to initialize user data:', err);
+      toast.error('Error initializing your account. Please try again.');
+    }
+  }
 
   async function signInWithGithub() {
     startGithubTransition(async () => {
       await authClient.signIn.social({
-        provider: "github",
-        callbackURL: "/",
+        provider: 'github',
+        callbackURL: '/',
         fetchOptions: {
           onSuccess: () => {
-            toast.success("Signed in with Github, you will be redirected...");
+            toast.success('Signed in with Github, you will be redirected...');
           },
           onError: (error) => {
-            toast.error("Internal Server Error");
-            console.error("Error signing in with Github:", error);
+            toast.error('Internal Server Error');
+            console.error('Error signing in with Github:', error);
           },
         },
       });
@@ -48,15 +67,17 @@ export function LoginForm() {
     startEmailTransition(async () => {
       await authClient.emailOtp.sendVerificationOtp({
         email: email,
-        type: "sign-in",
+        type: 'sign-in',
         fetchOptions: {
           onSuccess: () => {
-            toast.success("Email sent");
-            router.push(`/auth/verify-request?email=${encodeURIComponent(email)}&callbackUrl=${encodeURIComponent(pathname + '?' + searchParams.toString())}`);
-            },
+            toast.success('Email sent');
+            router.push(
+              `/auth/verify-request?email=${encodeURIComponent(email)}&callbackUrl=${encodeURIComponent(pathname + '?' + searchParams.toString())}`
+            );
+          },
           onError: (e) => {
             console.log(e);
-            toast.error("Error sending email");
+            toast.error('Error sending email');
           },
         },
       });
@@ -74,7 +95,7 @@ export function LoginForm() {
           disabled={githubPending}
           onClick={signInWithGithub}
           className="w-full cursor-pointer"
-          variant={"outline"}
+          variant={'outline'}
         >
           {githubPending ? (
             <>

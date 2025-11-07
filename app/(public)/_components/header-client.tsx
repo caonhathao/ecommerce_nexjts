@@ -59,14 +59,14 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
     router.push('/');
   };
 
-  useEffect(() => {
-    const onScroll = () => setIsSticky(window.scrollY > 100);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  // useEffect(() => {
+  //   const onScroll = () => setIsSticky(window.scrollY > 100);
+  //   window.addEventListener('scroll', onScroll);
+  //   return () => window.removeEventListener('scroll', onScroll);
+  // }, []);
 
   return (
-    <div className="w-full h-fit p-2 flex flex-col justify-center items-center relative">
+    <div className="w-full h-fit  flex flex-col justify-center items-center relative">
       {/* logo, searching zone and tags  */}
       <div
         className={`w-full flex justify-center items-center transition-all duration-300  bg-background ${

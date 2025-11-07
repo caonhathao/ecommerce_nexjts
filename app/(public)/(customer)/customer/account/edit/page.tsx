@@ -11,6 +11,8 @@ export default async function AccountPage() {
 
   const profile = await getUserProfile(userId);
 
+  // console.log('Fetched profile:', profile);
+
   const defaultValues = profile ?? {
     id: 'temp',
     userId,
