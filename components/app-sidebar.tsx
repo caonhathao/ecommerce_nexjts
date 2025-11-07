@@ -68,12 +68,8 @@ const data = {
       icon: AiOutlineProduct,
       items: [
         {
-          title: 'Duyệt sản phẩm',
-          url: '/manager/accept-prod',
-        },
-        {
           title: 'Quản lí sản phẩm',
-          url: '#',
+          url: '/manager/products',
         },
         {
           title: 'Khiếu nại',

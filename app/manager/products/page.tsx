@@ -54,6 +54,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
+  productData,
+  productDetail,
+  productItemData,
+} from '@/types/manager.data-types';
+import {
   closestCenter,
   DndContext,
   DragEndEvent,
@@ -102,74 +107,15 @@ import {
 import Image from 'next/image';
 import React, { useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { toast } from 'sonner';
+import SearchBar from '../_components/search-bar';
 
-interface draftData {
-  id: string;
-  title: string;
-  status: string;
-  shop: {
-    id: string;
-    logoUrl: string;
-    name: string;
-  };
-  _count: {
-    variants: number;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface draftProduct {
-  data: draftData[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}
-
-interface productDetail {
-  id: string;
-  shop: {
-    id: string;
-    name: string;
-    logoUrl: string;
-  };
-  title: string;
-  slug: string;
-  origin: string;
-  description: string;
-  status: string;
-  visibility: string;
-  attributes: string;
-  minPrice: string;
-  maxPrice: string;
-  currency: string;
-  createdAt: string;
-  updatedAt: string;
-  images: {
-    url: string;
-    alt: string;
-  }[];
-  variants: {
-    id: string;
-    sku: string;
-    name: string;
-    price: string;
-    image: string;
-    currency: string;
-    attributes: string;
-    createdAt: string;
-    updatedAt: string;
-  }[];
-}
-
-const AcceptProdPage = () => {
-  const [draft, setDraft] = React.useState<draftProduct | null>(null);
-  const [draftDt, setDraftDt] = React.useState<draftData[]>([]);
+const ProductsPage = () => {
+  const [data, setData] = React.useState<productData | null>(null);
+  const [productList, setProductList] = React.useState<productItemData[]>([]);
+  const [copiedId, setCopiedId] = React.useState<string | null>('');
 
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -184,14 +130,14 @@ const AcceptProdPage = () => {
   });
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => draftDt?.map(({ id }) => id) || [],
-    [draftDt]
+    () => productList?.map(({ id }) => id) || [],
+    [productList]
   );
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active && over && active.id !== over.id) {
-      setDraftDt((data) => {
+      setProductList((data) => {
         const oldIndex = dataIds.indexOf(active.id);
         const newIndex = dataIds.indexOf(over.id);
         return arrayMove(data, oldIndex, newIndex);
@@ -206,7 +152,26 @@ const AcceptProdPage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const columns: ColumnDef<draftData>[] = [
+  const handleCopy = (value: string) => {
+    navigator.clipboard
+      .writeText(value)
+      .then(() => {
+        // 1. Set the copied ID
+        setCopiedId(value);
+        // 2. Clear the feedback after 2 seconds
+        toast('Hành động', {
+          description: 'Đã sao chép ID sản phẩm',
+        });
+        setTimeout(() => {
+          setCopiedId(null);
+        }, 2000);
+      })
+      .catch((err) => {
+        console.error('Failed to copy ID: ', err);
+      });
+  };
+
+  const columns: ColumnDef<productItemData>[] = [
     {
       id: 'drag',
       header: () => null,
@@ -262,16 +227,18 @@ const AcceptProdPage = () => {
       ),
     },
     {
-      accessorKey: 'Trạng thái',
-      header: 'Trạng thái',
+      accessorKey: 'Hiển thị',
+      header: 'Hiển thị',
       cell: ({ row }) => (
         <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.status === 'ARCHIVED' ? (
+          {row.original.visibility === 'UNLISTED' ? (
             <FiXCircle className="fill-red-500 dark:fill-red-400" />
+          ) : row.original.visibility === 'PUBLIC' ? (
+            <FaCheckCircle className="fill-green-500 dark:fill-green-400" />
           ) : (
             <IconLoader />
           )}
-          {row.original.status}
+          {row.original.visibility}
         </Badge>
       ),
     },
@@ -300,7 +267,7 @@ const AcceptProdPage = () => {
     },
     {
       id: 'actions',
-      cell: () => (
+      cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -313,7 +280,15 @@ const AcceptProdPage = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem>Sao chép ID</DropdownMenuItem>
+            <DropdownMenuItem className='flex justify-center items-center'>
+              <Button
+                variant={'ghost'}
+                className='text-left'
+                onClick={() => handleCopy(row.original.id)}
+              >
+                Sao chép ID
+              </Button>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
           </DropdownMenuContent>
@@ -323,7 +298,7 @@ const AcceptProdPage = () => {
   ];
 
   const table = useReactTable({
-    data: draftDt,
+    data: productList,
     columns,
     state: {
       sorting,
@@ -366,7 +341,7 @@ const AcceptProdPage = () => {
     );
   }
 
-  function TableCellViewer({ item }: { item: draftData }) {
+  function TableCellViewer({ item }: { item: productItemData }) {
     const isMobile = useIsMobile();
     const [detail, setDetail] = React.useState<productDetail | null>(null);
 
@@ -376,8 +351,8 @@ const AcceptProdPage = () => {
       try {
         const response = await fetch(`/api/product/draft/${item.id}`);
         const detail = await response.json();
-        console.log(detail.data);
-        setDetail(detail.data);
+        // console.log(detail.data);
+        setProductList(detail.data);
       } catch (err) {
         console.error(err);
       }
@@ -394,8 +369,8 @@ const AcceptProdPage = () => {
           toast('Đã cập nhật sản phẩm', {
             description: 'Sản phẩm được cấp phép hiển thị',
           });
-          setDraftDt((prev) =>
-            prev.filter((draftDt) => draftDt.id !== item.id)
+          setProductList((prev) =>
+            prev.filter((product) => product.id !== item.id)
           );
         }
       } catch (e) {
@@ -584,7 +559,7 @@ const AcceptProdPage = () => {
     );
   }
 
-  function DraggableRow({ row }: { row: Row<draftData> }) {
+  function DraggableRow({ row }: { row: Row<productItemData> }) {
     const { transform, transition, setNodeRef, isDragging } = useSortable({
       id: row.original.id,
     });
@@ -612,13 +587,13 @@ const AcceptProdPage = () => {
   const fetchData = async (page: number, limit: number) => {
     try {
       const response = await fetch(
-        `/api/product/draft?page=${page}&&limit=${limit}`
+        `/api/product/manage?page=${page}&&limit=${limit}&&visibility=`
       );
       const data = await response.json();
 
-      // console.log(data);
-      setDraft(data);
-      setDraftDt(data.data);
+      console.log(data);
+      setData(data);
+      setProductList(data.data);
     } catch (err) {
       console.error(err);
     }
@@ -629,22 +604,23 @@ const AcceptProdPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log(draft);
-  }, [draft]);
+    console.log(productList);
+  }, [productList]);
 
-  if (!draft || !draftDt) return <Loading />;
+  if (!data || !productList) return <Loading />;
 
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
+      <SearchBar searchObject="product" setData={setProductList} />
       <Tabs
-        defaultValue="outline"
+        defaultValue="all-status"
         className="w-full flex-col justify-start gap-6"
       >
         <div className="flex items-center justify-between px-4 lg:px-6">
           <Label htmlFor="view-selector" className="sr-only">
             View
           </Label>
-          <Select defaultValue="outline">
+          <Select defaultValue="all-status">
             <SelectTrigger
               className="flex w-fit @4xl/main:hidden"
               size="sm"
@@ -653,29 +629,25 @@ const AcceptProdPage = () => {
               <SelectValue placeholder="Select a view" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="outline">Outline</SelectItem>
-              <SelectItem value="past-performance">Past Performance</SelectItem>
-              <SelectItem value="key-personnel">Key Personnel</SelectItem>
-              <SelectItem value="focus-documents">Focus Documents</SelectItem>
+              <SelectItem value="all-status">Tất cả</SelectItem>
+              <SelectItem value="all-public">Công khai</SelectItem>
+              <SelectItem value="all-private">Ẩn</SelectItem>
+              <SelectItem value="all-unlisted">Cấm</SelectItem>
             </SelectContent>
           </Select>
           <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
-            <TabsTrigger value="outline">Outline</TabsTrigger>
-            <TabsTrigger value="past-performance">
-              Past Performance <Badge variant="secondary">3</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="key-personnel">
-              Key Personnel <Badge variant="secondary">2</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="focus-documents">Focus Documents</TabsTrigger>
+            <TabsTrigger value="all-status">Tất cả</TabsTrigger>
+            <TabsTrigger value="all-public">Công khai</TabsTrigger>
+            <TabsTrigger value="all-private">Ẩn</TabsTrigger>
+            <TabsTrigger value="all-unlisted">Cấm</TabsTrigger>
           </TabsList>
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
                   <IconLayoutColumns />
-                  <span className="hidden lg:inline">Customize Columns</span>
-                  <span className="lg:hidden">Columns</span>
+                  <span className="hidden lg:inline">Hiển thị</span>
+                  <span className="lg:hidden">Cột</span>
                   <IconChevronDown />
                 </Button>
               </DropdownMenuTrigger>
@@ -710,7 +682,7 @@ const AcceptProdPage = () => {
           </div>
         </div>
         <TabsContent
-          value="outline"
+          value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
           <div className="overflow-hidden rounded-lg border">
@@ -741,7 +713,7 @@ const AcceptProdPage = () => {
                   ))}
                 </TableHeader>
                 <TableBody className="**:data-[slot=table-cell]:first:w-8">
-                  {table.getRowModel().rows?.length ? (
+                  {productList.length !== 0 ? (
                     <SortableContext
                       items={dataIds}
                       strategy={verticalListSortingStrategy}
@@ -796,7 +768,7 @@ const AcceptProdPage = () => {
                 </Select>
               </div>
               <div className="flex w-fit items-center justify-center text-sm font-medium">
-                Page {draft.pagination.page} of {draft.pagination.totalPages}
+                Page {data.pagination.page} of {data.pagination.totalPages}
               </div>
               <div className="ml-auto flex items-center gap-2 lg:ml-0">
                 <Button
@@ -806,7 +778,7 @@ const AcceptProdPage = () => {
                     table.setPageIndex(0);
                     fetchData(1, 10);
                   }}
-                  disabled={draft.pagination.page - 1 <= 0}
+                  disabled={data.pagination.page - 1 <= 0}
                 >
                   <span className="sr-only">Go to first page</span>
                   <IconChevronsLeft />
@@ -817,9 +789,9 @@ const AcceptProdPage = () => {
                   size="icon"
                   onClick={() => {
                     table.previousPage();
-                    fetchData(draft.pagination.page - 1, 10);
+                    fetchData(data.pagination.page - 1, 10);
                   }}
-                  disabled={draft.pagination.page - 1 <= 0}
+                  disabled={data.pagination.page - 1 <= 0}
                 >
                   <span className="sr-only">Go to previous page</span>
                   <IconChevronLeft />
@@ -830,10 +802,10 @@ const AcceptProdPage = () => {
                   size="icon"
                   onClick={() => {
                     table.nextPage();
-                    fetchData(draft.pagination.page + 1, 10);
+                    fetchData(data.pagination.page + 1, 10);
                   }}
                   disabled={
-                    draft.pagination.page + 1 > draft.pagination.totalPages
+                    data.pagination.page + 1 > data.pagination.totalPages
                   }
                 >
                   <span className="sr-only">Go to next page</span>
@@ -845,10 +817,10 @@ const AcceptProdPage = () => {
                   size="icon"
                   onClick={() => {
                     table.setPageIndex(table.getPageCount() - 1);
-                    fetchData(draft.pagination.totalPages, 10);
+                    fetchData(data.pagination.totalPages, 10);
                   }}
                   disabled={
-                    draft.pagination.page + 1 > draft.pagination.totalPages
+                    data.pagination.page + 1 > data.pagination.totalPages
                   }
                 >
                   <span className="sr-only">Go to last page</span>
@@ -881,4 +853,4 @@ const AcceptProdPage = () => {
   );
 };
 
-export default AcceptProdPage;
+export default ProductsPage;

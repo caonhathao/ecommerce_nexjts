@@ -6,6 +6,8 @@ import {
   PaymentStatus,
   Prisma,
   PrismaClient,
+  ProductStatus,
+  Visibility,
   VoucherType
 } from '@/lib/generated/prisma';
 import { faker } from '@faker-js/faker';
@@ -343,10 +345,8 @@ async function main() {
           origin: faker.location.country(),
           minPrice,
           maxPrice,
-          // status: faker.helpers.arrayElement(Object.values(ProductStatus)),
-          // visibility: faker.helpers.arrayElement(Object.values(Visibility)),
-          status: 'ARCHIVED',
-          visibility: 'PRIVATE',
+          status: faker.helpers.arrayElement(Object.values(ProductStatus)),
+          visibility: faker.helpers.arrayElement(Object.values(Visibility)),
         },
       });
     })
