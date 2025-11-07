@@ -3,7 +3,6 @@ import {
   formatDay,
   formatPrice,
 } from '@/app/(public)/_components/global-function';
-import { Loading } from '@/app/(public)/_components/loading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -43,14 +42,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
@@ -59,8 +51,6 @@ import {
   productItemData,
 } from '@/types/manager.data-types';
 import {
-  closestCenter,
-  DndContext,
   DragEndEvent,
   KeyboardSensor,
   MouseSensor,
@@ -69,20 +59,10 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+import { arrayMove, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
   IconChevronDown,
-  IconChevronLeft,
-  IconChevronRight,
-  IconChevronsLeft,
-  IconChevronsRight,
   IconDotsVertical,
   IconGripVertical,
   IconLayoutColumns,
@@ -105,17 +85,19 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
+import TabProduct from '../_components/tab-product';
 
 const ProductsPage = () => {
   const [data, setData] = React.useState<productData | null>(null);
   const [productList, setProductList] = React.useState<productItemData[]>([]);
   const [copiedId, setCopiedId] = React.useState<string | null>('');
+  const [isReset, SetIsReset] = React.useState<boolean>(false);
 
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -280,10 +262,10 @@ const ProductsPage = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem className='flex justify-center items-center'>
+            <DropdownMenuItem className="flex justify-center items-center">
               <Button
                 variant={'ghost'}
-                className='text-left'
+                className="text-left"
                 onClick={() => handleCopy(row.original.id)}
               >
                 Sao chép ID
@@ -584,34 +566,14 @@ const ProductsPage = () => {
     );
   }
 
-  const fetchData = async (page: number, limit: number) => {
-    try {
-      const response = await fetch(
-        `/api/product/manage?page=${page}&&limit=${limit}&&visibility=`
-      );
-      const data = await response.json();
-
-      console.log(data);
-      setData(data);
-      setProductList(data.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchData(1, 10);
-  }, []);
-
-  useEffect(() => {
-    console.log(productList);
-  }, [productList]);
-
-  if (!data || !productList) return <Loading />;
-
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
-      <SearchBar searchObject="product" setData={setProductList} />
+      <SearchBar
+        searchObject="product"
+        setData={setProductList}
+        setIsReset={SetIsReset}
+        isReset={isReset}
+      />
       <Tabs
         defaultValue="all-status"
         className="w-full flex-col justify-start gap-6"
@@ -685,168 +647,81 @@ const ProductsPage = () => {
           value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <div className="overflow-hidden rounded-lg border">
-            <DndContext
-              collisionDetection={closestCenter}
-              modifiers={[restrictToVerticalAxis]}
-              onDragEnd={handleDragEnd}
+          <TabProduct
+            visibilityFilter=""
+            isReset={isReset}
+            sensors={sensors}
+            sortableId={sortableId}
+            table={table}
+            columns={columns}
+            data={data}
+            setData={setData}
+            productList={productList}
+            setProductList={setProductList}
+            dataIds={dataIds}
+            DraggableRow={DraggableRow}
+            handleDragEnd={handleDragEnd}
+          />
+        </TabsContent>
+        <TabsContent value="all-public" className="flex flex-col px-4 lg:px-6">
+          <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
+            <TabProduct
+              visibilityFilter="PUBLIC"
+              isReset={isReset}
               sensors={sensors}
-              id={sortableId}
-            >
-              <Table>
-                <TableHeader className="bg-muted sticky top-0 z-10">
-                  {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
-                      {headerGroup.headers.map((header) => {
-                        return (
-                          <TableHead key={header.id} colSpan={header.colSpan}>
-                            {header.isPlaceholder
-                              ? null
-                              : flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                          </TableHead>
-                        );
-                      })}
-                    </TableRow>
-                  ))}
-                </TableHeader>
-                <TableBody className="**:data-[slot=table-cell]:first:w-8">
-                  {productList.length !== 0 ? (
-                    <SortableContext
-                      items={dataIds}
-                      strategy={verticalListSortingStrategy}
-                    >
-                      {table.getRowModel().rows.map((row) => (
-                        <DraggableRow key={row.id} row={row} />
-                      ))}
-                    </SortableContext>
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={columns.length}
-                        className="h-24 text-center"
-                      >
-                        No results.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </DndContext>
+              sortableId={sortableId}
+              table={table}
+              columns={columns}
+              data={data}
+              setData={setData}
+              productList={productList}
+              setProductList={setProductList}
+              dataIds={dataIds}
+              DraggableRow={DraggableRow}
+              handleDragEnd={handleDragEnd}
+            />
           </div>
-          <div className="flex items-center justify-between px-4">
-            <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-              {table.getFilteredSelectedRowModel().rows.length} of{' '}
-              {table.getFilteredRowModel().rows.length} row(s) selected.
-            </div>
-            <div className="flex w-full items-center gap-8 lg:w-fit">
-              <div className="hidden items-center gap-2 lg:flex">
-                <Label htmlFor="rows-per-page" className="text-sm font-medium">
-                  Rows per page
-                </Label>
-                <Select
-                  value={`${table.getState().pagination.pageSize}`}
-                  onValueChange={(value) => {
-                    table.setPageSize(Number(value));
-                    fetchData(1, Number(value));
-                  }}
-                >
-                  <SelectTrigger size="sm" className="w-20" id="rows-per-page">
-                    <SelectValue
-                      placeholder={table.getState().pagination.pageSize}
-                    />
-                  </SelectTrigger>
-                  <SelectContent side="top">
-                    {[10, 20, 30, 40, 50].map((pageSize) => (
-                      <SelectItem key={pageSize} value={`${pageSize}`}>
-                        {pageSize}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex w-fit items-center justify-center text-sm font-medium">
-                Page {data.pagination.page} of {data.pagination.totalPages}
-              </div>
-              <div className="ml-auto flex items-center gap-2 lg:ml-0">
-                <Button
-                  variant="outline"
-                  className="hidden h-8 w-8 p-0 lg:flex"
-                  onClick={() => {
-                    table.setPageIndex(0);
-                    fetchData(1, 10);
-                  }}
-                  disabled={data.pagination.page - 1 <= 0}
-                >
-                  <span className="sr-only">Go to first page</span>
-                  <IconChevronsLeft />
-                </Button>
-                <Button
-                  variant="outline"
-                  className="size-8"
-                  size="icon"
-                  onClick={() => {
-                    table.previousPage();
-                    fetchData(data.pagination.page - 1, 10);
-                  }}
-                  disabled={data.pagination.page - 1 <= 0}
-                >
-                  <span className="sr-only">Go to previous page</span>
-                  <IconChevronLeft />
-                </Button>
-                <Button
-                  variant="outline"
-                  className="size-8"
-                  size="icon"
-                  onClick={() => {
-                    table.nextPage();
-                    fetchData(data.pagination.page + 1, 10);
-                  }}
-                  disabled={
-                    data.pagination.page + 1 > data.pagination.totalPages
-                  }
-                >
-                  <span className="sr-only">Go to next page</span>
-                  <IconChevronRight />
-                </Button>
-                <Button
-                  variant="outline"
-                  className="hidden size-8 lg:flex"
-                  size="icon"
-                  onClick={() => {
-                    table.setPageIndex(table.getPageCount() - 1);
-                    fetchData(data.pagination.totalPages, 10);
-                  }}
-                  disabled={
-                    data.pagination.page + 1 > data.pagination.totalPages
-                  }
-                >
-                  <span className="sr-only">Go to last page</span>
-                  <IconChevronsRight />
-                </Button>
-              </div>
-            </div>
+        </TabsContent>
+        <TabsContent value="all-private" className="flex flex-col px-4 lg:px-6">
+          <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
+            <TabProduct
+              visibilityFilter="PRIVATE"
+              isReset={isReset}
+              sensors={sensors}
+              sortableId={sortableId}
+              table={table}
+              columns={columns}
+              data={data}
+              setData={setData}
+              productList={productList}
+              setProductList={setProductList}
+              dataIds={dataIds}
+              DraggableRow={DraggableRow}
+              handleDragEnd={handleDragEnd}
+            />
           </div>
         </TabsContent>
         <TabsContent
-          value="past-performance"
+          value="all-unlisted"
           className="flex flex-col px-4 lg:px-6"
         >
-          <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-        </TabsContent>
-        <TabsContent
-          value="key-personnel"
-          className="flex flex-col px-4 lg:px-6"
-        >
-          <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-        </TabsContent>
-        <TabsContent
-          value="focus-documents"
-          className="flex flex-col px-4 lg:px-6"
-        >
-          <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+          <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
+            <TabProduct
+              visibilityFilter="UNLISTED"
+              isReset={isReset}
+              sensors={sensors}
+              sortableId={sortableId}
+              table={table}
+              columns={columns}
+              data={data}
+              setData={setData}
+              productList={productList}
+              setProductList={setProductList}
+              dataIds={dataIds}
+              DraggableRow={DraggableRow}
+              handleDragEnd={handleDragEnd}
+            />
+          </div>
         </TabsContent>
       </Tabs>
     </div>

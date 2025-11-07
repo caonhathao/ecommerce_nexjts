@@ -50,10 +50,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   });
 
   const total = await prisma.product.count({
-    where: {
-      status: 'ARCHIVED',
-      visibility: 'PRIVATE',
-    },
+    where: whereClause,
   });
 
   return NextResponse.json({
