@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { ModeToogle } from '@/components/custom/mode-toogle';
 import { SelectLanguage } from '@/components/custom/select-language';
@@ -9,33 +9,55 @@ import { useEffect, useState } from 'react';
 import SearchingBar from '@/app/(public)/_components/searching-bar';
 import { Button } from '@/components/ui/button';
 import {
+  Badge,
+  BadgeCheck,
+  Handshake,
   LogIn,
   LogOut,
   MapPin,
   Package,
+  Rotate3D,
+  RotateCcw,
   ShoppingCartIcon,
+  Tag,
+  Timer,
+  Truck,
+  Undo,
+  Undo2,
   User2,
 } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 import { useSignOut } from '@/hooks/use-signout';
+import Image from 'next/image';
 
-type Role = 'USER' | 'SELLER' | 'ADMIN'
-type HeaderUser = { name: string; email?: string; avatar_url?: string; role: Role } | null;
+type Role = 'USER' | 'SELLER' | 'ADMIN';
+type HeaderUser = {
+  name: string;
+  email?: string;
+  avatar_url?: string;
+  role: Role;
+} | null;
 
-const HeaderClient = ({user}:{user:HeaderUser}) => {
+const HeaderClient = ({ user }: { user: HeaderUser }) => {
   const router = useRouter();
 
   const handleSingout = useSignOut();
 
-  const t = useTranslations("home_layout");
-  const n = useTranslations("user_navbar");
+  const t = useTranslations('home_layout');
+  const n = useTranslations('user_navbar');
   const [isSticky, setIsSticky] = useState(false);
-    const handleHome = () => {
-      router.push('/');
-    };
+  const handleHome = () => {
+    router.push('/');
+  };
 
   // useEffect(() => {
   //   const onScroll = () => setIsSticky(window.scrollY > 100);
@@ -47,18 +69,24 @@ const HeaderClient = ({user}:{user:HeaderUser}) => {
     <div className="w-full h-fit  flex flex-col justify-center items-center relative">
       {/* logo, searching zone and tags  */}
       <div
-        className={`w-full flex justify-center items-center transition-all duration-300  bg-[var(--background)] ${
+        className={`w-full flex justify-center items-center transition-all duration-300  bg-background ${
           isSticky ? 'fixed top-0 left-0 shadow-md z-50' : 'relative'
         }`}
       >
         <div className="w-[80%] h-fit p-2 flex flex-row justify-center items-center gap-4">
           {/* logo and slogan */}
           <div
-            className="w-[10%] flex flex-col justify-center items-center"
+            className="w-[10%] flex flex-col gap-1 justify-center items-center"
             onClick={() => handleHome()}
           >
-            <img src={'/logo-name.jpg'} alt="logo" className="w-full" />
-            <p className="text-[var(--primary)]">{t('slogan')}</p>
+            <Image
+              width={200}
+              height={200}
+              src="/logo.jpg"
+              alt="logo"
+              className=""
+            />
+            <p className="text-primary">{t('slogan')}</p>
           </div>
           {/* searching bar and tags  */}
           <div className="w-full flex flex-col justify-start items-start gap-1">
@@ -147,7 +175,7 @@ const HeaderClient = ({user}:{user:HeaderUser}) => {
               )}
             </div>
             {/* tags  */}
-            <div className="flex flex-row justify-start items-center gap-3">
+            <div className="flex flex-row justify-start items-center gap-3 text-[var(--secondary)] text-sm">
               <Link href={''}>{t('electronics')}</Link>
               <Link href={''}>{t('vehicles')}</Link>
               <Link href={''}>{t('mom_baby')}</Link>
@@ -161,30 +189,41 @@ const HeaderClient = ({user}:{user:HeaderUser}) => {
       </div>
       <Separator />
       {/* slogans */}
-      <div className="w-full p-2 flex flex-row justify-center items-center gap-4">
-        <Link href="" className="text-[var(--primary)] font-medium">
+      <div className="w-4/5 h-10 pt-2 pr-2 pl-2 flex flex-row justify-start items-center gap-4 text-[var(--foreground)] font-medium text-xs">
+        <Link href="" className="flex gap-1">
+          <Handshake className="w-4 h-4 text-primary" />
           {t('commitment')}
         </Link>
-        <Link href="" className="font-medium">
+        <Link href="" className="flex gap-1">
+          <BadgeCheck className="w-4 h-4 text-primary" />
           {t('genuine_goods')}
         </Link>
-        <Link href="" className="font-medium">
+        <Separator orientation="vertical" />
+        <Link href="" className="flex gap-1">
+          <Truck className="w-4 h-4 text-primary" />
           {t('freeship_all')}
         </Link>
-        <Link href="" className="font-medium">
+        <Separator orientation="vertical" />
+        <Link href="" className="flex gap-1">
+          <Rotate3D className="w-4 h-4 text-primary" />
           {t('refund_200')}
         </Link>
-        <Link href="" className="font-medium">
+        <Separator orientation="vertical" />
+        <Link href="" className="flex gap-1">
+          <Undo2 className="w-4 h-4 text-primary" />
           {t('return_30_days')}
         </Link>
-        <Link href="" className="font-medium">
+        <Separator orientation="vertical" />
+        <Link href="" className="flex gap-1">
+          <Timer className="w-4 h-4 text-primary" />
           {t('fast_delivery_2h')}
         </Link>
-        <Link href="" className="font-medium">
+        <Separator orientation="vertical" />
+        <Link href="" className="flex gap-1">
+          <Tag className="w-4 h-4 text-primary" />
           {t('super_cheap_price')}
         </Link>
       </div>
-      <Separator />
     </div>
   );
 };

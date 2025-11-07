@@ -12,13 +12,13 @@ type TopDealItemsProps = {
 export const SuggestDealToday = ({ data }: TopDealItemsProps) => {
   const t = useTranslations('suggest_deal_today');
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-2 bg-[var(--background)] rounded-lg mt-5 p-2">
+    <div className="w-full flex flex-col justify-center items-center gap-2 bg-[var(--background)] rounded-lg mt-5 p-6">
       {/* top-title */}
       <p className="w-full text-left font-bold">{t('title')}</p>
       {/* content here */}
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-5 gap-2 w-full">
         {data.map((item, index) => (
-          <ProductItem key={index} item={item} size="1/4" />
+          <ProductItem key={index} item={item} size="1" />
         ))}
       </div>
       {/* watch more */}

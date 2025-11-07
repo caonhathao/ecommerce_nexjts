@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { AiFillLike } from 'react-icons/ai';
 import { ProductItem } from '../../_components/product-item';
+import { ProductItemSm } from '@/app/(public)/_components/product-item-sm';
 
 type TopDealItemsProps = {
   data: productItemType[];
@@ -20,7 +21,7 @@ export const TopDealItems = ({
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-[var(--background)] rounded-lg">
       {/* top title */}
-      <div className="w-full flex flex-row justify-between items-center">
+      <div className="w-full flex flex-row justify-between items-center p-2">
         <p className="w-fit flex flex-row gap-2 text-[var(--destructive)] font-bold select-none">
           <AiFillLike color="var(--destructive)" size={20} />
           {t('title')}
@@ -30,9 +31,9 @@ export const TopDealItems = ({
         </Link>
       </div>
       {/* item list */}
-      <div className="w-full flex flex-row gap-2">
+      <div className="w-full flex flex-row justify-between p-2 gap-3 overflow-x-auto">
         {data.map((item: productItemType, index) => (
-          <ProductItem
+          <ProductItemSm
             item={item}
             size={size}
             renderSaleValue={renderSaleValue}

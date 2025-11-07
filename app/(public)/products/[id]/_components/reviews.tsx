@@ -38,15 +38,13 @@ const Reviews = ({ id, ratingAvg, ratingCount }: props) => {
           />
           <p>{reviewData.user.name}</p>
         </div>
-        <div className="w-[75%]">
+        <div className="w-[75%] flex flex-col gap-2">
           <RatingStars value={reviewData.rating} />
-          <p className="font-semibold text-lg">{reviewData.title}</p>
           <p>{reviewData.body}</p>
-          <div className="flex flex-row italic gap-2 text-sm">
+          <div className="flex flex-col italic gap-1 text-sm">
             <p>Đánh giá lúc: {formatDay(reviewData.createdAt)}</p>
-            <p>Chỉnh sửa lúc: {formatDay(reviewData.createdAt)}</p>
           </div>
-          <div className="flex flex-row justify-start items-center">
+          <div className="flex flex-row justify-end items-center">
             <AiOutlineLike size={15} color="var(--primary)" />
             {reviewData.likes}
           </div>
@@ -58,10 +56,10 @@ const Reviews = ({ id, ratingAvg, ratingCount }: props) => {
   return (
     <div className="w-full bg-[var(--background)] rounded-lg mt-3 p-3 flex flex-col justify-start items-start">
       {/* summary */}
-      <div className="flex flex-col justify-start items-start py-2">
-        <p className="font-semibold text-lg">Khách hàng đánh giá</p>
-        <p className="font-semibold">Tổng quan</p>
-        <div className="flex flex-row justify-start items-start">
+      <div className="flex flex-col justify-start items-start py-2 gap-2">
+        <p className="font-medium text-lg">Khách hàng đánh giá</p>
+        <p className="font-medium">Tổng quan</p>
+        <div className="flex flex-row justify-start items-center gap-4">
           <RatingStars value={ratingAvg} />
           <p>{ratingCount} đánh giá</p>
         </div>
@@ -72,28 +70,28 @@ const Reviews = ({ id, ratingAvg, ratingCount }: props) => {
         <div className="py-2">
           <p>Lọc theo</p>
           <ul className="flex flex-row justify-start items-start gap-2 py-2">
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-full hover:cursor-pointer">
+            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
               Mới nhất
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-full hover:cursor-pointer">
+            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
               Có hình ảnh
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-full hover:cursor-pointer">
+            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
               Mua lại
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-full hover:cursor-pointer">
+            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
               5 sao
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-full hover:cursor-pointer">
+            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
               4 sao
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-full hover:cursor-pointer">
+            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
               3 sao
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-full hover:cursor-pointer">
+            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
               2 sao
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-full hover:cursor-pointer">
+            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
               1 sao
             </li>
           </ul>
@@ -110,7 +108,7 @@ const Reviews = ({ id, ratingAvg, ratingCount }: props) => {
         ))}
       </div>
       <div className="w-full flex justify-center items-center">
-        <Button variant="outline" className="text-[var(--primary)]">
+        <Button variant="outline" className="text-[var(--primary)] hover:cursor-pointer">
           Xem thêm
         </Button>
       </div>

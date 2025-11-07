@@ -32,6 +32,7 @@ import { SuggestDealToday } from './_components/suggest-deal-today';
 import { AddToCartRequest } from '@/types/cart.data-types';
 import { Prisma } from '@/lib/generated/prisma';
 import Decimal = Prisma.Decimal;
+import Image from 'next/image';
 
 interface selectedVariant {
   name: string;
@@ -193,12 +194,14 @@ const detaiPage = () => {
             {/* product's image */}
             <div className="w-[40%] h-fit bg-[var(--background)] rounded-lg flex flex-col p-2 sticky top-3">
               {/* slider */}
-              <div className="w-full border border-gray-200 p-2">
+              <div className="w-full p-2">
                 <SlideImg data={data.images} />
               </div>
+              <Separator />
+
               {/* desc */}
               <div className="flex flex-col justify-start items-start p-2">
-                <p className="text-xl font-bold mb-2">Đặc điểm nổi bậc</p>
+                {/*<p className="text-xl font-bold mb-2">Đặc điểm nổi bậc</p>*/}
                 <div className="flex flex-row justify-start items-center gap-1">
                   <FaCheckCircle color="var(--priamry)" size={15} />
                   Ôi holy cái này làm thế nào z?
@@ -216,25 +219,34 @@ const detaiPage = () => {
             {/* name and variants, shipping info, suggestions and description  */}
             <div className="w-[60%] flex flex-col gap-4">
               {/* name and variants*/}
-              <div className="bg-[var(--background)] rounded-lg p-3 flex flex-col justify-start items-start">
+              <div className="relative bg-[var(--background)] rounded-lg p-3 flex flex-col justify-start items-start">
                 {/* badges */}
-                <div className="flex flex-row justify-start items-start gap-2">
-                  <Badge variant={'destructive'} className="font-bold">
-                    TOP DEAL
-                  </Badge>
-                  <Badge className="bg-yellow-300 text-blue-500 font-bold">
-                    30 NGÀY ĐỔI TRẢ
-                  </Badge>
-                  <Badge className="bg-blue-300 text-blue-600 font-bold">
-                    CHÍNH HÃNG
-                  </Badge>
+                <div className="absolute top-0 left-3 flex gap-2">
+                  {[
+                    'https://salt.tikicdn.com/ts/upload/be/67/48/04a82ab8df178e1a13bde38316081865.png',
+                    'https://salt.tikicdn.com/ts/ta/b1/3f/4e/cc3d0a2dd751a7b06dd97d868d6afa56.png',
+                    'https://salt.tikicdn.com/ts/upload/d7/56/04/b93b8c666e13f49971483596ef14800f.png',
+                  ].map((src, i) => (
+                    <div key={i} className="relative w-20 h-10">
+                      <Image
+                        src={src}
+                        alt={`banner-${i}`}
+                        fill
+                        className="object-contain rounded-md"
+                      />
+                    </div>
+                  ))}
                 </div>
+
                 {/* title */}
-                <div className="text-xl font-medium">{data.title}</div>
+                <div className="text-xl font-medium mt-5">{data.title}</div>
                 {/* ratingAvg, ratingCount, sold */}
-                <div className="flex flex-row justify-start items-center gap-2 text-[var(--muted-background)]">
-                  {data.ratingAvg} <RatingStars value={data.ratingAvg} /> |
-                  {'(' + data.ratingCount + ')'} |{' Đã bán ' + data.soldCount}
+                <div className="flex flex-row justify-start items-center gap-2 text-[var(--muted-background)] text-sm mt-2">
+                  {data.ratingAvg} <RatingStars value={data.ratingAvg} />
+                  {'(' + data.ratingCount + ')'} |
+                  <p className="text-secondary">
+                    {' Đã bán ' + data.soldCount}
+                  </p>
                 </div>
                 {/* price-after-sale, sale-value, origin-price */}
                 <div className="flex flex-row gap-2">
@@ -247,11 +259,11 @@ const detaiPage = () => {
                 </div>
                 <div className="mt-2">
                   <p className="font-semibold">Kiểu sản phẩm</p>
-                  <div className="flex flex-row flex-wrap justify-start items-start gap-2">
+                  <div className="flex flex-row flex-wrap justify-start items-start gap-2 mt-2">
                     {data.variants.map((value, index) => (
                       <div
                         key={index}
-                        className="p-1 rounded-lg border-2 border-[var(--muted-foreground)]"
+                        className="p-1 rounded-sm bg-border cursor-pointer border-2 hover:border-secondary hover:bg-transparent border-border transition duration-700"
                         onClick={() =>
                           handleSelectVariant(
                             value.id,
@@ -269,7 +281,7 @@ const detaiPage = () => {
               </div>
               {/* shipping info */}
               <div className="bg-[var(--background)] p-3 rounded-lg flex flex-col justify-start items-start gap-1">
-                <p className="font-bold text-xl">Thông tin vân chuyển</p>
+                <p className="font-semibold text-xl">Thông tin vân chuyển</p>
                 <p>Giao đến thị trấn Teyvalt</p>
                 <Separator />
                 <div className="flex flex-row justify-start items-center gap-1">
@@ -289,10 +301,10 @@ const detaiPage = () => {
               {/* vouchers (if has) */}
               {data.VoucherProduct.length !== 0 ? (
                 <div className="flex flex-col p-2 gap-2 bg-[var(--background)] rounded-lg">
-                  <p className="text-xl font-bold">Ưu đã khác</p>
+                  <p className="text-xl font-semibold">Ưu đãi khác</p>
                   <div className="w-full flex justify-between items-center">
                     <p>{data.VoucherProduct.length} Mã Giảm Giá</p>
-                    <Button variant="outline" color="var(--primary)">
+                    <Button variant="outline" className="hover: cursor-pointer">
                       Xem Thêm
                     </Button>
                   </div>
@@ -301,7 +313,7 @@ const detaiPage = () => {
 
               {/* others services */}
               <div className="bg-[var(--background)] p-2 rounded-lg">
-                <p className="font-bold text-xl">Dịch vụ bổ sung</p>
+                <p className="font-semibold text-xl">Dịch vụ bổ sung</p>
                 <div className="flex flex-row justify-start items-center gap-2">
                   <CiCreditCard1 color="var(--primary)" size={15} />
                   Ưu đãi đến 600k với thẻ TikiCard
@@ -314,14 +326,10 @@ const detaiPage = () => {
               </div>
 
               {/* top deals */}
-              <TopDealItems
-                data={dTopDeal}
-                size="1/4"
-                renderSaleValue={false}
-              />
+              <TopDealItems data={dTopDeal} size="1" renderSaleValue={false} />
               {/* slo-gan */}
               <div className="bg-[var(--background)] p-3 rounded-lg">
-                <p className="font-bold text-xl">An tâm mua sắm</p>
+                <p className="font-semibold text-xl">An tâm mua sắm</p>
                 <div className="flex flex-row justify-start items-center gap-2 py-1">
                   <FaBoxOpen color="var(--primary)" size={15} />
                   Được đồng kiểm khi nhận hàng
@@ -360,15 +368,17 @@ const detaiPage = () => {
             <div className="flex flex-row justify-start items-center gap-2">
               <p>2T3H</p>
               <div className="flex flex-col justify-start items-start">
-                <p className="font-semibold">2T3H Trading</p>
+                {/*<p className="font-semibold">2T3H Trading</p>*/}
                 <div className="flex flex-row justify-start items-start gap-2">
-                  <Badge className="flex flex-row gap-2 justify-start items-start bg-blue-200 text-[var(--primary)] font-semibold">
-                    <HiMiniCheckBadge color="var(--primary)" size={15} />
+                  <Badge className="flex flex-row gap-2 justify-start items-center bg-blue-200 text-[var(--primary)] font-semibold">
+                    <HiMiniCheckBadge color="var(--primary)" size={20} />
                     OFFICAL
                   </Badge>
                   <Separator orientation="vertical" />
-                  <div className="flex flex-row gap-2">
-                    {'4.7'} <FaStar color="yellow" size={15} />{' '}
+                  <div className="flex flex-row gap-2 items-center">
+                    {'4.7'}
+                    <FaStar color="var(--chart-4)" size={15} />
+                    {'| '}
                     {'5.5tr+ đánh giá'}
                   </div>
                 </div>
@@ -377,31 +387,33 @@ const detaiPage = () => {
             <Separator />
             {/* payment info */}
             <div className="flex flex-col justify-start items-start gap-2">
-              <div className="p-1 rounded-lg border-2 border-[var(--muted-foreground)]">
+              <div className="p-2 rounded-sm bg-primary-foreground text-secondary-foreground text-center">
                 {selVariant?.name}
               </div>
               <p className="font-semibold">Số lượng</p>
               <div className="flex flex-row gap-2 justify-start items-start">
                 <button
                   className={`w-10 h-10 border border-[var(--muted-foreground)] rounded-lg font-bold flex justify-center items-center ${
-                    amount === 1 ? 'opacity-50 cursor-not-allowed' : ''
+                    amount === 1
+                      ? 'opacity-50 cursor-not-allowed'
+                      : 'cursor-pointer '
                   }`}
                   onClick={() => handleMinus()}
                 >
-                  <FaMinus size={15} />
+                  <FaMinus size={10} />
                 </button>
                 <button className="w-10 h-10 border border-[var(--muted-foreground)] rounded-lg flex justify-center items-center">
                   {selVariant?.amount}
                 </button>
                 <button
-                  className="w-10 h-10 border border-[var(--muted-foreground)] rounded-lg font-bold flex justify-center items-center"
+                  className="w-10 h-10 border border-[var(--muted-foreground)] rounded-lg font-bold flex justify-center items-center cursor-pointer"
                   onClick={() => handlePlus()}
                 >
-                  <FaPlus size={15} />
+                  <FaPlus size={10} />
                 </button>
               </div>
-              <p className="font-semibold text-xl">Tạm tính</p>
-              <p className="text-2xl font-bold">
+              <p className="font-semibold text-lg">Tạm tính</p>
+              <p className="text-lg font-medium text-gray-700">
                 {formatPrice(
                   Number(selVariant.amount * Number(selVariant.price))
                 )}
@@ -409,12 +421,15 @@ const detaiPage = () => {
             </div>
             {/* payment buttons */}
             <div className="flex flex-col justify-start items-start gap-2 w-full">
-              <Button variant={'destructive'} className="w-full">
+              <Button
+                variant={'destructive'}
+                className="w-full hover:cursor-pointer hover:bg-primary transition-colors duration-750"
+              >
                 Mua ngay
               </Button>
               <Button
                 variant={'outline'}
-                className="border border-[var(--primary)] text-[var(--primary)] w-full"
+                className="border border-[var(--primary)] text-[var(--primary)] w-full cursor-pointer"
                 onClick={() => {
                   if (selVariant) {
                     const payload: AddToCartRequest = {
@@ -431,7 +446,7 @@ const detaiPage = () => {
               </Button>
               <Button
                 variant={'outline'}
-                className="border border-[var(--primary)] text-[var(--primary)] w-full"
+                className="border border-[var(--primary)] text-[var(--primary)] w-full cursor-pointer"
               >
                 Mua trước trả sau
               </Button>

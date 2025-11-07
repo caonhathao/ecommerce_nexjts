@@ -9,6 +9,11 @@ const nextConfig : NextConfig= {
         hostname: 'picsum.photos',
         port: '',
         protocol: 'https',
+      },
+      {
+        hostname: 'salt.tikicdn.com',
+        port: '',
+        protocol: 'https',
       }
     ],
   },
