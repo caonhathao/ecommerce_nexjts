@@ -1,19 +1,22 @@
 'use client';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import {
-    InputGroup,
-    InputGroupAddon,
-    InputGroupButton,
-    InputGroupInput,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
 } from '@/components/ui/input-group';
 import { productItemData } from '@/types/manager.data-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
+import { RiResetRightLine } from 'react-icons/ri';
 import { z } from 'zod';
 
 interface SearchProps {
   setData: Dispatch<SetStateAction<productItemData[]>>;
+  isReset: boolean;
+  setIsReset: Dispatch<SetStateAction<boolean>>;
   searchObject: string;
 }
 
@@ -21,7 +24,12 @@ const formSchema = z.object({
   idProduct: z.string().nonempty('Thiếu id'),
 });
 
-const SearchBar = ({ setData, searchObject }: SearchProps) => {
+const SearchBar = ({
+  setData,
+  setIsReset,
+  isReset,
+  searchObject,
+}: SearchProps) => {
   async function onSubmit(value: z.infer<typeof formSchema>) {
     try {
       const response = await fetch(
@@ -45,9 +53,9 @@ const SearchBar = ({ setData, searchObject }: SearchProps) => {
   });
 
   return (
-    <div className="w-full flex flex-row justify-center items-center">
+    <div className="w-full flex flex-row justify-center items-center mb-5">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[50%]">
           <FormField
             control={form.control}
             name="idProduct"
@@ -56,6 +64,15 @@ const SearchBar = ({ setData, searchObject }: SearchProps) => {
                 <InputGroup>
                   <InputGroupInput placeholder="ID sản phẩm..." {...field} />
                   <InputGroupAddon align="inline-end">
+                    <InputGroupButton
+                      variant={'outline'}
+                      onClick={() => {
+                        form.reset();
+                        setIsReset(!isReset);
+                      }}
+                    >
+                      <RiResetRightLine />
+                    </InputGroupButton>
                     <InputGroupButton variant="secondary" type="submit">
                       Search
                     </InputGroupButton>
