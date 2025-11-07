@@ -1,5 +1,5 @@
-import { auth } from '@/lib/auth';
-import { LoginForm } from './_components/LoginForm';
+import { auth, getSessionUser } from '@/lib/auth';
+import { LoginForm } from './_components/login-form';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -8,9 +8,7 @@ type Props = {
 };
 
 export default async function LoginPage({ searchParams }: Props) {
-  const session = await auth.api.getSession({
-    headers: await headers()
-  });
+  const session = await getSessionUser();
 
   if (session?.user) {
     const params = await searchParams;

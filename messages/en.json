@@ -43,6 +43,42 @@
     "help": "Customer support",
     "member_badge": "Member"
   },
+  "user_dashboard" : {
+    "profile_page": {
+      "title": "Personal information",
+      "fullName": "Full name",
+      "nickname": "Nickname",
+      "birthday": "Birthday",
+      "day": "Day",
+      "month": "Month",
+      "year": "Year",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "nationality": "Nationality",
+      "phoneEmailSectionTitle" : "Phone number & Email",
+      "phone": "Phone number",
+      "emailForBill": "Email address",
+      "save": "Save changes",
+      "placeholders": {
+        "fullName": "Your full name",
+        "nickname": "Add a nickname",
+        "phone": "Enter phone number",
+        "emailForBill": "Enter Email for Billing",
+        "nationality": "Choose nationality"
+      },
+      "errors": {
+        "fullNameRequired": "Full name is required",
+        "emailInvalid": "Invalid email address",
+        "phoneInvalid": "Invalid phone number"
+      },
+      "toasts": {
+        "saved": "Profile updated successfully",
+        "failed": "Failed to update profile"
+      }
+    }
+  },
   "home_layout": {
     "slogan": "good & fast",
     "electronics": "home appliances",

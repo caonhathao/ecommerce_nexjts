@@ -1,13 +1,11 @@
 import HeaderClient from '@/app/(public)/_components/header-client';
-import { auth } from '@/lib/auth';
+import { auth, getSessionUser } from '@/lib/auth';
 import { headers } from 'next/headers';
 
 
 export default async function HeaderServer() {
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
-  console.log(session);
+  const session = await getSessionUser();
+  // console.log(session);
 
   const user = session ? {
     name: session.user.name ?? '',

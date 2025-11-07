@@ -150,9 +150,9 @@ async function main() {
           id: faker.string.uuid(),
           userId: user.id, // dùng trực tiếp user đang duyệt
           phone: faker.phone.number(),
+          emailForBill: faker.internet.email(),
           birthDate: faker.date.past({ years: 30 }),
           gender: faker.helpers.arrayElement(['MALE', 'FEMALE', 'OTHER']),
-          displayName: faker.person.firstName(),
           bio: faker.lorem.sentence(),
           createdAt: faker.date.past(),
           updatedAt: faker.date.recent(),

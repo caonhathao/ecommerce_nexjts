@@ -907,8 +907,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.16.3
-   * Query Engine version: bb420e667c1820a8c05a38023385f6cc7ef8e83a
+   * Prisma Client JS version: 6.19.0
+   * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
    */
   export type PrismaVersion = {
     client: string
@@ -921,6 +921,7 @@ export namespace Prisma {
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -9858,10 +9859,10 @@ export namespace Prisma {
   export type UserProfileMinAggregateOutputType = {
     id: string | null
     userId: string | null
+    emailForBill: string | null
     phone: string | null
     birthDate: Date | null
     gender: string | null
-    displayName: string | null
     bio: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9870,10 +9871,10 @@ export namespace Prisma {
   export type UserProfileMaxAggregateOutputType = {
     id: string | null
     userId: string | null
+    emailForBill: string | null
     phone: string | null
     birthDate: Date | null
     gender: string | null
-    displayName: string | null
     bio: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9882,10 +9883,10 @@ export namespace Prisma {
   export type UserProfileCountAggregateOutputType = {
     id: number
     userId: number
+    emailForBill: number
     phone: number
     birthDate: number
     gender: number
-    displayName: number
     bio: number
     createdAt: number
     updatedAt: number
@@ -9896,10 +9897,10 @@ export namespace Prisma {
   export type UserProfileMinAggregateInputType = {
     id?: true
     userId?: true
+    emailForBill?: true
     phone?: true
     birthDate?: true
     gender?: true
-    displayName?: true
     bio?: true
     createdAt?: true
     updatedAt?: true
@@ -9908,10 +9909,10 @@ export namespace Prisma {
   export type UserProfileMaxAggregateInputType = {
     id?: true
     userId?: true
+    emailForBill?: true
     phone?: true
     birthDate?: true
     gender?: true
-    displayName?: true
     bio?: true
     createdAt?: true
     updatedAt?: true
@@ -9920,10 +9921,10 @@ export namespace Prisma {
   export type UserProfileCountAggregateInputType = {
     id?: true
     userId?: true
+    emailForBill?: true
     phone?: true
     birthDate?: true
     gender?: true
-    displayName?: true
     bio?: true
     createdAt?: true
     updatedAt?: true
@@ -10005,10 +10006,10 @@ export namespace Prisma {
   export type UserProfileGroupByOutputType = {
     id: string
     userId: string
+    emailForBill: string | null
     phone: string | null
     birthDate: Date | null
     gender: string | null
-    displayName: string | null
     bio: string | null
     createdAt: Date
     updatedAt: Date
@@ -10034,10 +10035,10 @@ export namespace Prisma {
   export type UserProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    emailForBill?: boolean
     phone?: boolean
     birthDate?: boolean
     gender?: boolean
-    displayName?: boolean
     bio?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -10047,10 +10048,10 @@ export namespace Prisma {
   export type UserProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    emailForBill?: boolean
     phone?: boolean
     birthDate?: boolean
     gender?: boolean
-    displayName?: boolean
     bio?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -10060,10 +10061,10 @@ export namespace Prisma {
   export type UserProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    emailForBill?: boolean
     phone?: boolean
     birthDate?: boolean
     gender?: boolean
-    displayName?: boolean
     bio?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -10073,16 +10074,16 @@ export namespace Prisma {
   export type UserProfileSelectScalar = {
     id?: boolean
     userId?: boolean
+    emailForBill?: boolean
     phone?: boolean
     birthDate?: boolean
     gender?: boolean
-    displayName?: boolean
     bio?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "phone" | "birthDate" | "gender" | "displayName" | "bio" | "createdAt" | "updatedAt", ExtArgs["result"]["userProfile"]>
+  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "emailForBill" | "phone" | "birthDate" | "gender" | "bio" | "createdAt" | "updatedAt", ExtArgs["result"]["userProfile"]>
   export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -10101,10 +10102,10 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
+      emailForBill: string | null
       phone: string | null
       birthDate: Date | null
       gender: string | null
-      displayName: string | null
       bio: string | null
       createdAt: Date
       updatedAt: Date
@@ -10534,10 +10535,10 @@ export namespace Prisma {
   interface UserProfileFieldRefs {
     readonly id: FieldRef<"UserProfile", 'String'>
     readonly userId: FieldRef<"UserProfile", 'String'>
+    readonly emailForBill: FieldRef<"UserProfile", 'String'>
     readonly phone: FieldRef<"UserProfile", 'String'>
     readonly birthDate: FieldRef<"UserProfile", 'DateTime'>
     readonly gender: FieldRef<"UserProfile", 'String'>
-    readonly displayName: FieldRef<"UserProfile", 'String'>
     readonly bio: FieldRef<"UserProfile", 'String'>
     readonly createdAt: FieldRef<"UserProfile", 'DateTime'>
     readonly updatedAt: FieldRef<"UserProfile", 'DateTime'>
@@ -47112,10 +47113,10 @@ export namespace Prisma {
   export const UserProfileScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
+    emailForBill: 'emailForBill',
     phone: 'phone',
     birthDate: 'birthDate',
     gender: 'gender',
-    displayName: 'displayName',
     bio: 'bio',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -48240,10 +48241,10 @@ export namespace Prisma {
     NOT?: UserProfileWhereInput | UserProfileWhereInput[]
     id?: UuidFilter<"UserProfile"> | string
     userId?: UuidFilter<"UserProfile"> | string
+    emailForBill?: StringNullableFilter<"UserProfile"> | string | null
     phone?: StringNullableFilter<"UserProfile"> | string | null
     birthDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     gender?: StringNullableFilter<"UserProfile"> | string | null
-    displayName?: StringNullableFilter<"UserProfile"> | string | null
     bio?: StringNullableFilter<"UserProfile"> | string | null
     createdAt?: DateTimeFilter<"UserProfile"> | Date | string
     updatedAt?: DateTimeFilter<"UserProfile"> | Date | string
@@ -48253,10 +48254,10 @@ export namespace Prisma {
   export type UserProfileOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
+    emailForBill?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     birthDate?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
-    displayName?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -48269,10 +48270,10 @@ export namespace Prisma {
     AND?: UserProfileWhereInput | UserProfileWhereInput[]
     OR?: UserProfileWhereInput[]
     NOT?: UserProfileWhereInput | UserProfileWhereInput[]
+    emailForBill?: StringNullableFilter<"UserProfile"> | string | null
     phone?: StringNullableFilter<"UserProfile"> | string | null
     birthDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     gender?: StringNullableFilter<"UserProfile"> | string | null
-    displayName?: StringNullableFilter<"UserProfile"> | string | null
     bio?: StringNullableFilter<"UserProfile"> | string | null
     createdAt?: DateTimeFilter<"UserProfile"> | Date | string
     updatedAt?: DateTimeFilter<"UserProfile"> | Date | string
@@ -48282,10 +48283,10 @@ export namespace Prisma {
   export type UserProfileOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
+    emailForBill?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     birthDate?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
-    displayName?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -48300,10 +48301,10 @@ export namespace Prisma {
     NOT?: UserProfileScalarWhereWithAggregatesInput | UserProfileScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"UserProfile"> | string
     userId?: UuidWithAggregatesFilter<"UserProfile"> | string
+    emailForBill?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     phone?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     birthDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     gender?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
-    displayName?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     bio?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"UserProfile"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"UserProfile"> | Date | string
@@ -51142,10 +51143,10 @@ export namespace Prisma {
 
   export type UserProfileCreateInput = {
     id?: string
+    emailForBill?: string | null
     phone?: string | null
     birthDate?: Date | string | null
     gender?: string | null
-    displayName?: string | null
     bio?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51155,10 +51156,10 @@ export namespace Prisma {
   export type UserProfileUncheckedCreateInput = {
     id?: string
     userId: string
+    emailForBill?: string | null
     phone?: string | null
     birthDate?: Date | string | null
     gender?: string | null
-    displayName?: string | null
     bio?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51166,10 +51167,10 @@ export namespace Prisma {
 
   export type UserProfileUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    emailForBill?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51179,10 +51180,10 @@ export namespace Prisma {
   export type UserProfileUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    emailForBill?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51191,10 +51192,10 @@ export namespace Prisma {
   export type UserProfileCreateManyInput = {
     id?: string
     userId: string
+    emailForBill?: string | null
     phone?: string | null
     birthDate?: Date | string | null
     gender?: string | null
-    displayName?: string | null
     bio?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51202,10 +51203,10 @@ export namespace Prisma {
 
   export type UserProfileUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    emailForBill?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51214,10 +51215,10 @@ export namespace Prisma {
   export type UserProfileUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    emailForBill?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54234,10 +54235,10 @@ export namespace Prisma {
   export type UserProfileCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    emailForBill?: SortOrder
     phone?: SortOrder
     birthDate?: SortOrder
     gender?: SortOrder
-    displayName?: SortOrder
     bio?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -54246,10 +54247,10 @@ export namespace Prisma {
   export type UserProfileMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    emailForBill?: SortOrder
     phone?: SortOrder
     birthDate?: SortOrder
     gender?: SortOrder
-    displayName?: SortOrder
     bio?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -54258,10 +54259,10 @@ export namespace Prisma {
   export type UserProfileMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    emailForBill?: SortOrder
     phone?: SortOrder
     birthDate?: SortOrder
     gender?: SortOrder
-    displayName?: SortOrder
     bio?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -60065,10 +60066,10 @@ export namespace Prisma {
 
   export type UserProfileCreateWithoutUserInput = {
     id?: string
+    emailForBill?: string | null
     phone?: string | null
     birthDate?: Date | string | null
     gender?: string | null
-    displayName?: string | null
     bio?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60076,10 +60077,10 @@ export namespace Prisma {
 
   export type UserProfileUncheckedCreateWithoutUserInput = {
     id?: string
+    emailForBill?: string | null
     phone?: string | null
     birthDate?: Date | string | null
     gender?: string | null
-    displayName?: string | null
     bio?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60612,10 +60613,10 @@ export namespace Prisma {
 
   export type UserProfileUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    emailForBill?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60623,10 +60624,10 @@ export namespace Prisma {
 
   export type UserProfileUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    emailForBill?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
