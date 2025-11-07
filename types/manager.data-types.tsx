@@ -25,6 +25,18 @@ export interface productData {
   };
 }
 
+export interface variantDetail {
+  id: string;
+  sku: string;
+  name: string;
+  price: string;
+  image: string;
+  currency: string;
+  attributes: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface productDetail {
   id: string;
   shop: {
@@ -48,15 +60,5 @@ export interface productDetail {
     url: string;
     alt: string;
   }[];
-  variants: {
-    id: string;
-    sku: string;
-    name: string;
-    price: string;
-    image: string;
-    currency: string;
-    attributes: string;
-    createdAt: string;
-    updatedAt: string;
-  }[];
+  variants: variantDetail[];
 }

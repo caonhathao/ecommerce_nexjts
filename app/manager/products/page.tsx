@@ -49,6 +49,7 @@ import {
   productData,
   productDetail,
   productItemData,
+  variantDetail,
 } from '@/types/manager.data-types';
 import {
   DragEndEvent,
@@ -85,10 +86,11 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
+import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
 import TabProduct from '../_components/tab-product';
@@ -326,15 +328,44 @@ const ProductsPage = () => {
   function TableCellViewer({ item }: { item: productItemData }) {
     const isMobile = useIsMobile();
     const [detail, setDetail] = React.useState<productDetail | null>(null);
+    const [openIndex, setOpenIndex] = React.useState<number | null>(null);
+    const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
 
     const [value, setValue] = React.useState<string>('');
 
+    // This effect runs when 'openIndex' changes
+    useEffect(() => {
+      // Only run if an item was OPENED
+      if (openIndex !== null) {
+        // We must wait for your 300ms animation to finish
+        const timer = setTimeout(() => {
+          const container = scrollContainerRef.current;
+
+          // Find the specific <li> element we want to scroll to
+          const element = document.getElementById(`variant-item-${openIndex}`);
+
+          if (container && element) {
+            // This calculates the <li>'s position *inside* the scroll container
+            const scrollToPosition = element.offsetTop - container.offsetTop;
+
+            // Scroll the container to the element
+            container.scrollTo({
+              top: scrollToPosition,
+              behavior: 'smooth',
+            });
+          }
+        }, 300); // 300ms matches your animation
+
+        // Clean up the timer
+        return () => clearTimeout(timer);
+      }
+    }, [openIndex]);
     async function fetchDetail() {
       try {
-        const response = await fetch(`/api/product/draft/${item.id}`);
+        const response = await fetch(`/api/product/manage/${item.id}`);
         const detail = await response.json();
-        // console.log(detail.data);
-        setProductList(detail.data);
+        console.log(detail.data);
+        setDetail(detail.data);
       } catch (err) {
         console.error(err);
       }
@@ -360,6 +391,52 @@ const ProductsPage = () => {
       }
     };
 
+    const renderVariant = (index: number, value: variantDetail) => {
+      return (
+        <div
+          className={`w-full flex flex-col gap-4 
+      ${openIndex === index ? 'max-h-[500px]' : 'max-h-0'}
+      transition-[max-height] duration-300 ease-in-out
+      overflow-hidden`}
+          key={index}
+        >
+          <div className="w-full flex justify-center items-center">
+            <img
+              src={value.image}
+              alt={value.image || index.toString()}
+              className="w-[50%]"
+            />
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="name">Tên sản phẩm</Label>
+              <div className="w-full">{value.name}</div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="sku">Mã SKU</Label>
+              <div className="w-full">{value.sku}</div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="price">Giá</Label>
+              <div>{formatPrice(Number(value.price))}</div>
+            </div>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="currency-variant">Đơn vị tiền tệ</Label>
+              <div>{value.currency}</div>
+            </div>
+          </div>
+          <Separator />
+        </div>
+      );
+    };
+
     return (
       <Drawer direction={isMobile ? 'bottom' : 'right'}>
         <DrawerTrigger asChild>
@@ -376,7 +453,10 @@ const ProductsPage = () => {
             <DrawerTitle>{detail?.title || 'unknown'}</DrawerTitle>
             <DrawerDescription>Thông tin chi tiết sản phẩm</DrawerDescription>
           </DrawerHeader>
-          <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
+          <div
+            className="flex flex-col gap-4 overflow-y-auto px-4 text-sm"
+            ref={scrollContainerRef}
+          >
             <form className="flex flex-col gap-4">
               <div className="w-full flex justify-center items-center">
                 <Carousel className="w-[70%] max-w-lg">
@@ -448,7 +528,7 @@ const ProductsPage = () => {
                   <div>{detail?.origin}</div>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="limit">currency</Label>
+                  <Label htmlFor="limit">Đơn vị tiền tệ</Label>
                   <div>{detail?.currency}</div>
                 </div>
               </div>
@@ -489,43 +569,41 @@ const ProductsPage = () => {
               <div className="flex flex-col gap-3">
                 <Label htmlFor="variants-list">Phiên bản</Label>
                 <div className="flex flex-col  gap-4">
-                  {detail?.variants.map((value, index) => (
-                    <div className="w-full flex flex-col gap-4" key={index}>
-                      <div className="w-full flex justify-center items-center">
-                        <img
-                          src={value.image}
-                          alt={value.image || index.toString()}
-                          className="w-[50%]"
-                        />
-                      </div>
+                  <ul className="w-full flex flex-col gap-2 ">
+                    {detail?.variants.map((value: variantDetail, index) => (
+                      <li
+                        id={`variant-item-${index}`}
+                        className="flex flex-col gap-2"
+                      >
+                        <div className="w-full flex flex-row justify-between items-center">
+                          <div className="flex flex-row justify-start items-center gap-2">
+                            <p>
+                              {index + 1}
+                              {'. '}
+                            </p>
+                            <p>{value.name}</p>
+                          </div>
+                          <Button
+                            variant={'outline'}
+                            onClick={() =>
+                              setOpenIndex(openIndex !== index ? index : null)
+                            }
+                            type="button"
+                          >
+                            <div
+                              className={`${openIndex !== index ? `transform-[rotate(180deg)]` : `transform-[rotate(0deg)]`} transition ease-in-out`}
+                            >
+                              <IoIosArrowUp />
+                            </div>
+                          </Button>
+                        </div>
 
-                      <div className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-3">
-                          <Label htmlFor="name">Tên sản phẩm</Label>
-                          <div className="w-full">{value.name}</div>
-                        </div>
-                      </div>
+                        {renderVariant(index, value)}
 
-                      <div className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-3">
-                          <Label htmlFor="sku">Mã SKU</Label>
-                          <div className="w-full">{value.sku}</div>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="flex flex-col gap-3">
-                          <Label htmlFor="price">Giá</Label>
-                          <div>{formatPrice(Number(value.price))}</div>
-                        </div>
-                        <div className="flex flex-col gap-3">
-                          <Label htmlFor="currency-variant">currency</Label>
-                          <div>{value.currency}</div>
-                        </div>
-                      </div>
-                      <Separator />
-                    </div>
-                  ))}
+                        <Separator />
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </form>

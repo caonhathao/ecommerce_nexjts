@@ -14,8 +14,6 @@ export const GET = (
     const data = await prisma.product.findFirst({
       where: {
         id,
-        status: 'ARCHIVED',
-        visibility: 'PRIVATE',
       },
       select: {
         id: true,
