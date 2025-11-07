@@ -122,7 +122,7 @@ const TabProduct = ({
       );
       const data = await response.json();
 
-      console.log(data);
+      //console.log(data);
       setData(data);
       setProductList(data.data);
     } catch (err) {
