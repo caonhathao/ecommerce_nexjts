@@ -24,7 +24,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { useEffect } from 'react';
 
 interface userProps {
   user: {
@@ -36,10 +35,6 @@ interface userProps {
 
 export function NavUser({ user }: userProps) {
   const { isMobile } = useSidebar();
-
-  useEffect(() => {
-    console.log(user.email);
-  }, []);
 
   return (
     <SidebarMenu>

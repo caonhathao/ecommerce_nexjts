@@ -1,11 +1,11 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:17
     restart: unless-stopped
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
+      POSTGRES_DB: ecommerce_db
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:

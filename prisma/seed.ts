@@ -6,7 +6,9 @@ import {
   PaymentStatus,
   Prisma,
   PrismaClient,
-  VoucherType,
+  ProductStatus,
+  Visibility,
+  VoucherType
 } from '@/lib/generated/prisma';
 import { faker } from '@faker-js/faker';
 import { Currency, OrderStatus } from '../lib/generated/prisma';
@@ -150,9 +152,9 @@ async function main() {
           id: faker.string.uuid(),
           userId: user.id, // dùng trực tiếp user đang duyệt
           phone: faker.phone.number(),
+          emailForBill: faker.internet.email(),
           birthDate: faker.date.past({ years: 30 }),
           gender: faker.helpers.arrayElement(['MALE', 'FEMALE', 'OTHER']),
-          displayName: faker.person.firstName(),
           bio: faker.lorem.sentence(),
           createdAt: faker.date.past(),
           updatedAt: faker.date.recent(),
@@ -318,7 +320,7 @@ async function main() {
   // 4️⃣ PRODUCTS
   // ------------------------
   const products = await Promise.all(
-    Array.from({ length: 10 }).map(() => {
+    Array.from({ length: 50 }).map(() => {
       const shop = faker.helpers.arrayElement(shops);
       const category = faker.helpers.arrayElement(categories);
       const minPrice = faker.number.float({
@@ -343,8 +345,8 @@ async function main() {
           origin: faker.location.country(),
           minPrice,
           maxPrice,
-          status: 'PUBLISHED',
-          visibility: 'PUBLIC',
+          status: faker.helpers.arrayElement(Object.values(ProductStatus)),
+          visibility: faker.helpers.arrayElement(Object.values(Visibility)),
         },
       });
     })
@@ -420,7 +422,7 @@ async function main() {
     skipDuplicates: true,
   });
 
-  console.log(`✅ Created ${productTags.count} product variants`);
+  console.log(`✅ Created ${productTags.length} product variants`);
 
   // ------------------------
   // 7️⃣ CARTS
@@ -1100,10 +1102,7 @@ async function main() {
   );
 
   await prisma.orderVoucher.createMany({
-    data: orderVoucher.map((ov) => ({
-      id: faker.string.uuid(),
-      ...ov,
-    })),
+    data: orderVoucher,
     skipDuplicates: true,
   });
 

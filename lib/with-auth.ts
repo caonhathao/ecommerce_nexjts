@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth';
+import { auth, getSessionUser } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -6,9 +6,7 @@ export function withAuth(
   handler: (userId: string, request: NextRequest) => Promise<NextResponse>
 ) {
   return async function (request: NextRequest) {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    const session = await getSessionUser()
     const userId = session?.user?.id;
     // const userId = "5a5ed0a1-66db-41ce-a2c5-dece655d8166"; // ✅ Dùng tạm để test
 
