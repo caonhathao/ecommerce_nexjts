@@ -4,6 +4,7 @@ export function formatPrice(value: number | null): string {
   return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 }
 
-export function formatDay(value: string) {
+export function formatDay(value: string | null | undefined) {
+  if (!value) return '';
   return dayjs(value).format('DD/MM/YYYY HH:mm:ss');
 }

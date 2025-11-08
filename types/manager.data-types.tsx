@@ -62,3 +62,63 @@ export interface productDetail {
   }[];
   variants: variantDetail[];
 }
+
+export interface shopItemData {
+  id: string;
+  name: string;
+  status: string;
+  owner: {
+    id: string;
+    image: string;
+    name: string;
+  };
+  ratingAvg: string;
+  ratingCount: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface shopData {
+  data: shopItemData[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+export interface shopMember {
+  id: string;
+  role: string;
+  user: {
+      id: string;
+      name: string;
+      image: string;
+  };
+}
+
+export interface shopDetail {
+  id: string;
+  owner: {
+    id: string;
+    name: string;
+    email: string;
+    image: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  name: string;
+  slug: string;
+  description: string;
+  logoUrl: string;
+  coverUrl: string;
+  status: string;
+  ratingAvg: string;
+  ratingCount: string;
+  contactEmail: string;
+  contactPhone: string;
+  createdAt: string;
+  updatedAt: string;
+  members: shopMember[];
+}
