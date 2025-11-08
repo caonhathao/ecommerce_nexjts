@@ -24,8 +24,10 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
               price: true,
               compareAt: true,
               stock: true,
+              productId: true,
               product: {
                 select: {
+                  id: true,
                   title: true,
                   slug: true,
                   images: {

@@ -7,7 +7,6 @@ export const createOrderDraftSchema = z.object({
       productId: z.uuid(),
       variantId: z.uuid().optional(),
       quantity: z.number().min(1),
-      shopId: z.uuid(),
     })
   ),
   voucher: z.array(z.object({ code: z.string() })),

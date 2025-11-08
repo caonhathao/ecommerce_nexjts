@@ -444,7 +444,7 @@ model Order {
   id                String            @id @default(uuid()) @db.Uuid
   orderNumber       String            @unique
   userId            String            @db.Uuid
-  shopId            String            @db.Uuid
+  shopId            String?           @db.Uuid
   status            OrderStatus       @default(PENDING)
   paymentStatus     PaymentStatus     @default(NOT_PAID)
   fulfillmentStatus FulfillmentStatus @default(NOT_FULFILLED)
@@ -467,7 +467,7 @@ model Order {
   canceledAt DateTime?
 
   user              User                @relation(fields: [userId], references: [id], onDelete: Restrict)
-  shop              Shop                @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  shop              Shop?               @relation(fields: [shopId], references: [id], onDelete: Restrict)
   items             OrderItem[]
   payments          Payment[]
   shipments         Shipment[]
@@ -487,14 +487,15 @@ model OrderItem {
   orderId      String? @db.Uuid
   orderDraftId String? @db.Uuid
   productId    String  @db.Uuid
-  variantId    String? @db.Uuid
-  title        String
-  sku          String?
-  unitPrice    Decimal @db.Decimal(14, 2)
-  quantity     Int
-  discount     Decimal @default(0) @db.Decimal(14, 2)
-  total        Decimal @db.Decimal(14, 2)
-  metadata     Json?
+
+  variantId String? @db.Uuid
+  title     String
+  sku       String?
+  unitPrice Decimal @db.Decimal(14, 2)
+  quantity  Int
+  discount  Decimal @default(0) @db.Decimal(14, 2)
+  total     Decimal @db.Decimal(14, 2)
+  metadata  Json?
 
   order      Order?          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderDraft OrderDraft?     @relation(fields: [orderDraftId], references: [id], onDelete: Cascade)
@@ -512,7 +513,7 @@ model OrderDraft {
   id          String   @id @default(uuid()) @db.Uuid
   orderNumber String   @unique
   orderId     String?  @unique @db.Uuid
-  userId      String   @db.Uuid
+  userId      String   @unique @db.Uuid
   placedAt    DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 
