@@ -1,19 +1,8 @@
 'use client';
-import {
-  formatDay,
-  formatPrice,
-} from '@/app/(public)/_components/global-function';
+import { formatDay } from '@/app/(public)/_components/global-function';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Drawer,
@@ -46,10 +35,10 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
-  productData,
-  productDetail,
-  productItemData,
-  variantDetail,
+  shopData,
+  shopDetail,
+  shopItemData,
+  shopMember,
 } from '@/types/manager.data-types';
 import {
   DragEndEvent,
@@ -85,19 +74,17 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
-import Image from 'next/image';
 import React, { useEffect } from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
-import { IoIosArrowUp } from 'react-icons/io';
+import { MdOutlineCopyAll } from 'react-icons/md';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
-import TabProduct from './_components/tab-product';
+import TabShop from './_components/tab-shop';
 
-const ProductsPage = () => {
-  const [data, setData] = React.useState<productData | null>(null);
-  const [productList, setProductList] = React.useState<productItemData[]>([]);
+const ShopsPage = () => {
+  const [data, setData] = React.useState<shopData | null>(null);
+  const [shopList, setShopList] = React.useState<shopItemData[]>([]);
   const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, SetIsReset] = React.useState<boolean>(false);
 
@@ -114,14 +101,14 @@ const ProductsPage = () => {
   });
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => productList?.map(({ id }) => id) || [],
-    [productList]
+    () => shopList?.map(({ id }) => id) || [],
+    [shopList]
   );
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active && over && active.id !== over.id) {
-      setProductList((data) => {
+      setShopList((data) => {
         const oldIndex = dataIds.indexOf(active.id);
         const newIndex = dataIds.indexOf(over.id);
         return arrayMove(data, oldIndex, newIndex);
@@ -136,26 +123,32 @@ const ProductsPage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = (value: string) => {
-    navigator.clipboard
-      .writeText(value)
-      .then(() => {
-        // 1. Set the copied ID
-        setCopiedId(value);
-        // 2. Clear the feedback after 2 seconds
-        toast('Hành động', {
-          description: 'Đã sao chép ID sản phẩm',
-        });
-        setTimeout(() => {
-          setCopiedId(null);
-        }, 2000);
-      })
-      .catch((err) => {
-        console.error('Failed to copy ID: ', err);
+  const handleCopy = (value: string | undefined) => {
+    if (!value) {
+      toast('Hành động', {
+        description: 'Sao chép ID cửa hàng thất bại',
       });
+    } else {
+      navigator.clipboard
+        .writeText(value)
+        .then(() => {
+          // 1. Set the copied ID
+          setCopiedId(value);
+          // 2. Clear the feedback after 2 seconds
+          toast('Hành động', {
+            description: 'Đã sao chép ID',
+          });
+          setTimeout(() => {
+            setCopiedId(null);
+          }, 2000);
+        })
+        .catch((err) => {
+          console.error('Failed to copy ID: ', err);
+        });
+    }
   };
 
-  const columns: ColumnDef<productItemData>[] = [
+  const columns: ColumnDef<shopItemData>[] = [
     {
       id: 'drag',
       header: () => null,
@@ -190,48 +183,50 @@ const ProductsPage = () => {
       enableHiding: false,
     },
     {
-      accessorKey: 'title',
-      header: 'Tên sản phẩm',
+      accessorKey: 'Tên cửa hàng',
+      header: 'Tên cửa hàng',
       cell: ({ row }) => {
         return <TableCellViewer item={row.original} />;
       },
       enableHiding: false,
     },
     {
-      accessorKey: 'Cửa hàng',
-      header: 'Cửa hàng',
+      accessorKey: 'Chủ sỡ hữu',
+      header: 'Chủ sở hữu',
       cell: ({ row }) => (
         <div className="w-full flex flex-row gap-2 justify-start items-center">
           <Avatar>
-            <AvatarImage src={row.original.shop.logoUrl} alt="shopLogo" />
+            <AvatarImage src={row.original.owner.image} alt="shopLogo" />
             <AvatarFallback>UK</AvatarFallback>
           </Avatar>
-          <div>{row.original.shop.name}</div>
+          <div>{row.original.owner.name}</div>
         </div>
       ),
     },
     {
-      accessorKey: 'Hiển thị',
-      header: 'Hiển thị',
+      accessorKey: 'Trạng thái',
+      header: 'Trạng thái',
       cell: ({ row }) => (
         <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.visibility === 'UNLISTED' ? (
+          {row.original.status === 'SUSPENDED' ? (
             <FiXCircle className="fill-red-500 dark:fill-red-400" />
-          ) : row.original.visibility === 'PUBLIC' ? (
+          ) : row.original.status === 'CLOSED' ? (
+            <FaCheckCircle className="fill-amber-500-500 dark:fill-amber-400" />
+          ) : row.original.status === 'ACTIVE' ? (
             <FaCheckCircle className="fill-green-500 dark:fill-green-400" />
           ) : (
             <IconLoader />
           )}
-          {row.original.visibility}
+          {row.original.status}
         </Badge>
       ),
     },
     {
-      accessorKey: 'Tổng phiên bản',
-      header: () => <div className="w-fit text-right">Tổng phiên bản</div>,
+      accessorKey: 'Điểm đánh giá',
+      header: () => <div className="w-fit text-right">Đánh giá</div>,
       cell: ({ row }) => (
         <div className="w-full text-right">
-          {row.original._count.variants.toString()}
+          {row.original.ratingAvg + '(' + row.original.ratingCount + ')'}
         </div>
       ),
     },
@@ -268,6 +263,7 @@ const ProductsPage = () => {
               <Button
                 variant={'ghost'}
                 className="text-left"
+                type="button"
                 onClick={() => handleCopy(row.original.id)}
               >
                 Sao chép ID
@@ -282,7 +278,7 @@ const ProductsPage = () => {
   ];
 
   const table = useReactTable({
-    data: productList,
+    data: shopList,
     columns,
     state: {
       sorting,
@@ -325,12 +321,12 @@ const ProductsPage = () => {
     );
   }
 
-  function TableCellViewer({ item }: { item: productItemData }) {
+  function TableCellViewer({ item }: { item: shopItemData }) {
     const isMobile = useIsMobile();
-    const [detail, setDetail] = React.useState<productDetail | null>(null);
+    const [detail, setDetail] = React.useState<shopDetail | null>(null);
     const [openIndex, setOpenIndex] = React.useState<number | null>(null);
     const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
-    const [defaultVisibility, setDefaultVisibility] = React.useState<string>('');
+    const [defaultStatus, setDefaultStatus] = React.useState<string>('');
 
     const [value, setValue] = React.useState<string>('');
 
@@ -361,16 +357,9 @@ const ProductsPage = () => {
         return () => clearTimeout(timer);
       }
     }, [openIndex]);
-
-    useEffect(() => {
-      if (detail) {
-        setDefaultVisibility(detail.visibility);
-      }
-    }, [detail]);
-
     async function fetchDetail() {
       try {
-        const response = await fetch(`/api/product/manage/${item.id}`);
+        const response = await fetch(`/api/shop/manage/${item.id}`);
         const detail = await response.json();
         console.log(detail.data);
         setDetail(detail.data);
@@ -390,60 +379,19 @@ const ProductsPage = () => {
           toast('Đã cập nhật sản phẩm', {
             description: 'Sản phẩm được cấp phép hiển thị',
           });
-          setProductList((prev) =>
-            prev.filter((product) => product.id !== item.id)
-          );
+          setShopList((prev) => prev.filter((shop) => shop.id !== item.id));
         }
       } catch (e) {
         console.error(e);
       }
     };
 
-    const renderVariant = (index: number, value: variantDetail) => {
-      return (
-        <div
-          className={`w-full flex flex-col gap-4 
-      ${openIndex === index ? 'max-h-[500px]' : 'max-h-0'}
-      transition-[max-height] duration-300 ease-in-out
-      overflow-hidden`}
-          key={index}
-        >
-          <div className="w-full flex justify-center items-center">
-            <img
-              src={value.image}
-              alt={value.image || index.toString()}
-              className="w-[50%]"
-            />
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="name">Tên sản phẩm</Label>
-              <div className="w-full">{value.name}</div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="sku">Mã SKU</Label>
-              <div className="w-full">{value.sku}</div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="price">Giá</Label>
-              <div>{formatPrice(Number(value.price))}</div>
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="currency-variant">Đơn vị tiền tệ</Label>
-              <div>{value.currency}</div>
-            </div>
-          </div>
-          <Separator />
-        </div>
-      );
-    };
+    useEffect(() => {
+      if (detail) {
+        console.log('fetched');
+        setDefaultStatus(detail.status);
+      }
+    }, [detail]);
 
     return (
       <Drawer direction={isMobile ? 'bottom' : 'right'}>
@@ -453,44 +401,35 @@ const ProductsPage = () => {
             className="text-foreground w-fit px-0 text-left"
             onClick={fetchDetail}
           >
-            {item.title}
+            {item.name}
           </Button>
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader className="gap-1">
-            <DrawerTitle>{detail?.title || 'unknown'}</DrawerTitle>
-            <DrawerDescription>Thông tin chi tiết sản phẩm</DrawerDescription>
+            <DrawerTitle>{detail?.name || 'unknown'}</DrawerTitle>
+            <DrawerDescription>Thông tin chi tiết cửa hàng</DrawerDescription>
           </DrawerHeader>
           <div
             className="flex flex-col gap-4 overflow-y-auto px-4 text-sm"
             ref={scrollContainerRef}
           >
             <form className="flex flex-col gap-4">
-              <div className="w-full flex justify-center items-center">
-                <Carousel className="w-[70%] max-w-lg">
-                  <CarouselContent>
-                    {detail?.images?.map((img, index) => (
-                      <CarouselItem key={index}>
-                        <div className="p-1">
-                          <Card className="w-full h-64 overflow-hidden">
-                            <CardContent className="relative w-full h-full p-0">
-                              <Image
-                                src={img.url}
-                                alt={img.alt || `Product image ${index + 1}`}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 768px) 100vw, 500px"
-                                priority={index === 0}
-                              />
-                            </CardContent>
-                          </Card>
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </Carousel>
+              <div className="w-full flex justify-center items-center mb-3">
+                {/* show cover image */}
+                <div className="w-full relative">
+                  <img
+                    src={detail?.coverUrl}
+                    alt="shop cover image"
+                    className="w-full"
+                  />
+                  <div className="absolute left-5 -bottom-5">
+                    <img
+                      src={detail?.logoUrl}
+                      alt="shop cover image"
+                      className="w-10 rounded-full border border-white"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex flex-col gap-3">
@@ -498,73 +437,91 @@ const ProductsPage = () => {
                 <div className="w-full flex flex-row justify-between items-center gap-2">
                   <div className="flex flex-row justify-start items-center gap-2">
                     <Avatar>
-                      <AvatarImage src={detail?.shop.logoUrl} alt="shopLogo" />
+                      <AvatarImage src={detail?.logoUrl} alt="shopLogo" />
                       <AvatarFallback>UK</AvatarFallback>
                     </Avatar>
-                    <p>{detail?.shop.name}</p>
+                    <p>{detail?.name}</p>
                   </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant={'outline'}>
-                        <BsThreeDotsVertical />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>Xem cửa hàng</DropdownMenuItem>
-                      <DropdownMenuItem>Sao chép ID</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Button
+                    variant={'outline'}
+                    type="button"
+                    onClick={() => handleCopy(detail?.id)}
+                  >
+                    Sao chép ID
+                    <MdOutlineCopyAll />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="shop">Chủ sở hữu</Label>
+                <div className="w-full flex flex-row justify-between items-center gap-2">
+                  <div className="flex flex-row justify-start items-center gap-2">
+                    <Avatar>
+                      <AvatarImage src={detail?.owner.image} alt="shopLogo" />
+                      <AvatarFallback>UK</AvatarFallback>
+                    </Avatar>
+                    <p>{detail?.owner.name}</p>
+                  </div>
+                  <Button
+                    variant={'outline'}
+                    type="button"
+                    onClick={() => handleCopy(detail?.id)}
+                  >
+                    <MdOutlineCopyAll />
+                  </Button>
                 </div>
               </div>
 
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="title">Tên sản phẩm</Label>
-                  <div className="w-full">{detail?.title}</div>
+                  <Label htmlFor="title">Ngày tạo</Label>
+                  <div className="w-full">{formatDay(detail?.createdAt)}</div>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="status">URL-friendly</Label>
+                  <Label htmlFor="status">Ngày cập nhật</Label>
                   <div className="flex flex-col gap-3">
-                    <div className="w-full">{detail?.slug}</div>
+                    <div className="w-full">{formatDay(detail?.updatedAt)}</div>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="target">Xuất xứ</Label>
-                  <div>{detail?.origin}</div>
+                  <Label htmlFor="target">Điểm đánh giá</Label>
+                  <div>{detail?.ratingAvg}</div>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="limit">Đơn vị tiền tệ</Label>
-                  <div>{detail?.currency}</div>
+                  <Label htmlFor="limit">Tổng đánh giá</Label>
+                  <div>{detail?.ratingCount}</div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="target">Giá tối thiểu</Label>
-                  <div>{formatPrice(Number(detail?.minPrice))}</div>
+                  <Label htmlFor="target">Email</Label>
+                  <div>{detail?.contactEmail}</div>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="limit">Giá tối đa</Label>
-                  <div>{formatPrice(Number(detail?.maxPrice))}</div>
+                  <Label htmlFor="limit">Điện thoại</Label>
+                  <div>{detail?.contactPhone}</div>
                 </div>
               </div>
 
               <div className="flex flex-col gap-3">
-                <Label htmlFor="visibility">Hiển thị</Label>
+                <Label htmlFor="visibility">Trạng thái</Label>
                 <Select
-                  value={defaultVisibility}
+                  value={defaultStatus}
                   onValueChange={(value) => setValue(value)}
                 >
                   <SelectTrigger id="visibility" className="w-full">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="UNLISTED">Không cho phép</SelectItem>
-                    <SelectItem value="PRIVATE">Đang xin phép</SelectItem>
-                    <SelectItem value="PUBLIC">Cho phép</SelectItem>
+                    <SelectItem value="ACTIVE">Đang hoạt động</SelectItem>
+                    <SelectItem value="PENDING">Đang chờ</SelectItem>
+                    <SelectItem value="SUSPENDED">Bị cấm</SelectItem>
+                    <SelectItem value="CLOSED">Đóng cửa</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -575,10 +532,10 @@ const ProductsPage = () => {
               </div>
 
               <div className="flex flex-col gap-3">
-                <Label htmlFor="variants-list">Phiên bản</Label>
+                <Label htmlFor="variants-list">Thành viên</Label>
                 <div className="flex flex-col  gap-4">
                   <ul className="w-full flex flex-col gap-2 ">
-                    {detail?.variants.map((value: variantDetail, index) => (
+                    {detail?.members.map((value: shopMember, index) => (
                       <li
                         id={`variant-item-${index}`}
                         className="flex flex-col gap-2"
@@ -589,25 +546,24 @@ const ProductsPage = () => {
                               {index + 1}
                               {'. '}
                             </p>
-                            <p>{value.name}</p>
+                            <Avatar>
+                              <AvatarImage
+                                src={value.user.image}
+                                alt="shopLogo"
+                              />
+                              <AvatarFallback>UK</AvatarFallback>
+                            </Avatar>
+                            <p>{value.user.name}</p>
+                            <p>{'(' + value.role + ')'}</p>
                           </div>
                           <Button
                             variant={'outline'}
-                            onClick={() =>
-                              setOpenIndex(openIndex !== index ? index : null)
-                            }
                             type="button"
+                            onClick={() => handleCopy(value.id)}
                           >
-                            <div
-                              className={`${openIndex !== index ? `transform-[rotate(180deg)]` : `transform-[rotate(0deg)]`} transition ease-in-out`}
-                            >
-                              <IoIosArrowUp />
-                            </div>
+                            <MdOutlineCopyAll />
                           </Button>
                         </div>
-
-                        {renderVariant(index, value)}
-
                         <Separator />
                       </li>
                     ))}
@@ -627,7 +583,7 @@ const ProductsPage = () => {
     );
   }
 
-  function DraggableRow({ row }: { row: Row<productItemData> }) {
+  function DraggableRow({ row }: { row: Row<shopItemData> }) {
     const { transform, transition, setNodeRef, isDragging } = useSortable({
       id: row.original.id,
     });
@@ -655,8 +611,8 @@ const ProductsPage = () => {
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
-        searchObject="product"
-        setData={setProductList}
+        searchObject="shop"
+        setData={setShopList}
         setIsReset={SetIsReset}
         isReset={isReset}
       />
@@ -685,9 +641,10 @@ const ProductsPage = () => {
           </Select>
           <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
             <TabsTrigger value="all-status">Tất cả</TabsTrigger>
-            <TabsTrigger value="all-public">Công khai</TabsTrigger>
-            <TabsTrigger value="all-private">Ẩn</TabsTrigger>
-            <TabsTrigger value="all-unlisted">Cấm</TabsTrigger>
+            <TabsTrigger value="all-active">Đang hoạt động</TabsTrigger>
+            <TabsTrigger value="all-pending">Đang chờ</TabsTrigger>
+            <TabsTrigger value="all-suspended">Cấm</TabsTrigger>
+            <TabsTrigger value="all-closed">Đóng cửa</TabsTrigger>
           </TabsList>
           <div className="flex items-center gap-2">
             <DropdownMenu>
@@ -733,8 +690,8 @@ const ProductsPage = () => {
           value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <TabProduct
-            visibilityFilter=""
+          <TabShop
+            statusFilter=""
             isReset={isReset}
             sensors={sensors}
             sortableId={sortableId}
@@ -742,17 +699,17 @@ const ProductsPage = () => {
             columns={columns}
             data={data}
             setData={setData}
-            productList={productList}
-            setProductList={setProductList}
+            shopList={shopList}
+            setShopList={setShopList}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}
           />
         </TabsContent>
-        <TabsContent value="all-public" className="flex flex-col px-4 lg:px-6">
+        <TabsContent value="all-active" className="flex flex-col px-4 lg:px-6">
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabProduct
-              visibilityFilter="PUBLIC"
+            <TabShop
+              statusFilter="ACTIVE"
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -760,18 +717,18 @@ const ProductsPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              productList={productList}
-              setProductList={setProductList}
+              shopList={shopList}
+              setShopList={setShopList}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
             />
           </div>
         </TabsContent>
-        <TabsContent value="all-private" className="flex flex-col px-4 lg:px-6">
+        <TabsContent value="all-pending" className="flex flex-col px-4 lg:px-6">
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabProduct
-              visibilityFilter="PRIVATE"
+            <TabShop
+              statusFilter="PENDING"
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -779,8 +736,8 @@ const ProductsPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              productList={productList}
-              setProductList={setProductList}
+              shopList={shopList}
+              setShopList={setShopList}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
@@ -788,12 +745,12 @@ const ProductsPage = () => {
           </div>
         </TabsContent>
         <TabsContent
-          value="all-unlisted"
+          value="all-suspended"
           className="flex flex-col px-4 lg:px-6"
         >
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabProduct
-              visibilityFilter="UNLISTED"
+            <TabShop
+              statusFilter="SUSPENDED"
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -801,8 +758,30 @@ const ProductsPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              productList={productList}
-              setProductList={setProductList}
+              shopList={shopList}
+              setShopList={setShopList}
+              dataIds={dataIds}
+              DraggableRow={DraggableRow}
+              handleDragEnd={handleDragEnd}
+            />
+          </div>
+        </TabsContent>
+         <TabsContent
+          value="all-closed"
+          className="flex flex-col px-4 lg:px-6"
+        >
+          <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
+            <TabShop
+              statusFilter="CLOSED"
+              isReset={isReset}
+              sensors={sensors}
+              sortableId={sortableId}
+              table={table}
+              columns={columns}
+              data={data}
+              setData={setData}
+              shopList={shopList}
+              setShopList={setShopList}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
@@ -814,4 +793,4 @@ const ProductsPage = () => {
   );
 };
 
-export default ProductsPage;
+export default ShopsPage;

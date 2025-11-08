@@ -66,21 +66,24 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
         },
         select: {
           id: true,
+          name: true,
           owner: {
             select: {
               id: true,
+              image: true,
               name: true,
             },
           },
-          name: true,
-          logoUrl: true,
+          status: true,
+          ratingAvg: true,
+          ratingCount: true,
           createdAt: true,
           updatedAt: true,
         },
       });
       return NextResponse.json({
         success: true,
-        data,
+        data: [data],
       });
     } catch (e) {
       return NextResponse.json({

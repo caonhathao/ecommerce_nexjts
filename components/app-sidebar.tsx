@@ -88,7 +88,7 @@ const data = {
         },
         {
           title: 'Quản lí cửa hàng',
-          url: '#',
+          url: '/manager/shops',
         },
         {
           title: 'Hỗ trợ',
