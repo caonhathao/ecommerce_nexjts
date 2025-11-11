@@ -22,10 +22,9 @@ import {
 
 import { Loading } from '@/app/(public)/_components/loading';
 import { AiOutlineProduct } from 'react-icons/ai';
+import { BsGraphUpArrow } from 'react-icons/bs';
 import { CiShop } from 'react-icons/ci';
-import { MdOutlineAttachMoney } from 'react-icons/md';
 
-// This is sample data.
 const data = {
   user: {
     name: 'shadcn',
@@ -57,9 +56,21 @@ const data = {
       isActive: true,
       items: [
         {
-          title:'Tổng quan',
-          url:'/manager/dashboard'
-        }
+          title: 'Tổng quan',
+          url: '/manager/dashboard',
+        },
+      ],
+    },
+    {
+      title: 'Danh mục',
+      url: '#',
+      icon: SquareTerminal,
+      isActive: true,
+      items: [
+        {
+          title: 'Quản lí doanh mục',
+          url: '/manager/categories',
+        },
       ],
     },
     {
@@ -83,10 +94,6 @@ const data = {
       icon: CiShop,
       items: [
         {
-          title: 'Duyệt cửa hàng',
-          url: '#',
-        },
-        {
           title: 'Quản lí cửa hàng',
           url: '/manager/shops',
         },
@@ -101,10 +108,27 @@ const data = {
       ],
     },
     {
-      title: 'Doanh thu',
+      title: 'Thống kê',
       url: '#',
-      icon: MdOutlineAttachMoney,
-      items: [],
+      icon: BsGraphUpArrow,
+      items: [
+        {
+          title: 'Doanh thu',
+          url: '/manager/statistic/revenue',
+        },
+        {
+          title: 'Lưu lượng truy cập',
+          url: '#',
+        },
+        {
+          title: 'Khách hàng',
+          url: '#',
+        },
+        {
+          title: 'Cửa hàng',
+          url: '#',
+        },
+      ],
     },
     {
       title: 'Cài đặt',
