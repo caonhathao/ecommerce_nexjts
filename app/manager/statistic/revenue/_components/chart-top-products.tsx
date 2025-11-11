@@ -1,68 +1,52 @@
+'use client';
 import { Loading } from '@/app/(public)/_components/loading';
 import {
-    Card,
-    CardAction,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card';
 import {
-    ChartConfig,
-    ChartContainer,
-    ChartLegend,
-    ChartLegendContent,
-    ChartTooltip,
-    ChartTooltipContent,
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
 } from '@/components/ui/chart';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { orderStatusRateChart } from '@/types/manager.data-types';
+import { topProductChart } from '@/types/manager.data-types';
 import React, { useEffect } from 'react';
-import { Pie, PieChart } from 'recharts';
+import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 
 const chartConfig = {
-  STATUS: {
-    label: 'Trạng thái',
-  },
-  PENDING: {
-    label: 'Đang chờ',
-    color: 'var(--chart-5)',
-  },
-  PAID: {
-    label: 'Đã thanh toán',
+  totalQuantity: {
+    label: 'Số lượng',
     color: 'var(--chart-2)',
   },
-  PROCESSING: {
-    label: 'Đang xử lí',
-    color: 'var(--chart-3)',
-  },
-  CANCELED: {
-    label: 'Đã hủy',
-    color: 'var(--chart-1)',
-  },
-  REFUNDED: {
-    label: 'Đã hoàn tiền',
-    color: 'var(--chart-4)',
+  label: {
+    color: 'var(--background)',
   },
 } satisfies ChartConfig;
 
-const OrderStatusRate = () => {
-  const [data, setData] = React.useState<orderStatusRateChart[] | null>(null);
+const TopProduct = () => {
+  const [data, setData] = React.useState<topProductChart[] | null>(null);
   const [isReady, setIsReady] = React.useState<boolean>(false);
   const [timeRange, setTimeRange] = React.useState('month');
   const [subTitle, setSubTitle] = React.useState<string>('30 ngày');
+  const [amountTop, setAmountTop] = React.useState<number>(5);
 
   const fetchData = async (period: string, month?: string) => {
     try {
       const response = await fetch(
-        `/api/manager/statistic/order-status?period=${period}&&month=${month}`
+        `/api/manager/statistic/top-product?amount=${amountTop}&&period=${period}&&month=${month}`
       );
       const parseData = await response.json();
       console.log(parseData.data);
@@ -99,34 +83,20 @@ const OrderStatusRate = () => {
   }, [timeRange]);
 
   useEffect(() => {
-    if (data && !isReady) {
-      const formattedData = data.map((item, index) => ({
-        ...item, // Copy all existing properties (label, total)
-        fill: `var(--chart-${index + 1})`, // Add the new 'fill' property
-      }));
-
-      // 3. Set the new array into your local state
-      setData(formattedData);
-      setIsReady(true);
-    }
-  }, [data]); // This effect re-runs whenever 'data' changes
-
-  //   useEffect(() => {
-  //     console.log(data);
-  //   }, [data]);
+    console.log(data);
+  }, [data]);
 
   if (!data && isReady) return <Loading />;
-
   return (
     <div className="w-[50%]">
       <Card className="@container/card">
-        <CardHeader>
-          <CardTitle>Tỉ lệ trạng thái đơn hàng</CardTitle>
+ <CardHeader>
+          <CardTitle>Top sản phẩm</CardTitle>
           <CardDescription>
             <span className="hidden @[540px]/card:block">
               Dữ liệu từ {subTitle} gần nhất
             </span>
-            <span className="@[540px]/card:hidden">Last 3 months</span>
+            <span className="@[540px]/card:hidden">{subTitle} gần nhất</span>
           </CardDescription>
           <CardAction>
             <ToggleGroup
@@ -166,22 +136,31 @@ const OrderStatusRate = () => {
             </Select>
           </CardAction>
         </CardHeader>
-        <CardContent className="flex-1 pb-0">
-          <ChartContainer
-            config={chartConfig}
-            className="mx-auto aspect-square max-h-[300px]"
-          >
-            <PieChart>
+        <CardContent>
+          <ChartContainer config={chartConfig}>
+            <BarChart
+              accessibilityLayer
+              data={data ?? undefined}
+              layout="vertical"
+              margin={{
+                left: -20,
+              }}
+            >
+              <XAxis type="number" dataKey="totalQuantity" hide />
+              <YAxis
+                dataKey="title"
+                type="category"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 3)}
+              />
               <ChartTooltip
                 cursor={false}
                 content={<ChartTooltipContent hideLabel />}
               />
-              <Pie data={data ?? undefined} dataKey="total" nameKey={'label'} />
-              <ChartLegend
-                content={<ChartLegendContent nameKey="label" />}
-                className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
-              />
-            </PieChart>
+              <Bar dataKey="totalQuantity" fill="var(--color-desktop)" radius={5} />
+            </BarChart>
           </ChartContainer>
         </CardContent>
       </Card>
@@ -189,4 +168,4 @@ const OrderStatusRate = () => {
   );
 };
 
-export default OrderStatusRate;
+export default TopProduct;
