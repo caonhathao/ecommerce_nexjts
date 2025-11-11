@@ -16,7 +16,7 @@ const STATUS_LIST_TO_COUNT = [
 // Helper type for our new statusCounts object
 type StatusCounts = Record<(typeof STATUS_LIST_TO_COUNT)[number], number>;
 
-// build api for calculator revenue by a week, a month, 3 months and months
+// build api for calculator order-status by a week, a month, 3 months and months
 // a week: show data (sum of each day) of 7 days lastest
 // a month: show data (sum of each day) of 30 days lastest
 // 3 months: show data (sum of each day) of 3 months latests
@@ -94,12 +94,11 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
 
   // --- 3. Fetch all data in a single transaction ---
   try {
-    const [paidOrders, statusGroups] = await prisma.$transaction([
+    const [orders, statusGroups] = await prisma.$transaction([
       // Query 1: Get PAID orders for the revenue chart (same as before)
       prisma.order.findMany({
         where: {
           ...whereClause,
-          //status: 'PAID', // <-- We add status: 'PAID' here
         },
         select: {
           grandTotal: true,
@@ -115,11 +114,8 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
         by: ['status'] as const,
         _count: {
           _all: true, // <-- Changing this
-          //   id: true, // <-- to this (counts all records by their 'id')
         },
-        // --- FIX for TS(2345) ---
-        // The generated Prisma types for this query require an 'orderBy' property.
-        // We'll order by the status name alphabetically to satisfy this.
+
         orderBy: {
           status: 'asc',
         },
@@ -134,11 +130,10 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     ]);
 
     // --- 4. Group data for REVENUE chart (from paidOrders) ---
-    // This logic is unchanged, but it now uses the 'paidOrders' variable
     const groupedData = new Map<string, number>();
     let totalSum = 0;
 
-    for (const order of paidOrders) {
+    for (const order of orders) {
       if (!order.placedAt) continue;
       const dateKey = order.placedAt.toISOString();
       const key = groupByMonth

@@ -127,8 +127,15 @@ export interface revenueEleChart {
   date: Date;
   total: number;
 }
+
 export interface orderStatusRateChart {
   label: string;
   total: number;
   fill: string;
+}
+
+export interface topProductChart {
+  productId: string;
+  title: string;
+  totalQuantity: number;
 }

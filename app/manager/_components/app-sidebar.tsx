@@ -68,7 +68,7 @@ const data = {
       isActive: true,
       items: [
         {
-          title: 'Quản lí doanh mục',
+          title: 'Quản lí danh mục',
           url: '/manager/categories',
         },
       ],
