@@ -28,6 +28,13 @@ export async function GET(
         minPrice: true,
         maxPrice: true,
         soldCount: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
         images: {
           select: {
             url: true,
