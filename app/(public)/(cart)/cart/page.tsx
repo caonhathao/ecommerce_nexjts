@@ -9,6 +9,9 @@ import { Separator } from '@/components/ui/separator';
 import { useDebounce } from '@/hooks/debounce';
 import { CartType } from '@/types/cart.data-types';
 import Image from 'next/image';
+import { toast } from 'sonner';
+import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
+import { useRouter } from 'next/navigation';
 
 const emptyCart: CartType = {
   id: '',
@@ -16,13 +19,24 @@ const emptyCart: CartType = {
   items: [],
 };
 
+type itemType = {
+  productId: string;
+  variantId: string;
+  quantity: number;
+};
+
 export default function Cart() {
+  const router = useRouter();
+
   const [cart, setCart] = useState<CartType>(emptyCart);
   const [loading, setLoading] = useState(true);
   let noItems = false;
-  const [selectedItem, setSelectedItem] = useState<string[]>([]);
+  const [selectedItem, setSelectedItem] = useState<itemType[]>([]);
   const allSelected =
-    cart?.items?.length > 0 && selectedItem.length === cart.items.length;
+    cart.items.length > 0 &&
+    cart.items.every((item) =>
+      selectedItem.some((obj) => obj.variantId === item.variant.id)
+    );
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -150,7 +164,56 @@ export default function Cart() {
     }
   };
 
-  if (loading) return <div>Đang tải giỏ hàng...</div>;
+  const handleCreateDraft = async () => {
+    if (selectedItem.length == 0) {
+      toast.warning('Bạn phải chọn ít nhất một sản phẩm để đặt hàng', {
+        duration: 4000,
+        position: 'top-right',
+      });
+      return;
+    }
+
+    try {
+      const existing = await getOrderDrafts();
+      if (existing.success && existing.draft) {
+        toast.info('Bạn có đơn hàng đang chờ xử lý. Chuyển đến trang thanh toán...', {
+          duration: 4000,
+          position: 'top-right',
+        });
+        router.push('/checkout');
+        return;
+      }
+
+      const data = {
+        notes: '',
+        items: selectedItem,
+        voucher: [
+          {
+            code: 'VC-JNF8CK7A',
+          },
+          {
+            code: 'VC-CWAOF1OO',
+          },
+        ],
+      };
+      const formData = new FormData();
+      formData.append('data', JSON.stringify(data));
+
+      const res = await createOrderDraft(formData);
+
+      if (res.success) {
+        toast.success('Đang chuyển đến trang thanh toán...');
+        router.push('/checkout');
+      } else {
+        toast.error('Lỗi: ' + res.error);
+        console.error(res.error);
+      }
+    } catch (e) {
+      console.error('Lỗi khi tạo đơn hàng nháp:', e);
+      toast.error(`Lỗi: ${e}`);
+    }
+  };
+
   if (!cart || !cart.items || cart.items.length == 0) {
     noItems = true;
   }
@@ -174,7 +237,11 @@ export default function Cart() {
                     onCheckedChange={(checked) => {
                       if (checked) {
                         setSelectedItem(
-                          cart.items.map((item: any) => item.variant.id)
+                          cart.items.map((item: any) => ({
+                            productId: item.variant.productId,
+                            variantId: item.variant.id,
+                            quantity: item.quantity,
+                          }))
                         );
                       } else {
                         setSelectedItem([]);
@@ -196,6 +263,11 @@ export default function Cart() {
 
             {/* danh sách sản phẩm */}
             <div className="bg-white rounded-2xl shadow-xs divide-y">
+              {loading && (
+                <div className="flex items-center justify-center p-8">
+                  <div className="animate-spin rounded-full h-10 w-10 border-4 border-muted border-t-primary" />
+                </div>
+              )}
               {noItems && (
                 <div className="p-4 text-center text-gray-500">
                   Không có sản phẩm trong giỏ hàng .
@@ -209,13 +281,23 @@ export default function Cart() {
                   <div className="flex items-center gap-3">
                     <Checkbox
                       id={item.id}
-                      checked={selectedItem.includes(item.variant.id)}
+                      checked={selectedItem.some(
+                        (object) => object.variantId === item.variant.id
+                      )}
                       onCheckedChange={(checked) => {
-                        setSelectedItem((prev: string[]) =>
+                        setSelectedItem((prev: itemType[]) =>
                           checked
-                            ? [...prev, item.variant.id]
+                            ? [
+                                ...prev,
+                                {
+                                  productId: item.variant.productId,
+                                  variantId: item.variant.id,
+                                  quantity: item.quantity,
+                                },
+                              ]
                             : prev.filter(
-                                (id: string) => id !== item.variant.id
+                                (object: itemType) =>
+                                  object.variantId !== item.variant.id
                               )
                         );
                       }}
@@ -320,11 +402,15 @@ export default function Cart() {
                   </button>
                 </div>
               </div>
-
-              <Button variant="link" className="flex cursor-pointer mt-2">
-                <TicketIcon className="w-5 h-5 text-primary" />
-                <p>Mua thêm để nhận freeship lên đến 300k ...</p>
-              </Button>
+              <div className="w-full p-0 overflow-hidden">
+                <Button
+                  variant="link"
+                  className="cursor-pointer mt-2 items-center p-0"
+                >
+                  <TicketIcon className="w-5 h-5 text-primary" />
+                  <p>Mua thêm để nhận freeship lên đến 300k ...</p>
+                </Button>
+              </div>
             </div>
 
             {/* Payment info */}
@@ -334,7 +420,9 @@ export default function Cart() {
                 <p>
                   {cart.items
                     .filter((item: any) =>
-                      selectedItem.includes(item.variant.id)
+                      selectedItem.some(
+                        (object) => object.variantId === item.variant.id
+                      )
                     )
                     .reduce(
                       (total: number, item: any) =>
@@ -350,7 +438,11 @@ export default function Cart() {
                 <p className="text-green-400">
                   -
                   {cart.items
-                    .filter((item) => selectedItem.includes(item.variant.id))
+                    .filter((item) =>
+                      selectedItem.some(
+                        (object) => object.variantId === item.variant.id
+                      )
+                    )
                     .reduce(
                       (total: number, item: any) =>
                         total +
@@ -382,7 +474,9 @@ export default function Cart() {
                 <p className="text-red-400">
                   {cart.items
                     .filter((item: any) =>
-                      selectedItem.includes(item.variant.id)
+                      selectedItem.some(
+                        (object) => object.variantId === item.variant.id
+                      )
                     )
                     .reduce(
                       (total: number, item: any) =>
@@ -395,7 +489,11 @@ export default function Cart() {
                   ₫
                 </p>
               </div>
-              <Button variant="default" className="w-full cursor-pointer">
+              <Button
+                onClick={handleCreateDraft}
+                variant="default"
+                className="w-full cursor-pointer"
+              >
                 Mua hàng
               </Button>
             </div>

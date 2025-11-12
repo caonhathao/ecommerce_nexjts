@@ -170,6 +170,7 @@ const detaiPage = () => {
         toast.success('Thêm vào giỏ hàng thành công', {
           duration: 3000,
           position: 'top-right',
+          style: { color: 'var(--chart-2)' },
         });
       }
     } catch (error) {
@@ -177,6 +178,7 @@ const detaiPage = () => {
       toast.error(`Thêm vào giỏ hàng thất bại: ${message}`, {
         duration: 3000,
         position: 'top-right',
+        style: { color: 'var(--chart-1)' },
       });
     }
   };
