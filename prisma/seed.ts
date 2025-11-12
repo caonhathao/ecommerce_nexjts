@@ -747,7 +747,7 @@ async function main() {
     skipDuplicates: true,
   });
 
-  console.log(`✅ Created ${productTags.length} product variants`);
+  console.log(`✅ Created ${productTags.count} product variants`);
 
   // ------------------------
   // 7️⃣ CARTS
