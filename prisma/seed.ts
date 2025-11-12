@@ -7,6 +7,7 @@ import {
   Prisma,
   PrismaClient,
   ProductStatus,
+  Role,
   Visibility,
   VoucherType
 } from '@/lib/generated/prisma';
@@ -259,7 +260,7 @@ async function main() {
           id: faker.string.uuid(),
           shopId,
           userId,
-          role: faker.helpers.arrayElement(['ADMIN', 'SELLER', 'USER']),
+          role: faker.helpers.arrayElement(Object.values(Role)),
           createdAt: faker.date.past(),
         },
       });
