@@ -10,9 +10,9 @@ datasource db {
 
 // ---------- Enums ----------
 enum Role {
-  USER
-  SELLER
-  ADMIN
+  user
+  seller
+  admin
 }
 
 enum ShopStatus {
@@ -103,7 +103,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  role       String?
+  role       Role      @default(user)
   banned     Boolean?  @default(false)
   banReason  String?
   banExpires DateTime?
@@ -260,7 +260,7 @@ model ShopMember {
   id        String   @id @default(uuid()) @db.Uuid
   shopId    String   @db.Uuid
   userId    String   @db.Uuid
-  role      Role     @default(SELLER)
+  role      Role     @default(seller)
   createdAt DateTime @default(now())
 
   shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
