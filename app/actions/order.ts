@@ -1,9 +1,9 @@
 'use server';
 
-import { auth } from '@/lib/auth';
+import { auth, getCurrentUserId } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { prisma } from '@/lib/db';
-import { Prisma } from '@/lib/generated/prisma';
+import { OrderStatus, Prisma } from '@/lib/generated/prisma';
 import { revalidatePath } from 'next/cache';
 import { OrderWithRelations } from '@/types/order.data-types';
 
@@ -101,5 +101,51 @@ export async function createOrder(draftId: string): Promise<CreateOrderResult> {
   } catch (error: any) {
     console.error('Error creating order:', error);
     return { success: false, error: error.message };
+  }
+}
+
+interface GetOrdersParams {
+  cursor?: string;
+  status?: OrderStatus;
+  orderId?: string;
+  limit?: number;
+}
+
+export async function getOrder(
+  _prevState: any,
+  formData: GetOrdersParams = {}
+): Promise<{ orders: any[]; nextCursor: string | undefined }> {
+
+  const  { cursor, status, orderId, limit = 10 } = formData;
+
+  try {
+    const userId = await getCurrentUserId();
+
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+    const filter = {
+      userId,
+      ...(orderId && { orderId }),
+      ...(status && { status }),
+    };
+
+    const order = await prisma.order.findMany({
+      where: filter,
+      orderBy: { placedAt: 'desc' },
+      take: limit + 1,
+      ...(cursor && { skip: 1, cursor: { id: cursor } }),
+    });
+
+    const hasNextPage = order.length > limit;
+    const nextCursor = hasNextPage ? order[limit - 1].id : undefined;
+
+    return {
+      orders: hasNextPage ? order.slice(0, limit) : order,
+      nextCursor,
+    };
+  } catch (error: any) {
+    console.error('Error fetching orders:', error);
+    throw new Error(error.message || 'Internal Server Error');
   }
 }
