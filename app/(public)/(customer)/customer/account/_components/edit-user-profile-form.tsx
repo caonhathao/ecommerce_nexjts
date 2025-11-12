@@ -25,7 +25,7 @@ import { Button } from '@/components/ui/button';
 import {
   makeUserProfileSchema,
   UserProfileFormValues,
-} from '@/app/(public)/(customer)/customer/account/makeUserSchema';
+} from '@/app/(public)/(customer)/customer/account/_components/makeUserSchema';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Separator } from '@/components/ui/separator';
