@@ -14,7 +14,7 @@ function getTitleFromPath(path: string): string {
     "/manager/product": "Quản lí sản phẩm",
     "/manager/users": "Quản lí người dùng",
     "/manager/shops": "Quản lí cửa hàng",
-    "/manager/revenue": "Doanh thu",
+    "/manager/statistic/revenue": "Doanh thu",
     "manager/dashboard": "Tổng quan",
     "/manager/settings": "Cài đặt",
   };

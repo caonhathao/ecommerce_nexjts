@@ -7,6 +7,7 @@ import {
   Prisma,
   PrismaClient,
   ProductStatus,
+  Role,
   Visibility,
   VoucherType
 } from '@/lib/generated/prisma';
@@ -259,7 +260,7 @@ async function main() {
           id: faker.string.uuid(),
           shopId,
           userId,
-          role: faker.helpers.arrayElement(['ADMIN', 'SELLER', 'USER']),
+          role: faker.helpers.arrayElement(Object.values(Role)),
           createdAt: faker.date.past(),
         },
       });
@@ -271,29 +272,353 @@ async function main() {
   // ------------------------
   // 3️⃣ CATEGORIES
   // ------------------------
-  const categories = await Promise.all(
-    Array.from({ length: 5 }).map(() => {
-      const name = faker.commerce.department();
-      const slug = faker.helpers.slugify(name.toLowerCase());
-      const uniqueSlug = `${slug}-${faker.string.alphanumeric(6).toLowerCase()}`;
+   const categoryTree = [
+     {
+       name: 'Electronics',
+       slug: 'electronics',
+       position: 0,
+       children: [
+         {
+           name: 'Smartphones & Accessories',
+           slug: 'smartphones-accessories',
+           position: 0,
+         },
+         {
+           name: 'Computers & Laptops',
+           slug: 'computers-laptops',
+           position: 1,
+         },
+         { name: 'Audio & Headphones', slug: 'audio-headphones', position: 2 },
+         { name: 'Cameras & Drones', slug: 'cameras-drones', position: 3 },
+         { name: 'Smart Home & IoT', slug: 'smart-home-iot', position: 4 },
+       ],
+     },
+     {
+       name: 'Fashion & Apparel',
+       slug: 'fashion-apparel',
+       position: 1,
+       children: [
+         { name: 'Women’s Clothing', slug: 'womens-clothing', position: 0 },
+         { name: 'Men’s Clothing', slug: 'mens-clothing', position: 1 },
+         { name: 'Shoes & Footwear', slug: 'shoes-footwear', position: 2 },
+         { name: 'Bags & Accessories', slug: 'bags-accessories', position: 3 },
+         {
+           name: 'Jewellery & Watches',
+           slug: 'jewellery-watches',
+           position: 4,
+         },
+       ],
+     },
+     // ... add further top‐level entries similarly
+     {
+       name: 'Home & Living',
+       slug: 'home-living',
+       position: 2,
+       children: [
+         { name: 'Furniture', slug: 'furniture', position: 0 },
+         { name: 'Home Décor', slug: 'home-decor', position: 1 },
+         { name: 'Kitchen & Dining', slug: 'kitchen-dining', position: 2 },
+         { name: 'Bedding & Bath', slug: 'bedding-bath', position: 3 },
+         { name: 'Lighting & Lamps', slug: 'lighting-lamps', position: 4 },
+       ],
+     },
+     {
+       name: 'Beauty & Personal Care',
+       slug: 'beauty-personal-care',
+       position: 3,
+       children: [
+         { name: 'Skincare', slug: 'skincare', position: 0 },
+         { name: 'Haircare', slug: 'haircare', position: 1 },
+         { name: 'Makeup & Cosmetics', slug: 'makeup-cosmetics', position: 2 },
+         { name: 'Fragrances', slug: 'fragrances', position: 3 },
+         {
+           name: 'Wellness & Self-care',
+           slug: 'wellness-selfcare',
+           position: 4,
+         },
+       ],
+     },
+     {
+       name: 'Food & Beverages',
+       slug: 'food-beverages',
+       position: 4,
+       children: [
+         {
+           name: 'Groceries & Daily Needs',
+           slug: 'groceries-daily-needs',
+           position: 0,
+         },
+         { name: 'Snacks & Sweets', slug: 'snacks-sweets', position: 1 },
+         { name: 'Drinks & Beverages', slug: 'drinks-beverages', position: 2 },
+         {
+           name: 'Organic & Health Foods',
+           slug: 'organic-health-foods',
+           position: 3,
+         },
+         { name: 'Gourmet & Gifts', slug: 'gourmet-gifts', position: 4 },
+       ],
+     },
+     {
+       name: 'Sports & Outdoors',
+       slug: 'sports-outdoors',
+       position: 5,
+       children: [
+         { name: 'Fitness Equipment', slug: 'fitness-equipment', position: 0 },
+         {
+           name: 'Outdoor Recreation',
+           slug: 'outdoor-recreation',
+           position: 1,
+         },
+         { name: 'Sportswear', slug: 'sportswear', position: 2 },
+         { name: 'Team Sports Gear', slug: 'team-sports-gear', position: 3 },
+         { name: 'Camping & Hiking', slug: 'camping-hiking', position: 4 },
+       ],
+     },
+     {
+       name: 'Health & Wellness',
+       slug: 'health-wellness',
+       position: 6,
+       children: [
+         {
+           name: 'Personal Care Devices',
+           slug: 'personal-care-devices',
+           position: 0,
+         },
+         { name: 'Fitness Trackers', slug: 'fitness-trackers', position: 1 },
+         { name: 'Sleep & Relaxation', slug: 'sleep-relaxation', position: 2 },
+         {
+           name: 'Healthy Living Products',
+           slug: 'healthy-living-products',
+           position: 3,
+         },
+         {
+           name: 'Vitamins & Supplements',
+           slug: 'vitamins-supplements',
+           position: 4,
+         },
+       ],
+     },
+     {
+       name: 'Baby, Kids & Toys',
+       slug: 'baby-kids-toys',
+       position: 7,
+       children: [
+         {
+           name: 'Baby Gear & Essentials',
+           slug: 'baby-gear-essentials',
+           position: 0,
+         },
+         { name: 'Toys & Games', slug: 'toys-games', position: 1 },
+         {
+           name: 'Kids Clothing & Shoes',
+           slug: 'kids-clothing-shoes',
+           position: 2,
+         },
+         {
+           name: 'Educational & STEM Toys',
+           slug: 'educational-stem-toys',
+           position: 3,
+         },
+         {
+           name: 'Kids Furniture & Decor',
+           slug: 'kids-furniture-decor',
+           position: 4,
+         },
+       ],
+     },
+     {
+       name: 'Books, Movies & Games',
+       slug: 'books-movies-games',
+       position: 8,
+       children: [
+         { name: 'Books & eBooks', slug: 'books-ebooks', position: 0 },
+         { name: 'Movies & TV Series', slug: 'movies-tv-series', position: 1 },
+         {
+           name: 'Video Games & Consoles',
+           slug: 'video-games-consoles',
+           position: 2,
+         },
+         {
+           name: 'Board Games & Puzzles',
+           slug: 'board-games-puzzles',
+           position: 3,
+         },
+         {
+           name: 'Music & Instruments',
+           slug: 'music-instruments',
+           position: 4,
+         },
+       ],
+     },
+     {
+       name: 'Pet Supplies',
+       slug: 'pet-supplies',
+       position: 9,
+       children: [
+         { name: 'Pet Food', slug: 'pet-food', position: 0 },
+         {
+           name: 'Pet Toys & Accessories',
+           slug: 'pet-toys-accessories',
+           position: 1,
+         },
+         {
+           name: 'Pet Health & Grooming',
+           slug: 'pet-health-grooming',
+           position: 2,
+         },
+         {
+           name: 'Aquatic & Fish Supplies',
+           slug: 'aquatic-fish-supplies',
+           position: 3,
+         },
+         {
+           name: 'Pet Bedding & Habitat',
+           slug: 'pet-bedding-habitat',
+           position: 4,
+         },
+       ],
+     },
+     {
+       name: 'Bags, Luggage & Accessories',
+       slug: 'bags-luggage-accessories',
+       position: 10,
+       children: [
+         {
+           name: 'Backpacks & School Bags',
+           slug: 'backpacks-school-bags',
+           position: 0,
+         },
+         { name: 'Travel Luggage', slug: 'travel-luggage', position: 1 },
+         { name: 'Handbags & Wallets', slug: 'handbags-wallets', position: 2 },
+         {
+           name: 'Laptop Bags & Briefcases',
+           slug: 'laptop-bags-briefcases',
+           position: 3,
+         },
+         {
+           name: 'Accessories & Wallets',
+           slug: 'accessories-wallets',
+           position: 4,
+         },
+       ],
+     },
+     {
+       name: 'Automotive & Industrial',
+       slug: 'automotive-industrial',
+       position: 11,
+       children: [
+         { name: 'Car Accessories', slug: 'car-accessories', position: 0 },
+         { name: 'Motorbike Parts', slug: 'motorbike-parts', position: 1 },
+         { name: 'Tools & Equipment', slug: 'tools-equipment', position: 2 },
+         {
+           name: 'Industrial Supplies',
+           slug: 'industrial-supplies',
+           position: 3,
+         },
+         {
+           name: 'Car Electronics & Audio',
+           slug: 'car-electronics-audio',
+           position: 4,
+         },
+       ],
+     },
+     {
+       name: 'Office Supplies & Stationery',
+       slug: 'office-supplies-stationery',
+       position: 12,
+       children: [
+         { name: 'Office Furniture', slug: 'office-furniture', position: 0 },
+         {
+           name: 'Printers & Supplies',
+           slug: 'printers-supplies',
+           position: 1,
+         },
+         {
+           name: 'Stationery & Writing',
+           slug: 'stationery-writing',
+           position: 2,
+         },
+         { name: 'School Supplies', slug: 'school-supplies', position: 3 },
+         {
+           name: 'Office Tech Accessories',
+           slug: 'office-tech-accessories',
+           position: 4,
+         },
+       ],
+     },
+     {
+       name: 'DIY, Tools & Hardware',
+       slug: 'diy-tools-hardware',
+       position: 13,
+       children: [
+         { name: 'Power Tools', slug: 'power-tools', position: 0 },
+         { name: 'Hand Tools', slug: 'hand-tools', position: 1 },
+         {
+           name: 'Building Materials',
+           slug: 'building-materials',
+           position: 2,
+         },
+         { name: 'Home Improvement', slug: 'home-improvement', position: 3 },
+         {
+           name: 'Painting & Decorating',
+           slug: 'painting-decorating',
+           position: 4,
+         },
+       ],
+     },
+     {
+       name: 'Gifts & Special Occasions',
+       slug: 'gifts-special-occasions',
+       position: 14,
+       children: [
+         { name: 'Gift Hampers', slug: 'gift-hampers', position: 0 },
+         { name: 'Seasonal Decor', slug: 'seasonal-decor', position: 1 },
+         { name: 'Party Supplies', slug: 'party-supplies', position: 2 },
+         {
+           name: 'Personalized Gifts',
+           slug: 'personalized-gifts',
+           position: 3,
+         },
+         { name: 'Greeting Cards', slug: 'greeting-cards', position: 4 },
+       ],
+     },
+   ];
 
-      return prisma.category.create({
-        data: {
-          id: faker.string.uuid(),
-          parentId: null,
-          children: undefined,
-          name,
-          slug: uniqueSlug,
-          position: 1,
-          isActive: true,
-          createdAt: faker.date.past(),
-          updatedAt: faker.date.recent(),
-        },
-      });
-    })
-  );
+   for (const topCat of categoryTree) {
+     const topId = faker.string.uuid();
+     await prisma.category.create({
+       data: {
+         id: topId,
+         parentId: null,
+         name: topCat.name,
+         slug: topCat.slug,
+         position: topCat.position,
+         isActive: true,
+         createdAt: new Date(),
+         updatedAt: new Date(),
+       },
+     });
+     for (const sub of topCat.children) {
+       await prisma.category.create({
+         data: {
+           id: faker.string.uuid(),
+           parentId: topId,
+           name: sub.name,
+           slug: sub.slug,
+           position: sub.position,
+           isActive: true,
+           createdAt: new Date(),
+           updatedAt: new Date(),
+         },
+       });
+     }
+   }
 
-  console.log(`✅ Created ${categories.length} categories`);
+    const categories = await prisma.category.findMany();
+   console.log(
+     `✅ Seeded ${categoryTree.length} top-categories with sub-categories`
+   );
+
 
   // ------------------------
   // 3️⃣ TAGS

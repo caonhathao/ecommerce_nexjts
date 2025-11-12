@@ -13,37 +13,6 @@ type InitUserOpts = {
   phone?: string | null;
 };
 
-export async function initializeUserData(user: InitUserOpts) {
-  const { id: userId, email, phone } = user;
-
-  const result = await prisma.$transaction(async (tx) => {
-    const profile = await tx.userProfile.upsert({
-      where: { userId },
-      update: { emailForBill: email, phone },
-      create: { userId, emailForBill: email, phone },
-      select: userProfileSelect,
-    });
-
-    const cart = await tx.cart.upsert({
-      where: { userId },
-      update: {},
-      create: { userId },
-      select: { id: true },
-    });
-
-    const wishlist = await tx.wishlist.upsert({
-      where: { userId },
-      update: {},
-      create: { userId },
-      select: { id: true },
-    });
-
-    return { profile, cart, wishlist };
-  });
-
-  return result;
-}
-
 export async function getUserProfile(
   userId: string
 ): Promise<UserProfileResponseDTO | null> {
@@ -61,9 +30,7 @@ export async function getUserProfile(
   if (!profile || !user) {
     return null;
   }
-
-  console.log('Fetched user profile:', profile, 'with user data:', user);
-
+  
   return mapToUserProfileResponseDTO(profile, user);
 }
 

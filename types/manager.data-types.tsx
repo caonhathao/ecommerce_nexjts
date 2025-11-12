@@ -92,9 +92,9 @@ export interface shopMember {
   id: string;
   role: string;
   user: {
-      id: string;
-      name: string;
-      image: string;
+    id: string;
+    name: string;
+    image: string;
   };
 }
 
@@ -121,4 +121,21 @@ export interface shopDetail {
   createdAt: string;
   updatedAt: string;
   members: shopMember[];
+}
+
+export interface revenueEleChart {
+  date: Date;
+  total: number;
+}
+
+export interface orderStatusRateChart {
+  label: string;
+  total: number;
+  fill: string;
+}
+
+export interface topProductChart {
+  productId: string;
+  title: string;
+  totalQuantity: number;
 }

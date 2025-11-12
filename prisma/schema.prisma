@@ -10,9 +10,9 @@ datasource db {
 
 // ---------- Enums ----------
 enum Role {
-  USER
-  SELLER
-  ADMIN
+  user
+  seller
+  admin
 }
 
 enum ShopStatus {
@@ -103,7 +103,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  role       String?
+  role       Role      @default(user)
   banned     Boolean?  @default(false)
   banReason  String?
   banExpires DateTime?
@@ -175,16 +175,16 @@ model Verification {
 }
 
 model UserProfile {
-  id          String    @id @default(uuid()) @db.Uuid
-  userId      String    @unique @db.Uuid
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  phone       String?
-  birthDate   DateTime?
-  gender      String?
-  displayName String?
-  bio         String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @unique @db.Uuid
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailForBill String?
+  phone        String?
+  birthDate    DateTime?
+  gender       String?
+  bio          String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@map("user_profile")
 }
@@ -261,7 +261,7 @@ model ShopMember {
   id        String   @id @default(uuid()) @db.Uuid
   shopId    String   @db.Uuid
   userId    String   @db.Uuid
-  role      Role     @default(SELLER)
+  role      Role     @default(seller)
   createdAt DateTime @default(now())
 
   shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
