@@ -5,7 +5,7 @@ import {
   Bell,
   ChevronsUpDown,
   CreditCard,
-  LogOut
+  LogOut,
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -24,6 +24,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { useSignOut } from '@/hooks/use-signout';
 
 interface userProps {
   user: {
@@ -35,6 +36,7 @@ interface userProps {
 
 export function NavUser({ user }: userProps) {
   const { isMobile } = useSidebar();
+  const handleSingout = useSignOut();
 
   return (
     <SidebarMenu>
@@ -90,7 +92,7 @@ export function NavUser({ user }: userProps) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleSingout()}>
               <LogOut />
               Đăng xuất
             </DropdownMenuItem>

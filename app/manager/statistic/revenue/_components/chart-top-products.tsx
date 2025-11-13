@@ -25,6 +25,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { topProductChart } from '@/types/manager.data-types';
 import React, { useEffect } from 'react';
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
+import TableCellViewer from './table-cell-viewer';
 
 const chartConfig = {
   totalQuantity: {
@@ -42,6 +43,8 @@ const TopProduct = () => {
   const [timeRange, setTimeRange] = React.useState('month');
   const [subTitle, setSubTitle] = React.useState<string>('30 ngày');
   const [amountTop, setAmountTop] = React.useState<number>(5);
+  const [openDetail, setOpenDetail] = React.useState<boolean>(false);
+  const [id, setId] = React.useState<string | null>(null);
 
   const fetchData = async (period: string, month?: string) => {
     try {
@@ -55,6 +58,11 @@ const TopProduct = () => {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const handleOpenDetail = (id: string) => {
+    setOpenDetail(true);
+    setId(id);
   };
 
   useEffect(() => {
@@ -83,14 +91,14 @@ const TopProduct = () => {
   }, [timeRange]);
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    console.log(id);
+  }, [id]);
 
   if (!data && isReady) return <Loading />;
   return (
     <div className="w-[50%]">
       <Card className="@container/card">
- <CardHeader>
+        <CardHeader>
           <CardTitle>Top sản phẩm</CardTitle>
           <CardDescription>
             <span className="hidden @[540px]/card:block">
@@ -159,11 +167,22 @@ const TopProduct = () => {
                 cursor={false}
                 content={<ChartTooltipContent hideLabel />}
               />
-              <Bar dataKey="totalQuantity" fill="var(--color-desktop)" radius={5} />
+              <Bar
+                dataKey="totalQuantity"
+                fill="var(--color-desktop)"
+                radius={5}
+                onClick={(data) => handleOpenDetail(data.productId)}
+                className="hover:cursor-pointer"
+              />
             </BarChart>
           </ChartContainer>
         </CardContent>
       </Card>
+      <TableCellViewer
+        id={id}
+        openDetail={openDetail}
+        SetOpenDetail={setOpenDetail}
+      />
     </div>
   );
 };
