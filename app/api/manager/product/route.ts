@@ -41,12 +41,13 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
           variants: true,
         },
       },
+      soldCount: true,
       createdAt: true,
       updatedAt: true,
     },
     skip,
     take: limit,
-    orderBy: { id: 'asc' },
+    orderBy: { soldCount: 'desc' },
   });
 
   const total = await prisma.product.count({

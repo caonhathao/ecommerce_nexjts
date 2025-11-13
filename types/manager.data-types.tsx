@@ -11,6 +11,7 @@ export interface productItemData {
   _count: {
     variants: number;
   };
+  soldCount: number;
   createdAt: string;
   updatedAt: string;
 }
