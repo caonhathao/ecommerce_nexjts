@@ -140,3 +140,29 @@ export interface topProductChart {
   title: string;
   totalQuantity: number;
 }
+
+export interface categoryDataResponse {
+  data: categoryItemData[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+}
+
+export interface categoryItemData {
+  createdAt: string;
+  id: string;
+  isActive: boolean;
+  name: string;
+  parentId: string | null;
+  position: number;
+  slug: string;
+  updatedAt: string;
+  _count: {
+    children: number;
+  };
+}
