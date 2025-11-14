@@ -151,7 +151,7 @@ export async function createOrderDraft(formData: FormData) {
     const draft = await prisma.orderDraft.create({
       data: {
         userId,
-        orderNumber: `ORFT-${Date.now()}`,
+        orderNumber: `ORD-${Date.now()}`,
         status: 'AWAITING_PAYMENT',
 
         itemsTotal: itemsTotalPrisma,

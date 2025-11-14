@@ -115,8 +115,7 @@ export async function getOrder(
   _prevState: any,
   formData: GetOrdersParams = {}
 ): Promise<{ orders: any[]; nextCursor: string | undefined }> {
-
-  const  { cursor, status, orderId, limit = 10 } = formData;
+  const { cursor, status, orderId, limit = 10 } = formData;
 
   try {
     const userId = await getCurrentUserId();
@@ -133,6 +132,15 @@ export async function getOrder(
     const order = await prisma.order.findMany({
       where: filter,
       orderBy: { placedAt: 'desc' },
+      include: {
+        items: {
+          include: {
+            product: {
+              include: { images: true },
+            },
+          },
+        },
+      },
       take: limit + 1,
       ...(cursor && { skip: 1, cursor: { id: cursor } }),
     });

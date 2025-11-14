@@ -21,7 +21,12 @@ import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/
 export default function AddressPage() {
   const [address, setAddress] = useState<AddressDTO[]>([]);
   const [isPendingTransition, startTransition] = useTransition();
-  const [state, formAction, isPending] = useActionState(createAddress, { success: false, message: "" });
+  const [state, formAction, isPending] = useActionState(
+    async (prevState: any, formData: FormData) => {
+      return await createAddress(formData);
+    },
+    { success: false, error: '' }
+  );
 
   useEffect(() => {
     startTransition(async () => {
@@ -31,6 +36,27 @@ export default function AddressPage() {
       }
     });
   }, []);
+
+  const handleSubmit = (formData: FormData) => {
+    const data = {
+      line1: formData.get('line1'),
+      ward: formData.get('ward'),
+      district: formData.get('district'),
+      city: formData.get('city'),
+      country: formData.get('country'),
+    };
+    formData.append('data', JSON.stringify(data));
+    return formAction(formData);
+  };
+
+  useEffect(() => {
+    if (state.success) {
+      startTransition(async () => {
+        const data = await getAddress();
+        if (data.success) setAddress(data.addresses);
+      });
+    }
+  }, [state.success]);
 
   return (
     <div className="p-4 w-full min-h-fit">
@@ -42,14 +68,14 @@ export default function AddressPage() {
           </h2>
         </div>
         <Dialog>
-          <form action="" method="POST">
-            <DialogTrigger asChild>
-              <Button size="lg" variant="outline">
-                <MapPlus className="w-6 h-6" />
-                <p>Thêm địa chỉ mới</p>
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+          <DialogTrigger asChild>
+            <Button size="lg" variant="outline">
+              <MapPlus className="w-6 h-6" />
+              <p>Thêm địa chỉ mới</p>
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <form action={handleSubmit}>
               <DialogHeader>
                 <DialogTitle>Thêm địa chỉ của bạn</DialogTitle>
               </DialogHeader>
@@ -71,10 +97,10 @@ export default function AddressPage() {
                   <Input id="city" name="city" required />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="Country">Quốc gia</Label>
+                  <Label htmlFor="country">Quốc gia</Label>
                   <Input
-                    id="Country"
-                    name="Country"
+                    id="country"
+                    name="country"
                     defaultValue="Việt Nam"
                     disabled
                   />
@@ -84,13 +110,15 @@ export default function AddressPage() {
                 <DialogClose asChild>
                   <Button variant="outline">Hủy bỏ</Button>
                 </DialogClose>
-                <Button type="submit">Lưu</Button>
+                <Button type="submit" disabled={isPending}>{isPending ? 'Đang lưu...' : 'Lưu'}</Button>
               </DialogFooter>
-            </DialogContent>
-          </form>
+            </form>
+          </DialogContent>
         </Dialog>
       </div>
-      {address.length > 0 ? (
+      {isPendingTransition ? (
+        <p className="text-center mt-10">Đang tải...</p>
+      ) : address.length > 0 ? (
         <div className="mt-6 grid gap-4">
           {address.map((addr) => (
             <AddressCard key={addr.id} {...addr} />
