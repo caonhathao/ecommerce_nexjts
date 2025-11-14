@@ -359,7 +359,7 @@ const ShopsPage = () => {
     }, [openIndex]);
     async function fetchDetail() {
       try {
-        const response = await fetch(`/api/shop/manage/${item.id}`);
+        const response = await fetch(`/api/manager/shop/query?id=${item.id}`);
         const detail = await response.json();
         console.log(detail.data);
         setDetail(detail.data);
@@ -370,7 +370,7 @@ const ShopsPage = () => {
 
     const handleSubmit = async (value: string) => {
       try {
-        const response = await fetch(`/api/product/draft/${item.id}`, {
+        const response = await fetch(`/api/manager/shop?id=${item.id}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ visibility: value }),
@@ -537,6 +537,7 @@ const ShopsPage = () => {
                   <ul className="w-full flex flex-col gap-2 ">
                     {detail?.members.map((value: shopMember, index) => (
                       <li
+                        key={index}
                         id={`variant-item-${index}`}
                         className="flex flex-col gap-2"
                       >
@@ -611,7 +612,7 @@ const ShopsPage = () => {
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
-        searchObject="shop"
+        baseUrl="/api/manager/shop/search"
         setData={setShopList}
         setIsReset={SetIsReset}
         isReset={isReset}
@@ -766,10 +767,7 @@ const ShopsPage = () => {
             />
           </div>
         </TabsContent>
-         <TabsContent
-          value="all-closed"
-          className="flex flex-col px-4 lg:px-6"
-        >
+        <TabsContent value="all-closed" className="flex flex-col px-4 lg:px-6">
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
             <TabShop
               statusFilter="CLOSED"

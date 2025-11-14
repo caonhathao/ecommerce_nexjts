@@ -7,8 +7,9 @@ import {
   Prisma,
   PrismaClient,
   ProductStatus,
+  Role,
   Visibility,
-  VoucherType
+  VoucherType,
 } from '@/lib/generated/prisma';
 import { faker } from '@faker-js/faker';
 import { Currency, OrderStatus } from '../lib/generated/prisma';
@@ -259,7 +260,7 @@ async function main() {
           id: faker.string.uuid(),
           shopId,
           userId,
-          role: faker.helpers.arrayElement(['ADMIN', 'SELLER', 'USER']),
+          role: faker.helpers.arrayElement(Object.values(Role)),
           createdAt: faker.date.past(),
         },
       });
@@ -271,29 +272,352 @@ async function main() {
   // ------------------------
   // 3️⃣ CATEGORIES
   // ------------------------
-  const categories = await Promise.all(
-    Array.from({ length: 5 }).map(() => {
-      const name = faker.commerce.department();
-      const slug = faker.helpers.slugify(name.toLowerCase());
-      const uniqueSlug = `${slug}-${faker.string.alphanumeric(6).toLowerCase()}`;
+  const categoryTree = [
+    {
+      name: 'Electronics',
+      slug: 'electronics',
+      position: 0,
+      children: [
+        {
+          name: 'Smartphones & Accessories',
+          slug: 'smartphones-accessories',
+          position: 0,
+        },
+        {
+          name: 'Computers & Laptops',
+          slug: 'computers-laptops',
+          position: 1,
+        },
+        { name: 'Audio & Headphones', slug: 'audio-headphones', position: 2 },
+        { name: 'Cameras & Drones', slug: 'cameras-drones', position: 3 },
+        { name: 'Smart Home & IoT', slug: 'smart-home-iot', position: 4 },
+      ],
+    },
+    {
+      name: 'Fashion & Apparel',
+      slug: 'fashion-apparel',
+      position: 1,
+      children: [
+        { name: 'Women’s Clothing', slug: 'womens-clothing', position: 0 },
+        { name: 'Men’s Clothing', slug: 'mens-clothing', position: 1 },
+        { name: 'Shoes & Footwear', slug: 'shoes-footwear', position: 2 },
+        { name: 'Bags & Accessories', slug: 'bags-accessories', position: 3 },
+        {
+          name: 'Jewellery & Watches',
+          slug: 'jewellery-watches',
+          position: 4,
+        },
+      ],
+    },
+    // ... add further top‐level entries similarly
+    {
+      name: 'Home & Living',
+      slug: 'home-living',
+      position: 2,
+      children: [
+        { name: 'Furniture', slug: 'furniture', position: 0 },
+        { name: 'Home Décor', slug: 'home-decor', position: 1 },
+        { name: 'Kitchen & Dining', slug: 'kitchen-dining', position: 2 },
+        { name: 'Bedding & Bath', slug: 'bedding-bath', position: 3 },
+        { name: 'Lighting & Lamps', slug: 'lighting-lamps', position: 4 },
+      ],
+    },
+    {
+      name: 'Beauty & Personal Care',
+      slug: 'beauty-personal-care',
+      position: 3,
+      children: [
+        { name: 'Skincare', slug: 'skincare', position: 0 },
+        { name: 'Haircare', slug: 'haircare', position: 1 },
+        { name: 'Makeup & Cosmetics', slug: 'makeup-cosmetics', position: 2 },
+        { name: 'Fragrances', slug: 'fragrances', position: 3 },
+        {
+          name: 'Wellness & Self-care',
+          slug: 'wellness-selfcare',
+          position: 4,
+        },
+      ],
+    },
+    {
+      name: 'Food & Beverages',
+      slug: 'food-beverages',
+      position: 4,
+      children: [
+        {
+          name: 'Groceries & Daily Needs',
+          slug: 'groceries-daily-needs',
+          position: 0,
+        },
+        { name: 'Snacks & Sweets', slug: 'snacks-sweets', position: 1 },
+        { name: 'Drinks & Beverages', slug: 'drinks-beverages', position: 2 },
+        {
+          name: 'Organic & Health Foods',
+          slug: 'organic-health-foods',
+          position: 3,
+        },
+        { name: 'Gourmet & Gifts', slug: 'gourmet-gifts', position: 4 },
+      ],
+    },
+    {
+      name: 'Sports & Outdoors',
+      slug: 'sports-outdoors',
+      position: 5,
+      children: [
+        { name: 'Fitness Equipment', slug: 'fitness-equipment', position: 0 },
+        {
+          name: 'Outdoor Recreation',
+          slug: 'outdoor-recreation',
+          position: 1,
+        },
+        { name: 'Sportswear', slug: 'sportswear', position: 2 },
+        { name: 'Team Sports Gear', slug: 'team-sports-gear', position: 3 },
+        { name: 'Camping & Hiking', slug: 'camping-hiking', position: 4 },
+      ],
+    },
+    {
+      name: 'Health & Wellness',
+      slug: 'health-wellness',
+      position: 6,
+      children: [
+        {
+          name: 'Personal Care Devices',
+          slug: 'personal-care-devices',
+          position: 0,
+        },
+        { name: 'Fitness Trackers', slug: 'fitness-trackers', position: 1 },
+        { name: 'Sleep & Relaxation', slug: 'sleep-relaxation', position: 2 },
+        {
+          name: 'Healthy Living Products',
+          slug: 'healthy-living-products',
+          position: 3,
+        },
+        {
+          name: 'Vitamins & Supplements',
+          slug: 'vitamins-supplements',
+          position: 4,
+        },
+      ],
+    },
+    {
+      name: 'Baby, Kids & Toys',
+      slug: 'baby-kids-toys',
+      position: 7,
+      children: [
+        {
+          name: 'Baby Gear & Essentials',
+          slug: 'baby-gear-essentials',
+          position: 0,
+        },
+        { name: 'Toys & Games', slug: 'toys-games', position: 1 },
+        {
+          name: 'Kids Clothing & Shoes',
+          slug: 'kids-clothing-shoes',
+          position: 2,
+        },
+        {
+          name: 'Educational & STEM Toys',
+          slug: 'educational-stem-toys',
+          position: 3,
+        },
+        {
+          name: 'Kids Furniture & Decor',
+          slug: 'kids-furniture-decor',
+          position: 4,
+        },
+      ],
+    },
+    {
+      name: 'Books, Movies & Games',
+      slug: 'books-movies-games',
+      position: 8,
+      children: [
+        { name: 'Books & eBooks', slug: 'books-ebooks', position: 0 },
+        { name: 'Movies & TV Series', slug: 'movies-tv-series', position: 1 },
+        {
+          name: 'Video Games & Consoles',
+          slug: 'video-games-consoles',
+          position: 2,
+        },
+        {
+          name: 'Board Games & Puzzles',
+          slug: 'board-games-puzzles',
+          position: 3,
+        },
+        {
+          name: 'Music & Instruments',
+          slug: 'music-instruments',
+          position: 4,
+        },
+      ],
+    },
+    {
+      name: 'Pet Supplies',
+      slug: 'pet-supplies',
+      position: 9,
+      children: [
+        { name: 'Pet Food', slug: 'pet-food', position: 0 },
+        {
+          name: 'Pet Toys & Accessories',
+          slug: 'pet-toys-accessories',
+          position: 1,
+        },
+        {
+          name: 'Pet Health & Grooming',
+          slug: 'pet-health-grooming',
+          position: 2,
+        },
+        {
+          name: 'Aquatic & Fish Supplies',
+          slug: 'aquatic-fish-supplies',
+          position: 3,
+        },
+        {
+          name: 'Pet Bedding & Habitat',
+          slug: 'pet-bedding-habitat',
+          position: 4,
+        },
+      ],
+    },
+    {
+      name: 'Bags, Luggage & Accessories',
+      slug: 'bags-luggage-accessories',
+      position: 10,
+      children: [
+        {
+          name: 'Backpacks & School Bags',
+          slug: 'backpacks-school-bags',
+          position: 0,
+        },
+        { name: 'Travel Luggage', slug: 'travel-luggage', position: 1 },
+        { name: 'Handbags & Wallets', slug: 'handbags-wallets', position: 2 },
+        {
+          name: 'Laptop Bags & Briefcases',
+          slug: 'laptop-bags-briefcases',
+          position: 3,
+        },
+        {
+          name: 'Accessories & Wallets',
+          slug: 'accessories-wallets',
+          position: 4,
+        },
+      ],
+    },
+    {
+      name: 'Automotive & Industrial',
+      slug: 'automotive-industrial',
+      position: 11,
+      children: [
+        { name: 'Car Accessories', slug: 'car-accessories', position: 0 },
+        { name: 'Motorbike Parts', slug: 'motorbike-parts', position: 1 },
+        { name: 'Tools & Equipment', slug: 'tools-equipment', position: 2 },
+        {
+          name: 'Industrial Supplies',
+          slug: 'industrial-supplies',
+          position: 3,
+        },
+        {
+          name: 'Car Electronics & Audio',
+          slug: 'car-electronics-audio',
+          position: 4,
+        },
+      ],
+    },
+    {
+      name: 'Office Supplies & Stationery',
+      slug: 'office-supplies-stationery',
+      position: 12,
+      children: [
+        { name: 'Office Furniture', slug: 'office-furniture', position: 0 },
+        {
+          name: 'Printers & Supplies',
+          slug: 'printers-supplies',
+          position: 1,
+        },
+        {
+          name: 'Stationery & Writing',
+          slug: 'stationery-writing',
+          position: 2,
+        },
+        { name: 'School Supplies', slug: 'school-supplies', position: 3 },
+        {
+          name: 'Office Tech Accessories',
+          slug: 'office-tech-accessories',
+          position: 4,
+        },
+      ],
+    },
+    {
+      name: 'DIY, Tools & Hardware',
+      slug: 'diy-tools-hardware',
+      position: 13,
+      children: [
+        { name: 'Power Tools', slug: 'power-tools', position: 0 },
+        { name: 'Hand Tools', slug: 'hand-tools', position: 1 },
+        {
+          name: 'Building Materials',
+          slug: 'building-materials',
+          position: 2,
+        },
+        { name: 'Home Improvement', slug: 'home-improvement', position: 3 },
+        {
+          name: 'Painting & Decorating',
+          slug: 'painting-decorating',
+          position: 4,
+        },
+      ],
+    },
+    {
+      name: 'Gifts & Special Occasions',
+      slug: 'gifts-special-occasions',
+      position: 14,
+      children: [
+        { name: 'Gift Hampers', slug: 'gift-hampers', position: 0 },
+        { name: 'Seasonal Decor', slug: 'seasonal-decor', position: 1 },
+        { name: 'Party Supplies', slug: 'party-supplies', position: 2 },
+        {
+          name: 'Personalized Gifts',
+          slug: 'personalized-gifts',
+          position: 3,
+        },
+        { name: 'Greeting Cards', slug: 'greeting-cards', position: 4 },
+      ],
+    },
+  ];
 
-      return prisma.category.create({
+  for (const topCat of categoryTree) {
+    const topId = faker.string.uuid();
+    await prisma.category.create({
+      data: {
+        id: topId,
+        parentId: null,
+        name: topCat.name,
+        slug: topCat.slug,
+        position: topCat.position,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+    for (const sub of topCat.children) {
+      await prisma.category.create({
         data: {
           id: faker.string.uuid(),
-          parentId: null,
-          children: undefined,
-          name,
-          slug: uniqueSlug,
-          position: 1,
+          parentId: topId,
+          name: sub.name,
+          slug: sub.slug,
+          position: sub.position,
           isActive: true,
-          createdAt: faker.date.past(),
-          updatedAt: faker.date.recent(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
       });
-    })
-  );
+    }
+  }
 
-  console.log(`✅ Created ${categories.length} categories`);
+  const categories = await prisma.category.findMany();
+  console.log(
+    `✅ Seeded ${categoryTree.length} top-categories with sub-categories`
+  );
 
   // ------------------------
   // 3️⃣ TAGS
@@ -347,6 +671,7 @@ async function main() {
           maxPrice,
           status: faker.helpers.arrayElement(Object.values(ProductStatus)),
           visibility: faker.helpers.arrayElement(Object.values(Visibility)),
+          soldCount: faker.number.int({ min: 10, max: 10000 }),
         },
       });
     })
@@ -509,17 +834,61 @@ async function main() {
   // ------------------------
   // 8️⃣ ORDERS
   // ------------------------
+  // ------------------------
+  // 8️⃣ ORDERS (with 2-3 items each)
+  // ------------------------
+  console.log('🌱 Seeding orders and order items...');
+
   const orders = await Promise.all(
-    Array.from({ length: 10 }).map(async (_, i) => {
+    Array.from({ length: 100 }).map(async (_, i) => {
+      // --- 1. Generate 2 or 3 items' data FIRST ---
+      const itemCount = faker.number.int({ min: 2, max: 3 });
+      const itemsData = Array.from({ length: itemCount }).map(() => {
+        const product = faker.helpers.arrayElement(products);
+        const variant = faker.helpers.arrayElement(variants);
+        // NOTE: Your OrderItem model might have different fields
+        // This is based on your original commented-out code
+        const unitPrice = faker.number.int({ min: 100000, max: 300000 });
+        const quantity = faker.number.int({ min: 1, max: 5 });
+        const total = unitPrice * quantity; // Calculate real total
+
+        return {
+          // Data for the OrderItem
+          data: {
+            id: faker.string.uuid(),
+            product: { connect: { id: product.id } },
+            variant: { connect: { id: variant.id } },
+            title: faker.commerce.productName(),
+            sku: faker.string.alphanumeric(8),
+            unitPrice,
+            quantity,
+            discount: 0,
+            total,
+          },
+          // Temporary value for calculating the order's total
+          _calculatedTotal: total,
+        };
+      });
+
+      // --- 2. Calculate real totals for the Order ---
+      const itemsTotal = itemsData.reduce(
+        (sum, item) => sum + item._calculatedTotal,
+        0
+      );
+      const shippingFee = faker.number.int({ min: 0, max: 100000 });
+      const discountTotal = faker.number.int({ min: 0, max: 50000 });
+      const taxTotal = Math.round(itemsTotal * 0.1); // Tax based on real items
+      const grandTotal = itemsTotal + shippingFee + taxTotal - discountTotal;
+
+      // --- 3. Get user, shop, and date ---
       const user = faker.helpers.arrayElement(users);
       const shop = faker.helpers.arrayElement(shops);
 
-      const itemsTotal = faker.number.int({ min: 200000, max: 2000000 });
-      const shippingFee = faker.number.int({ min: 0, max: 100000 });
-      const discountTotal = faker.number.int({ min: 0, max: 50000 });
-      const taxTotal = Math.round(itemsTotal * 0.1);
-      const grandTotal = itemsTotal + shippingFee + taxTotal - discountTotal;
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 180);
+      const placedAt = faker.date.between({ from: startDate, to: new Date() });
 
+      // --- 4. Create the Order and its OrderItems in one transaction ---
       const order = await prisma.order.create({
         data: {
           id: faker.string.uuid(),
@@ -534,9 +903,9 @@ async function main() {
           fulfillmentStatus: faker.helpers.arrayElement(
             Object.values(FulfillmentStatus)
           ),
-
           currency: faker.helpers.arrayElement(Object.values(Currency)),
 
+          // Use the calculated totals
           itemsTotal,
           shippingFee,
           discountTotal,
@@ -559,11 +928,16 @@ async function main() {
 
           contactEmail: faker.internet.email(),
           contactPhone: null,
-
           notes: faker.lorem.sentence(),
-          placedAt: faker.date.recent({ days: 30 }),
-          updatedAt: faker.date.recent({ days: 15 }),
+          placedAt: placedAt,
+          updatedAt: placedAt,
           canceledAt: null,
+
+          // --- THIS IS THE KEY ---
+          // Use the correct relation name 'items' from your schema
+          items: {
+            create: itemsData.map((item) => item.data),
+          },
         },
       });
 
@@ -571,36 +945,37 @@ async function main() {
     })
   );
 
-  console.log(`✅ Created ${orders.length} orders`);
-
+  // This log message is now accurate
+  console.log(`✅ Created ${orders.length} orders (with 2-3 items each)`);
   // ------------------------
   // 8️⃣ ORDER ITEMS
   // ------------------------
-  const orderItems = await Promise.all(
-    Array.from({ length: 20 }).map(() => {
-      return prisma.orderItem.create({
-        data: {
-          id: faker.string.uuid(),
+  // const orderItems = await Promise.all(
+  //   Array.from({ length: 100 }).map(() => {
+  //     return prisma.orderItem.create({
+  //       data: {
+  //         id: faker.string.uuid(),
 
-          order: { connect: { id: faker.helpers.arrayElement(orders).id } },
-          product: { connect: { id: faker.helpers.arrayElement(products).id } },
-          variant: { connect: { id: faker.helpers.arrayElement(variants).id } },
+  //         order: { connect: { id: faker.helpers.arrayElement(orders).id } },
+  //         product: { connect: { id: faker.helpers.arrayElement(products).id } },
+  //         variant: { connect: { id: faker.helpers.arrayElement(variants).id } },
 
-          title: faker.commerce.productName(),
-          sku: faker.string.alphanumeric(8),
-          unitPrice: faker.number.int({ min: 100000, max: 300000 }),
-          quantity: faker.number.int({ min: 1, max: 5 }),
-          discount: 0,
-          total: 1,
-          metadata: undefined,
+  //         title: faker.commerce.productName(),
+  //         sku: faker.string.alphanumeric(8),
+  //         unitPrice: faker.number.int({ min: 100000, max: 300000 }),
+  //         quantity: faker.number.int({ min: 1, max: 5 }),
+  //         discount: 0,
+  //         total: 1,
+  //         metadata: undefined,
 
-          review: undefined,
-        },
-      });
-    })
-  );
+  //         review: undefined,
+  //       },
+  //     });
+  //   })
+  // );
 
-  console.log(`✅ Created ${orderItems.length} order items`);
+  const orderItems = await prisma.orderItem.findMany();
+  console.log(`✅ Fetched ${orderItems.length} order items (from orders)`);
 
   // ------------------------
   // 8️⃣ PAYMENTS

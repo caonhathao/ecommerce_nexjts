@@ -4,12 +4,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 //query api
 //get all data of one product
-export const GET = (
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) => {
-  return withAuth(async (userId: string) => {
-    const { id } = await context.params;
+export const GET= withAuth(async (userId: string, request: NextRequest) => {
+  const { searchParams } = new URL(request.url);
+
+  const id = String(searchParams.get('id'));
     try {
       const data = await prisma.shop.findFirst({
         where: {
@@ -64,48 +62,44 @@ export const GET = (
         },
       });
     }
-  })(request);
-};
+  })
 
 //if pass, update status and visibility of product
-export const POST = (
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) => {
-  return withAuth(async (userId: string) => {
-    const { id } = await context.params;
-    try {
-      const body = await request.json();
-      const { status } = body;
+export const POST = withAuth(async (userId: string, request: NextRequest) => {
+  const { searchParams } = new URL(request.url);
 
-      if (!id) {
-        return NextResponse.json(
-          { success: false, error: 'Missing id' },
-          { status: 400 }
-        );
-      }
+  const id = String(searchParams.get('id'));
+  try {
+    const body = await request.json();
+    const { status } = body;
 
-      if (!status) {
-        return NextResponse.json(
-          { success: false, error: 'Missing status field' },
-          { status: 400 }
-        );
-      }
-
-      // Update product status and visibility (adjust values to match your schema/enums)
-      await prisma.shop.update({
-        where: { id },
-        data: {
-          status: status,
-        },
-      });
-
-      return NextResponse.json({ success: true });
-    } catch (err) {
+    if (!id) {
       return NextResponse.json(
-        { success: false, error: 'Internal Server Error' },
-        { status: 500 }
+        { success: false, error: 'Missing id' },
+        { status: 400 }
       );
     }
-  })(request);
-};
+
+    if (!status) {
+      return NextResponse.json(
+        { success: false, error: 'Missing status field' },
+        { status: 400 }
+      );
+    }
+
+    // Update product status and visibility (adjust values to match your schema/enums)
+    await prisma.shop.update({
+      where: { id },
+      data: {
+        status: status,
+      },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json(
+      { success: false, error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+});

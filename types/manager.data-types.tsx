@@ -11,6 +11,7 @@ export interface productItemData {
   _count: {
     variants: number;
   };
+  soldCount: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -92,9 +93,9 @@ export interface shopMember {
   id: string;
   role: string;
   user: {
-      id: string;
-      name: string;
-      image: string;
+    id: string;
+    name: string;
+    image: string;
   };
 }
 
@@ -121,4 +122,74 @@ export interface shopDetail {
   createdAt: string;
   updatedAt: string;
   members: shopMember[];
+}
+
+export interface revenueEleChart {
+  date: Date;
+  total: number;
+}
+
+export interface orderStatusRateChart {
+  label: string;
+  total: number;
+  fill: string;
+}
+
+export interface topProductChart {
+  productId: string;
+  title: string;
+  totalQuantity: number;
+}
+
+export interface categoryDataResponse {
+  data: categoryItemData[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+}
+
+export interface categoryItemData {
+  createdAt: string;
+  id: string;
+  isActive: boolean;
+  name: string;
+  parentId: string | null;
+  position: number;
+  slug: string;
+  updatedAt: string;
+  _count: {
+    children: number;
+  };
+}
+
+export interface categoryDetail {
+  id: string;
+  name: string;
+  slug: string;
+  isActive: boolean;
+
+  parentId: string | null;
+  parent: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  children: {
+    id: string;
+    name: string;
+    slug: string;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface categoryChildDetail {
+  id: string;
+  name: string;
+  slug: string;
 }

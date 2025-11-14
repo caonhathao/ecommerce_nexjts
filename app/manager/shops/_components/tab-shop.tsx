@@ -17,10 +17,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  shopData,
-  shopItemData
-} from '@/types/manager.data-types';
+import { fetchData } from '@/funcs/fetch';
+import { shopData, shopItemData } from '@/types/manager.data-types';
 import {
   closestCenter,
   DndContext,
@@ -45,7 +43,7 @@ import {
   Row,
   Table as TanstackTable,
 } from '@tanstack/react-table';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 /**
  * @interface tabProductProps
@@ -114,32 +112,21 @@ const TabShop = ({
   DraggableRow,
   handleDragEnd,
 }: tabShopProps) => {
-  const fetchData = async (
-    page: number,
-    limit: number,
-    visibility: string = ''
-  ) => {
-    try {
-      const response = await fetch(
-        `/api/shop/manage?page=${page}&&limit=${limit}&&status=${statusFilter}`
-      );
-      const data = await response.json();
-
-      //console.log(data);
-      setData(data);
-      setShopList(data.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  const [rows, setRows] = React.useState<number>(10);
   useEffect(() => {
-    fetchData(1, 10, statusFilter);
+    fetchData(
+      '/api/manager/shop',
+      { page: 1, limit: rows, status: statusFilter },
+      setData
+    );
   }, [statusFilter, isReset]);
 
-  // useEffect(() => {
-  //   console.log(shopList);
-  // }, [shopList]);
+  useEffect(() => {
+    console.log('category data changed:', data);
+    if (data) {
+      setShopList(data.data);
+    }
+  }, [data]);
 
   if (!data || !shopList) return <Loading />;
 
@@ -207,10 +194,15 @@ const TabShop = ({
               Rows per page
             </Label>
             <Select
-              value={`${table.getState().pagination.pageSize}`}
+              value={rows.toString()}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
-                fetchData(1, Number(value), statusFilter);
+                setRows(Number(value));
+                fetchData(
+                  '/api/manager/shop',
+                  { page: 1, limit: Number(value), isActive: statusFilter },
+                  setData
+                );
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -236,7 +228,11 @@ const TabShop = ({
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => {
                 table.setPageIndex(0);
-                fetchData(1, 10, statusFilter);
+                fetchData(
+                  '/api/manager/shop',
+                  { page: 1, limit: rows, isActive: statusFilter },
+                  setData
+                );
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -249,7 +245,15 @@ const TabShop = ({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                fetchData(data.pagination.page - 1, 10, statusFilter);
+                fetchData(
+                  '/api/manager/shop',
+                  {
+                    page: data.pagination.page - 1,
+                    limit: rows,
+                    isActive: statusFilter,
+                  },
+                  setData
+                );
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -262,7 +266,15 @@ const TabShop = ({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                fetchData(data.pagination.page + 1, 10, statusFilter);
+                fetchData(
+                  '/api/manager/shop',
+                  {
+                    page: data.pagination.page + 1,
+                    limit: rows,
+                    isActive: statusFilter,
+                  },
+                  setData
+                );
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >
@@ -275,7 +287,15 @@ const TabShop = ({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                fetchData(data.pagination.totalPages, 10, statusFilter);
+                fetchData(
+                  '/api/manager/shop',
+                  {
+                    page: data.pagination.totalPages,
+                    limit: rows,
+                    isActive: statusFilter,
+                  },
+                  setData
+                );
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >

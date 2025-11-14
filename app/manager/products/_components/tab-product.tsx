@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { fetchData } from '@/funcs/fetch';
 import { productData, productItemData } from '@/types/manager.data-types';
 import {
   closestCenter,
@@ -42,7 +43,7 @@ import {
   Row,
   Table as TanstackTable,
 } from '@tanstack/react-table';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 /**
  * @interface tabProductProps
@@ -111,32 +112,22 @@ const TabProduct = ({
   DraggableRow,
   handleDragEnd,
 }: tabProductProps) => {
-  const fetchData = async (
-    page: number,
-    limit: number,
-    visibility: string = ''
-  ) => {
-    try {
-      const response = await fetch(
-        `/api/product/manage?page=${page}&&limit=${limit}&&status=${visibility}`
-      );
-      const data = await response.json();
-
-      //console.log(data);
-      setData(data);
-      setProductList(data.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const [rows, setRows] = React.useState<number>(10);
 
   useEffect(() => {
-    fetchData(1, 10, visibilityFilter);
+    fetchData(
+      '/api/manager/product',
+      { page: 1, limit: rows, visibility: visibilityFilter },
+      setData
+    );
   }, [visibilityFilter, isReset]);
 
-  // useEffect(() => {
-  //   console.log(productList);
-  // }, [productList]);
+  useEffect(() => {
+    console.log('category data changed:', data);
+    if (data) {
+      setProductList(data.data);
+    }
+  }, [data]);
 
   if (!data || !productList) return <Loading />;
 
@@ -204,10 +195,15 @@ const TabProduct = ({
               Rows per page
             </Label>
             <Select
-              value={`${table.getState().pagination.pageSize}`}
+              value={rows.toString()}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
-                fetchData(1, Number(value), visibilityFilter);
+                setRows(Number(value));
+                fetchData(
+                  '/api/manager/product',
+                  { page: 1, limit: Number(value), isActive: visibilityFilter },
+                  setData
+                );
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -233,7 +229,11 @@ const TabProduct = ({
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => {
                 table.setPageIndex(0);
-                fetchData(1, 10, visibilityFilter);
+                fetchData(
+                  '/api/manager/product',
+                  { page: 1, limit: rows, isActive: visibilityFilter },
+                  setData
+                );
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -246,7 +246,15 @@ const TabProduct = ({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                fetchData(data.pagination.page - 1, 10, visibilityFilter);
+                fetchData(
+                  '/api/manager/product',
+                  {
+                    page: data.pagination.page - 1,
+                    limit: rows,
+                    isActive: visibilityFilter,
+                  },
+                  setData
+                );
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -259,7 +267,15 @@ const TabProduct = ({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                fetchData(data.pagination.page + 1, 10, visibilityFilter);
+                fetchData(
+                  '/api/manager/product',
+                  {
+                    page: data.pagination.page + 1,
+                    limit: rows,
+                    isActive: visibilityFilter,
+                  },
+                  setData
+                );
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >
@@ -272,7 +288,15 @@ const TabProduct = ({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                fetchData(data.pagination.totalPages, 10, visibilityFilter);
+                fetchData(
+                  '/api/manager/product',
+                  {
+                    page: data.pagination.totalPages,
+                    limit: rows,
+                    isActive: visibilityFilter,
+                  },
+                  setData
+                );
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >
