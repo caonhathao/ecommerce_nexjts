@@ -330,7 +330,8 @@ const ProductsPage = () => {
     const [detail, setDetail] = React.useState<productDetail | null>(null);
     const [openIndex, setOpenIndex] = React.useState<number | null>(null);
     const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
-    const [defaultVisibility, setDefaultVisibility] = React.useState<string>('');
+    const [defaultVisibility, setDefaultVisibility] =
+      React.useState<string>('');
 
     const [value, setValue] = React.useState<string>('');
 
@@ -370,7 +371,9 @@ const ProductsPage = () => {
 
     async function fetchDetail() {
       try {
-        const response = await fetch(`/api/product/manage/${item.id}`);
+        const response = await fetch(
+          `/api/manager/product/query?id=${item.id}`
+        );
         const detail = await response.json();
         console.log(detail.data);
         setDetail(detail.data);
@@ -580,6 +583,7 @@ const ProductsPage = () => {
                   <ul className="w-full flex flex-col gap-2 ">
                     {detail?.variants.map((value: variantDetail, index) => (
                       <li
+                        key={index}
                         id={`variant-item-${index}`}
                         className="flex flex-col gap-2"
                       >
@@ -655,7 +659,7 @@ const ProductsPage = () => {
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
-        searchObject="product"
+        baseUrl="/api/manager/product/search"
         setData={setProductList}
         setIsReset={SetIsReset}
         isReset={isReset}
