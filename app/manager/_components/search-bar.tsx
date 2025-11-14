@@ -13,30 +13,23 @@ import { RiResetRightLine } from 'react-icons/ri';
 import { z } from 'zod';
 
 interface SearchProps {
+  baseUrl: string;
   setData: Dispatch<SetStateAction<any>>;
   isReset: boolean;
   setIsReset: Dispatch<SetStateAction<boolean>>;
-  searchObject: string;
 }
 
 const formSchema = z.object({
   id: z.string().nonempty('Thiếu id'),
 });
 
-const SearchBar = ({
-  setData,
-  setIsReset,
-  isReset,
-  searchObject,
-}: SearchProps) => {
+const SearchBar = ({ baseUrl, setData, setIsReset, isReset }: SearchProps) => {
   async function onSubmit(value: z.infer<typeof formSchema>) {
     try {
-      const response = await fetch(
-        `/api/manager/search?owner=${searchObject}&&id=${value.id}`
-      );
+      const response = await fetch(`${baseUrl}?id=${value.id}`);
       const data = await response.json();
       console.log('data searched:', data.data);
-      if (data.success === 403) setData([]);
+      if (data.success === 403 || data.success === 500) setData([]);
       else setData(data.data);
     } catch (e) {
       console.error(e);

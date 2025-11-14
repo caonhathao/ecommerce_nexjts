@@ -115,7 +115,7 @@ const TabCategory = ({
   DraggableRow,
   handleDragEnd,
 }: tabProductProps) => {
-  const [rows, SetRows] = React.useState<number>(10);
+  const [rows, setRows] = React.useState<number>(10);
 
   useEffect(() => {
     fetchData(
@@ -126,7 +126,7 @@ const TabCategory = ({
   }, [activeFilter, isReset]);
 
   useEffect(() => {
-    console.log('category data changed:', data);
+    //console.log('category data changed:', data);
     if (data) {
       setCategoryList(data.data);
     }
@@ -200,7 +200,8 @@ const TabCategory = ({
             <Select
               value={rows.toString()}
               onValueChange={(value) => {
-                SetRows(Number(value));
+                setRows(Number(value));
+                table.setPageSize(Number(value));
                 fetchData(
                   '/api/manager/category',
                   { page: 1, limit: Number(value), isActive: activeFilter },

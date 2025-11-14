@@ -1,19 +1,7 @@
 'use client';
-import {
-  formatDay,
-  formatPrice,
-} from '@/app/(public)/_components/global-function';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { formatDay } from '@/app/(public)/_components/global-function';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Drawer,
@@ -46,10 +34,10 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
+  categoryChildDetail,
   categoryDataResponse,
+  categoryDetail,
   categoryItemData,
-  productDetail,
-  variantDetail,
 } from '@/types/manager.data-types';
 import {
   DragEndEvent,
@@ -84,9 +72,7 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
-import Image from 'next/image';
 import React, { useEffect } from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { IoIosArrowUp } from 'react-icons/io';
@@ -102,6 +88,7 @@ const CategoryManagePage = () => {
   );
   const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, SetIsReset] = React.useState<boolean>(false);
+  const [defaultActive, setDefaultActive] = React.useState<string>('true');
 
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -323,11 +310,9 @@ const CategoryManagePage = () => {
 
   function TableCellViewer({ item }: { item: categoryItemData }) {
     const isMobile = useIsMobile();
-    const [detail, setDetail] = React.useState<productDetail | null>(null);
+    const [detail, setDetail] = React.useState<categoryDetail | null>(null);
     const [openIndex, setOpenIndex] = React.useState<number | null>(null);
     const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
-    const [defaultVisibility, setDefaultVisibility] =
-      React.useState<string>('');
 
     const [value, setValue] = React.useState<string>('');
 
@@ -361,13 +346,15 @@ const CategoryManagePage = () => {
 
     useEffect(() => {
       if (detail) {
-        setDefaultVisibility(detail.visibility);
+        setDefaultActive(detail.isActive.toString());
       }
     }, [detail]);
 
     async function fetchDetail() {
       try {
-        const response = await fetch(`/api/product/manage/${item.id}`);
+        const response = await fetch(
+          `/api/manager/category/query?id=${item.id}`
+        );
         const detail = await response.json();
         console.log(detail.data);
         setDetail(detail.data);
@@ -396,7 +383,7 @@ const CategoryManagePage = () => {
       }
     };
 
-    const renderVariant = (index: number, value: variantDetail) => {
+    const renderVariant = (index: number, value: categoryChildDetail) => {
       return (
         <div
           className={`w-full flex flex-col gap-4 
@@ -405,38 +392,43 @@ const CategoryManagePage = () => {
         overflow-hidden`}
           key={index}
         >
-          <div className="w-full flex justify-center items-center">
-            <img
-              src={value.image}
-              alt={value.image || index.toString()}
-              className="w-[50%]"
-            />
-          </div>
-
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-row justify-between items-center gap-4">
             <div className="flex flex-col gap-3">
               <Label htmlFor="name">Tên sản phẩm</Label>
               <div className="w-full">{value.name}</div>
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+                  size="icon"
+                >
+                  <IconDotsVertical />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-32">
+                <DropdownMenuItem className="flex justify-center items-center">
+                  <Button
+                    variant={'ghost'}
+                    className="text-left"
+                    onClick={() => handleCopy(value.id)}
+                  >
+                    Sao chép ID
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3">
-              <Label htmlFor="sku">Mã SKU</Label>
-              <div className="w-full">{value.sku}</div>
+              <Label htmlFor="sku">URL-friendly</Label>
+              <div className="w-full">{value.slug}</div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="price">Giá</Label>
-              <div>{formatPrice(Number(value.price))}</div>
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="currency-variant">Đơn vị tiền tệ</Label>
-              <div>{value.currency}</div>
-            </div>
-          </div>
           <Separator />
         </div>
       );
@@ -455,69 +447,18 @@ const CategoryManagePage = () => {
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader className="gap-1">
-            <DrawerTitle>{detail?.title || 'unknown'}</DrawerTitle>
-            <DrawerDescription>Thông tin chi tiết sản phẩm</DrawerDescription>
+            <DrawerTitle>{detail?.name || 'unknown'}</DrawerTitle>
+            <DrawerDescription>Thông tin chi tiết danh mục</DrawerDescription>
           </DrawerHeader>
           <div
             className="flex flex-col gap-4 overflow-y-auto px-4 text-sm"
             ref={scrollContainerRef}
           >
             <form className="flex flex-col gap-4">
-              <div className="w-full flex justify-center items-center">
-                <Carousel className="w-[70%] max-w-lg">
-                  <CarouselContent>
-                    {detail?.images?.map((img, index) => (
-                      <CarouselItem key={index}>
-                        <div className="p-1">
-                          <Card className="w-full h-64 overflow-hidden">
-                            <CardContent className="relative w-full h-full p-0">
-                              <Image
-                                src={img.url}
-                                alt={img.alt || `Product image ${index + 1}`}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 768px) 100vw, 500px"
-                                priority={index === 0}
-                              />
-                            </CardContent>
-                          </Card>
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </Carousel>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="shop">Cửa hàng</Label>
-                <div className="w-full flex flex-row justify-between items-center gap-2">
-                  <div className="flex flex-row justify-start items-center gap-2">
-                    <Avatar>
-                      <AvatarImage src={detail?.shop.logoUrl} alt="shopLogo" />
-                      <AvatarFallback>UK</AvatarFallback>
-                    </Avatar>
-                    <p>{detail?.shop.name}</p>
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant={'outline'}>
-                        <BsThreeDotsVertical />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>Xem cửa hàng</DropdownMenuItem>
-                      <DropdownMenuItem>Sao chép ID</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="title">Tên sản phẩm</Label>
-                  <div className="w-full">{detail?.title}</div>
+                  <Label htmlFor="title">Tên danh mục</Label>
+                  <div className="w-full">{detail?.name}</div>
                 </div>
                 <div className="flex flex-col gap-3">
                   <Label htmlFor="status">URL-friendly</Label>
@@ -527,89 +468,107 @@ const CategoryManagePage = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="target">Xuất xứ</Label>
-                  <div>{detail?.origin}</div>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="limit">Đơn vị tiền tệ</Label>
-                  <div>{detail?.currency}</div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="target">Giá tối thiểu</Label>
-                  <div>{formatPrice(Number(detail?.minPrice))}</div>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="limit">Giá tối đa</Label>
-                  <div>{formatPrice(Number(detail?.maxPrice))}</div>
-                </div>
-              </div>
-
               <div className="flex flex-col gap-3">
                 <Label htmlFor="visibility">Hiển thị</Label>
                 <Select
-                  value={defaultVisibility}
+                  value={defaultActive}
                   onValueChange={(value) => setValue(value)}
                 >
                   <SelectTrigger id="visibility" className="w-full">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="UNLISTED">Không cho phép</SelectItem>
-                    <SelectItem value="PRIVATE">Đang xin phép</SelectItem>
-                    <SelectItem value="PUBLIC">Cho phép</SelectItem>
+                    <SelectItem value="true">Hiển thị</SelectItem>
+                    <SelectItem value="false">Ẩn</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="type">Mô tả</Label>
-                <textarea defaultValue={detail?.description || ''} />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-3">
+                  <Label htmlFor="target">Danh mục cha</Label>
+                  {detail?.parent ? (
+                    <div className="flex flex-row justify-between items-center gap-4">
+                      <div className="flex flex-col gap-3">
+                        <Label htmlFor="name">Tên danh mục</Label>
+                        <div className="w-full">{detail.name}</div>
+                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+                            size="icon"
+                          >
+                            <IconDotsVertical />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-32">
+                          <DropdownMenuItem className="flex justify-center items-center">
+                            <Button
+                              variant={'ghost'}
+                              className="text-left"
+                              onClick={() => handleCopy(detail.parent.id)}
+                            >
+                              Sao chép ID
+                            </Button>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  ) : (
+                    <div>Không có danh mục cha</div>
+                  )}
+                </div>
               </div>
 
               <div className="flex flex-col gap-3">
-                <Label htmlFor="variants-list">Phiên bản</Label>
-                <div className="flex flex-col  gap-4">
-                  <ul className="w-full flex flex-col gap-2 ">
-                    {detail?.variants.map((value: variantDetail, index) => (
-                      <li
-                        id={`variant-item-${index}`}
-                        className="flex flex-col gap-2"
-                      >
-                        <div className="w-full flex flex-row justify-between items-center">
-                          <div className="flex flex-row justify-start items-center gap-2">
-                            <p>
-                              {index + 1}
-                              {'. '}
-                            </p>
-                            <p>{value.name}</p>
-                          </div>
-                          <Button
-                            variant={'outline'}
-                            onClick={() =>
-                              setOpenIndex(openIndex !== index ? index : null)
-                            }
-                            type="button"
+                <Label htmlFor="variants-list">Danh mục con</Label>
+                {detail?.children.length !== 0 ? (
+                  <div className="flex flex-col  gap-4">
+                    <ul className="w-full flex flex-col gap-2 ">
+                      {detail?.children.map(
+                        (value: categoryChildDetail, index) => (
+                          <li
+                            key={index}
+                            id={`variant-item-${index}`}
+                            className="flex flex-col gap-2"
                           >
-                            <div
-                              className={`${openIndex !== index ? `transform-[rotate(180deg)]` : `transform-[rotate(0deg)]`} transition ease-in-out`}
-                            >
-                              <IoIosArrowUp />
+                            <div className="w-full flex flex-row justify-between items-center">
+                              <div className="flex flex-row justify-start items-center gap-2">
+                                <p>
+                                  {index + 1}
+                                  {'. '}
+                                </p>
+                                <p>{value.name}</p>
+                              </div>
+                              <Button
+                                variant={'outline'}
+                                onClick={() =>
+                                  setOpenIndex(
+                                    openIndex !== index ? index : null
+                                  )
+                                }
+                                type="button"
+                              >
+                                <div
+                                  className={`${openIndex !== index ? `transform-[rotate(180deg)]` : `transform-[rotate(0deg)]`} transition ease-in-out`}
+                                >
+                                  <IoIosArrowUp />
+                                </div>
+                              </Button>
                             </div>
-                          </Button>
-                        </div>
-
-                        {renderVariant(index, value)}
-
-                        <Separator />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                            {renderVariant(index, value)}
+                            <Separator />
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                ) : (
+                  <div>Không có danh mục con</div>
+                )}
               </div>
             </form>
           </div>
@@ -649,10 +608,14 @@ const CategoryManagePage = () => {
     );
   }
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
-        searchObject="category"
+        baseUrl="/api/manager/category/search"
         setData={setCategoryList}
         setIsReset={SetIsReset}
         isReset={isReset}

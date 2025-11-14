@@ -166,3 +166,30 @@ export interface categoryItemData {
     children: number;
   };
 }
+
+export interface categoryDetail {
+  id: string;
+  name: string;
+  slug: string;
+  isActive: boolean;
+
+  parentId: string | null;
+  parent: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  children: {
+    id: string;
+    name: string;
+    slug: string;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface categoryChildDetail {
+  id: string;
+  name: string;
+  slug: string;
+}
