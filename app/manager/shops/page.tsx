@@ -359,7 +359,7 @@ const ShopsPage = () => {
     }, [openIndex]);
     async function fetchDetail() {
       try {
-        const response = await fetch(`/api/shop/manage/${item.id}`);
+        const response = await fetch(`/api/manager/shop/${item.id}`);
         const detail = await response.json();
         console.log(detail.data);
         setDetail(detail.data);

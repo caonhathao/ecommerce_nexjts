@@ -53,7 +53,6 @@ const data = {
       title: 'Tổng quan',
       url: '#',
       icon: SquareTerminal,
-      isActive: true,
       items: [
         {
           title: 'Tổng quan',
@@ -65,7 +64,6 @@ const data = {
       title: 'Danh mục',
       url: '#',
       icon: SquareTerminal,
-      isActive: true,
       items: [
         {
           title: 'Quản lí danh mục',

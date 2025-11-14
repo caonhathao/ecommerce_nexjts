@@ -12,6 +12,7 @@ import { ModeToogle } from './custom/mode-toogle';
 function getTitleFromPath(path: string): string {
   // 1. Create a map for your specific routes
   const titleMap: Record<string, string> = {
+    '/manager/categories':'Quản lí danh mục',
     '/manager/product': 'Quản lí sản phẩm',
     '/manager/users': 'Quản lí người dùng',
     '/manager/shops': 'Quản lí cửa hàng',

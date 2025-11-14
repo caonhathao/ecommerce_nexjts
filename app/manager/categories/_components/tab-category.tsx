@@ -17,9 +17,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { fetchData } from '@/funcs/fetch';
 import {
-  shopData,
-  shopItemData
+  categoryDataResponse,
+  categoryItemData,
 } from '@/types/manager.data-types';
 import {
   closestCenter,
@@ -45,15 +46,15 @@ import {
   Row,
   Table as TanstackTable,
 } from '@tanstack/react-table';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 /**
  * @interface tabProductProps
  * Defines the complete set of props required by the TabProduct component.
  */
-interface tabShopProps {
-  /** The current visibility filter string (e.g., "PUBLIC", "PRIVATE"). */
-  statusFilter: string;
+interface tabProductProps {
+  /** The current active filter string (e.g., true, false). */
+  activeFilter: string;
 
   /** Check the reset state: If reset data is called, change reset state */
   isReset: boolean;
@@ -65,28 +66,28 @@ interface tabShopProps {
   sortableId: string;
 
   /** The table instance object returned from `useReactTable`. */
-  table: TanstackTable<shopItemData>;
+  table: TanstackTable<categoryItemData>;
 
   /** The column definitions used to build the table. */
-  columns: ColumnDef<shopItemData>[];
+  columns: ColumnDef<categoryItemData>[];
 
   /** The complete data object from the API, including pagination. */
-  data: shopData | null;
+  data: categoryDataResponse | null;
 
   /** The React state setter for the `data` object. */
-  setData: Dispatch<SetStateAction<shopData | null>>;
+  setData: Dispatch<SetStateAction<categoryDataResponse | null>>;
 
-  /** The array of shop items currently rendered in the table. */
-  shopList: shopItemData[];
+  /** The array of product items currently rendered in the table. */
+  categoryList: categoryItemData[];
 
-  /** The React state setter for the `shopList` array. */
-  setShopList: Dispatch<SetStateAction<shopItemData[]>>;
+  /** The React state setter for the `productList` array. */
+  setCategoryList: Dispatch<SetStateAction<categoryItemData[]>>;
 
-  /** Memoized array of shop IDs for dnd-kit's `SortableContext`. */
+  /** Memoized array of product IDs for dnd-kit's `SortableContext`. */
   dataIds: UniqueIdentifier[];
 
   /** The component to be used for rendering each draggable row. */
-  DraggableRow: React.ComponentType<{ row: Row<shopItemData> }>;
+  DraggableRow: React.ComponentType<{ row: Row<categoryItemData> }>;
 
   /** Callback function to handle the `onDragEnd` event from dnd-kit. */
   handleDragEnd: (event: DragEndEvent) => void;
@@ -94,13 +95,13 @@ interface tabShopProps {
 
 /**
  * Renders a tab panel content, displaying a sortable and paginated table
- * of shops based on the provided `statusFilter`.
+ * of products based on the provided `visibilityFilter`.
  *
- * @param {tabShopProps} props The destructured props for the component.
+ * @param {tabProductProps} props The destructured props for the component.
  * @returns {React.ReactElement} The rendered tab panel.
  */
-const TabShop = ({
-  statusFilter,
+const TabCategory = ({
+  activeFilter,
   isReset,
   sensors,
   sortableId,
@@ -108,40 +109,30 @@ const TabShop = ({
   columns,
   data,
   setData,
-  shopList,
-  setShopList,
+  categoryList,
+  setCategoryList,
   dataIds,
   DraggableRow,
   handleDragEnd,
-}: tabShopProps) => {
-  const fetchData = async (
-    page: number,
-    limit: number,
-    visibility: string = ''
-  ) => {
-    try {
-      const response = await fetch(
-        `/api/manager/shop?page=${page}&&limit=${limit}&&status=${statusFilter}`
-      );
-      const data = await response.json();
-
-      //console.log(data);
-      setData(data);
-      setShopList(data.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+}: tabProductProps) => {
+  const [rows, SetRows] = React.useState<number>(10);
 
   useEffect(() => {
-    fetchData(1, 10, statusFilter);
-  }, [statusFilter, isReset]);
+    fetchData(
+      '/api/manager/category',
+      { page: 1, limit: rows, isActive: activeFilter },
+      setData
+    );
+  }, [activeFilter, isReset]);
 
-  // useEffect(() => {
-  //   console.log(shopList);
-  // }, [shopList]);
+  useEffect(() => {
+    console.log('category data changed:', data);
+    if (data) {
+      setCategoryList(data.data);
+    }
+  }, [data]);
 
-  if (!data || !shopList) return <Loading />;
+  if (!data || !categoryList) return <Loading />;
 
   return (
     <>
@@ -173,7 +164,7 @@ const TabShop = ({
               ))}
             </TableHeader>
             <TableBody className="**:data-[slot=table-cell]:first:w-8">
-              {shopList.length !== 0 ? (
+              {categoryList.length !== 0 ? (
                 <SortableContext
                   items={dataIds}
                   strategy={verticalListSortingStrategy}
@@ -207,10 +198,14 @@ const TabShop = ({
               Rows per page
             </Label>
             <Select
-              value={`${table.getState().pagination.pageSize}`}
+              value={rows.toString()}
               onValueChange={(value) => {
-                table.setPageSize(Number(value));
-                fetchData(1, Number(value), statusFilter);
+                SetRows(Number(value));
+                fetchData(
+                  '/api/manager/category',
+                  { page: 1, limit: Number(value), isActive: activeFilter },
+                  setData
+                );
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -228,7 +223,7 @@ const TabShop = ({
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center text-sm font-medium">
-            Page {data.pagination.page} of {data.pagination.totalPages}
+            Page {data.meta.page} of {data.meta.totalPages}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button
@@ -236,9 +231,13 @@ const TabShop = ({
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => {
                 table.setPageIndex(0);
-                fetchData(1, 10, statusFilter);
+                fetchData(
+                  '/api/manager/category',
+                  { page: 1, limit: rows, isActive: activeFilter },
+                  setData
+                );
               }}
-              disabled={data.pagination.page - 1 <= 0}
+              disabled={data.meta.page - 1 <= 0}
             >
               <span className="sr-only">Go to first page</span>
               <IconChevronsLeft />
@@ -249,9 +248,17 @@ const TabShop = ({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                fetchData(data.pagination.page - 1, 10, statusFilter);
+                fetchData(
+                  '/api/manager/category',
+                  {
+                    page: data.meta.page - 1,
+                    limit: rows,
+                    isActive: activeFilter,
+                  },
+                  setData
+                );
               }}
-              disabled={data.pagination.page - 1 <= 0}
+              disabled={data.meta.page - 1 <= 0}
             >
               <span className="sr-only">Go to previous page</span>
               <IconChevronLeft />
@@ -262,9 +269,17 @@ const TabShop = ({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                fetchData(data.pagination.page + 1, 10, statusFilter);
+                fetchData(
+                  '/api/manager/category',
+                  {
+                    page: data.meta.page + 1,
+                    limit: rows,
+                    isActive: activeFilter,
+                  },
+                  setData
+                );
               }}
-              disabled={data.pagination.page + 1 > data.pagination.totalPages}
+              disabled={data.meta.page + 1 > data.meta.totalPages}
             >
               <span className="sr-only">Go to next page</span>
               <IconChevronRight />
@@ -275,9 +290,17 @@ const TabShop = ({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                fetchData(data.pagination.totalPages, 10, statusFilter);
+                fetchData(
+                  '/api/manager/category',
+                  {
+                    page: data.meta.totalPages,
+                    limit: rows,
+                    isActive: activeFilter,
+                  },
+                  setData
+                );
               }}
-              disabled={data.pagination.page + 1 > data.pagination.totalPages}
+              disabled={data.meta.page + 1 > data.meta.totalPages}
             >
               <span className="sr-only">Go to last page</span>
               <IconChevronsRight />
@@ -288,4 +311,4 @@ const TabShop = ({
     </>
   );
 };
-export default TabShop;
+export default TabCategory;
