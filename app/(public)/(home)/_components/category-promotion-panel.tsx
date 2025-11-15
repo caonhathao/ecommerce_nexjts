@@ -44,7 +44,7 @@ export const CategoryPromotionPanel = () => {
   return (
     <div className="w-full flex flex-row justify-evenly items-center bg-[var(--background)] rounded-lg py-3 overflow-x-auto">
       {data.map((item, index) => (
-        <div className="flex flex-col gap-1 justify-center items-center hover:cursor-pointer">
+        <div key={item.name} className="flex flex-col gap-1 justify-center items-center hover:cursor-pointer">
           <Image width={40} height={40} src={item.icon} alt="logo" className="rounded-2xl"/>
           <p className="w-4/5 text-center text-base overflow-hidden">{t(item.name)}</p>
         </div>

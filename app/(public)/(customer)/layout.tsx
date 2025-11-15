@@ -28,7 +28,7 @@ export default async function UserLayout({
           }}
         />
       </aside>
-      <main className="col-span-12 md:col-span-9 min-h-screen rounded-2xl bg-white">{children}</main>
+      <main className="col-span-12 md:col-span-9 h-fit rounded-2xl bg-white">{children}</main>
     </div>
     </div>
   );
