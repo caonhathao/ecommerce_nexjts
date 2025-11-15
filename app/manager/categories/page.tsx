@@ -4,16 +4,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer';
-import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -29,14 +19,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useIsMobile } from '@/hooks/use-mobile';
 import {
-  categoryChildDetail,
   categoryDataResponse,
-  categoryDetail,
   categoryItemData,
 } from '@/types/manager.data-types';
 import {
@@ -55,7 +41,6 @@ import {
   IconDotsVertical,
   IconGripVertical,
   IconLayoutColumns,
-  IconPlus,
 } from '@tabler/icons-react';
 import {
   ColumnDef,
@@ -72,13 +57,15 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
-import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
+import { NewCategoryForm } from './_components/new-category-form';
 import TabCategory from './_components/tab-category';
+import { TableCellViewer } from './_components/table-cell-viewer';
+import { handleDelete } from './_funcs/funcs';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
@@ -87,7 +74,7 @@ const CategoryManagePage = () => {
     []
   );
   const [copiedId, setCopiedId] = React.useState<string | null>('');
-  const [isReset, SetIsReset] = React.useState<boolean>(false);
+  const [isReset, setIsReset] = React.useState<boolean>(false);
   const [defaultActive, setDefaultActive] = React.useState<string>('true');
 
   const [rowSelection, setRowSelection] = React.useState({});
@@ -125,7 +112,7 @@ const CategoryManagePage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = (value: string) => {
+  const handleCopy = React.useCallback((value: string) => {
     navigator.clipboard
       .writeText(value)
       .then(() => {
@@ -135,6 +122,7 @@ const CategoryManagePage = () => {
         toast('Hành động', {
           description: 'Đã sao chép ID sản phẩm',
         });
+
         setTimeout(() => {
           setCopiedId(null);
         }, 2000);
@@ -142,127 +130,156 @@ const CategoryManagePage = () => {
       .catch((err) => {
         console.error('Failed to copy ID: ', err);
       });
-  };
+  }, []);
 
-  const columns: ColumnDef<categoryItemData>[] = [
-    {
-      id: 'drag',
-      header: () => null,
-      cell: ({ row }) => <DragHandle id={row.original.id} />,
-    },
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <div className="flex items-center justify-center">
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && 'indeterminate')
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center">
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        </div>
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: 'Tên danh mục',
-      header: 'Tên danh mục',
-      cell: ({ row }) => {
-        return <TableCellViewer item={row.original} />;
+  const columns: ColumnDef<categoryItemData>[] = React.useMemo(
+    () => [
+      {
+        id: 'drag',
+        header: () => null,
+        cell: ({ row }) => <DragHandle id={row.original.id} />,
       },
-      enableHiding: false,
-    },
-    {
-      accessorKey: 'Thứ tự',
-      header: 'Thứ tự',
-      cell: ({ row }) => (
-        <div className="w-full flex flex-row gap-2 justify-start items-center">
-          <div>{row.original.position}</div>
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'Hiển thị',
-      header: 'Hiển thị',
-      cell: ({ row }) => (
-        <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.isActive === false ? (
-            <FiXCircle className="fill-red-500 dark:fill-red-400" />
-          ) : (
-            <FaCheckCircle className="fill-green-500 dark:fill-green-400" />
-          )}
-          {row.original.isActive ? 'Có' : 'Không'}
-        </Badge>
-      ),
-    },
-    {
-      accessorKey: 'Số danh mục con',
-      header: () => <div className="w-fit text-right">Số danh mục con</div>,
-      cell: ({ row }) => (
-        <div className="w-full text-right">
-          {row.original._count.children.toString()}
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'Ngày tạo',
-      header: 'Ngày tạo',
-      cell: ({ row }) => {
-        return <div className="w-32">{formatDay(row.original.createdAt)}</div>;
+      {
+        id: 'select',
+        header: ({ table }) => (
+          <div className="flex items-center justify-center">
+            <Checkbox
+              checked={
+                table.getIsAllPageRowsSelected() ||
+                (table.getIsSomePageRowsSelected() && 'indeterminate')
+              }
+              onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+              }
+              aria-label="Select all"
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="flex items-center justify-center">
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label="Select row"
+            />
+          </div>
+        ),
+        enableSorting: false,
+        enableHiding: false,
       },
-    },
-    {
-      accessorKey: 'Ngày sửa',
-      header: 'Ngày sửa',
-      cell: ({ row }) => {
-        return <div className="w-32">{formatDay(row.original.updatedAt)}</div>;
+      {
+        accessorKey: 'Tên danh mục',
+        header: 'Tên danh mục',
+        cell: ({ row }) => {
+          return (
+            <TableCellViewer
+              item={row.original}
+              defaultActive={defaultActive}
+              setDefaultActive={setDefaultActive}
+              setCategoryList={setCategoryList}
+              handleCopy={handleCopy}
+              setIsReset={setIsReset}
+            />
+          );
+        },
+        enableHiding: false,
       },
-    },
-    {
-      id: 'actions',
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-              size="icon"
-            >
-              <IconDotsVertical />
-              <span className="sr-only">Open menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem className="flex justify-center items-center">
+      {
+        accessorKey: 'Thứ tự',
+        header: 'Thứ tự',
+        cell: ({ row }) => (
+          <div className="w-full flex flex-row gap-2 justify-start items-center">
+            <div>{row.original.position}</div>
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'Hiển thị',
+        header: 'Hiển thị',
+        cell: ({ row }) => (
+          <Badge variant="outline" className="text-muted-foreground px-1.5">
+            {row.original.isActive === false ? (
+              <FiXCircle className="fill-red-500 dark:fill-red-400" />
+            ) : (
+              <FaCheckCircle className="fill-green-500 dark:fill-green-400" />
+            )}
+            {row.original.isActive ? 'Có' : 'Không'}
+          </Badge>
+        ),
+      },
+      {
+        accessorKey: 'Số danh mục con',
+        header: () => <div className="w-fit text-right">Số danh mục con</div>,
+        cell: ({ row }) => (
+          <div className="w-full text-right">
+            {row.original._count.children.toString()}
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'Ngày tạo',
+        header: 'Ngày tạo',
+        cell: ({ row }) => {
+          return (
+            <div className="w-32">{formatDay(row.original.createdAt)}</div>
+          );
+        },
+      },
+      {
+        accessorKey: 'Ngày sửa',
+        header: 'Ngày sửa',
+        cell: ({ row }) => {
+          return (
+            <div className="w-32">{formatDay(row.original.updatedAt)}</div>
+          );
+        },
+      },
+      {
+        id: 'actions',
+        cell: ({ row }) => (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <Button
-                variant={'ghost'}
-                className="text-left"
-                onClick={() => handleCopy(row.original.id)}
+                variant="ghost"
+                className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+                size="icon"
               >
-                Sao chép ID
+                <IconDotsVertical />
+                <span className="sr-only">Open menu</span>
               </Button>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
-  ];
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-32">
+              <DropdownMenuItem className="flex justify-center items-center">
+                <Button
+                  variant={'ghost'}
+                  className="text-left"
+                  onClick={() => handleCopy(row.original.id)}
+                >
+                  Sao chép ID
+                </Button>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="flex justify-center items-center">
+                <Button
+                  variant={'destructive'}
+                  className="text-left w-full"
+                  onClick={() =>
+                    handleDelete({
+                      id: row.original.id,
+                      setIsReset: setIsReset,
+                    })
+                  }
+                >
+                  Xóa
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ),
+      },
+    ],
+    [handleCopy, setCategoryList, defaultActive, setDefaultActive]
+  );
 
   const table = useReactTable({
     data: categoryList,
@@ -289,335 +306,16 @@ const CategoryManagePage = () => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  function DragHandle({ id }: { id: string }) {
-    const { attributes, listeners } = useSortable({
-      id,
-    });
-
-    return (
-      <Button
-        {...attributes}
-        {...listeners}
-        variant="ghost"
-        size="icon"
-        className="text-muted-foreground size-7 hover:bg-transparent"
-      >
-        <IconGripVertical className="text-muted-foreground size-3" />
-        <span className="sr-only">Drag to reorder</span>
-      </Button>
-    );
-  }
-
-  function TableCellViewer({ item }: { item: categoryItemData }) {
-    const isMobile = useIsMobile();
-    const [detail, setDetail] = React.useState<categoryDetail | null>(null);
-    const [openIndex, setOpenIndex] = React.useState<number | null>(null);
-    const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
-
-    const [value, setValue] = React.useState<string>('');
-
-    // This effect runs when 'openIndex' changes
-    useEffect(() => {
-      // Only run if an item was OPENED
-      if (openIndex !== null) {
-        // We must wait for your 300ms animation to finish
-        const timer = setTimeout(() => {
-          const container = scrollContainerRef.current;
-
-          // Find the specific <li> element we want to scroll to
-          const element = document.getElementById(`variant-item-${openIndex}`);
-
-          if (container && element) {
-            // This calculates the <li>'s position *inside* the scroll container
-            const scrollToPosition = element.offsetTop - container.offsetTop;
-
-            // Scroll the container to the element
-            container.scrollTo({
-              top: scrollToPosition,
-              behavior: 'smooth',
-            });
-          }
-        }, 300); // 300ms matches your animation
-
-        // Clean up the timer
-        return () => clearTimeout(timer);
-      }
-    }, [openIndex]);
-
-    useEffect(() => {
-      if (detail) {
-        setDefaultActive(detail.isActive.toString());
-      }
-    }, [detail]);
-
-    async function fetchDetail() {
-      try {
-        const response = await fetch(
-          `/api/manager/category/query?id=${item.id}`
-        );
-        const detail = await response.json();
-        console.log(detail.data);
-        setDetail(detail.data);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    const handleSubmit = async (value: string) => {
-      try {
-        const response = await fetch(`/api/product/draft/${item.id}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ visibility: value }),
-        });
-        if (response.status === 200) {
-          toast('Đã cập nhật sản phẩm', {
-            description: 'Sản phẩm được cấp phép hiển thị',
-          });
-          setCategoryList((prev) =>
-            prev.filter((category) => category.id !== item.id)
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    const renderVariant = (index: number, value: categoryChildDetail) => {
-      return (
-        <div
-          className={`w-full flex flex-col gap-4 
-        ${openIndex === index ? 'max-h-[500px]' : 'max-h-0'}
-        transition-[max-height] duration-300 ease-in-out
-        overflow-hidden`}
-          key={index}
-        >
-          <div className="flex flex-row justify-between items-center gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="name">Tên sản phẩm</Label>
-              <div className="w-full">{value.name}</div>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-                  size="icon"
-                >
-                  <IconDotsVertical />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-32">
-                <DropdownMenuItem className="flex justify-center items-center">
-                  <Button
-                    variant={'ghost'}
-                    className="text-left"
-                    onClick={() => handleCopy(value.id)}
-                  >
-                    Sao chép ID
-                  </Button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="sku">URL-friendly</Label>
-              <div className="w-full">{value.slug}</div>
-            </div>
-          </div>
-
-          <Separator />
-        </div>
-      );
-    };
-
-    return (
-      <Drawer direction={isMobile ? 'bottom' : 'right'}>
-        <DrawerTrigger asChild>
-          <Button
-            variant="link"
-            className="text-foreground w-fit px-0 text-left"
-            onClick={fetchDetail}
-          >
-            {item.name}
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent>
-          <DrawerHeader className="gap-1">
-            <DrawerTitle>{detail?.name || 'unknown'}</DrawerTitle>
-            <DrawerDescription>Thông tin chi tiết danh mục</DrawerDescription>
-          </DrawerHeader>
-          <div
-            className="flex flex-col gap-4 overflow-y-auto px-4 text-sm"
-            ref={scrollContainerRef}
-          >
-            <form className="flex flex-col gap-4">
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="title">Tên danh mục</Label>
-                  <div className="w-full">{detail?.name}</div>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="status">URL-friendly</Label>
-                  <div className="flex flex-col gap-3">
-                    <div className="w-full">{detail?.slug}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="visibility">Hiển thị</Label>
-                <Select
-                  value={defaultActive}
-                  onValueChange={(value) => setValue(value)}
-                >
-                  <SelectTrigger id="visibility" className="w-full">
-                    <SelectValue placeholder="Select a type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="true">Hiển thị</SelectItem>
-                    <SelectItem value="false">Ẩn</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="target">Danh mục cha</Label>
-                  {detail?.parent ? (
-                    <div className="flex flex-row justify-between items-center gap-4">
-                      <div className="flex flex-col gap-3">
-                        <Label htmlFor="name">Tên danh mục</Label>
-                        <div className="w-full">{detail.name}</div>
-                      </div>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-                            size="icon"
-                          >
-                            <IconDotsVertical />
-                            <span className="sr-only">Open menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-32">
-                          <DropdownMenuItem className="flex justify-center items-center">
-                            <Button
-                              variant={'ghost'}
-                              className="text-left"
-                              onClick={() => handleCopy(detail.parent.id)}
-                            >
-                              Sao chép ID
-                            </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  ) : (
-                    <div>Không có danh mục cha</div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="variants-list">Danh mục con</Label>
-                {detail?.children.length !== 0 ? (
-                  <div className="flex flex-col  gap-4">
-                    <ul className="w-full flex flex-col gap-2 ">
-                      {detail?.children.map(
-                        (value: categoryChildDetail, index) => (
-                          <li
-                            key={index}
-                            id={`variant-item-${index}`}
-                            className="flex flex-col gap-2"
-                          >
-                            <div className="w-full flex flex-row justify-between items-center">
-                              <div className="flex flex-row justify-start items-center gap-2">
-                                <p>
-                                  {index + 1}
-                                  {'. '}
-                                </p>
-                                <p>{value.name}</p>
-                              </div>
-                              <Button
-                                variant={'outline'}
-                                onClick={() =>
-                                  setOpenIndex(
-                                    openIndex !== index ? index : null
-                                  )
-                                }
-                                type="button"
-                              >
-                                <div
-                                  className={`${openIndex !== index ? `transform-[rotate(180deg)]` : `transform-[rotate(0deg)]`} transition ease-in-out`}
-                                >
-                                  <IoIosArrowUp />
-                                </div>
-                              </Button>
-                            </div>
-                            {renderVariant(index, value)}
-                            <Separator />
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  </div>
-                ) : (
-                  <div>Không có danh mục con</div>
-                )}
-              </div>
-            </form>
-          </div>
-          <DrawerFooter>
-            <Button onClick={() => handleSubmit(value)}>Submit</Button>
-            <DrawerClose asChild>
-              <Button variant="outline">Done</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    );
-  }
-
-  function DraggableRow({ row }: { row: Row<categoryItemData> }) {
-    const { transform, transition, setNodeRef, isDragging } = useSortable({
-      id: row.original.id,
-    });
-
-    return (
-      <TableRow
-        data-state={row.getIsSelected() && 'selected'}
-        data-dragging={isDragging}
-        ref={setNodeRef}
-        className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-        style={{
-          transform: CSS.Transform.toString(transform),
-          transition: transition,
-        }}
-      >
-        {row.getVisibleCells().map((cell) => (
-          <TableCell key={cell.id}>
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </TableCell>
-        ))}
-      </TableRow>
-    );
-  }
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
 
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
         baseUrl="/api/manager/category/search"
         setData={setCategoryList}
-        setIsReset={SetIsReset}
+        setIsReset={setIsReset}
         isReset={isReset}
       />
       <Tabs
@@ -681,10 +379,7 @@ const CategoryManagePage = () => {
                   })}
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="outline" size="sm">
-              <IconPlus />
-              <span className="hidden lg:inline">Add Section</span>
-            </Button>
+            <NewCategoryForm setIsReset={setIsReset} />
           </div>
         </div>
         <TabsContent
@@ -753,3 +448,47 @@ const CategoryManagePage = () => {
 };
 
 export default CategoryManagePage;
+
+function DragHandle({ id }: { id: string }) {
+  const { attributes, listeners } = useSortable({
+    id,
+  });
+
+  return (
+    <Button
+      {...attributes}
+      {...listeners}
+      variant="ghost"
+      size="icon"
+      className="text-muted-foreground size-7 hover:bg-transparent"
+    >
+      <IconGripVertical className="text-muted-foreground size-3" />
+      <span className="sr-only">Drag to reorder</span>
+    </Button>
+  );
+}
+
+function DraggableRow({ row }: { row: Row<categoryItemData> }) {
+  const { transform, transition, setNodeRef, isDragging } = useSortable({
+    id: row.original.id,
+  });
+
+  return (
+    <TableRow
+      data-state={row.getIsSelected() && 'selected'}
+      data-dragging={isDragging}
+      ref={setNodeRef}
+      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition: transition,
+      }}
+    >
+      {row.getVisibleCells().map((cell) => (
+        <TableCell key={cell.id}>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </TableCell>
+      ))}
+    </TableRow>
+  );
+}
