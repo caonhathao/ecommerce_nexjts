@@ -27,7 +27,7 @@ export function CategoryCascader({
   value,
   onChange,
   disabled,
-  placeholder = 'Chọn Danh mục',
+  placeholder = 'Select category',
   className,
 }: CategoryCascaderProps) {
   const [open, setOpen] = React.useState(false);
@@ -111,7 +111,7 @@ export function CategoryCascader({
       <PopoverContent className="w-[720px] p-0" align="start">
         {/* Breadcrumb */}
         <div className="px-3 py-2 text-sm">
-          <span className="text-muted-foreground">Đang chọn: </span>
+          <span className="text-muted-foreground">Selecting: </span>
           <span className="font-medium">{displayText || '—'}</span>
         </div>
         <Separator />

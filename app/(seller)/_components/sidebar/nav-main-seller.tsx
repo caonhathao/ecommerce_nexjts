@@ -18,6 +18,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 export function NavMainSeller({
   items,
@@ -33,17 +36,25 @@ export function NavMainSeller({
     }[];
   }[];
 }) {
+  const pathname = usePathname();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) =>
-          item.items && item.items.length > 0 ? (
+        {items.map((item) => {
+          const childMatch = item.items?.some((sub) =>
+            Boolean(sub.url && pathname.startsWith(sub.url))
+          );
+          const isOpen = Boolean(
+            item.isActive || childMatch || (item.url && pathname === item.url)
+          );
+
+          return item.items && item.items.length > 0 ? (
             // Item with submenu
             <Collapsible
               key={item.title}
               asChild
-              defaultOpen={item.isActive}
+              defaultOpen={isOpen}
               className="group/collapsible"
             >
               <SidebarMenuItem>
@@ -57,11 +68,18 @@ export function NavMainSeller({
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     {item.items.map((subItem) => (
-                      <SidebarMenuSubItem key={subItem.title}>
+                      <SidebarMenuSubItem
+                        key={subItem.title}
+                        className={cn(
+                          subItem.url &&
+                            pathname === subItem.url &&
+                            'bg-accent/50'
+                        )}
+                      >
                         <SidebarMenuSubButton asChild>
-                          <a href={subItem.url}>
+                          <Link href={subItem.url}>
                             <span>{subItem.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
@@ -79,8 +97,8 @@ export function NavMainSeller({
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          )
-        )}
+          );
+        })}
       </SidebarMenu>
     </SidebarGroup>
   );

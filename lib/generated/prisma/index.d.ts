@@ -922,8 +922,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.16.3
-   * Query Engine version: bb420e667c1820a8c05a38023385f6cc7ef8e83a
+   * Prisma Client JS version: 6.19.0
+   * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
    */
   export type PrismaVersion = {
     client: string
@@ -936,6 +936,7 @@ export namespace Prisma {
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -13446,7 +13447,9 @@ export namespace Prisma {
     slug: string | null
     description: string | null
     logoUrl: string | null
+    logoPublicId: string | null
     coverUrl: string | null
+    coverPublicId: string | null
     status: $Enums.ShopStatus | null
     ratingAvg: Decimal | null
     ratingCount: number | null
@@ -13464,7 +13467,9 @@ export namespace Prisma {
     slug: string | null
     description: string | null
     logoUrl: string | null
+    logoPublicId: string | null
     coverUrl: string | null
+    coverPublicId: string | null
     status: $Enums.ShopStatus | null
     ratingAvg: Decimal | null
     ratingCount: number | null
@@ -13482,7 +13487,9 @@ export namespace Prisma {
     slug: number
     description: number
     logoUrl: number
+    logoPublicId: number
     coverUrl: number
+    coverPublicId: number
     status: number
     ratingAvg: number
     ratingCount: number
@@ -13512,7 +13519,9 @@ export namespace Prisma {
     slug?: true
     description?: true
     logoUrl?: true
+    logoPublicId?: true
     coverUrl?: true
+    coverPublicId?: true
     status?: true
     ratingAvg?: true
     ratingCount?: true
@@ -13530,7 +13539,9 @@ export namespace Prisma {
     slug?: true
     description?: true
     logoUrl?: true
+    logoPublicId?: true
     coverUrl?: true
+    coverPublicId?: true
     status?: true
     ratingAvg?: true
     ratingCount?: true
@@ -13548,7 +13559,9 @@ export namespace Prisma {
     slug?: true
     description?: true
     logoUrl?: true
+    logoPublicId?: true
     coverUrl?: true
+    coverPublicId?: true
     status?: true
     ratingAvg?: true
     ratingCount?: true
@@ -13653,7 +13666,9 @@ export namespace Prisma {
     slug: string
     description: string | null
     logoUrl: string | null
+    logoPublicId: string | null
     coverUrl: string | null
+    coverPublicId: string | null
     status: $Enums.ShopStatus
     ratingAvg: Decimal
     ratingCount: number
@@ -13690,7 +13705,9 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     logoUrl?: boolean
+    logoPublicId?: boolean
     coverUrl?: boolean
+    coverPublicId?: boolean
     status?: boolean
     ratingAvg?: boolean
     ratingCount?: boolean
@@ -13717,7 +13734,9 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     logoUrl?: boolean
+    logoPublicId?: boolean
     coverUrl?: boolean
+    coverPublicId?: boolean
     status?: boolean
     ratingAvg?: boolean
     ratingCount?: boolean
@@ -13736,7 +13755,9 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     logoUrl?: boolean
+    logoPublicId?: boolean
     coverUrl?: boolean
+    coverPublicId?: boolean
     status?: boolean
     ratingAvg?: boolean
     ratingCount?: boolean
@@ -13755,7 +13776,9 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     logoUrl?: boolean
+    logoPublicId?: boolean
     coverUrl?: boolean
+    coverPublicId?: boolean
     status?: boolean
     ratingAvg?: boolean
     ratingCount?: boolean
@@ -13766,7 +13789,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type ShopOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ownerId" | "name" | "slug" | "description" | "logoUrl" | "coverUrl" | "status" | "ratingAvg" | "ratingCount" | "contactEmail" | "contactPhone" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["shop"]>
+  export type ShopOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ownerId" | "name" | "slug" | "description" | "logoUrl" | "logoPublicId" | "coverUrl" | "coverPublicId" | "status" | "ratingAvg" | "ratingCount" | "contactEmail" | "contactPhone" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["shop"]>
   export type ShopInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     members?: boolean | Shop$membersArgs<ExtArgs>
@@ -13804,7 +13827,9 @@ export namespace Prisma {
       slug: string
       description: string | null
       logoUrl: string | null
+      logoPublicId: string | null
       coverUrl: string | null
+      coverPublicId: string | null
       status: $Enums.ShopStatus
       ratingAvg: Prisma.Decimal
       ratingCount: number
@@ -14250,7 +14275,9 @@ export namespace Prisma {
     readonly slug: FieldRef<"Shop", 'String'>
     readonly description: FieldRef<"Shop", 'String'>
     readonly logoUrl: FieldRef<"Shop", 'String'>
+    readonly logoPublicId: FieldRef<"Shop", 'String'>
     readonly coverUrl: FieldRef<"Shop", 'String'>
+    readonly coverPublicId: FieldRef<"Shop", 'String'>
     readonly status: FieldRef<"Shop", 'ShopStatus'>
     readonly ratingAvg: FieldRef<"Shop", 'Decimal'>
     readonly ratingCount: FieldRef<"Shop", 'Int'>
@@ -19750,6 +19777,7 @@ export namespace Prisma {
     id: string | null
     productId: string | null
     url: string | null
+    publicId: string | null
     alt: string | null
     position: number | null
     createdAt: Date | null
@@ -19759,6 +19787,7 @@ export namespace Prisma {
     id: string | null
     productId: string | null
     url: string | null
+    publicId: string | null
     alt: string | null
     position: number | null
     createdAt: Date | null
@@ -19768,6 +19797,7 @@ export namespace Prisma {
     id: number
     productId: number
     url: number
+    publicId: number
     alt: number
     position: number
     createdAt: number
@@ -19787,6 +19817,7 @@ export namespace Prisma {
     id?: true
     productId?: true
     url?: true
+    publicId?: true
     alt?: true
     position?: true
     createdAt?: true
@@ -19796,6 +19827,7 @@ export namespace Prisma {
     id?: true
     productId?: true
     url?: true
+    publicId?: true
     alt?: true
     position?: true
     createdAt?: true
@@ -19805,6 +19837,7 @@ export namespace Prisma {
     id?: true
     productId?: true
     url?: true
+    publicId?: true
     alt?: true
     position?: true
     createdAt?: true
@@ -19901,6 +19934,7 @@ export namespace Prisma {
     id: string
     productId: string
     url: string
+    publicId: string | null
     alt: string | null
     position: number
     createdAt: Date
@@ -19929,6 +19963,7 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     url?: boolean
+    publicId?: boolean
     alt?: boolean
     position?: boolean
     createdAt?: boolean
@@ -19939,6 +19974,7 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     url?: boolean
+    publicId?: boolean
     alt?: boolean
     position?: boolean
     createdAt?: boolean
@@ -19949,6 +19985,7 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     url?: boolean
+    publicId?: boolean
     alt?: boolean
     position?: boolean
     createdAt?: boolean
@@ -19959,12 +19996,13 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     url?: boolean
+    publicId?: boolean
     alt?: boolean
     position?: boolean
     createdAt?: boolean
   }
 
-  export type ProductImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "url" | "alt" | "position" | "createdAt", ExtArgs["result"]["productImage"]>
+  export type ProductImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "url" | "publicId" | "alt" | "position" | "createdAt", ExtArgs["result"]["productImage"]>
   export type ProductImageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }
@@ -19984,6 +20022,7 @@ export namespace Prisma {
       id: string
       productId: string
       url: string
+      publicId: string | null
       alt: string | null
       position: number
       createdAt: Date
@@ -20414,6 +20453,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductImage", 'String'>
     readonly productId: FieldRef<"ProductImage", 'String'>
     readonly url: FieldRef<"ProductImage", 'String'>
+    readonly publicId: FieldRef<"ProductImage", 'String'>
     readonly alt: FieldRef<"ProductImage", 'String'>
     readonly position: FieldRef<"ProductImage", 'Int'>
     readonly createdAt: FieldRef<"ProductImage", 'DateTime'>
@@ -20872,6 +20912,7 @@ export namespace Prisma {
     name: string | null
     price: Decimal | null
     image: string | null
+    imagePublicId: string | null
     compareAt: Decimal | null
     currency: $Enums.Currency | null
     stock: number | null
@@ -20892,6 +20933,7 @@ export namespace Prisma {
     name: string | null
     price: Decimal | null
     image: string | null
+    imagePublicId: string | null
     compareAt: Decimal | null
     currency: $Enums.Currency | null
     stock: number | null
@@ -20912,6 +20954,7 @@ export namespace Prisma {
     name: number
     price: number
     image: number
+    imagePublicId: number
     compareAt: number
     currency: number
     stock: number
@@ -20957,6 +21000,7 @@ export namespace Prisma {
     name?: true
     price?: true
     image?: true
+    imagePublicId?: true
     compareAt?: true
     currency?: true
     stock?: true
@@ -20977,6 +21021,7 @@ export namespace Prisma {
     name?: true
     price?: true
     image?: true
+    imagePublicId?: true
     compareAt?: true
     currency?: true
     stock?: true
@@ -20997,6 +21042,7 @@ export namespace Prisma {
     name?: true
     price?: true
     image?: true
+    imagePublicId?: true
     compareAt?: true
     currency?: true
     stock?: true
@@ -21105,6 +21151,7 @@ export namespace Prisma {
     name: string | null
     price: Decimal
     image: string
+    imagePublicId: string | null
     compareAt: Decimal | null
     currency: $Enums.Currency
     stock: number
@@ -21145,6 +21192,7 @@ export namespace Prisma {
     name?: boolean
     price?: boolean
     image?: boolean
+    imagePublicId?: boolean
     compareAt?: boolean
     currency?: boolean
     stock?: boolean
@@ -21170,6 +21218,7 @@ export namespace Prisma {
     name?: boolean
     price?: boolean
     image?: boolean
+    imagePublicId?: boolean
     compareAt?: boolean
     currency?: boolean
     stock?: boolean
@@ -21192,6 +21241,7 @@ export namespace Prisma {
     name?: boolean
     price?: boolean
     image?: boolean
+    imagePublicId?: boolean
     compareAt?: boolean
     currency?: boolean
     stock?: boolean
@@ -21214,6 +21264,7 @@ export namespace Prisma {
     name?: boolean
     price?: boolean
     image?: boolean
+    imagePublicId?: boolean
     compareAt?: boolean
     currency?: boolean
     stock?: boolean
@@ -21228,7 +21279,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "sku" | "name" | "price" | "image" | "compareAt" | "currency" | "stock" | "reserved" | "weightGrams" | "lengthMm" | "widthMm" | "heightMm" | "attributes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
+  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "sku" | "name" | "price" | "image" | "imagePublicId" | "compareAt" | "currency" | "stock" | "reserved" | "weightGrams" | "lengthMm" | "widthMm" | "heightMm" | "attributes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
   export type ProductVariantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     orderItems?: boolean | ProductVariant$orderItemsArgs<ExtArgs>
@@ -21256,6 +21307,7 @@ export namespace Prisma {
       name: string | null
       price: Prisma.Decimal
       image: string
+      imagePublicId: string | null
       compareAt: Prisma.Decimal | null
       currency: $Enums.Currency
       stock: number
@@ -21700,6 +21752,7 @@ export namespace Prisma {
     readonly name: FieldRef<"ProductVariant", 'String'>
     readonly price: FieldRef<"ProductVariant", 'Decimal'>
     readonly image: FieldRef<"ProductVariant", 'String'>
+    readonly imagePublicId: FieldRef<"ProductVariant", 'String'>
     readonly compareAt: FieldRef<"ProductVariant", 'Decimal'>
     readonly currency: FieldRef<"ProductVariant", 'Currency'>
     readonly stock: FieldRef<"ProductVariant", 'Int'>
@@ -48823,7 +48876,9 @@ export namespace Prisma {
     slug: 'slug',
     description: 'description',
     logoUrl: 'logoUrl',
+    logoPublicId: 'logoPublicId',
     coverUrl: 'coverUrl',
+    coverPublicId: 'coverPublicId',
     status: 'status',
     ratingAvg: 'ratingAvg',
     ratingCount: 'ratingCount',
@@ -48900,6 +48955,7 @@ export namespace Prisma {
     id: 'id',
     productId: 'productId',
     url: 'url',
+    publicId: 'publicId',
     alt: 'alt',
     position: 'position',
     createdAt: 'createdAt'
@@ -48915,6 +48971,7 @@ export namespace Prisma {
     name: 'name',
     price: 'price',
     image: 'image',
+    imagePublicId: 'imagePublicId',
     compareAt: 'compareAt',
     currency: 'currency',
     stock: 'stock',
@@ -50182,7 +50239,9 @@ export namespace Prisma {
     slug?: StringFilter<"Shop"> | string
     description?: StringNullableFilter<"Shop"> | string | null
     logoUrl?: StringNullableFilter<"Shop"> | string | null
+    logoPublicId?: StringNullableFilter<"Shop"> | string | null
     coverUrl?: StringNullableFilter<"Shop"> | string | null
+    coverPublicId?: StringNullableFilter<"Shop"> | string | null
     status?: EnumShopStatusFilter<"Shop"> | $Enums.ShopStatus
     ratingAvg?: DecimalFilter<"Shop"> | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFilter<"Shop"> | number
@@ -50208,7 +50267,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
     logoUrl?: SortOrderInput | SortOrder
+    logoPublicId?: SortOrderInput | SortOrder
     coverUrl?: SortOrderInput | SortOrder
+    coverPublicId?: SortOrderInput | SortOrder
     status?: SortOrder
     ratingAvg?: SortOrder
     ratingCount?: SortOrder
@@ -50237,7 +50298,9 @@ export namespace Prisma {
     name?: StringFilter<"Shop"> | string
     description?: StringNullableFilter<"Shop"> | string | null
     logoUrl?: StringNullableFilter<"Shop"> | string | null
+    logoPublicId?: StringNullableFilter<"Shop"> | string | null
     coverUrl?: StringNullableFilter<"Shop"> | string | null
+    coverPublicId?: StringNullableFilter<"Shop"> | string | null
     status?: EnumShopStatusFilter<"Shop"> | $Enums.ShopStatus
     ratingAvg?: DecimalFilter<"Shop"> | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFilter<"Shop"> | number
@@ -50263,7 +50326,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
     logoUrl?: SortOrderInput | SortOrder
+    logoPublicId?: SortOrderInput | SortOrder
     coverUrl?: SortOrderInput | SortOrder
+    coverPublicId?: SortOrderInput | SortOrder
     status?: SortOrder
     ratingAvg?: SortOrder
     ratingCount?: SortOrder
@@ -50289,7 +50354,9 @@ export namespace Prisma {
     slug?: StringWithAggregatesFilter<"Shop"> | string
     description?: StringNullableWithAggregatesFilter<"Shop"> | string | null
     logoUrl?: StringNullableWithAggregatesFilter<"Shop"> | string | null
+    logoPublicId?: StringNullableWithAggregatesFilter<"Shop"> | string | null
     coverUrl?: StringNullableWithAggregatesFilter<"Shop"> | string | null
+    coverPublicId?: StringNullableWithAggregatesFilter<"Shop"> | string | null
     status?: EnumShopStatusWithAggregatesFilter<"Shop"> | $Enums.ShopStatus
     ratingAvg?: DecimalWithAggregatesFilter<"Shop"> | Decimal | DecimalJsLike | number | string
     ratingCount?: IntWithAggregatesFilter<"Shop"> | number
@@ -50646,6 +50713,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductImage"> | string
     productId?: UuidFilter<"ProductImage"> | string
     url?: StringFilter<"ProductImage"> | string
+    publicId?: StringNullableFilter<"ProductImage"> | string | null
     alt?: StringNullableFilter<"ProductImage"> | string | null
     position?: IntFilter<"ProductImage"> | number
     createdAt?: DateTimeFilter<"ProductImage"> | Date | string
@@ -50656,6 +50724,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     url?: SortOrder
+    publicId?: SortOrderInput | SortOrder
     alt?: SortOrderInput | SortOrder
     position?: SortOrder
     createdAt?: SortOrder
@@ -50669,6 +50738,7 @@ export namespace Prisma {
     NOT?: ProductImageWhereInput | ProductImageWhereInput[]
     productId?: UuidFilter<"ProductImage"> | string
     url?: StringFilter<"ProductImage"> | string
+    publicId?: StringNullableFilter<"ProductImage"> | string | null
     alt?: StringNullableFilter<"ProductImage"> | string | null
     position?: IntFilter<"ProductImage"> | number
     createdAt?: DateTimeFilter<"ProductImage"> | Date | string
@@ -50679,6 +50749,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     url?: SortOrder
+    publicId?: SortOrderInput | SortOrder
     alt?: SortOrderInput | SortOrder
     position?: SortOrder
     createdAt?: SortOrder
@@ -50696,6 +50767,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"ProductImage"> | string
     productId?: UuidWithAggregatesFilter<"ProductImage"> | string
     url?: StringWithAggregatesFilter<"ProductImage"> | string
+    publicId?: StringNullableWithAggregatesFilter<"ProductImage"> | string | null
     alt?: StringNullableWithAggregatesFilter<"ProductImage"> | string | null
     position?: IntWithAggregatesFilter<"ProductImage"> | number
     createdAt?: DateTimeWithAggregatesFilter<"ProductImage"> | Date | string
@@ -50711,6 +50783,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"ProductVariant"> | string | null
     price?: DecimalFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
     image?: StringFilter<"ProductVariant"> | string
+    imagePublicId?: StringNullableFilter<"ProductVariant"> | string | null
     compareAt?: DecimalNullableFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFilter<"ProductVariant"> | $Enums.Currency
     stock?: IntFilter<"ProductVariant"> | number
@@ -50735,6 +50808,7 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     price?: SortOrder
     image?: SortOrder
+    imagePublicId?: SortOrderInput | SortOrder
     compareAt?: SortOrderInput | SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -50762,6 +50836,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"ProductVariant"> | string | null
     price?: DecimalFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
     image?: StringFilter<"ProductVariant"> | string
+    imagePublicId?: StringNullableFilter<"ProductVariant"> | string | null
     compareAt?: DecimalNullableFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFilter<"ProductVariant"> | $Enums.Currency
     stock?: IntFilter<"ProductVariant"> | number
@@ -50786,6 +50861,7 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     price?: SortOrder
     image?: SortOrder
+    imagePublicId?: SortOrderInput | SortOrder
     compareAt?: SortOrderInput | SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -50815,6 +50891,7 @@ export namespace Prisma {
     name?: StringNullableWithAggregatesFilter<"ProductVariant"> | string | null
     price?: DecimalWithAggregatesFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
     image?: StringWithAggregatesFilter<"ProductVariant"> | string
+    imagePublicId?: StringNullableWithAggregatesFilter<"ProductVariant"> | string | null
     compareAt?: DecimalNullableWithAggregatesFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyWithAggregatesFilter<"ProductVariant"> | $Enums.Currency
     stock?: IntWithAggregatesFilter<"ProductVariant"> | number
@@ -53265,7 +53342,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -53291,7 +53370,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -53315,7 +53396,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -53341,7 +53424,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -53366,7 +53451,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -53383,7 +53470,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -53401,7 +53490,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -53787,6 +53878,7 @@ export namespace Prisma {
   export type ProductImageCreateInput = {
     id?: string
     url: string
+    publicId?: string | null
     alt?: string | null
     position?: number
     createdAt?: Date | string
@@ -53797,6 +53889,7 @@ export namespace Prisma {
     id?: string
     productId: string
     url: string
+    publicId?: string | null
     alt?: string | null
     position?: number
     createdAt?: Date | string
@@ -53805,6 +53898,7 @@ export namespace Prisma {
   export type ProductImageUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    publicId?: NullableStringFieldUpdateOperationsInput | string | null
     alt?: NullableStringFieldUpdateOperationsInput | string | null
     position?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53815,6 +53909,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    publicId?: NullableStringFieldUpdateOperationsInput | string | null
     alt?: NullableStringFieldUpdateOperationsInput | string | null
     position?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53824,6 +53919,7 @@ export namespace Prisma {
     id?: string
     productId: string
     url: string
+    publicId?: string | null
     alt?: string | null
     position?: number
     createdAt?: Date | string
@@ -53832,6 +53928,7 @@ export namespace Prisma {
   export type ProductImageUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    publicId?: NullableStringFieldUpdateOperationsInput | string | null
     alt?: NullableStringFieldUpdateOperationsInput | string | null
     position?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53841,6 +53938,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    publicId?: NullableStringFieldUpdateOperationsInput | string | null
     alt?: NullableStringFieldUpdateOperationsInput | string | null
     position?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53852,6 +53950,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -53876,6 +53975,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -53898,6 +53998,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -53922,6 +54023,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -53945,6 +54047,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -53965,6 +54068,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -53986,6 +54090,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -56479,7 +56584,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     logoUrl?: SortOrder
+    logoPublicId?: SortOrder
     coverUrl?: SortOrder
+    coverPublicId?: SortOrder
     status?: SortOrder
     ratingAvg?: SortOrder
     ratingCount?: SortOrder
@@ -56502,7 +56609,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     logoUrl?: SortOrder
+    logoPublicId?: SortOrder
     coverUrl?: SortOrder
+    coverPublicId?: SortOrder
     status?: SortOrder
     ratingAvg?: SortOrder
     ratingCount?: SortOrder
@@ -56520,7 +56629,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     logoUrl?: SortOrder
+    logoPublicId?: SortOrder
     coverUrl?: SortOrder
+    coverPublicId?: SortOrder
     status?: SortOrder
     ratingAvg?: SortOrder
     ratingCount?: SortOrder
@@ -56923,6 +57034,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     url?: SortOrder
+    publicId?: SortOrder
     alt?: SortOrder
     position?: SortOrder
     createdAt?: SortOrder
@@ -56936,6 +57048,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     url?: SortOrder
+    publicId?: SortOrder
     alt?: SortOrder
     position?: SortOrder
     createdAt?: SortOrder
@@ -56945,6 +57058,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     url?: SortOrder
+    publicId?: SortOrder
     alt?: SortOrder
     position?: SortOrder
     createdAt?: SortOrder
@@ -56993,6 +57107,7 @@ export namespace Prisma {
     name?: SortOrder
     price?: SortOrder
     image?: SortOrder
+    imagePublicId?: SortOrder
     compareAt?: SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -57025,6 +57140,7 @@ export namespace Prisma {
     name?: SortOrder
     price?: SortOrder
     image?: SortOrder
+    imagePublicId?: SortOrder
     compareAt?: SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -57045,6 +57161,7 @@ export namespace Prisma {
     name?: SortOrder
     price?: SortOrder
     image?: SortOrder
+    imagePublicId?: SortOrder
     compareAt?: SortOrder
     currency?: SortOrder
     stock?: SortOrder
@@ -62521,7 +62638,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -62545,7 +62664,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -63133,7 +63254,9 @@ export namespace Prisma {
     slug?: StringFilter<"Shop"> | string
     description?: StringNullableFilter<"Shop"> | string | null
     logoUrl?: StringNullableFilter<"Shop"> | string | null
+    logoPublicId?: StringNullableFilter<"Shop"> | string | null
     coverUrl?: StringNullableFilter<"Shop"> | string | null
+    coverPublicId?: StringNullableFilter<"Shop"> | string | null
     status?: EnumShopStatusFilter<"Shop"> | $Enums.ShopStatus
     ratingAvg?: DecimalFilter<"Shop"> | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFilter<"Shop"> | number
@@ -64717,7 +64840,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -64742,7 +64867,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -64846,7 +64973,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -64871,7 +65000,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -65267,7 +65398,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -65292,7 +65425,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -65348,6 +65483,7 @@ export namespace Prisma {
   export type ProductImageCreateWithoutProductInput = {
     id?: string
     url: string
+    publicId?: string | null
     alt?: string | null
     position?: number
     createdAt?: Date | string
@@ -65356,6 +65492,7 @@ export namespace Prisma {
   export type ProductImageUncheckedCreateWithoutProductInput = {
     id?: string
     url: string
+    publicId?: string | null
     alt?: string | null
     position?: number
     createdAt?: Date | string
@@ -65377,6 +65514,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -65399,6 +65537,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -65606,7 +65745,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -65631,7 +65772,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -65708,6 +65851,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductImage"> | string
     productId?: UuidFilter<"ProductImage"> | string
     url?: StringFilter<"ProductImage"> | string
+    publicId?: StringNullableFilter<"ProductImage"> | string | null
     alt?: StringNullableFilter<"ProductImage"> | string | null
     position?: IntFilter<"ProductImage"> | number
     createdAt?: DateTimeFilter<"ProductImage"> | Date | string
@@ -65739,6 +65883,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"ProductVariant"> | string | null
     price?: DecimalFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string
     image?: StringFilter<"ProductVariant"> | string
+    imagePublicId?: StringNullableFilter<"ProductVariant"> | string | null
     compareAt?: DecimalNullableFilter<"ProductVariant"> | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFilter<"ProductVariant"> | $Enums.Currency
     stock?: IntFilter<"ProductVariant"> | number
@@ -66641,6 +66786,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -66664,6 +66810,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -66726,6 +66873,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -66749,6 +66897,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -67181,7 +67330,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -67206,7 +67357,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -67575,7 +67728,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -67600,7 +67755,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -68013,6 +68170,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -68036,6 +68194,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -68319,6 +68478,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -68342,6 +68502,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -68493,7 +68654,7 @@ export namespace Prisma {
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    role?: string | null
+    role?: $Enums.Role
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
@@ -68523,7 +68684,7 @@ export namespace Prisma {
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    role?: string | null
+    role?: $Enums.Role
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
@@ -68668,7 +68829,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -68698,7 +68859,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -70403,7 +70564,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -70428,7 +70591,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -70549,7 +70714,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -70574,7 +70741,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -71753,7 +71922,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -71778,7 +71949,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -71875,7 +72048,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -71900,7 +72075,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -72043,7 +72220,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -72068,7 +72247,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -72207,7 +72388,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -72232,7 +72415,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -72343,7 +72528,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -72368,7 +72555,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -72507,7 +72696,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -72532,7 +72723,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -72615,7 +72808,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     logoUrl?: string | null
+    logoPublicId?: string | null
     coverUrl?: string | null
+    coverPublicId?: string | null
     status?: $Enums.ShopStatus
     ratingAvg?: Decimal | DecimalJsLike | number | string
     ratingCount?: number
@@ -72917,7 +73112,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -72941,7 +73138,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -72965,7 +73164,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     coverUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPublicId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
     ratingAvg?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     ratingCount?: IntFieldUpdateOperationsInput | number
@@ -73904,6 +74105,7 @@ export namespace Prisma {
   export type ProductImageCreateManyProductInput = {
     id?: string
     url: string
+    publicId?: string | null
     alt?: string | null
     position?: number
     createdAt?: Date | string
@@ -73915,6 +74117,7 @@ export namespace Prisma {
     name?: string | null
     price: Decimal | DecimalJsLike | number | string
     image: string
+    imagePublicId?: string | null
     compareAt?: Decimal | DecimalJsLike | number | string | null
     currency?: $Enums.Currency
     stock?: number
@@ -73982,6 +74185,7 @@ export namespace Prisma {
   export type ProductImageUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    publicId?: NullableStringFieldUpdateOperationsInput | string | null
     alt?: NullableStringFieldUpdateOperationsInput | string | null
     position?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -73990,6 +74194,7 @@ export namespace Prisma {
   export type ProductImageUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    publicId?: NullableStringFieldUpdateOperationsInput | string | null
     alt?: NullableStringFieldUpdateOperationsInput | string | null
     position?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -73998,6 +74203,7 @@ export namespace Prisma {
   export type ProductImageUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    publicId?: NullableStringFieldUpdateOperationsInput | string | null
     alt?: NullableStringFieldUpdateOperationsInput | string | null
     position?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -74009,6 +74215,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -74031,6 +74238,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number
@@ -74053,6 +74261,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     image?: StringFieldUpdateOperationsInput | string
+    imagePublicId?: NullableStringFieldUpdateOperationsInput | string | null
     compareAt?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     stock?: IntFieldUpdateOperationsInput | number

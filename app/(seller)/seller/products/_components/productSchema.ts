@@ -1,10 +1,14 @@
 import { z } from 'zod';
 import { ProductStatus, Visibility, Currency } from '@/lib/generated/prisma';
 
+const emptyToUndefined = (v: unknown) =>
+  typeof v === 'string' && v.trim() === '' ? undefined : v;
+
 // Product Image Schema
 export const productImageSchema = z.object({
   id: z.uuid().optional(),
   url: z.url('Invalid image URL'),
+  publicId: z.string().min(1, 'Public ID is required'),
   alt: z.string().optional().nullable(),
   position: z.number().int().min(0).default(0),
 });
@@ -13,9 +17,10 @@ export const productImageSchema = z.object({
 export const productVariantSchema = z.object({
   id: z.uuid().optional(),
   sku: z.string().min(1, 'SKU is required').max(100),
-  name: z.string().max(255).optional().nullable(),
-  price: z.number().positive('Price must be greater than 0'),
+  name: z.string().min(1, 'Name is required').max(255),
+  price: z.coerce.number().positive('Price must be greater than 0'),
   image: z.url('Invalid variant image URL'),
+  imagePublicId: z.string().min(1, 'Public ID is required'),
   compareAt: z.number().positive().optional().nullable(),
   currency: z.enum(Currency).default(Currency.VND),
   stock: z.number().int().min(0, 'Stock cannot be negative').default(0),
@@ -30,7 +35,15 @@ export const productVariantSchema = z.object({
 
 // Product Tag Schema
 export const productTagSchema = z.object({
-  tagId: z.string().uuid(),
+  tagId: z
+    .preprocess(emptyToUndefined, z.string().uuid('Invalid UUID'))
+    .optional(),
+  name: z
+    .preprocess(emptyToUndefined, z.string().min(1, 'Tag name is required').max(50))
+    .optional(),
+}).refine((d) => !!d.tagId || !!d.name, {
+  message: 'Provide a tag id or a tag name',
+  path: ['tagId'],
 });
 
 // Base Product Schema
@@ -46,7 +59,7 @@ const baseProductSchema = z.object({
   status: z.enum(ProductStatus).default(ProductStatus.DRAFT),
   visibility: z.enum(Visibility).default(Visibility.PUBLIC),
   attributes: z.record(z.string(), z.any()).optional().nullable(),
-  categoryId: z.uuid().optional().nullable(),
+  categoryId: z.uuid('Category is required'),
   currency: z.enum(Currency).default(Currency.VND),
 });
 
