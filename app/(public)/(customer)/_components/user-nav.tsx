@@ -101,7 +101,7 @@ export default function UserNav({ user }: { user: UserMini }) {
           Icon: RefreshCcw,
         },
         {
-          href: '/customer/account/addresses',
+          href: '/customer/account/address',
           i18nKey: 'addresses',
           Icon: MapPin,
         },

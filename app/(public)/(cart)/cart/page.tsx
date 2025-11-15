@@ -189,10 +189,10 @@ export default function Cart() {
         items: selectedItem,
         voucher: [
           {
-            code: 'VC-JNF8CK7A',
+            code: 'VC-GN59AEGX',
           },
           {
-            code: 'VC-CWAOF1OO',
+            code: 'VC-HALD6C8B',
           },
         ],
       };
