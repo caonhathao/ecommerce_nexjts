@@ -228,22 +228,24 @@ model Notification {
 }
 
 model Shop {
-  id           String     @id @default(uuid()) @db.Uuid
-  ownerId      String     @db.Uuid
-  owner        User       @relation("ShopsOwned", fields: [ownerId], references: [id], onDelete: Restrict)
-  name         String
-  slug         String     @unique
-  description  String?
-  logoUrl      String?
-  coverUrl     String?
-  status       ShopStatus @default(PENDING)
-  ratingAvg    Decimal    @default(0) @db.Decimal(2, 1)
-  ratingCount  Int        @default(0)
-  contactEmail String?
-  contactPhone String?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  deletedAt    DateTime?
+  id            String     @id @default(uuid()) @db.Uuid
+  ownerId       String     @db.Uuid
+  owner         User       @relation("ShopsOwned", fields: [ownerId], references: [id], onDelete: Restrict)
+  name          String
+  slug          String     @unique
+  description   String?
+  logoUrl       String?
+  logoPublicId  String?
+  coverUrl      String?
+  coverPublicId String?
+  status        ShopStatus @default(PENDING)
+  ratingAvg     Decimal    @default(0) @db.Decimal(2, 1)
+  ratingCount   Int        @default(0)
+  contactEmail  String?
+  contactPhone  String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  deletedAt     DateTime?
 
   members                 ShopMember[]
   products                Product[]
@@ -342,6 +344,7 @@ model ProductImage {
   productId String   @db.Uuid
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
+  publicId  String?
   alt       String?
   position  Int      @default(0)
   createdAt DateTime @default(now())
@@ -351,25 +354,26 @@ model ProductImage {
 }
 
 model ProductVariant {
-  id          String   @id @default(uuid()) @db.Uuid
-  productId   String   @db.Uuid
-  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  sku         String   @unique
-  name        String?
-  price       Decimal  @db.Decimal(14, 2)
-  image       String
-  compareAt   Decimal? @db.Decimal(14, 2)
-  currency    Currency @default(VND)
-  stock       Int      @default(0)
-  reserved    Int      @default(0)
-  weightGrams Int?
-  lengthMm    Int?
-  widthMm     Int?
-  heightMm    Int?
-  attributes  Json?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
+  id            String   @id @default(uuid()) @db.Uuid
+  productId     String   @db.Uuid
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku           String   @unique
+  name          String?
+  price         Decimal  @db.Decimal(14, 2)
+  image         String
+  imagePublicId String?
+  compareAt     Decimal? @db.Decimal(14, 2)
+  currency      Currency @default(VND)
+  stock         Int      @default(0)
+  reserved      Int      @default(0)
+  weightGrams   Int?
+  lengthMm      Int?
+  widthMm       Int?
+  heightMm      Int?
+  attributes    Json?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
 
   orderItems OrderItem[]
   cartItems  CartItem[]

@@ -3,20 +3,14 @@
 import * as React from 'react';
 import {
   IconCamera,
-  IconChartBar,
   IconDashboard,
-  // IconDatabase,
   IconFileAi,
   IconFileDescription,
-  // IconFileWord,
-  IconFolder,
   IconHelp,
-  // IconInnerShadowTop,
   IconListDetails,
-  // IconReport,
   IconSearch,
   IconSettings,
-  IconUsers,
+  IconShoppingCart,
 } from '@tabler/icons-react';
 
 // import { NavDocuments } from "@/components/nav-documents";
@@ -65,6 +59,21 @@ const data = {
         {
           title: 'Categories',
           url: '/seller/products/categories',
+        },
+      ],
+    },
+    {
+      title: 'Shops',
+      url: '#',
+      icon: IconShoppingCart,
+      items: [
+        {
+          title: 'All Shops',
+          url: '/seller/shops',
+        },
+        {
+          title: 'Add Shop',
+          url: '/seller/shops/create',
         },
       ],
     },
@@ -164,7 +173,7 @@ export function AppSidebarSeller({ ...props }: React.ComponentProps<typeof Sideb
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <Link href="/public">
+              <Link href="/">
                 <Image src={Logo} alt="Logo" className="size-5" />
                 <span className="text-base font-semibold">{WEB_NAME}</span>
               </Link>
