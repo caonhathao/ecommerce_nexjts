@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
+import { requireSeller } from '@/lib/require-role';
 
 const createShopSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -29,19 +30,38 @@ function slugify(input: string) {
 
 export async function GET() {
   try {
-    const session = await getSessionUser();
+    const session = await requireSeller();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 });
     }
     const ownerId = session.user.id;
 
     const shops = await prisma.shop.findMany({
-      where: { ownerId, status: 'ACTIVE' },
-      select: { id: true, name: true, slug: true },
+      where: { ownerId },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        logoUrl: true,
+        coverUrl: true,
+        status: true,
+        contactEmail: true,
+        contactPhone: true,
+        ratingAvg: true,
+        ratingCount: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json(shops, { status: 200 });
+    const normalized = shops.map(s => ({
+      ...s,
+      ratingAvg: Number(s.ratingAvg),
+    }));
+
+    return NextResponse.json(normalized, { status: 200 });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message ?? 'Server error' }, { status: 500 });
   }
