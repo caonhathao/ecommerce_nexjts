@@ -21,134 +21,11 @@ import {
 } from '@/components/ui/sidebar';
 
 import { Loading } from '@/app/(public)/_components/loading';
+import { useTranslations } from 'next-intl';
 import { AiOutlineProduct } from 'react-icons/ai';
 import { BsGraphUpArrow } from 'react-icons/bs';
-import { CiShop } from 'react-icons/ci';
-
-const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
-  teams: [
-    {
-      name: '2T3H Inc',
-      logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
-    },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
-  ],
-  navMain: [
-    {
-      title: 'Tổng quan',
-      url: '#',
-      icon: SquareTerminal,
-      items: [
-        {
-          title: 'Tổng quan',
-          url: '/manager/dashboard',
-        },
-      ],
-    },
-    {
-      title: 'Danh mục',
-      url: '#',
-      icon: SquareTerminal,
-      items: [
-        {
-          title: 'Quản lí danh mục',
-          url: '/manager/categories',
-        },
-      ],
-    },
-    {
-      title: 'Sản phẩm',
-      url: '#',
-      icon: AiOutlineProduct,
-      items: [
-        {
-          title: 'Quản lí sản phẩm',
-          url: '/manager/products',
-        },
-        {
-          title: 'Khiếu nại',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Cửa hàng',
-      url: '#',
-      icon: CiShop,
-      items: [
-        {
-          title: 'Quản lí cửa hàng',
-          url: '/manager/shops',
-        },
-        {
-          title: 'Hỗ trợ',
-          url: '#',
-        },
-        {
-          title: 'Khiếu nại',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Thống kê',
-      url: '#',
-      icon: BsGraphUpArrow,
-      items: [
-        {
-          title: 'Doanh thu',
-          url: '/manager/statistic/revenue',
-        },
-        {
-          title: 'Lưu lượng truy cập',
-          url: '#',
-        },
-        {
-          title: 'Khách hàng',
-          url: '#',
-        },
-        {
-          title: 'Cửa hàng',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Cài đặt',
-      url: '#',
-      icon: Settings2,
-      items: [
-        {
-          title: 'Chung',
-          url: '#',
-        },
-        {
-          title: 'Phản hồi',
-          url: '#',
-        },
-        {
-          title: 'Thanh toán',
-          url: '#',
-        },
-      ],
-    },
-  ],
-};
+import { CiBoxList, CiShop } from 'react-icons/ci';
+import { GoPeople } from 'react-icons/go';
 
 interface user {
   image: string;
@@ -158,6 +35,151 @@ interface user {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [dataUser, setDataUser] = React.useState<user | null>(null);
+  const t = useTranslations('admin_layout.admin_app_sidebar');
+
+  const data = {
+    user: {
+      name: 'shadcn',
+      email: 'm@example.com',
+      avatar: '/avatars/shadcn.jpg',
+    },
+    teams: [
+      {
+        name: '2T3H Inc',
+        logo: GalleryVerticalEnd,
+        plan: 'Enterprise',
+      },
+      {
+        name: 'Acme Corp.',
+        logo: AudioWaveform,
+        plan: 'Startup',
+      },
+      {
+        name: 'Evil Corp.',
+        logo: Command,
+        plan: 'Free',
+      },
+    ],
+    navMain: [
+      {
+        title: t('t_dashboard'),
+        url: '#',
+        icon: SquareTerminal,
+        items: [
+          {
+            title: t('t_dashboard'),
+            url: '/manager/dashboard',
+          },
+        ],
+      },
+      {
+        title: t('t_category'),
+        url: '#',
+        icon: CiBoxList,
+        items: [
+          {
+            title: t('t_category_management'),
+            url: '/manager/categories',
+          },
+        ],
+      },
+      {
+        title: t('t_product'),
+        url: '#',
+        icon: AiOutlineProduct,
+        items: [
+          {
+            title: t('t_product_management'),
+            url: '/manager/products',
+          },
+          {
+            title: t('t_complaint'),
+            url: '#',
+          },
+        ],
+      },
+      {
+        title: t('t_shop'),
+        url: '#',
+        icon: CiShop,
+        items: [
+          {
+            title: t('t_shop_management'),
+            url: '/manager/shops',
+          },
+          {
+            title: t('t_support'),
+            url: '#',
+          },
+          {
+            title: t('t_complaint'),
+            url: '#',
+          },
+        ],
+      },
+      {
+        title: t('t_user'),
+        url: '#',
+        icon: GoPeople,
+        items: [
+          {
+            title: t('t_user_management'),
+            url: '#',
+          },
+          {
+            title: t('t_support'),
+            url: '#',
+          },
+          {
+            title: t('t_complaint'),
+            url: '#',
+          },
+        ],
+      },
+      {
+        title: t('t_statistic'),
+        url: '#',
+        icon: BsGraphUpArrow,
+        items: [
+          {
+            title: t('t_revenue'),
+            url: '/manager/statistic/revenue',
+          },
+          {
+            title: t('t_traffic'),
+            url: '#',
+          },
+          {
+            title: t('t_user'),
+            url: '#',
+          },
+          {
+            title: t('t_shop'),
+            url: '#',
+          },
+        ],
+      },
+      {
+        title: t('t_settings'),
+        url: '#',
+        icon: Settings2,
+        items: [
+          {
+            title: t('t_general'),
+            url: '#',
+          },
+          {
+            title: t('t_feedback'),
+            url: '#',
+          },
+          {
+            title: t('t_payment'),
+            url: '#',
+          },
+        ],
+      },
+    ],
+  };
 
   React.useEffect(() => {
     const fetchData = async () => {

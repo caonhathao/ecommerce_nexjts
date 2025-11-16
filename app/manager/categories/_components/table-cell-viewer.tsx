@@ -1,48 +1,49 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
 } from '@/components/ui/drawer';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { putData } from '@/funcs/put';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
-    categoryChildDetail,
-    categoryDetail,
-    categoryItemData,
+  categoryChildDetail,
+  categoryDetail,
+  categoryItemData,
 } from '@/types/manager.data-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IconDotsVertical } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoIosArrowUp } from 'react-icons/io';
@@ -84,7 +85,6 @@ export function TableCellViewer({
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = React.useState<boolean>(false);
-  const [value, setValue] = React.useState<string>('');
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -95,6 +95,7 @@ export function TableCellViewer({
       parentId: '',
     },
   });
+  const t = useTranslations('admin_category_page.category_drawer');
 
   // This effect runs when 'openIndex' changes
   useEffect(() => {
@@ -150,8 +151,8 @@ export function TableCellViewer({
     try {
       const data = await putData('/api/manager/category', values);
       if (data.status === 200) {
-        toast('Cập nhật thành công', {
-          description: 'Đã cập nhật danh mục sản phẩm.',
+        toast(t('t_action_noti'), {
+          description: t('t_update_des_noti'),
         });
         setTimeout(() => {
           setOpen(false);
@@ -160,8 +161,8 @@ export function TableCellViewer({
       }
     } catch (error) {
       console.error('Failed to create category:', error);
-      toast('Cập nhật thất bại', {
-        description: 'Vui lòng kiểm tra lại.',
+      toast(t('t_action_noti'), {
+        description: t('t_update_des_noti'),
       });
     }
   }
@@ -177,7 +178,7 @@ export function TableCellViewer({
       >
         <div className="flex flex-row justify-between items-center gap-4">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="name">Tên sản phẩm</Label>
+            <Label htmlFor="name">{t('t_category_name')}</Label>
             <div className="w-full">{value.name}</div>
           </div>
           <DropdownMenu>
@@ -198,7 +199,7 @@ export function TableCellViewer({
                   className="text-left"
                   onClick={() => handleCopy(value.id)}
                 >
-                  Sao chép ID
+                  {t('t_copy_action')}
                 </Button>
               </DropdownMenuItem>
               <Separator />
@@ -214,7 +215,7 @@ export function TableCellViewer({
                     setOpen(false);
                   }}
                 >
-                  Xóa
+                  {t('t_del_action')}
                 </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -251,7 +252,7 @@ export function TableCellViewer({
       <DrawerContent>
         <DrawerHeader className="gap-1">
           <DrawerTitle>{detail?.name || 'unknown'}</DrawerTitle>
-          <DrawerDescription>Thông tin chi tiết danh mục</DrawerDescription>
+          <DrawerDescription>{t('t_category_desc')}</DrawerDescription>
         </DrawerHeader>
         <div
           className="flex flex-col gap-4 overflow-y-auto px-4 text-sm"
@@ -265,7 +266,7 @@ export function TableCellViewer({
             >
               <div className="flex flex-col gap-4">
                 <div className="grid gap-3">
-                  <Label htmlFor="name-1">Tên danh mục</Label>
+                  <Label htmlFor="name-1">{t('t_category_name')}</Label>
                   <FormField
                     control={form.control}
                     name="name"
@@ -307,7 +308,7 @@ export function TableCellViewer({
               </div>
 
               <div className="flex flex-col gap-3">
-                <Label htmlFor="visibility">Hiển thị</Label>
+                <Label htmlFor="visibility">{t('t_is_active')}</Label>
                 <FormField
                   control={form.control}
                   name="isActive"
@@ -326,12 +327,18 @@ export function TableCellViewer({
                             size="sm"
                             id="active-1"
                           >
-                            <SelectValue placeholder="Trạng thái" />
+                            <SelectValue
+                              placeholder={t('t_is_active_placeholder')}
+                            />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="true">Hiển thị</SelectItem>
-                              <SelectItem value="false">Ẩn</SelectItem>
+                              <SelectItem value="true">
+                                {t('c_active')}
+                              </SelectItem>
+                              <SelectItem value="false">
+                                {t('c_inactive')}
+                              </SelectItem>
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -344,11 +351,11 @@ export function TableCellViewer({
 
               <div className="grid grid-cols-1 gap-4">
                 <div className="w-full flex flex-col gap-3">
-                  <Label htmlFor="target">Danh mục cha</Label>
+                  <Label htmlFor="target">{t('t_parent_category')}</Label>
                   {detail?.parent ? (
                     <div className="flex flex-row justify-between items-center gap-4">
                       <div className="flex flex-col gap-3">
-                        <Label htmlFor="name">Tên danh mục</Label>
+                        <Label htmlFor="name">{t('t_category_name')}</Label>
                         <div className="w-full">{detail.name}</div>
                       </div>
                       <DropdownMenu>
@@ -369,20 +376,20 @@ export function TableCellViewer({
                               className="text-left"
                               onClick={() => handleCopy(detail.parent.id)}
                             >
-                              Sao chép ID
+                              {t('t_copy_action')}
                             </Button>
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
                   ) : (
-                    <div>Không có danh mục cha</div>
+                    <div>{t('t_no_parent')}</div>
                   )}
                 </div>
               </div>
 
               <div className="flex flex-col gap-3">
-                <Label htmlFor="variants-list">Danh mục con</Label>
+                <Label htmlFor="variants-list">{t('t_child_categories')}</Label>
                 {detail?.children.length !== 0 ? (
                   <div className="flex flex-col  gap-4">
                     <ul className="w-full flex flex-col gap-2 ">
@@ -425,7 +432,7 @@ export function TableCellViewer({
                     </ul>
                   </div>
                 ) : (
-                  <div>Không có danh mục con</div>
+                  <div>{t('t_no_child')}</div>
                 )}
               </div>
             </form>
@@ -433,10 +440,10 @@ export function TableCellViewer({
         </div>
         <DrawerFooter>
           <Button type="submit" form={'form-edit-category'}>
-            Submit
+            {t('t_submit_action')}
           </Button>
           <DrawerClose asChild>
-            <Button variant="outline">Done</Button>
+            <Button variant="outline">{t('t_cancel_action')}</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

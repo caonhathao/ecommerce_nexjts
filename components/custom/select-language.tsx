@@ -1,18 +1,18 @@
-"use client";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
+'use client';
+import { useLocale, useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from '../ui/dropdown-menu';
 
 export const SelectLanguage = () => {
-  const t = useTranslations("layout");
+  const t = useTranslations('layout');
   const locale = useLocale();
   const router = useRouter();
 
@@ -21,9 +21,7 @@ export const SelectLanguage = () => {
     router.refresh();
   };
 
-  const [width, setWidth] = useState<number>(
-    typeof window !== "undefined" ? window.innerWidth : 0
-  );
+  const [width, setWidth] = useState<number>(0);
 
   useEffect(() => {
     // Hàm cập nhật kích thước
@@ -33,8 +31,8 @@ export const SelectLanguage = () => {
     handleResize();
 
     // Lắng nghe sự kiện resize
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
@@ -42,10 +40,10 @@ export const SelectLanguage = () => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          size={width > 1000 ? "default" : "icon"}
-          className={"text-[var(--primary)] hover:cursor-pointer"}
+          size={width > 1000 ? 'default' : 'icon'}
+          className={'text-[var(--primary)] hover:cursor-pointer'}
         >
-          {width > 1000 ? t("language") : <img src={t("icon")} />}
+          {width > 1000 ? t('language') : <img src={t('icon')} />}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
@@ -53,7 +51,7 @@ export const SelectLanguage = () => {
           value={locale}
           onValueChange={(val) => changeLang(val)}
         >
-          <DropdownMenuRadioItem value={"vi"}>
+          <DropdownMenuRadioItem value={'vi'}>
             <div className="flex flex-row justify-center items-center gap-2 hover:cursor-pointer">
               <img
                 width="48"
@@ -64,7 +62,7 @@ export const SelectLanguage = () => {
               <p>Tiếng Việt</p>
             </div>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value={"en"}>
+          <DropdownMenuRadioItem value={'en'}>
             <div className="flex flex-row justify-center items-center gap-2 hover:cursor-pointer">
               <img
                 width="48"
@@ -75,7 +73,7 @@ export const SelectLanguage = () => {
               <p>English</p>
             </div>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value={"jp"}>
+          <DropdownMenuRadioItem value={'jp'}>
             <div className="flex flex-row justify-center items-center gap-2 hover:cursor-pointer">
               <img
                 width="48"

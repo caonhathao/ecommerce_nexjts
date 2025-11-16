@@ -25,6 +25,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useSignOut } from '@/hooks/use-signout';
+import { useTranslations } from 'next-intl';
 
 interface userProps {
   user: {
@@ -37,6 +38,7 @@ interface userProps {
 export function NavUser({ user }: userProps) {
   const { isMobile } = useSidebar();
   const handleSingout = useSignOut();
+  const t = useTranslations('admin_layout.admin_app_sidebar');
 
   return (
     <SidebarMenu>
@@ -80,21 +82,21 @@ export function NavUser({ user }: userProps) {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Tài khoản
+                {t('t_account_settings')}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
-                Liên kết
+                {t('t_connected')}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
-                Thông báo
+                {t('t_notification')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleSingout()}>
               <LogOut />
-              Đăng xuất
+              {t('t_logout')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

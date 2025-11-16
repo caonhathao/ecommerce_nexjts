@@ -18,6 +18,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
+import { useTranslations } from 'next-intl';
 
 export function NavMain({
   items,
@@ -33,9 +34,10 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const t=useTranslations('admin_layout.admin_app_sidebar');
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>{t('t_quick_access')}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible

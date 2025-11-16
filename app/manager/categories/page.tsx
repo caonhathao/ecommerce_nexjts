@@ -57,6 +57,7 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
@@ -69,14 +70,12 @@ import { handleDelete } from './_funcs/funcs';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
-
   const [categoryList, setCategoryList] = React.useState<categoryItemData[]>(
     []
   );
   const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, setIsReset] = React.useState<boolean>(false);
   const [defaultActive, setDefaultActive] = React.useState<string>('true');
-
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -93,6 +92,7 @@ const CategoryManagePage = () => {
     () => categoryList?.map(({ id }) => id) || [],
     [categoryList]
   );
+  const t = useTranslations('admin_category_page');
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -119,8 +119,8 @@ const CategoryManagePage = () => {
         // 1. Set the copied ID
         setCopiedId(value);
         // 2. Clear the feedback after 2 seconds
-        toast('Hành động', {
-          description: 'Đã sao chép ID sản phẩm',
+        toast(t('t_action_noti'), {
+          description: t('t_copy_des_noti'),
         });
 
         setTimeout(() => {
@@ -128,6 +128,10 @@ const CategoryManagePage = () => {
         }, 2000);
       })
       .catch((err) => {
+        toast(t('t_action_failed_noti'), {
+          description: t('t_copy_failed_des_noti'),
+        });
+
         console.error('Failed to copy ID: ', err);
       });
   }, []);
@@ -168,8 +172,8 @@ const CategoryManagePage = () => {
         enableHiding: false,
       },
       {
-        accessorKey: 'Tên danh mục',
-        header: 'Tên danh mục',
+        accessorKey: t('t_category_name'),
+        header: t('t_category_name'),
         cell: ({ row }) => {
           return (
             <TableCellViewer
@@ -185,8 +189,8 @@ const CategoryManagePage = () => {
         enableHiding: false,
       },
       {
-        accessorKey: 'Thứ tự',
-        header: 'Thứ tự',
+        accessorKey: t('t_serial'),
+        header: t('t_serial'),
         cell: ({ row }) => (
           <div className="w-full flex flex-row gap-2 justify-start items-center">
             <div>{row.original.position}</div>
@@ -194,8 +198,8 @@ const CategoryManagePage = () => {
         ),
       },
       {
-        accessorKey: 'Hiển thị',
-        header: 'Hiển thị',
+        accessorKey: t('t_is_active'),
+        header: t('t_is_active'),
         cell: ({ row }) => (
           <Badge variant="outline" className="text-muted-foreground px-1.5">
             {row.original.isActive === false ? (
@@ -208,8 +212,10 @@ const CategoryManagePage = () => {
         ),
       },
       {
-        accessorKey: 'Số danh mục con',
-        header: () => <div className="w-fit text-right">Số danh mục con</div>,
+        accessorKey: t('t_children_count'),
+        header: () => (
+          <div className="w-fit text-right">{t('t_children_count')}</div>
+        ),
         cell: ({ row }) => (
           <div className="w-full text-right">
             {row.original._count.children.toString()}
@@ -217,8 +223,8 @@ const CategoryManagePage = () => {
         ),
       },
       {
-        accessorKey: 'Ngày tạo',
-        header: 'Ngày tạo',
+        accessorKey: t('t_created_at'),
+        header: t('t_created_at'),
         cell: ({ row }) => {
           return (
             <div className="w-32">{formatDay(row.original.createdAt)}</div>
@@ -226,8 +232,8 @@ const CategoryManagePage = () => {
         },
       },
       {
-        accessorKey: 'Ngày sửa',
-        header: 'Ngày sửa',
+        accessorKey: t('t_updated_at'),
+        header: t('t_updated_at'),
         cell: ({ row }) => {
           return (
             <div className="w-32">{formatDay(row.original.updatedAt)}</div>
@@ -255,7 +261,7 @@ const CategoryManagePage = () => {
                   className="text-left"
                   onClick={() => handleCopy(row.original.id)}
                 >
-                  Sao chép ID
+                  {t('t_copy_action')}
                 </Button>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -270,7 +276,7 @@ const CategoryManagePage = () => {
                     })
                   }
                 >
-                  Xóa
+                  {t('t_del_action')}
                 </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -278,7 +284,7 @@ const CategoryManagePage = () => {
         ),
       },
     ],
-    [handleCopy, setCategoryList, defaultActive, setDefaultActive]
+    [handleCopy, setCategoryList, defaultActive, setDefaultActive, t]
   );
 
   const table = useReactTable({
@@ -335,23 +341,27 @@ const CategoryManagePage = () => {
               <SelectValue placeholder="Select a view" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all-status">Tất cả</SelectItem>
-              <SelectItem value="all-active">Hiện</SelectItem>
-              <SelectItem value="all-inactive">Ẩn</SelectItem>
+              <SelectItem value="all-status">{t('t_tab_all')}</SelectItem>
+              <SelectItem value="all-active">{t('t_tab_active')}</SelectItem>
+              <SelectItem value="all-inactive">
+                {t('t_tab_inactive')}
+              </SelectItem>
             </SelectContent>
           </Select>
           <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
-            <TabsTrigger value="all-status">Tất cả</TabsTrigger>
-            <TabsTrigger value="all-active">Hiện</TabsTrigger>
-            <TabsTrigger value="all-inactive">Ẩn</TabsTrigger>
+            <TabsTrigger value="all-status">{t('t_tab_all')}</TabsTrigger>
+            <TabsTrigger value="all-active">{t('t_tab_active')}</TabsTrigger>
+            <TabsTrigger value="all-inactive">
+              {t('t_tab_inactive')}
+            </TabsTrigger>
           </TabsList>
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
                   <IconLayoutColumns />
-                  <span className="hidden lg:inline">Hiển thị</span>
-                  <span className="lg:hidden">Cột</span>
+                  <span className="hidden lg:inline">{t('t_showing')}</span>
+                  <span className="lg:hidden">{t('t_column')}</span>
                   <IconChevronDown />
                 </Button>
               </DropdownMenuTrigger>
