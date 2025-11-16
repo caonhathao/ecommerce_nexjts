@@ -46,7 +46,7 @@ export const Ri = RiIcons;
 export type CircumIcon = IconType;
 
 // -------------------------
-// 🧾 Remix Icons
+// 🧾 Circum Icons
 // -------------------------
 import * as CiIcons from 'react-icons/ci';
 export const Ci = CiIcons;
@@ -58,6 +58,13 @@ export type RemixIcon = IconType;
 import * as HiIcons from 'react-icons/hi2'; // hi2 = phiên bản HeroIcons v2
 export const Hi = HiIcons;
 export type HeroIcon = IconType;
+
+// -------------------------
+// 🧱 Github Octions icons
+// -------------------------
+import * as GoIcons from 'react-icons/go';
+export const go = GoIcons;
+export type GithubOctionsIcons = IconType;
 
 // -------------------------
 // ✅ Xuất type chung (tuỳ chọn)

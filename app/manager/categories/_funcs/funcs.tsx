@@ -1,4 +1,5 @@
 import { deleteData } from '@/funcs/delete';
+import { useTranslations } from 'next-intl';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';
 
@@ -9,11 +10,12 @@ export const handleDelete = async ({
   id: string;
   setIsReset: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const t=useTranslations('admin_category_page');
   try {
     const response = await deleteData('/api/manager/category', { id });
     if (response.ok) {
-      toast('Xóa thành công', {
-        description: 'Đã xóa danh mục sản phẩm.',
+      toast(t('t_action_noti'), {
+        description: t('t_del_des_noti'),
       });
       setTimeout(() => {
         setIsReset((prev) => !prev);
@@ -21,8 +23,8 @@ export const handleDelete = async ({
     }
   } catch (error) {
     console.error('Failed to delete category:', error);
-    toast('Xóa thất bại', {
-      description: 'Không thể xóa danh mục.',
+    toast(t('t_action_noti'), {
+      description: t('t_del_des_noti'),
     });
   }
 };

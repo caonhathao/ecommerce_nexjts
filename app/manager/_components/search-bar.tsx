@@ -7,6 +7,7 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { RiResetRightLine } from 'react-icons/ri';
@@ -24,6 +25,7 @@ const formSchema = z.object({
 });
 
 const SearchBar = ({ baseUrl, setData, setIsReset, isReset }: SearchProps) => {
+  const t=useTranslations('admin_search_bar');
   async function onSubmit(value: z.infer<typeof formSchema>) {
     try {
       const response = await fetch(`${baseUrl}?id=${value.id}`);
@@ -54,7 +56,7 @@ const SearchBar = ({ baseUrl, setData, setIsReset, isReset }: SearchProps) => {
             render={({ field }) => (
               <FormItem>
                 <InputGroup>
-                  <InputGroupInput placeholder="Nhập ID..." {...field} />
+                  <InputGroupInput placeholder={t('t_search_placeholder')} {...field} />
                   <InputGroupAddon align="inline-end">
                     <InputGroupButton
                       variant={'outline'}
@@ -66,7 +68,7 @@ const SearchBar = ({ baseUrl, setData, setIsReset, isReset }: SearchProps) => {
                       <RiResetRightLine />
                     </InputGroupButton>
                     <InputGroupButton variant="secondary" type="submit">
-                      Search
+                      {t('t_search_action')}
                     </InputGroupButton>
                   </InputGroupAddon>
                 </InputGroup>
