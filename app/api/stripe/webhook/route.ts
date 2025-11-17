@@ -1,7 +1,7 @@
-import Stripe from 'stripe';
+import { prisma } from '@/lib/db';
 import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
-import { prisma } from '@/lib/db';
+import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.SECRET_WEBHOOK_STRIPE!;

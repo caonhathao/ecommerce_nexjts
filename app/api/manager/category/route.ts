@@ -1,5 +1,5 @@
+import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
-import { prisma } from '@/lib/prisma'; // Adjust path to your prisma client instance
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
