@@ -231,5 +231,76 @@
       "t_submit_action": "Save Changes",
       "t_cancel_action": "Cancel"
     }
+  },
+  "admin_product_page": {
+    "t_action_noti": "Action",
+    "t_copy_desc_noti": "Copied information successfully!",
+    "t_del_desc_noti": "Deleted product successfully!",
+
+    "t_action_failed_noti": "Action failed",
+    "t_copy_failed_desc_noti": "Failed to copy information!",
+    "t_del_failed_desc_noti": "Failed to delete product!",
+
+    "t_product_name": "Product Name",
+    "t_shop_name": "Shop Name",
+    "t_visibility": "Visibility",
+    "t_variant_count": "Variant Count",
+    "t_created_at": "Created At",
+    "t_updated_at": "Updated At",
+
+    "t_copy_action": "Copy ID",
+    "t_del_action": "Delete",
+
+    "t_tab_all": "All",
+    "t_tab_public": "Public",
+    "t_tab_private": "Private",
+    "t_tab_inlisted": "Unlisted",
+
+    "t_showing": "Showing",
+    "t_column": "Column",
+
+    "product_tab": {
+      "t_no_product_found": "No products found",
+      "t_of": "of",
+      "t_rows_selected": "rows selected.",
+      "t_rows_per_page": "Rows per page",
+      "t_page": "Page"
+    },
+    "product_drawer": {
+      "t_action_noti": "Action",
+      "t_update_desc_noti": "Updated category information successfully!",
+      "t_copy_desc_noti": "Copied information successfully!",
+      "t_del_desc_noti": "Deleted product successfully!",
+
+      "t_action_failed_noti": "Action failed",
+      "t_update_failed_desc_noti": "Failed to update information!",
+      "t_copy_failed_desc_noti": "Failed to copy information!",
+      "t_del_failed_desc_noti": "Failed to delete product!",
+
+      "t_product_desc": "Product Details",
+      "t_shop": "Shop",
+      "t_product_name": "Product Name",
+      "t_copy_action": "Copy ID",
+      "t_del_action": "Delete",
+
+      "t_origin": "Origin",
+      "t_currency": "Currency",
+      "t_min_price": "Min Price",
+      "t_max_price": "Max Price",
+
+      "t_visibility": "Visibility",
+      "t_visibility_placeholder": "Select status",
+      "c_public": "Public",
+      "c_private": "Private",
+      "c_unlisted": "Unlisted",
+
+      "t_desc": "Description",
+
+      "t_sku_code": "SKU Code",
+      "t_price": "Price",
+      "t_variant": "Variant",
+      "t_submit_action": "Save Changes",
+      "t_cancel_action": "Cancel"
+    }
   }
 }

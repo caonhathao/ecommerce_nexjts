@@ -212,7 +212,6 @@
       "t_rows_per_page": "Dòng mỗi trang",
       "t_page": "Trang"
     },
-
     "category_drawer": {
       "t_action_noti": "Hành động",
       "t_update_desc_noti": "Cập nhật thông tin danh mục thành công!",
@@ -236,6 +235,77 @@
       "t_no_parent": "Không có danh mục cha",
       "t_child_categories": "Danh mục con",
       "t_no_child": "Không có danh mục con",
+      "t_submit_action": "Lưu thay đổi",
+      "t_cancel_action": "Hủy"
+    }
+  },
+  "admin_product_page": {
+    "t_action_noti": "Hành động",
+    "t_copy_desc_noti": "Sao chép thông tin thành công!",
+    "t_del_desc_noti": "Xóa sản phẩm thành công!",
+
+    "t_action_failed_noti": "Hành động thất bại",
+    "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
+    "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
+
+    "t_product_name": "Tên sản phẩm",
+    "t_shop_name": "Cửa hàng",
+    "t_visibility": "Hiển thị",
+    "t_variant_count": "Số phiên bản",
+    "t_created_at": "Ngày tạo",
+    "t_updated_at": "Ngày cập nhật",
+
+    "t_copy_action": "Sao chép ID",
+    "t_del_action": "Xóa",
+
+    "t_tab_all": "Tất cả",
+    "t_tab_public": "Đang công khai",
+    "t_tab_private": "Đang ẩn",
+    "t_tab_inlisted": "Bị cấm",
+
+    "t_showing": "Hiển thị",
+    "t_column": "Cột",
+
+    "product_tab": {
+      "t_no_product_found": "Không có sản phẩm nào",
+      "t_of": "của",
+      "t_rows_selected": "số dòng đã chọn.",
+      "t_rows_per_page": "Dòng mỗi trang",
+      "t_page": "Trang"
+    },
+    "product_drawer": {
+      "t_action_noti": "Hành động",
+      "t_update_desc_noti": "Cập nhật thông tin danh mục thành công!",
+      "t_copy_desc_noti": "Sao chép thông tin thành công!",
+      "t_del_desc_noti": "Xóa sản phẩm thành công!",
+
+      "t_action_failed_noti": "Hành động thất bại",
+      "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
+      "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
+      "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
+
+      "t_product_desc": "Thông tin chi tiết sản phẩm",
+      "t_shop": "Cửa hàng",
+      "t_product_name": "Tên sản phẩm",
+      "t_copy_action": "Sao chép ID",
+      "t_del_action": "Xóa",
+
+      "t_origin": "Xuất xứ",
+      "t_currency": "Đơn vị tiền tệ",
+      "t_min_price": "Giá tối thiểu",
+      "t_max_price": "Giá tối đa",
+
+      "t_visibility": "Hiển thị",
+      "t_visibility_placeholder": "Chọn trạng thái",
+      "c_public": "Cho phép",
+      "c_private": "Đang xin phép",
+      "c_unlisted": "Không cho phép",
+
+      "t_desc":"Mô tả",
+
+      "t_sku_code": "Mã SKU",
+      "t_price": "Giá",
+      "t_variant": "Sản phẩm con",
       "t_submit_action": "Lưu thay đổi",
       "t_cancel_action": "Hủy"
     }

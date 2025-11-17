@@ -43,6 +43,7 @@ import {
   Row,
   Table as TanstackTable,
 } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 /**
@@ -113,6 +114,7 @@ const TabProduct = ({
   handleDragEnd,
 }: tabProductProps) => {
   const [rows, setRows] = React.useState<number>(10);
+  const t = useTranslations('admin_product_page.product_tab');
 
   useEffect(() => {
     fetchData(
@@ -176,7 +178,7 @@ const TabProduct = ({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    {t('t_no_product_found')}
                   </TableCell>
                 </TableRow>
               )}
@@ -186,13 +188,13 @@ const TabProduct = ({
       </div>
       <div className="flex items-center justify-between px-4">
         <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} {t('t_of')}{' '}
+          {table.getFilteredRowModel().rows.length} {t('t_rows_selected')}
         </div>
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="hidden items-center gap-2 lg:flex">
             <Label htmlFor="rows-per-page" className="text-sm font-medium">
-              Rows per page
+              {t('t_rows_per_page')}
             </Label>
             <Select
               value={rows.toString()}
@@ -221,7 +223,8 @@ const TabProduct = ({
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center text-sm font-medium">
-            Page {data.pagination.page} of {data.pagination.totalPages}
+            {t('t_page')} {data.pagination.page} {t('t_of')}{' '}
+            {data.pagination.totalPages}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button

@@ -230,5 +230,76 @@
       "t_submit_action": "変更を保存",
       "t_cancel_action": "キャンセル"
     }
+  },
+  "admin_product_page": {
+    "t_action_noti": "アクション",
+    "t_copy_desc_noti": "情報を正常にコピーしました！",
+    "t_del_desc_noti": "商品を正常に削除しました！",
+
+    "t_action_failed_noti": "アクション失敗",
+    "t_copy_failed_desc_noti": "情報のコピーに失敗しました！",
+    "t_del_failed_desc_noti": "商品の削除に失敗しました！",
+
+    "t_product_name": "商品名",
+    "t_shop_name": "ショップ名",
+    "t_visibility": "表示設定",
+    "t_variant_count": "バリアント数",
+    "t_created_at": "作成日",
+    "t_updated_at": "更新日",
+
+    "t_copy_action": "IDをコピー",
+    "t_del_action": "削除",
+
+    "t_tab_all": "すべて",
+    "t_tab_public": "公開中",
+    "t_tab_private": "非公開",
+    "t_tab_inlisted": "出品停止",
+
+    "t_showing": "表示中",
+    "t_column": "列",
+
+    "product_tab": {
+      "t_no_product_found": "商品が見つかりません",
+      "t_of": "/",
+      "t_rows_selected": "行を選択中",
+      "t_rows_per_page": "ページあたりの行数",
+      "t_page": "ページ"
+    },
+    "product_drawer": {
+      "t_action_noti": "アクション",
+      "t_update_desc_noti": "カテゴリ情報を正常に更新しました！",
+      "t_copy_desc_noti": "情報を正常にコピーしました！",
+      "t_del_desc_noti": "商品を正常に削除しました！",
+
+      "t_action_failed_noti": "アクション失敗",
+      "t_update_failed_desc_noti": "情報の更新に失敗しました！",
+      "t_copy_failed_desc_noti": "情報のコピーに失敗しました！",
+      "t_del_failed_desc_noti": "商品の削除に失敗しました！",
+
+      "t_product_desc": "商品詳細",
+      "t_shop": "ショップ",
+      "t_product_name": "商品名",
+      "t_copy_action": "IDをコピー",
+      "t_del_action": "削除",
+
+      "t_origin": "原産地",
+      "t_currency": "通貨",
+      "t_min_price": "最低価格",
+      "t_max_price": "最高価格",
+
+      "t_visibility": "表示設定",
+      "t_visibility_placeholder": "ステータスを選択",
+      "c_public": "公開",
+      "c_private": "承認待ち",
+      "c_unlisted": "非公開",
+
+      "t_desc": "説明",
+
+      "t_sku_code": "SKUコード",
+      "t_price": "価格",
+      "t_variant": "バリアント",
+      "t_submit_action": "変更を保存",
+      "t_cancel_action": "キャンセル"
+    }
   }
 }
