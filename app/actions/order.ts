@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache';
 import { OrderWithRelations } from '@/types/order.data-types';
 
 type CreateOrderResult =
-  | { success: true; order: OrderWithRelations }
+  | { success: true; order: OrderWithRelations[] }
   | { success: false; error: string };
 
 export async function createOrder(draftId: string): Promise<CreateOrderResult> {

@@ -34,7 +34,6 @@ export const TopDealItems = ({
       <div className="w-full flex flex-row justify-between p-2 gap-3 overflow-x-auto">
         {data.map((item: productItemType, index) => (
           <ProductItemSm
-            key={item.id}
             item={item}
             size={size}
             renderSaleValue={renderSaleValue}

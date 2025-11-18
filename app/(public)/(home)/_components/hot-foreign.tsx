@@ -9,6 +9,8 @@ type TopDealItemsProps = {
 };
 
 export const HotForeign = ({ data }: TopDealItemsProps) => {
+
+  console.log(data);
   const t = useTranslations('hot_foreign');
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-2 mt-5 bg-[var(--background)] rounded-lg">

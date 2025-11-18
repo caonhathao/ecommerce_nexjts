@@ -15,14 +15,12 @@ import {
 } from '@/components/ui/card';
 
 interface ProductItemProps {
-  key : string,
   item: productItemType;
   size: string;
   renderSaleValue?: boolean;
 }
 
 export const ProductItemSm = ({
-                              key,
                               item,
                               size,
                               renderSaleValue = true,
@@ -57,7 +55,7 @@ export const ProductItemSm = ({
 
   return (
     <div
-      key={key}
+      key={item.id}
       className={`w-${size} flex flex-col justify-start items-start flex-${size} border border-gray-200 rounded-lg hover:cursor-pointer`}
       onClick={() => handleOpenDetail(item.id)}
     >
