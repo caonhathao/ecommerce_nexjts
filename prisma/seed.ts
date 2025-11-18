@@ -60,7 +60,7 @@ async function main() {
   // 1️⃣ USERS
   // ------------------------
   const users = await Promise.all(
-    Array.from({ length: 5 }).map(() =>
+    Array.from({ length: 100 }).map(() =>
       prisma.user.create({
         data: {
           id: faker.string.uuid(),
@@ -79,7 +79,7 @@ async function main() {
   // 1️⃣ SESSIONS
   // ------------------------
   const session = await Promise.all(
-    Array.from({ length: 5 }).map(() =>
+    Array.from({ length: 100 }).map(() =>
       prisma.session.create({
         data: {
           id: faker.string.uuid(),
@@ -101,7 +101,7 @@ async function main() {
   // 1️⃣ ACCOUNTS
   // ------------------------
   const account = await Promise.all(
-    Array.from({ length: 5 }).map(() =>
+    Array.from({ length: 100 }).map(() =>
       prisma.account.create({
         data: {
           id: faker.string.uuid(),
@@ -127,7 +127,7 @@ async function main() {
   // 1️⃣ VERIFICAION
   // ------------------------
   const verification = await Promise.all(
-    Array.from({ length: 5 }).map(() =>
+    Array.from({ length: 100 }).map(() =>
       prisma.verification.create({
         data: {
           id: faker.string.uuid(),
@@ -147,11 +147,11 @@ async function main() {
   // 1️⃣ USER PROFILE
   // ------------------------
   const userProfiles = await Promise.all(
-    users.slice(0, 5).map((user) =>
+    users.slice(0, 100).map((user) =>
       prisma.userProfile.create({
         data: {
           id: faker.string.uuid(),
-          userId: user.id, // dùng trực tiếp user đang duyệt
+          userId: user.id,
           phone: faker.phone.number(),
           emailForBill: faker.internet.email(),
           birthDate: faker.date.past({ years: 30 }),
@@ -170,7 +170,7 @@ async function main() {
   // 1️⃣ ADDRESS
   // ------------------------
   const address = await Promise.all(
-    Array.from({ length: 5 }).map(() =>
+    Array.from({ length: 100 }).map(() =>
       prisma.address.create({
         data: {
           id: faker.string.uuid(),
@@ -199,7 +199,7 @@ async function main() {
   // 1️⃣ NOTIFICATION
   // ------------------------
   const notification = await Promise.all(
-    Array.from({ length: 5 }).map(() =>
+    Array.from({ length: 100 }).map(() =>
       prisma.notification.create({
         data: {
           id: faker.string.uuid(),
@@ -221,7 +221,7 @@ async function main() {
   // 2️⃣ SHOPS
   // ------------------------
   const shops = await Promise.all(
-    users.slice(0, 3).map((user) =>
+    users.slice(0, 100).map((user) =>
       prisma.shop.create({
         data: {
           ownerId: user.id,
@@ -623,7 +623,7 @@ async function main() {
   // 3️⃣ TAGS
   // ------------------------
   const tags = await Promise.all(
-    Array.from({ length: 5 }).map(() => {
+    Array.from({ length: 100 }).map(() => {
       const name = faker.commerce.department();
       const slug = faker.helpers.slugify(name.toLowerCase());
       const uniqueSlug = `${slug}-${faker.string.alphanumeric(6).toLowerCase()}`;
@@ -644,7 +644,7 @@ async function main() {
   // 4️⃣ PRODUCTS
   // ------------------------
   const products = await Promise.all(
-    Array.from({ length: 50 }).map(() => {
+    Array.from({ length: 200 }).map(() => {
       const shop = faker.helpers.arrayElement(shops);
       const category = faker.helpers.arrayElement(categories);
       const minPrice = faker.number.float({
@@ -684,7 +684,7 @@ async function main() {
   // ------------------------
   const images = await Promise.all(
     products.flatMap((product) =>
-      Array.from({ length: 2 }).map(() =>
+      Array.from({ length: 3 }).map(() =>
         prisma.productImage.create({
           data: {
             productId: product.id,
@@ -704,7 +704,7 @@ async function main() {
   const variants: { id: string; price: any }[] = [];
 
   for (const product of products) {
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 3; i++) {
       const variant = await prisma.productVariant.create({
         data: {
           productId: product.id,
@@ -1139,7 +1139,7 @@ async function main() {
   const usedOrderItemIds = new Set();
   const reviewsData = [];
 
-  while (reviewsData.length < 30) {
+  while (reviewsData.length < 1000) {
     // Random user
     const user = faker.helpers.arrayElement(users);
 
@@ -1283,7 +1283,7 @@ async function main() {
   // ------------------------
 
   const vouchers = await Promise.all(
-    Array.from({ length: 15 }).map(async () => {
+    Array.from({ length: 200 }).map(async () => {
       const type = faker.helpers.arrayElement(Object.values(VoucherType));
       const shop = faker.helpers.maybe(
         () => faker.helpers.arrayElement(shops),

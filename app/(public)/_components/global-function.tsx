@@ -1,7 +1,16 @@
 import dayjs from 'dayjs';
-export function formatPrice(value: number | null): string {
+export function formatPrice(value: number | string | null): string {
+
+  value = Number(value)
+
   if (!value || value <= 0) return '0';
-  return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  const c = value.toLocaleString('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
+
+  //console.log(`currecncy` + c);
+  return c;
 }
 
 export function formatDay(value: string | null | undefined) {

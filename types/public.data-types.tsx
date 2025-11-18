@@ -5,10 +5,11 @@ export interface productItemType {
   minPrice: number;
   ratingAvg: number;
   voucher: {
-    maxDiscount: number | null | undefined;
-    type: string | null;
-    value: number | null;
-  };
+    maxDiscount: number;
+    type: string;
+    value: number;
+  } | null;
+  origin: string;
 }
 
 export interface productDetailType {
@@ -21,6 +22,7 @@ export interface productDetailType {
       type: string;
       value: string;
     };
+    origin: string;
   }[];
   attributes: string | null;
   description: string;

@@ -2,7 +2,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 import { NextConfig } from 'next';
 const withNextIntl = createNextIntlPlugin();
 
-const nextConfig : NextConfig= {
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
@@ -14,7 +14,13 @@ const nextConfig : NextConfig= {
         hostname: 'salt.tikicdn.com',
         port: '',
         protocol: 'https',
-      }
+      },
+      {
+        hostname: 'res.cloudinary.com',
+        port: '',
+        protocol: 'https',
+      },
+
     ],
   },
 };

@@ -53,10 +53,11 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
 });
 
 //if pass, update status and visibility of product
-export const POST = withAuth(async (userId: string, request: NextRequest) => {
+export const PUT = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
   const id = String(searchParams.get('id'));
+  
   try {
     const body = await request.json();
     const { visibility } = body;
