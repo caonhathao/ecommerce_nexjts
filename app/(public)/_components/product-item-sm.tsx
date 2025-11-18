@@ -1,64 +1,88 @@
-import { Separator } from '@/components/ui/separator';
-import { productItemType } from '@/types/public.data-types';
-import { useRouter } from 'next/navigation';
-import { formatPrice } from './global-function';
-import { RatingStars } from './rating-starts';
-import Image from 'next/image';
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { productItemType } from '@/types/public.data-types';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { formatPrice } from './global-function';
+import { RatingStars } from './rating-starts';
 
 interface ProductItemProps {
-  key : string,
   item: productItemType;
-  size: string;
   renderSaleValue?: boolean;
 }
 
 export const ProductItemSm = ({
-                              key,
-                              item,
-                              size,
-                              renderSaleValue = true,
-                            }: ProductItemProps) => {
+  item,
+  renderSaleValue = true,
+}: ProductItemProps) => {
   const router = useRouter();
   const handleOpenDetail = (id: string) => {
     router.push(`/products/${id}`);
   };
-  const renderSaleInfo = (type: string | null, value: number | null) => {
-    const originalPrice = (
-      <span className="text-[var(--muted-foreground)] line-through text-xs">
-        {formatPrice(item.minPrice)}đ
-      </span>
-    );
 
-    if (!type || value === null || !renderSaleValue) {
+  const renderSaleInfo = ({
+    voucher,
+  }: {
+    voucher: { type: string; value: number; maxDiscount: number } | null;
+  }) => {
+    // const originalPrice = (
+    //   <span className="text-[var(--muted-foreground)] line-through text-xs">
+    //     {formatPrice(item.minPrice)}đ
+    //   </span>
+    // );
+
+    if (!voucher && !renderSaleValue) {
       return (
-        <div className="flex items-start">
-          <span className="font-normal">{formatPrice(item.minPrice)}đ</span>
+        <div className="flex items-center gap-2">
+          <span className="font-medium">{formatPrice(item.minPrice)}</span>
+        </div>
+      );
+    } else if (voucher) {
+      const discountedPrice =
+        voucher.type === 'PERCENT'
+          ? item.minPrice - (item.minPrice * Number(voucher.value)) / 100
+          : item.minPrice - Number(voucher.value);
+
+      const promotionBadge =
+        voucher.type === 'PERCENT' ? (
+          <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-[2px] rounded-md">
+            -{voucher.value}%
+          </span>
+        ) : (
+          <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-[2px] rounded-md">
+            -{formatPrice(Number(voucher.value))}
+          </span>
+        );
+
+      return (
+        <div className="flex flex-col items-start gap-2">
+          <div className="flex flex-row items-center gap-2">
+            <div className="text-[var(--destructive)] font-medium text-sm">
+              {Number(discountedPrice) <= 0 ? (
+                <div className="flex flex-row  gap-1">
+                  0<div className="underline">{'đ'}</div>
+                </div>
+              ) : (
+                formatPrice(discountedPrice)
+              )}
+            </div>
+            {/* {originalPrice} */}
+          </div>
+          {promotionBadge}
         </div>
       );
     }
-
-    return (
-      <div className="flex flex-col items-start">
-        <div className="flex flex-row items-start">
-          {originalPrice}
-        </div>
-      </div>
-    );
   };
 
   return (
     <div
-      key={key}
-      className={`w-${size} flex flex-col justify-start items-start flex-${size} border border-gray-200 rounded-lg hover:cursor-pointer`}
+      key={item.id}
+      className={`w-full flex flex-col justify-start items-start flex-1 border border-gray-200 rounded-lg hover:cursor-pointer`}
       onClick={() => handleOpenDetail(item.id)}
     >
       <div className="relative w-full flex-shrink-0 aspect-square overflow-hidden rounded-t-lg">
@@ -81,11 +105,11 @@ export const ProductItemSm = ({
                 quắc quắc quặc qucặ
               </p>
             </div>
-            <RatingStars value={item.ratingAvg} size={10}/>
+            <RatingStars value={item.ratingAvg} size={10} />
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col justify-start items-start px-2 py-1">
-          {renderSaleInfo(item.voucher.type, item.voucher.value)}
+          {renderSaleInfo({ voucher: item.voucher })}
         </CardContent>
       </Card>
     </div>

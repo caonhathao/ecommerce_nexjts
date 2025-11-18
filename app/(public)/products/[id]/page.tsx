@@ -1,16 +1,11 @@
 'use client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { fetchProductById, fetchProducts } from '@/funcs/fetch';
 import { productDetailType, productItemType } from '@/types/public.data-types';
 import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react';
-import { formatPrice } from '../../_components/global-function';
-import { Loading } from '../../_components/loading';
-import { RatingStars } from '../../_components/rating-starts';
-import SlideImg from './_components/slide-img';
-import { toast } from 'sonner';
-import { Separator } from '@/components/ui/separator';
 import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
 import {
   FaBoxOpen,
@@ -23,16 +18,21 @@ import { GrPowerCycle } from 'react-icons/gr';
 import { HiMiniCheckBadge } from 'react-icons/hi2';
 import { MdAttachMoney } from 'react-icons/md';
 import { PiTruckLight } from 'react-icons/pi';
+import { toast } from 'sonner';
+import { formatPrice } from '../../_components/global-function';
+import { Loading } from '../../_components/loading';
+import { RatingStars } from '../../_components/rating-starts';
+import SlideImg from './_components/slide-img';
 
+import { Prisma } from '@/lib/generated/prisma';
+import { AddToCartRequest } from '@/types/cart.data-types';
+import Image from 'next/image';
 import Link from 'next/link';
 import { TopDealItems } from '../../(home)/_components/top-deal-items';
 import Desc from './_components/desc';
 import Reviews from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
-import { AddToCartRequest } from '@/types/cart.data-types';
-import { Prisma } from '@/lib/generated/prisma';
 import Decimal = Prisma.Decimal;
-import Image from 'next/image';
 
 interface selectedVariant {
   name: string;
@@ -153,9 +153,9 @@ const detaiPage = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
 
   const addProductToCart = async (params: AddToCartRequest) => {
     try {

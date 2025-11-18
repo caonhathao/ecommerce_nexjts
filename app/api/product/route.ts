@@ -15,13 +15,6 @@ export async function GET(req: Request) {
       where: {
         status: 'PUBLISHED',
         visibility: 'PUBLIC',
-        VoucherProduct: {
-          some: {
-            voucher: {
-              type: { not: 'SHIPPING' },
-            },
-          },
-        },
       },
       select: {
         id: true,
@@ -44,10 +37,11 @@ export async function GET(req: Request) {
             },
           },
         },
+        origin: true,
       },
       skip,
       take: limit,
-      distinct: ['id'], // tương đương DISTINCT ON (p.id)
+      //distinct: ['id'], // tương đương DISTINCT ON (p.id)
       orderBy: { id: 'asc' },
     });
 
@@ -74,6 +68,7 @@ export async function GET(req: Request) {
       ratingAvg: p.ratingAvg,
       imageUrl: p.images[0]?.url ?? null,
       voucher: p.VoucherProduct[0]?.voucher ?? null,
+      origin: p.origin,
     }));
 
     return NextResponse.json({

@@ -7,18 +7,23 @@ import { ProductItem } from '../../_components/product-item';
 
 type TopDealItemsProps = {
   data: productItemType[];
+  size: string;
 };
 
-export const SuggestDealToday = ({ data }: TopDealItemsProps) => {
+export const SuggestDealToday = ({ data, size }: TopDealItemsProps) => {
   const t = useTranslations('suggest_deal_today');
   return (
     <div className="w-full flex flex-col justify-center items-center gap-2 bg-[var(--background)] rounded-lg mt-5 p-2">
       {/* top-title */}
       <p className="w-full p-2 text-lg text-left font-bold">{t('title')}</p>
       {/* content here */}
-      <div className="w-full flex flex-row gap-3 p-2 overflow-x-auto">
+      <div
+        className={`w-full grid grid-cols-${size} gap-3 p-2 overflow-x-auto`}
+      >
         {data.map((item: productItemType, index) => (
-          <ProductItem item={item} size='1'/>
+          <div key={index} className="w-full">
+            <ProductItem item={item} size={'5'} />
+          </div>
         ))}
       </div>
       {/* watch more */}
