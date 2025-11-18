@@ -596,7 +596,7 @@ async function main() {
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        imageUrl: faker.image.urlPicsumPhotos({ width: 600, height: 600 }),
+        imageUrl: null,
       },
     });
     for (const sub of topCat.children) {
@@ -610,7 +610,7 @@ async function main() {
           isActive: true,
           createdAt: new Date(),
           updatedAt: new Date(),
-          imageUrl: faker.image.urlPicsumPhotos({ width: 600, height: 600 }),
+          imageUrl: null,
         },
       });
     }

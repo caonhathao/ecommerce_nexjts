@@ -7,6 +7,7 @@ export type CategoryNode = {
   parentId: string | null;
   name: string;
   slug: string;
+  imageUrl: string | null;
   position: number;
   isActive?: boolean;
   children?: CategoryNode[];
