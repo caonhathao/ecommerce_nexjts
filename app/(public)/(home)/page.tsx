@@ -21,7 +21,7 @@ export default function Home() {
     console.log('Fetched Products:', data1);
   }, [data1]);
 
-  if (!data1 || data1.length < 1 ) {
+  if (!data1 || data1.length < 1) {
     return <Loading />;
   }
 
@@ -31,9 +31,9 @@ export default function Home() {
       <div className="w-full bg-transparent p-1.5"></div>
       <CategoryPromotionPanel />
       <div className="w-full bg-transparent p-1.5"></div>
-      <TopDealItems data={data1} size="1" />
-      <HotForeign data={data1} />
-      <SuggestDealToday data={data1} />
+      <TopDealItems data={data1} size={'5'} />
+      <HotForeign data={data1} size={'5'} />
+      <SuggestDealToday data={data1} size="5" />
     </div>
   );
 }
