@@ -596,6 +596,7 @@ async function main() {
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
+        imageUrl: faker.image.urlPicsumPhotos({ width: 600, height: 600 }),
       },
     });
     for (const sub of topCat.children) {
@@ -609,11 +610,11 @@ async function main() {
           isActive: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          imageUrl: faker.image.urlPicsumPhotos({ width: 600, height: 600 }),
         },
       });
     }
   }
-
   const categories = await prisma.category.findMany();
   console.log(
     `✅ Seeded ${categoryTree.length} top-categories with sub-categories`

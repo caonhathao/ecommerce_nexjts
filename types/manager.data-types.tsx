@@ -160,6 +160,7 @@ export interface categoryItemData {
   name: string;
   parentId: string | null;
   position: number;
+  imageUrl: string;
   slug: string;
   updatedAt: string;
   _count: {
