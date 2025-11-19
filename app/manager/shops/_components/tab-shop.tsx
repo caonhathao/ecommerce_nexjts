@@ -43,6 +43,7 @@ import {
   Row,
   Table as TanstackTable,
 } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 /**
@@ -113,6 +114,7 @@ const TabShop = ({
   handleDragEnd,
 }: tabShopProps) => {
   const [rows, setRows] = React.useState<number>(10);
+  const t=useTranslations('admin_shop_page.shop_tab')
   useEffect(() => {
     fetchData(
       '/api/manager/shop',
@@ -122,7 +124,7 @@ const TabShop = ({
   }, [statusFilter, isReset]);
 
   useEffect(() => {
-    console.log('category data changed:', data);
+    //console.log('category data changed:', data);
     if (data) {
       setShopList(data.data);
     }
@@ -175,7 +177,7 @@ const TabShop = ({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                   {t('t_no_shop_found')}
                   </TableCell>
                 </TableRow>
               )}
@@ -185,13 +187,13 @@ const TabShop = ({
       </div>
       <div className="flex items-center justify-between px-4">
         <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} {t('t_of')}{' '}
+          {table.getFilteredRowModel().rows.length} {t('t_rows_selected')}
         </div>
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="hidden items-center gap-2 lg:flex">
             <Label htmlFor="rows-per-page" className="text-sm font-medium">
-              Rows per page
+              {t('t_rows_per_page')}
             </Label>
             <Select
               value={rows.toString()}

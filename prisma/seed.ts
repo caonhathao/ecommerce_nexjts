@@ -60,7 +60,7 @@ async function main() {
   // 1️⃣ USERS
   // ------------------------
   const users = await Promise.all(
-    Array.from({ length: 100 }).map(() =>
+    Array.from({ length: 500 }).map(() =>
       prisma.user.create({
         data: {
           id: faker.string.uuid(),
@@ -79,7 +79,7 @@ async function main() {
   // 1️⃣ SESSIONS
   // ------------------------
   const session = await Promise.all(
-    Array.from({ length: 100 }).map(() =>
+    Array.from({ length: 500 }).map(() =>
       prisma.session.create({
         data: {
           id: faker.string.uuid(),
@@ -101,7 +101,7 @@ async function main() {
   // 1️⃣ ACCOUNTS
   // ------------------------
   const account = await Promise.all(
-    Array.from({ length: 100 }).map(() =>
+    Array.from({ length: 500 }).map(() =>
       prisma.account.create({
         data: {
           id: faker.string.uuid(),
@@ -127,7 +127,7 @@ async function main() {
   // 1️⃣ VERIFICAION
   // ------------------------
   const verification = await Promise.all(
-    Array.from({ length: 100 }).map(() =>
+    Array.from({ length: 500 }).map(() =>
       prisma.verification.create({
         data: {
           id: faker.string.uuid(),
@@ -147,7 +147,7 @@ async function main() {
   // 1️⃣ USER PROFILE
   // ------------------------
   const userProfiles = await Promise.all(
-    users.slice(0, 100).map((user) =>
+    users.slice(0, 500).map((user) =>
       prisma.userProfile.create({
         data: {
           id: faker.string.uuid(),
@@ -170,7 +170,7 @@ async function main() {
   // 1️⃣ ADDRESS
   // ------------------------
   const address = await Promise.all(
-    Array.from({ length: 100 }).map(() =>
+    Array.from({ length: 500 }).map(() =>
       prisma.address.create({
         data: {
           id: faker.string.uuid(),
@@ -199,7 +199,7 @@ async function main() {
   // 1️⃣ NOTIFICATION
   // ------------------------
   const notification = await Promise.all(
-    Array.from({ length: 100 }).map(() =>
+    Array.from({ length: 500 }).map(() =>
       prisma.notification.create({
         data: {
           id: faker.string.uuid(),
@@ -239,12 +239,12 @@ async function main() {
   console.log(`✅ Created ${shops.length} shops`);
 
   // ------------------------
-  // 2️⃣ SHOPS
+  // 2️⃣ SHOP MEMBERS
   // ------------------------
   const usedPairs = new Set();
 
   const shopMembers = await Promise.all(
-    users.slice(0, 3).map(async (user) => {
+    users.slice(0, 200).map(async (user) => {
       let shopId, userId, key;
 
       do {
