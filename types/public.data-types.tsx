@@ -53,6 +53,16 @@ export interface productDetailType {
   }[];
 }
 
+export interface reviewResponse {
+  data: reviewsType[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 export interface reviewsType {
   body: string;
   createdAt: string;

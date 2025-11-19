@@ -1,19 +1,24 @@
 import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
-export async function GET(
-  req: Request,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function GET(req: Request) {
   try {
-    const { id } = await context.params;
-
     const { searchParams } = new URL(req.url);
 
     // Lấy pagination params
+    const id = searchParams.get('id') || '';
     const page = Number(searchParams.get('page')) || 1;
     const limit = Number(searchParams.get('limit')) || 10;
     const skip = (page - 1) * limit;
+
+    if (id.length === 0 || id === null || id === undefined) {
+      return NextResponse.json({
+        status: 403,
+        data: {
+          message: 'Missing id',
+        },
+      });
+    }
 
     // Đếm tổng số review
     const total = await prisma.review.count({
@@ -57,9 +62,8 @@ export async function GET(
     });
   } catch (error) {
     console.error('GET /api/reviews/[id] error:', error);
-    return new Response(
-      JSON.stringify({ message: 'Internal Server Error' }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ message: 'Internal Server Error' }), {
+      status: 500,
+    });
   }
 }

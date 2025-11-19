@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { fetchProductById, fetchProducts } from '@/funcs/fetch';
 import { productDetailType, productItemType } from '@/types/public.data-types';
-import { useParams, useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import React, { Suspense, useEffect } from 'react';
 import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
 import {
   FaBoxOpen,
@@ -21,7 +21,7 @@ import { MdAttachMoney } from 'react-icons/md';
 import { PiTruckLight } from 'react-icons/pi';
 import { toast } from 'sonner';
 import { formatPrice } from '../../_components/global-function';
-import { Loading } from '../../_components/loading';
+import { Loading, LoadingComponent } from '../../_components/loading';
 import { RatingStars } from '../../_components/rating-starts';
 import SlideImg from './_components/slide-img';
 
@@ -31,7 +31,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { TopDealItems } from '../../(home)/_components/top-deal-items';
 import Desc from './_components/desc';
-import Reviews from './_components/reviews';
+import { Reviews } from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 import Decimal = Prisma.Decimal;
 import { authClient } from '@/lib/auth-client';
@@ -64,9 +64,9 @@ const detaiPage = () => {
     valueVoucher: string | null,
     price: string
   ) => {
-    console.log(typeVoucher);
-    console.log(valueVoucher);
-    console.log(price);
+    // console.log(typeVoucher);
+    // console.log(valueVoucher);
+    // console.log(price);
 
     if (!typeVoucher || !valueVoucher) {
       return <p>{formatPrice(Number(price))}</p>;
@@ -175,15 +175,48 @@ const detaiPage = () => {
         },
         body: JSON.stringify(params),
       });
+
+      // --- THIS IS THE IMPORTANT PART ---
+      // Check if the response was successful (status 200-299)
       if (response.ok) {
+        // Now it's safe to parse the JSON
+        const data = await response.json();
+        //console.log(data);
+
         toast.success('Thêm vào giỏ hàng thành công', {
           duration: 3000,
           position: 'top-right',
           style: { color: 'var(--chart-2)' },
         });
+      } else {
+        // Handle HTTP errors (like 401, 404, 500)
+        // Try to get a meaningful error message from the response body
+        let errorMessage = `Lỗi: ${response.status} ${response.statusText}`;
+        try {
+          // The server might have sent an error message as text
+          const errorText = await response.json();
+          if (errorText) {
+            errorMessage = errorText;
+          }
+        } catch (e) {
+          // Ignore errors trying to read the body, just use the status
+        }
+
+        console.log(errorMessage);
+        let errNotice = '';
+        if (response.status === 401) errNotice = 'Bạn chưa đăng nhập';
+
+        toast.error(`Thêm vào giỏ hàng thất bại: ${errNotice}`, {
+          duration: 3000,
+          position: 'top-right',
+          style: { color: 'var(--chart-1)' },
+        });
       }
+      // ------------------------------------
     } catch (error) {
+      // This catch block will now *only* handle network failures
       const message = error instanceof Error ? error.message : 'Có lỗi xảy ra';
+      console.log(message);
       toast.error(`Thêm vào giỏ hàng thất bại: ${message}`, {
         duration: 3000,
         position: 'top-right',
@@ -191,7 +224,6 @@ const detaiPage = () => {
       });
     }
   };
-
   if (!data) return <Loading />;
   if (selVariant === null) {
     return <Loading />;
@@ -337,7 +369,7 @@ const detaiPage = () => {
               </div>
 
               {/* top deals */}
-              <TopDealItems data={dTopDeal} size="1" renderSaleValue={false} />
+              <TopDealItems data={dTopDeal} size="4" renderSaleValue={false} />
               {/* slo-gan */}
               <div className="bg-[var(--background)] p-3 rounded-lg">
                 <p className="font-semibold text-xl">An tâm mua sắm</p>
@@ -365,11 +397,13 @@ const detaiPage = () => {
             </div>
           </div>
 
-          <Reviews
-            id={data.id}
-            ratingAvg={data.ratingAvg}
-            ratingCount={data.ratingCount}
-          />
+          <Suspense fallback={<LoadingComponent />}>
+            <Reviews
+              id={data.id}
+              ratingAvg={data.ratingAvg}
+              ratingCount={data.ratingCount}
+            />
+          </Suspense>
         </section>
 
         {/* payment methods */}
