@@ -32,6 +32,19 @@ export default async function CheckoutPage() {
     );
   }
 
+  const draftPlain = {
+    ...draft,
+    itemsTotal: draft.itemsTotal.toString(),
+    shippingFee: draft.shippingFee.toString(),
+    discountTotal: draft.discountTotal.toString(),
+    grandTotal: draft.grandTotal.toString(),
+    items: draft.items.map(item => ({
+      ...item,
+      unitPrice: item.unitPrice.toString(),
+      total: item.total.toString(),
+    })),
+  };
+
   const shipping = draft.shippingInfor as Record<string, any>;
 
   return (
@@ -93,7 +106,7 @@ export default async function CheckoutPage() {
             </Label>
 
             <div className="divide-y">
-              {draft.items.map((item, i) => (
+              {draftPlain.items.map((item, i) => (
                 <Item key={i} variant="outline" className="py-3">
                   <ItemMedia>
                     <Image
@@ -112,7 +125,7 @@ export default async function CheckoutPage() {
                       {item.title}
                     </ItemTitle>
                     <ItemDescription className="text-sm text-foreground font-medium">
-                      {formatPrice(item.unitPrice.toNumber())}
+                      {formatPrice(item.unitPrice)}
                     </ItemDescription>
                   </ItemContent>
                   <ItemActions>
@@ -121,7 +134,7 @@ export default async function CheckoutPage() {
                         Số lượng: {item.quantity}
                       </p>
                       <p className="font-semibold text-primary">
-                        {formatPrice(item.total.toNumber())}
+                        {formatPrice(item.total)}
                       </p>
                     </div>
                   </ItemActions>

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { fetchProductById, fetchProducts } from '@/funcs/fetch';
 import { productDetailType, productItemType } from '@/types/public.data-types';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { Suspense, useEffect } from 'react';
 import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
 import {
@@ -35,6 +35,7 @@ import { Reviews } from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 import Decimal = Prisma.Decimal;
 import { authClient } from '@/lib/auth-client';
+import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
 
 interface selectedVariant {
   name: string;
@@ -42,6 +43,12 @@ interface selectedVariant {
   price: string;
   amount: number;
 }
+
+type itemType = {
+  productId: string;
+  variantId: string;
+  quantity: number;
+};
 
 const detaiPage = () => {
   const route = useRouter();
@@ -64,10 +71,6 @@ const detaiPage = () => {
     valueVoucher: string | null,
     price: string
   ) => {
-    // console.log(typeVoucher);
-    // console.log(valueVoucher);
-    // console.log(price);
-
     if (!typeVoucher || !valueVoucher) {
       return <p>{formatPrice(Number(price))}</p>;
     }
@@ -156,12 +159,63 @@ const detaiPage = () => {
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
+  const buyNow = async (params: itemType) => {
+    const session = await authClient.getSession();
+    if (session.data == null) {
+      route.push('/auth/login');
+    }
+
+    try {
+      const existing = await getOrderDrafts();
+      if (existing.success && existing.draft) {
+        toast.info(
+          'Bạn có đơn hàng đang chờ xử lý. Chuyển đến trang thanh toán...',
+          {
+            duration: 4000,
+            position: 'top-right',
+          }
+        );
+        route.push('/checkout');
+        return;
+      }
+
+      const data = {
+        notes: '',
+        items: [params],
+        voucher: [
+          {
+            code: 'VC-6KSWBFG9',
+          },
+          {
+            code: 'VC-KSXTMQ0T',
+          },
+        ],
+      };
+      const formData = new FormData();
+      formData.append('data', JSON.stringify(data));
+
+      const res = await createOrderDraft(formData);
+
+      if (res.success) {
+        toast.success('Đang chuyển đến trang thanh toán...');
+        route.push('/checkout');
+      } else if (!res.success && res.redirectTo) {
+        toast.error(res.message, {
+          position: 'top-right',
+          duration: 3000,
+        });
+        route.push(res.redirectTo);
+      } else {
+        toast.error('Lỗi: ' + res.error);
+        console.error(res.error);
+      }
+    } catch (e) {
+      console.error('Lỗi khi tạo đơn hàng nháp:', e);
+      toast.error(`Lỗi: ${e}`);
+    }
+  };
 
   const addProductToCart = async (params: AddToCartRequest) => {
-
     const session = await authClient.getSession();
     if (session.data == null) {
       route.push('/auth/login');
@@ -176,30 +230,22 @@ const detaiPage = () => {
         body: JSON.stringify(params),
       });
 
-      // --- THIS IS THE IMPORTANT PART ---
-      // Check if the response was successful (status 200-299)
       if (response.ok) {
-        // Now it's safe to parse the JSON
         const data = await response.json();
-        //console.log(data);
-
         toast.success('Thêm vào giỏ hàng thành công', {
           duration: 3000,
           position: 'top-right',
           style: { color: 'var(--chart-2)' },
         });
       } else {
-        // Handle HTTP errors (like 401, 404, 500)
-        // Try to get a meaningful error message from the response body
         let errorMessage = `Lỗi: ${response.status} ${response.statusText}`;
         try {
-          // The server might have sent an error message as text
           const errorText = await response.json();
           if (errorText) {
             errorMessage = errorText;
           }
         } catch (e) {
-          // Ignore errors trying to read the body, just use the status
+          console.error(e);
         }
 
         console.log(errorMessage);
@@ -224,6 +270,8 @@ const detaiPage = () => {
       });
     }
   };
+  console.log(data);
+
   if (!data) return <Loading />;
   if (selVariant === null) {
     return <Loading />;
@@ -399,6 +447,7 @@ const detaiPage = () => {
 
           <Suspense fallback={<LoadingComponent />}>
             <Reviews
+              key={data.id}
               id={data.id}
               ratingAvg={data.ratingAvg}
               ratingCount={data.ratingCount}
@@ -469,6 +518,16 @@ const detaiPage = () => {
               <Button
                 variant={'destructive'}
                 className="w-full hover:cursor-pointer hover:bg-primary transition-colors duration-750"
+                onClick={() => {
+                  if (selVariant) {
+                    const payload: itemType = {
+                      variantId: selVariant.id,
+                      productId: data.id,
+                      quantity: selVariant.amount,
+                    };
+                    buyNow(payload);
+                  }
+                }}
               >
                 Mua ngay
               </Button>

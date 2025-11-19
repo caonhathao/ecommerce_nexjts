@@ -17,13 +17,30 @@ import { useActionState, useEffect, useState, useTransition } from 'react';
 import { AddressDTO } from '@/types/dtos/address.dto';
 import { createAddress, getAddress } from '@/app/actions/address';
 import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/_components/table-address';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function AddressPage() {
   const [address, setAddress] = useState<AddressDTO[]>([]);
   const [isPendingTransition, startTransition] = useTransition();
+  const route = useRouter();
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [state, formAction, isPending] = useActionState(
     async (prevState: any, formData: FormData) => {
-      return await createAddress(formData);
+      try {
+        const address = await createAddress(formData);
+        toast.success('Thêm địa chỉ thành công!', {
+          duration: 3000,
+          position: 'top-right',
+        });
+        return { success: true, address };
+      } catch (err: any) {
+        toast.error(err.message, {
+          duration: 3000,
+          position: 'top-right',
+        });
+        return { success: false, error: err.message };
+      }
     },
     { success: false, error: '' }
   );
@@ -35,6 +52,7 @@ export default function AddressPage() {
         setAddress(data.addresses);
       }
     });
+    setDialogOpen(false);
   }, []);
 
   const handleSubmit = (formData: FormData) => {
@@ -67,7 +85,7 @@ export default function AddressPage() {
             Địa chỉ của tôi
           </h2>
         </div>
-        <Dialog>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button size="lg" variant="outline">
               <MapPlus className="w-6 h-6" />
@@ -79,7 +97,7 @@ export default function AddressPage() {
               <DialogHeader>
                 <DialogTitle>Thêm địa chỉ của bạn</DialogTitle>
               </DialogHeader>
-              <div className="grid gap-4">
+              <div className="grid gap-4 mt-2">
                 <div className="grid gap-3">
                   <Label htmlFor="line1">Số nhà</Label>
                   <Input id="line1" name="line1" required />
@@ -106,11 +124,18 @@ export default function AddressPage() {
                   />
                 </div>
               </div>
-              <DialogFooter>
+              <DialogFooter className="mt-2">
                 <DialogClose asChild>
-                  <Button variant="outline">Hủy bỏ</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setDialogOpen(false)}
+                  >
+                    Hủy bỏ
+                  </Button>
                 </DialogClose>
-                <Button type="submit" disabled={isPending}>{isPending ? 'Đang lưu...' : 'Lưu'}</Button>
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? 'Đang lưu...' : 'Lưu'}
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>

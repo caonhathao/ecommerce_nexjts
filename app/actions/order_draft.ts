@@ -6,6 +6,7 @@ import { headers } from 'next/headers';
 import { prisma } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import { Prisma } from '@/lib/generated/prisma';
+import { redirect } from 'next/navigation';
 
 export async function createOrderDraft(formData: FormData) {
   try {
@@ -25,7 +26,13 @@ export async function createOrderDraft(formData: FormData) {
     const defaultAddress = await prisma.address.findFirst({
       where: { userId, isDefault: true },
     });
-    if (!defaultAddress) throw new Error('Default address not found');
+    if (!defaultAddress) {
+      return {
+        success: false,
+        redirectTo: '/customer/account/address',
+        message: 'Default address missing',
+      };
+    }
 
     const shippingInfor = {
       name: defaultAddress.fullName,

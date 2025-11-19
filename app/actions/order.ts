@@ -6,6 +6,7 @@ import { prisma } from '@/lib/db';
 import { OrderStatus, Prisma } from '@/lib/generated/prisma';
 import { revalidatePath } from 'next/cache';
 import { OrderWithRelations } from '@/types/order.data-types';
+import { Decimal } from '@/lib/generated/prisma/runtime/library';
 
 type CreateOrderResult =
   | { success: true; order: OrderWithRelations[] }
@@ -27,16 +28,18 @@ export async function createOrder(draftId: string): Promise<CreateOrderResult> {
     });
 
     if (!draft) {
-      return { success: false, error: "Draft not found" };
+      return { success: false, error: 'Draft not found' };
     }
 
-    // 🏪 Group items theo shopId
-    const itemsByShop = draft.items.reduce((acc, item) => {
-      if (!item.shopId) throw new Error("OrderItem missing shopId!");
-      if (!acc[item.shopId]) acc[item.shopId] = [];
-      acc[item.shopId].push(item);
-      return acc;
-    }, {} as Record<string, typeof draft.items>);
+    const itemsByShop = draft.items.reduce(
+      (acc, item) => {
+        if (!item.shopId) throw new Error('OrderItem missing shopId!');
+        if (!acc[item.shopId]) acc[item.shopId] = [];
+        acc[item.shopId].push(item);
+        return acc;
+      },
+      {} as Record<string, typeof draft.items>
+    );
 
     const shopIds = Object.keys(itemsByShop);
     const timestamp = Date.now();
@@ -54,8 +57,7 @@ export async function createOrder(draftId: string): Promise<CreateOrderResult> {
 
         const shippingFee = Number(draft.shippingFee);
         const discountTotal = Number(draft.discountTotal) * ratio;
-        const grandTotal =
-          itemsTotal + shippingFee - discountTotal;
+        const grandTotal = itemsTotal + shippingFee - discountTotal;
 
         const orderNumber = `ORD-${timestamp}-${index + 1}`;
 
@@ -65,7 +67,7 @@ export async function createOrder(draftId: string): Promise<CreateOrderResult> {
             userId,
             shopId,
             status: draft.status,
-            paymentStatus: "PENDING",
+            paymentStatus: 'PENDING',
 
             itemsTotal: new Prisma.Decimal(itemsTotal),
             shippingFee: new Prisma.Decimal(shippingFee),
@@ -117,7 +119,7 @@ export async function createOrder(draftId: string): Promise<CreateOrderResult> {
           },
         },
       });
-      revalidatePath("/cart");
+      revalidatePath('/cart');
     }
 
     return {
@@ -125,11 +127,10 @@ export async function createOrder(draftId: string): Promise<CreateOrderResult> {
       order: createdOrders,
     };
   } catch (error: any) {
-    console.error("Error createOrder:", error);
+    console.error('Error createOrder:', error);
     return { success: false, error: error.message };
   }
 }
-
 
 interface GetOrdersParams {
   cursor?: string;
@@ -175,10 +176,11 @@ export async function getOrder(
     const hasNextPage = order.length > limit;
     const nextCursor = hasNextPage ? order[limit - 1].id : undefined;
 
-    return {
-      orders: hasNextPage ? order.slice(0, limit) : order,
-      nextCursor,
-    };
+    return JSON.parse(
+      JSON.stringify({
+        orders: hasNextPage ? order.slice(0, limit) : order,
+        nextCursor,
+      }));
   } catch (error: any) {
     console.error('Error fetching orders:', error);
     throw new Error(error.message || 'Internal Server Error');

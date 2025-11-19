@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: 'vnd',
             product_data: {
-              name: 'Thanh toán đơn hàng #' + order[0].orderNumber + "/n" + order[1].orderNumber,
+              name: `Thanh toán ${order.length} đơn hàng`,
             },
             unit_amount: Math.round(totalAmount),
           },

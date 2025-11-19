@@ -10,9 +10,14 @@ export async function middleware(request: NextRequest) {
     '/api/auth',
     '/products',
     '/api/products',
+    '/api/stripe/webhook',
     '/',
   ];
   if (publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
+    return NextResponse.next();
+  }
+
+  if (pathname.startsWith('/api/stripe/webhook')) {
     return NextResponse.next();
   }
 

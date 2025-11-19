@@ -207,6 +207,12 @@ export default function Cart() {
       if (res.success) {
         toast.success('Đang chuyển đến trang thanh toán...');
         router.push('/checkout');
+      } else if (!res.success && res.redirectTo) {
+        toast.error(res.message,{
+          position: 'top-right',
+          duration: 3000,
+        });
+        router.push(res.redirectTo);
       } else {
         toast.error('Lỗi: ' + res.error);
         console.error(res.error);

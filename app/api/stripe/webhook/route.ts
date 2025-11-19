@@ -1,15 +1,15 @@
 import { prisma } from '@/lib/db';
-import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 import Stripe from 'stripe';
-import { toast } from 'sonner';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.SECRET_WEBHOOK_STRIPE!;
+
 console.log('⚡ Stripe webhook route triggered');
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  const sig = (await headers()).get('stripe-signature');
+  const sig = req.headers.get('stripe-signature');
 
   try {
     const event = stripe.webhooks.constructEvent(body, sig!, endpointSecret);
@@ -25,20 +25,18 @@ export async function POST(req: NextRequest) {
 
         await prisma.payment.updateMany({
           where: { externalId: session.id, provider: 'STRIPE' },
-          data: {
-            status: 'PAID',
-            updatedAt: new Date(),
-          },
+          data: { status: 'PAID', updatedAt: new Date() },
         });
 
         await prisma.order.updateMany({
           where: { id: { in: orderIds } },
           data: {
             paymentStatus: 'PAID',
-            status: 'PENDING',
+            status: 'PROCESSING',
             updatedAt: new Date(),
           },
         });
+        console.log(`✅ Payment success for session ${session.id}, updated ${orderIds.length} orders`);
         break;
       }
       case 'checkout.session.expired': {
@@ -58,10 +56,7 @@ export async function POST(req: NextRequest) {
           data: { paymentStatus: 'FAILED', updatedAt: new Date() },
         });
 
-        toast.info('Payment failure', {
-          position: 'top-right',
-          duration: 5000,
-        });
+        console.log('⚠️ Payment failure for:', session.id);
 
         break;
       }
