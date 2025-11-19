@@ -79,7 +79,7 @@ export interface shopItemData {
   updatedAt: string;
 }
 
-export interface shopData {
+export interface shopDataResponse {
   data: shopItemData[];
   pagination: {
     page: number;
@@ -192,4 +192,54 @@ export interface categoryChildDetail {
   id: string;
   name: string;
   slug: string;
+}
+
+export interface userDataResponse {
+  data: userItemData[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+export interface userItemData {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface userDetail {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  role: string;
+  banned: boolean;
+  banReasion: string | null;
+  banExpires: string | null;
+  profile: {
+    emailForBill: string;
+    phone: string | null;
+    gender: string | null;
+  };
+  shopsOwned: {
+    id: string;
+    name: string;
+    logoUrl: string;
+  }[];
+  shopMemberships: {
+    shop: {
+      id: string;
+      name: string;
+      logoUrl: string;
+    };
+  }[];
 }

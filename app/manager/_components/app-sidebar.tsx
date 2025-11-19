@@ -124,7 +124,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: t('t_user_management'),
-            url: '#',
+            url: '/manager/users',
           },
           {
             title: t('t_support'),

@@ -49,6 +49,7 @@ export const fetchData = async (
     if (isExport) return response;
 
     const data = await response.json();
+    console.log('data: ', data);
 
     // 3. Update state with the fetched data
     if (setData) setData(data);

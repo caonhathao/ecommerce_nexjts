@@ -382,5 +382,89 @@
       "t_submit_action": "変更を保存",
       "t_cancel_action": "キャンセル"
     }
+  },
+  "admin_user_page": {
+    "t_action_noti": "操作",
+    "t_copy_desc_noti": "情報をコピーしました！",
+    "t_del_desc_noti": "商品を削除しました！",
+
+    "t_action_failed_noti": "操作失敗",
+    "t_copy_failed_desc_noti": "情報のコピーに失敗しました！",
+    "t_del_failed_desc_noti": "商品の削除に失敗しました！",
+
+    "t_user_name": "ユーザー名",
+    "t_email": "メールアドレス",
+    "t_email_verified": "メール認証",
+    "t_no_verified": "未認証",
+    "t_verified": "認証済み",
+    "t_rating": "評価",
+    "t_created_at": "作成日時",
+    "t_updated_at": "更新日時",
+
+    "t_copy_action": "IDをコピー",
+    "t_del_action": "削除",
+
+    "t_tab_all": "すべて",
+    "t_tab_un_banned": "有効",
+    "t_tab_banned": "停止中",
+
+    "t_showing": "表示中",
+    "t_column": "列",
+
+    "user_tab": {
+      "t_no_shop_found": "結果が見つかりません",
+      "t_of": "中の",
+      "t_rows_selected": "行を選択済み。",
+      "t_rows_per_page": "ページあたりの行数",
+      "t_page": "ページ"
+    },
+    "user_drawer": {
+      "t_process_failed_noti": "処理失敗",
+      "t_conn_failed_desc_noti": "サーバーに接続できません！",
+
+      "t_action_noti": "操作",
+      "t_update_desc_noti": "店舗情報を更新しました！",
+      "t_copy_desc_noti": "情報をコピーしました！",
+      "t_del_desc_noti": "店舗を削除しました！",
+
+      "t_action_failed_noti": "操作失敗",
+      "t_update_failed_desc_noti": "情報の更新に失敗しました！",
+      "t_copy_failed_desc_noti": "情報のコピーに失敗しました！",
+      "t_del_failed_desc_noti": "店舗の削除に失敗しました！",
+
+      "t_user_name": "ユーザー名",
+      "t_user_desc": "ユーザー詳細",
+      "t_shop_owned": "店舗オーナー",
+      "t_no_shop_owned": "なし",
+      "t_shop_membership": "店舗メンバー",
+      "t_no_shop_membership": "なし",
+      "t_email": "メールアドレス",
+      "t_no_verified": "未認証",
+      "t_verified": "認証済み",
+      "t_email_for_bill": "請求書送付先メール",
+      "t_copy_action": "IDをコピー",
+      "t_del_action": "削除",
+      "t_email_verified": "メール認証",
+      "t_number_phone": "電話番号",
+      "t_empty": "空",
+      "t_gender": "性別",
+      "c_male": "男性",
+      "c_female": "女性",
+      "c_other": "その他",
+
+      "t_created_at": "作成日時",
+      "t_updated_at": "更新日時",
+
+      "t_banned_status": "ステータス",
+      "t_status_placeholder": "ステータスを選択",
+      "c_no_banned": "通常",
+      "c_banned": "停止",
+
+      "t_ban_reason": "停止理由",
+      "t_ban_expired": "停止期限",
+
+      "t_submit_action": "変更を保存",
+      "t_cancel_action": "キャンセル"
+    }
   }
 }

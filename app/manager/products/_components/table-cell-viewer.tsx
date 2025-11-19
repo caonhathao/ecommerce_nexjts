@@ -1,3 +1,4 @@
+'use client';
 import { formatPrice } from '@/app/(public)/_components/global-function';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -69,6 +70,8 @@ export function TableCellViewer({
 
   const [value, setValue] = React.useState<string>('');
 
+  //console.log('product detail: ', item);
+
   // This effect runs when 'openIndex' changes
   useEffect(() => {
     // Only run if an item was OPENED
@@ -99,13 +102,26 @@ export function TableCellViewer({
 
   useEffect(() => {
     if (detail) {
+      //console.log(detail);
       setDefaultVisibility(detail.visibility);
     }
   }, [detail]);
 
   async function fetchDetail() {
     try {
-      fetchData('/api/manager/product/query', { id: item.id }, setDetail);
+      const res = await fetchData(
+        '/api/manager/product/query',
+        { id: item.id },
+        undefined,
+        'default',
+        true
+      );
+
+      if (res && res.ok) {
+        const parse = await res.json();
+        //console.log(parse);
+        setDetail(parse.data);
+      }
     } catch (err) {
       console.error(err);
       toast(t('t_process_failed_noti'), {
@@ -234,10 +250,10 @@ export function TableCellViewer({
               <div className="w-full flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-row justify-start items-center gap-2">
                   <Avatar>
-                    <AvatarImage src={detail?.shop.logoUrl} alt="shopLogo" />
+                    <AvatarImage src={item.shop.logoUrl} alt="shopLogo" />
                     <AvatarFallback>UK</AvatarFallback>
                   </Avatar>
-                  <p>{detail?.shop.name}</p>
+                  <p>{item.shop.name}</p>
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
