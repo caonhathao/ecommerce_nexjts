@@ -33,7 +33,7 @@ export const ProductItem = ({
   }: {
     voucher: { type: string; value: number; maxDiscount: number } | null;
   }) => {
-    console.log(voucher);
+    //console.log(voucher);
     const originalPrice = (
       <span className="text-[var(--muted-foreground)] line-through text-xs">
         {formatPrice(item.minPrice)}

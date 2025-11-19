@@ -11,12 +11,25 @@ type TopDealItemsProps = {
   renderSaleValue?: boolean;
 };
 
+const sizeClasses = {
+  '1': 'grid-cols-1',
+  '2': 'grid-cols-2',
+  '3': 'grid-cols-3',
+  '4': 'grid-cols-4',
+  '5': 'grid-cols-5',
+  '6': 'grid-cols-6',
+};
+
 export const TopDealItems = ({
   data,
   size,
   renderSaleValue = true,
 }: TopDealItemsProps) => {
   const t = useTranslations('top_deal_items');
+
+  const gridClass =
+    sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4'; 
+
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-[var(--background)] rounded-lg">
       {/* top title */}
@@ -31,13 +44,12 @@ export const TopDealItems = ({
       </div>
       {/* item list */}
       <div
-        className={`w-full grid grid-cols-${size} p-2 gap-3 overflow-x-auto`}
+        className={`w-full grid ${gridClass} grid-rows-1 p-2 gap-3 overflow-x-auto`}
       >
         {data.map((item: productItemType, index) => (
-          <ProductItemSm
-            item={item}
-            renderSaleValue={renderSaleValue}
-          />
+          <div key={index}>
+            <ProductItemSm item={item} renderSaleValue={renderSaleValue} />
+          </div>
         ))}
       </div>
     </div>

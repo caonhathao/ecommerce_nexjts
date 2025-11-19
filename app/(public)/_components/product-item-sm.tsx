@@ -82,7 +82,7 @@ export const ProductItemSm = ({
   return (
     <div
       key={item.id}
-      className={`w-full flex flex-col justify-start items-start flex-1 border border-gray-200 rounded-lg hover:cursor-pointer`}
+      className={`flex flex-col justify-start items-start flex-1 border border-gray-200 rounded-lg hover:cursor-pointer`}
       onClick={() => handleOpenDetail(item.id)}
     >
       <div className="relative w-full flex-shrink-0 aspect-square overflow-hidden rounded-t-lg">
