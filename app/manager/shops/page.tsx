@@ -22,10 +22,7 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  shopData,
-  shopItemData
-} from '@/types/manager.data-types';
+import { shopData, shopItemData } from '@/types/manager.data-types';
 import {
   DragEndEvent,
   KeyboardSensor,
@@ -42,8 +39,7 @@ import {
   IconDotsVertical,
   IconGripVertical,
   IconLayoutColumns,
-  IconLoader,
-  IconPlus,
+  IconLoader
 } from '@tabler/icons-react';
 import {
   ColumnDef,
@@ -60,6 +56,7 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
@@ -73,7 +70,6 @@ const ShopsPage = () => {
   const [shopList, setShopList] = React.useState<shopItemData[]>([]);
   const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, SetIsReset] = React.useState<boolean>(false);
-
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -86,6 +82,7 @@ const ShopsPage = () => {
     pageSize: 10,
   });
 
+  const t = useTranslations('admin_shop_page');
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => shopList?.map(({ id }) => id) || [],
     [shopList]
@@ -111,8 +108,8 @@ const ShopsPage = () => {
 
   const handleCopy = (value: string | undefined) => {
     if (!value) {
-      toast('Hành động', {
-        description: 'Sao chép ID cửa hàng thất bại',
+      toast(t('t_action_failed_noti'), {
+        description: t('t_copy_failed_desc_noti'),
       });
     } else {
       navigator.clipboard
@@ -121,8 +118,8 @@ const ShopsPage = () => {
           // 1. Set the copied ID
           setCopiedId(value);
           // 2. Clear the feedback after 2 seconds
-          toast('Hành động', {
-            description: 'Đã sao chép ID',
+          toast(t('t_action_noti'), {
+            description: t('t_copy_desc_noti'),
           });
           setTimeout(() => {
             setCopiedId(null);
@@ -169,8 +166,8 @@ const ShopsPage = () => {
       enableHiding: false,
     },
     {
-      accessorKey: 'Tên cửa hàng',
-      header: 'Tên cửa hàng',
+      accessorKey: t('t_shop_name'),
+      header: t('t_shop_name'),
       cell: ({ row }) => {
         return (
           <TableCellViewer
@@ -183,8 +180,8 @@ const ShopsPage = () => {
       enableHiding: false,
     },
     {
-      accessorKey: 'Chủ sỡ hữu',
-      header: 'Chủ sở hữu',
+      accessorKey: t('t_owner_name'),
+      header: t('t_owner_name'),
       cell: ({ row }) => (
         <div className="w-full flex flex-row gap-2 justify-start items-center">
           <Avatar>
@@ -196,8 +193,8 @@ const ShopsPage = () => {
       ),
     },
     {
-      accessorKey: 'Trạng thái',
-      header: 'Trạng thái',
+      accessorKey: t('t_status'),
+      header: t('t_status'),
       cell: ({ row }) => (
         <Badge variant="outline" className="text-muted-foreground px-1.5">
           {row.original.status === 'SUSPENDED' ? (
@@ -214,8 +211,8 @@ const ShopsPage = () => {
       ),
     },
     {
-      accessorKey: 'Điểm đánh giá',
-      header: () => <div className="w-fit text-right">Đánh giá</div>,
+      accessorKey: t('t_rating'),
+      header: () => <div className="w-fit text-right">{t('t_rating')}</div>,
       cell: ({ row }) => (
         <div className="w-full text-right">
           {row.original.ratingAvg + '(' + row.original.ratingCount + ')'}
@@ -223,15 +220,15 @@ const ShopsPage = () => {
       ),
     },
     {
-      accessorKey: 'Ngày tạo',
-      header: 'Ngày tạo',
+      accessorKey: t('t_created_at'),
+      header: t('t_created_at'),
       cell: ({ row }) => {
         return <div className="w-32">{formatDay(row.original.createdAt)}</div>;
       },
     },
     {
-      accessorKey: 'Ngày sửa',
-      header: 'Ngày sửa',
+      accessorKey: t('t_updated_at'),
+      header: t('t_updated_at'),
       cell: ({ row }) => {
         return <div className="w-32">{formatDay(row.original.updatedAt)}</div>;
       },
@@ -258,11 +255,13 @@ const ShopsPage = () => {
                 type="button"
                 onClick={() => handleCopy(row.original.id)}
               >
-                Sao chép ID
+                {t('t_copy_action')}
               </Button>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+            <DropdownMenuItem variant="destructive">
+              {t('t_del_action')}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ),
@@ -363,26 +362,31 @@ const ShopsPage = () => {
               <SelectValue placeholder="Select a view" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all-status">Tất cả</SelectItem>
-              <SelectItem value="all-public">Công khai</SelectItem>
-              <SelectItem value="all-private">Ẩn</SelectItem>
-              <SelectItem value="all-unlisted">Cấm</SelectItem>
+              <SelectItem value="all-status">{t('t_tab_all')}</SelectItem>
+              <SelectItem value="all-active">{t('t_tab_active')}</SelectItem>
+              <SelectItem value="all-pending">{t('t_tab_pending')}</SelectItem>
+              <SelectItem value="all-suspended">
+                {t('t_tab_suspended')}
+              </SelectItem>
+              <SelectItem value="all-closed">{t('t_tab_closed')}</SelectItem>
             </SelectContent>
           </Select>
           <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
-            <TabsTrigger value="all-status">Tất cả</TabsTrigger>
-            <TabsTrigger value="all-active">Đang hoạt động</TabsTrigger>
-            <TabsTrigger value="all-pending">Đang chờ</TabsTrigger>
-            <TabsTrigger value="all-suspended">Cấm</TabsTrigger>
-            <TabsTrigger value="all-closed">Đóng cửa</TabsTrigger>
+            <TabsTrigger value="all-status">{t('t_tab_all')}</TabsTrigger>
+            <TabsTrigger value="all-active">{t('t_tab_active')}</TabsTrigger>
+            <TabsTrigger value="all-pending">{t('t_tab_pending')}</TabsTrigger>
+            <TabsTrigger value="all-suspended">
+              {t('t_tab_suspended')}
+            </TabsTrigger>
+            <TabsTrigger value="all-closed">{t('t_tab_closed')}</TabsTrigger>
           </TabsList>
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
                   <IconLayoutColumns />
-                  <span className="hidden lg:inline">Hiển thị</span>
-                  <span className="lg:hidden">Cột</span>
+                  <span className="hidden lg:inline">{t('t_showing')}</span>
+                  <span className="lg:hidden">{t('t_column')}</span>
                   <IconChevronDown />
                 </Button>
               </DropdownMenuTrigger>
@@ -410,10 +414,6 @@ const ShopsPage = () => {
                   })}
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="outline" size="sm">
-              <IconPlus />
-              <span className="hidden lg:inline">Add Section</span>
-            </Button>
           </div>
         </div>
         <TabsContent

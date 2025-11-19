@@ -233,17 +233,17 @@
   },
   "admin_product_page": {
     "t_action_noti": "アクション",
-    "t_copy_desc_noti": "情報を正常にコピーしました！",
-    "t_del_desc_noti": "商品を正常に削除しました！",
+    "t_copy_desc_noti": "情報をコピーしました！",
+    "t_del_desc_noti": "商品を削除しました！",
 
     "t_action_failed_noti": "アクション失敗",
     "t_copy_failed_desc_noti": "情報のコピーに失敗しました！",
     "t_del_failed_desc_noti": "商品の削除に失敗しました！",
 
     "t_product_name": "商品名",
-    "t_shop_name": "ショップ名",
+    "t_shop_name": "ショップ",
     "t_visibility": "表示設定",
-    "t_variant_count": "バリアント数",
+    "t_variant_count": "バリエーション数",
     "t_created_at": "作成日",
     "t_updated_at": "更新日",
 
@@ -253,51 +253,132 @@
     "t_tab_all": "すべて",
     "t_tab_public": "公開中",
     "t_tab_private": "非公開",
-    "t_tab_inlisted": "出品停止",
+    "t_tab_inlisted": "禁止",
 
     "t_showing": "表示中",
     "t_column": "列",
 
     "product_tab": {
       "t_no_product_found": "商品が見つかりません",
-      "t_of": "/",
-      "t_rows_selected": "行を選択中",
+      "t_of": "の",
+      "t_rows_selected": "行を選択済み",
       "t_rows_per_page": "ページあたりの行数",
       "t_page": "ページ"
     },
     "product_drawer": {
+      "t_process_failed_noti": "処理失敗",
+      "t_conn_failed_desc_noti": "サーバーに接続できません！",
+
       "t_action_noti": "アクション",
-      "t_update_desc_noti": "カテゴリ情報を正常に更新しました！",
-      "t_copy_desc_noti": "情報を正常にコピーしました！",
-      "t_del_desc_noti": "商品を正常に削除しました！",
+      "t_update_desc_noti": "カテゴリー情報を更新しました！",
+      "t_copy_desc_noti": "情報をコピーしました！",
+      "t_del_desc_noti": "商品を削除しました！",
 
       "t_action_failed_noti": "アクション失敗",
       "t_update_failed_desc_noti": "情報の更新に失敗しました！",
       "t_copy_failed_desc_noti": "情報のコピーに失敗しました！",
       "t_del_failed_desc_noti": "商品の削除に失敗しました！",
 
-      "t_product_desc": "商品詳細",
+      "t_product_desc": "商品詳細情報",
       "t_shop": "ショップ",
       "t_product_name": "商品名",
       "t_copy_action": "IDをコピー",
       "t_del_action": "削除",
 
-      "t_origin": "原産地",
+      "t_origin": "原産国",
       "t_currency": "通貨",
       "t_min_price": "最低価格",
       "t_max_price": "最高価格",
 
       "t_visibility": "表示設定",
       "t_visibility_placeholder": "ステータスを選択",
-      "c_public": "公開",
-      "c_private": "承認待ち",
-      "c_unlisted": "非公開",
+      "c_public": "許可",
+      "c_private": "申請中",
+      "c_unlisted": "不許可",
 
       "t_desc": "説明",
 
       "t_sku_code": "SKUコード",
       "t_price": "価格",
-      "t_variant": "バリアント",
+      "t_variant": "バリエーション",
+      "t_submit_action": "変更を保存",
+      "t_cancel_action": "キャンセル"
+    }
+  },
+  "admin_shop_page": {
+    "t_action_noti": "アクション",
+    "t_copy_desc_noti": "情報をコピーしました！",
+    "t_del_desc_noti": "ショップを削除しました！",
+
+    "t_action_failed_noti": "アクション失敗",
+    "t_copy_failed_desc_noti": "情報のコピーに失敗しました！",
+    "t_del_failed_desc_noti": "ショップの削除に失敗しました！",
+
+    "t_shop_name": "ショップ名",
+    "t_owner_name": "所有者",
+    "t_status": "ステータス",
+    "t_rating": "評価",
+    "t_created_at": "作成日",
+    "t_updated_at": "更新日",
+
+    "t_copy_action": "IDをコピー",
+    "t_del_action": "削除",
+
+    "t_tab_all": "すべて",
+    "t_tab_active": "アクティブ",
+    "t_tab_pending": "承認待ち",
+    "t_tab_suspended": "利用停止",
+    "t_tab_closed": "閉店",
+
+    "t_showing": "表示中",
+    "t_column": "列",
+
+    "shop_tab": {
+      "t_no_shop_found": "ショップが見つかりません",
+      "t_of": "の",
+      "t_rows_selected": "行を選択済み",
+      "t_rows_per_page": "ページあたりの行数",
+      "t_page": "ページ"
+    },
+    "shop_drawer": {
+      "t_process_failed_noti": "処理失敗",
+      "t_conn_failed_desc_noti": "サーバーに接続できません！",
+
+      "t_action_noti": "アクション",
+      "t_update_desc_noti": "ショップ情報を更新しました！",
+      "t_copy_desc_noti": "情報をコピーしました！",
+      "t_del_desc_noti": "ショップを削除しました！",
+
+      "t_action_failed_noti": "アクション失敗",
+      "t_update_failed_desc_noti": "情報の更新に失敗しました！",
+      "t_copy_failed_desc_noti": "情報のコピーに失敗しました！",
+      "t_del_failed_desc_noti": "ショップの削除に失敗しました！",
+
+      "t_shop_desc": "ショップ詳細情報",
+      "t_shop": "ショップ",
+      "t_owner_name": "所有者",
+      "t_copy_action": "IDをコピー",
+      "t_del_action": "削除",
+      "t_rating": "評価",
+      "t_rating_count": "総評価数",
+      "t_email": "メール",
+      "t_number_phone": "電話番号",
+      "t_members": "メンバー",
+      "t_created_at": "作成日",
+      "t_updated_at": "更新日",
+
+      "t_status": "ステータス",
+      "t_status_placeholder": "ステータスを選択",
+      "c_active": "アクティブ",
+      "c_pending": "承認待ち",
+      "c_suspended": "利用停止",
+      "c_closed": "閉店",
+
+      "t_desc": "説明",
+
+      "t_sku_code": "SKUコード",
+      "t_price": "価格",
+      "t_variant": "バリエーション",
       "t_submit_action": "変更を保存",
       "t_cancel_action": "キャンセル"
     }

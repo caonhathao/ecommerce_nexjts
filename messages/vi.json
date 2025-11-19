@@ -274,6 +274,9 @@
       "t_page": "Trang"
     },
     "product_drawer": {
+      "t_process_failed_noti": "Tiến trình thất bại",
+      "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
+
       "t_action_noti": "Hành động",
       "t_update_desc_noti": "Cập nhật thông tin danh mục thành công!",
       "t_copy_desc_noti": "Sao chép thông tin thành công!",
@@ -301,7 +304,85 @@
       "c_private": "Đang xin phép",
       "c_unlisted": "Không cho phép",
 
-      "t_desc":"Mô tả",
+      "t_desc": "Mô tả",
+
+      "t_sku_code": "Mã SKU",
+      "t_price": "Giá",
+      "t_variant": "Sản phẩm con",
+      "t_submit_action": "Lưu thay đổi",
+      "t_cancel_action": "Hủy"
+    }
+  },
+  "admin_shop_page": {
+    "t_action_noti": "Hành động",
+    "t_copy_desc_noti": "Sao chép thông tin thành công!",
+    "t_del_desc_noti": "Xóa sản phẩm thành công!",
+
+    "t_action_failed_noti": "Hành động thất bại",
+    "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
+    "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
+
+    "t_shop_name": "Tên cửa hàng",
+    "t_owner_name": "Chủ sở hữu",
+    "t_status": "Trạng thái",
+    "t_rating": "Điểm đánh giá",
+    "t_created_at": "Ngày tạo",
+    "t_updated_at": "Ngày cập nhật",
+
+    "t_copy_action": "Sao chép ID",
+    "t_del_action": "Xóa",
+
+    "t_tab_all": "Tất cả",
+    "t_tab_active": "Đang hoạt động",
+    "t_tab_pending": "Chờ duyệt",
+    "t_tab_suspended": "Bị cấm",
+    "t_tab_closed": "Đóng cửa",
+
+    "t_showing": "Hiển thị",
+    "t_column": "Cột",
+
+    "shop_tab": {
+      "t_no_shop_found": "Không có sản phẩm nào",
+      "t_of": "của",
+      "t_rows_selected": "số dòng đã chọn.",
+      "t_rows_per_page": "Dòng mỗi trang",
+      "t_page": "Trang"
+    },
+    "shop_drawer": {
+      "t_process_failed_noti": "Tiến trình thất bại",
+      "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
+
+      "t_action_noti": "Hành động",
+      "t_update_desc_noti": "Cập nhật thông tin cửa hàng thành công!",
+      "t_copy_desc_noti": "Sao chép thông tin thành công!",
+      "t_del_desc_noti": "Xóa cửa hàng thành công!",
+
+      "t_action_failed_noti": "Hành động thất bại",
+      "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
+      "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
+      "t_del_failed_desc_noti": "Xóa cửa hàngkhông thành công!",
+
+      "t_shop_desc": "Thông tin chi tiết cửa hàng",
+      "t_shop": "Cửa hàng",
+      "t_owner_name": "Chủ sở hữu",
+      "t_copy_action": "Sao chép ID",
+      "t_del_action": "Xóa",
+      "t_rating": "Điểm đánh giá",
+      "t_rating_count": "Tổng đánh giá",
+      "t_email": "Email",
+      "t_number_phone": "Số điện thoại",
+      "t_members": "Thành viên",
+      "t_created_at": "Ngày tạo",
+      "t_updated_at": "Ngày cập nhật",
+
+      "t_status": "Trạng thái",
+      "t_status_placeholder": "Chọn trạng thái",
+      "c_active": "Đang hoạt động",
+      "c_pending": "Chờ duyệt",
+      "c_suspended": "Bị cấm",
+      "c_closed": "Đóng cửa",
+
+      "t_desc": "Mô tả",
 
       "t_sku_code": "Mã SKU",
       "t_price": "Giá",

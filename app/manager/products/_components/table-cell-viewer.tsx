@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { fetchData } from '@/funcs/fetch';
 import { putData } from '@/funcs/put';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
@@ -104,12 +105,12 @@ export function TableCellViewer({
 
   async function fetchDetail() {
     try {
-      const response = await fetch(`/api/manager/product/query?id=${item.id}`);
-      const detail = await response.json();
-      console.log(detail.data);
-      setDetail(detail.data);
+      fetchData('/api/manager/product/query', { id: item.id }, setDetail);
     } catch (err) {
       console.error(err);
+      toast(t('t_process_failed_noti'), {
+        description: t('t_conn_failed_desc_noti'),
+      });
     }
   }
 
