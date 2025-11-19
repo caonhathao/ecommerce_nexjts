@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -41,7 +41,7 @@ interface selectedVariant {
   amount: number;
 }
 
-const detaiPage = () => {
+const detailPage = () => {
   const params = useParams();
   const [data, setData] = React.useState<productDetailType>();
   const [dTopDeal, setDTopDeal] = React.useState<productItemType[]>([]);
@@ -176,7 +176,7 @@ const detaiPage = () => {
 
         toast.success('Thêm vào giỏ hàng thành công', {
           duration: 3000,
-          position: 'top-right',
+          position: 'bottom-right',
           style: { color: 'var(--chart-2)' },
         });
       } else {
@@ -199,7 +199,7 @@ const detaiPage = () => {
 
         toast.error(`Thêm vào giỏ hàng thất bại: ${errNotice}`, {
           duration: 3000,
-          position: 'top-right',
+          position: 'bottom-right',
           style: { color: 'var(--chart-1)' },
         });
       }
@@ -315,7 +315,7 @@ const detaiPage = () => {
               </div>
               {/* shipping info */}
               <div className="bg-[var(--background)] p-3 rounded-lg flex flex-col justify-start items-start gap-1">
-                <p className="font-semibold text-xl">Thông tin vân chuyển</p>
+                <p className="font-semibold text-xl">Thông tin vận chuyển</p>
                 <p>Giao đến thị trấn Teyvalt</p>
                 <Separator />
                 <div className="flex flex-row justify-start items-center gap-1">
@@ -401,16 +401,16 @@ const detaiPage = () => {
         <section className="w-[30%] sticky top-3">
           <div className="w-full bg-[var(--background)] rounded-lg p-3 flex flex-col gap-3">
             {/* title */}
-            <div className="flex flex-row justify-start items-center gap-2">
+            <div className="flex flex-row justify-start items-center gap-4">
               <p>2T3H</p>
               <div className="flex flex-col justify-start items-start">
                 {/*<p className="font-semibold">2T3H Trading</p>*/}
-                <div className="flex flex-row justify-start items-start gap-2">
+                <div className="flex flex-col justify-start items-start gap-2">
                   <Badge className="flex flex-row gap-2 justify-start items-center bg-blue-200 text-[var(--primary)] font-semibold">
                     <HiMiniCheckBadge color="var(--primary)" size={20} />
                     OFFICAL
                   </Badge>
-                  <Separator orientation="vertical" />
+                  {/* <Separator orientation="vertical" /> */}
                   <div className="flex flex-row gap-2 items-center">
                     {'4.7'}
                     <FaStar color="var(--chart-4)" size={15} />
@@ -496,4 +496,4 @@ const detaiPage = () => {
     </div>
   );
 };
-export default detaiPage;
+export default detailPage;
