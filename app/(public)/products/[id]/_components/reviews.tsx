@@ -1,10 +1,9 @@
-'use client';
 import { formatDay } from '@/app/(public)/_components/global-function';
 import { RatingStars } from '@/app/(public)/_components/rating-starts';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { fetchReviews } from '@/funcs/fetch';
-import { reviewsType } from '@/types/public.data-types';
+import { fetchData } from '@/funcs/fetch';
+import { reviewResponse, reviewsType } from '@/types/public.data-types';
 import React, { useEffect } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
 
@@ -13,16 +12,17 @@ interface props {
   ratingCount: number;
   id: string;
 }
-const Reviews = ({ id, ratingAvg, ratingCount }: props) => {
+export async function Reviews({ id, ratingAvg, ratingCount }: props) {
+  const [response, setResponse] = React.useState<reviewResponse | null>(null);
   const [data, setData] = React.useState<reviewsType[] | null>(null);
 
   useEffect(() => {
-    fetchReviews(setData, id);
+    fetchData('/api/reviews', { id: id, page: 1, limit: 5 }, setResponse);
   }, []);
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    if (response) setData(response.data);
+  }, [response]);
 
   const renderReview = (reviewData: reviewsType) => {
     return (
@@ -52,6 +52,10 @@ const Reviews = ({ id, ratingAvg, ratingCount }: props) => {
       </div>
     );
   };
+
+  // if (!response) {
+  //   return <LoadingComponent />;
+  // }
 
   return (
     <div className="w-full bg-[var(--background)] rounded-lg mt-3 p-3 flex flex-col justify-start items-start">
@@ -108,12 +112,13 @@ const Reviews = ({ id, ratingAvg, ratingCount }: props) => {
         ))}
       </div>
       <div className="w-full flex justify-center items-center">
-        <Button variant="outline" className="text-[var(--primary)] hover:cursor-pointer">
+        <Button
+          variant="outline"
+          className="text-[var(--primary)] hover:cursor-pointer"
+        >
           Xem thêm
         </Button>
       </div>
     </div>
   );
-};
-
-export default Reviews;
+}

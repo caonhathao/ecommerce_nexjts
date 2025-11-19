@@ -9,8 +9,20 @@ type TopDealItemsProps = {
   data: productItemType[];
 };
 
+const sizeClasses = {
+  '1': 'grid-cols-1',
+  '2': 'grid-cols-2',
+  '3': 'grid-cols-3',
+  '4': 'grid-cols-4',
+  '5': 'grid-cols-5',
+  '6': 'grid-cols-6',
+};
+
 export const HotForeign = ({ data, size }: TopDealItemsProps) => {
   const t = useTranslations('hot_foreign');
+  const gridClass =
+    sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4'; // Cung cấp giá trị mặc định
+
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-2 mt-5 bg-[var(--background)] rounded-lg">
       {/* top title */}
@@ -23,11 +35,9 @@ export const HotForeign = ({ data, size }: TopDealItemsProps) => {
         </Link>
       </div>
       {/* item list */}
-      <div
-        className={`w-full grid grid-cols-${size} gap-3 p-2 overflow-x-auto`}
-      >
+      <div className={`w-full grid ${gridClass} gap-3 p-2 overflow-x-auto`}>
         {data.map((item: productItemType, index) => (
-          <div key={index} className="w-full">
+          <div key={index}>
             <ProductItem item={item} size={'5'} />
           </div>
         ))}
