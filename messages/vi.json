@@ -390,5 +390,89 @@
       "t_submit_action": "Lưu thay đổi",
       "t_cancel_action": "Hủy"
     }
+  },
+  "admin_user_page": {
+    "t_action_noti": "Hành động",
+    "t_copy_desc_noti": "Sao chép thông tin thành công!",
+    "t_del_desc_noti": "Xóa sản phẩm thành công!",
+
+    "t_action_failed_noti": "Hành động thất bại",
+    "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
+    "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
+
+    "t_user_name": "Tên người dùng",
+    "t_email": "Email",
+    "t_email_verified": "Xác thực email",
+    "t_no_verified": "Chưa xác thực",
+    "t_verified": "Đã xác thực",
+    "t_rating": "Điểm đánh giá",
+    "t_created_at": "Ngày tạo",
+    "t_updated_at": "Ngày cập nhật",
+
+    "t_copy_action": "Sao chép ID",
+    "t_del_action": "Xóa",
+
+    "t_tab_all": "Tất cả",
+    "t_tab_un_banned": "Đang hoạt động",
+    "t_tab_banned": "Bị khóa",
+
+    "t_showing": "Hiển thị",
+    "t_column": "Cột",
+
+    "user_tab": {
+      "t_no_shop_found": "Không có kết quả",
+      "t_of": "của",
+      "t_rows_selected": "số dòng đã chọn.",
+      "t_rows_per_page": "Dòng mỗi trang",
+      "t_page": "Trang"
+    },
+    "user_drawer": {
+      "t_process_failed_noti": "Tiến trình thất bại",
+      "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
+
+      "t_action_noti": "Hành động",
+      "t_update_desc_noti": "Cập nhật thông tin cửa hàng thành công!",
+      "t_copy_desc_noti": "Sao chép thông tin thành công!",
+      "t_del_desc_noti": "Xóa cửa hàng thành công!",
+
+      "t_action_failed_noti": "Hành động thất bại",
+      "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
+      "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
+      "t_del_failed_desc_noti": "Xóa cửa hàngkhông thành công!",
+
+      "t_user_name": "Tên người dùng",
+      "t_user_desc": "Thông tin chi tiết người dùng",
+      "t_shop_owned": "Là chủ cửa hàng",
+      "t_no_shop_owned": "Trống",
+      "t_shop_membership": "Là thành viên của cửa hàng",
+      "t_no_shop_membership": "Trống",
+      "t_email": "Email",
+      "t_no_verified": "Chưa xác thực",
+      "t_verified": "Đã xác thực",
+      "t_email_for_bill": "Email nhận thanh toán",
+      "t_copy_action": "Sao chép ID",
+      "t_del_action": "Xóa",
+      "t_email_verified": "Xác thực email",
+      "t_number_phone": "Số điện thoại",
+      "t_empty": "Trống",
+      "t_gender": "Giới tính",
+      "c_male": "Nam",
+      "c_female": "Nữ",
+      "c_other": "Bí ẩn",
+
+      "t_created_at": "Ngày tạo",
+      "t_updated_at": "Ngày cập nhật",
+
+      "t_banned_status": "Trạng thái",
+      "t_status_placeholder": "Chọn trạng thái",
+      "c_no_banned": "Bình thường",
+      "c_banned": "Bị khóa",
+
+      "t_ban_reason": "Lí do khóa",
+      "t_ban_expired": "Hạn khóa",
+
+      "t_submit_action": "Lưu thay đổi",
+      "t_cancel_action": "Hủy"
+    }
   }
 }

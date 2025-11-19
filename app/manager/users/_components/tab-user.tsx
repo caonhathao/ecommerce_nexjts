@@ -18,7 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { fetchData } from '@/funcs/fetch';
-import { shopDataResponse, shopItemData } from '@/types/manager.data-types';
+import { userDataResponse, userItemData } from '@/types/manager.data-types';
 import {
   closestCenter,
   DndContext,
@@ -64,28 +64,28 @@ interface tabShopProps {
   sortableId: string;
 
   /** The table instance object returned from `useReactTable`. */
-  table: TanstackTable<shopItemData>;
+  table: TanstackTable<userItemData>;
 
   /** The column definitions used to build the table. */
-  columns: ColumnDef<shopItemData>[];
+  columns: ColumnDef<userItemData>[];
 
   /** The complete data object from the API, including pagination. */
-  data: shopDataResponse | null;
+  data: userDataResponse | null;
 
   /** The React state setter for the `data` object. */
-  setData: Dispatch<SetStateAction<shopDataResponse | null>>;
+  setData: Dispatch<SetStateAction<userDataResponse | null>>;
 
   /** The array of shop items currently rendered in the table. */
-  shopList: shopItemData[];
+  userList: userItemData[];
 
   /** The React state setter for the `shopList` array. */
-  setShopList: Dispatch<SetStateAction<shopItemData[]>>;
+  setUserList: Dispatch<SetStateAction<userItemData[]>>;
 
   /** Memoized array of shop IDs for dnd-kit's `SortableContext`. */
   dataIds: UniqueIdentifier[];
 
   /** The component to be used for rendering each draggable row. */
-  DraggableRow: React.ComponentType<{ row: Row<shopItemData> }>;
+  DraggableRow: React.ComponentType<{ row: Row<userItemData> }>;
 
   /** Callback function to handle the `onDragEnd` event from dnd-kit. */
   handleDragEnd: (event: DragEndEvent) => void;
@@ -98,7 +98,7 @@ interface tabShopProps {
  * @param {tabShopProps} props The destructured props for the component.
  * @returns {React.ReactElement} The rendered tab panel.
  */
-const TabShop = ({
+const TabUser = ({
   statusFilter,
   isReset,
   sensors,
@@ -107,18 +107,18 @@ const TabShop = ({
   columns,
   data,
   setData,
-  shopList,
-  setShopList,
+  userList,
+  setUserList,
   dataIds,
   DraggableRow,
   handleDragEnd,
 }: tabShopProps) => {
   const [rows, setRows] = React.useState<number>(10);
-  const t = useTranslations('admin_shop_page.shop_tab');
+  const t = useTranslations('admin_user_page.user_tab');
   useEffect(() => {
     fetchData(
-      '/api/manager/shop',
-      { page: 1, limit: rows, status: statusFilter },
+      '/api/manager/user',
+      { page: 1, limit: rows, lock: statusFilter },
       setData
     );
   }, [statusFilter, isReset]);
@@ -126,11 +126,11 @@ const TabShop = ({
   useEffect(() => {
     //console.log('category data changed:', data);
     if (data) {
-      setShopList(data.data);
+      setUserList(data.data);
     }
   }, [data]);
 
-  if (!data || !shopList) return <Loading />;
+  if (!data || !userList) return <Loading />;
 
   return (
     <>
@@ -162,7 +162,7 @@ const TabShop = ({
               ))}
             </TableHeader>
             <TableBody className="**:data-[slot=table-cell]:first:w-8">
-              {shopList.length !== 0 ? (
+              {userList.length !== 0 ? (
                 <SortableContext
                   items={dataIds}
                   strategy={verticalListSortingStrategy}
@@ -201,7 +201,7 @@ const TabShop = ({
                 table.setPageSize(Number(value));
                 setRows(Number(value));
                 fetchData(
-                  '/api/manager/shop',
+                  '/api/manager/user',
                   { page: 1, limit: Number(value), isActive: statusFilter },
                   setData
                 );
@@ -231,7 +231,7 @@ const TabShop = ({
               onClick={() => {
                 table.setPageIndex(0);
                 fetchData(
-                  '/api/manager/shop',
+                  '/api/manager/user',
                   { page: 1, limit: rows, isActive: statusFilter },
                   setData
                 );
@@ -248,7 +248,7 @@ const TabShop = ({
               onClick={() => {
                 table.previousPage();
                 fetchData(
-                  '/api/manager/shop',
+                  '/api/manager/user',
                   {
                     page: data.pagination.page - 1,
                     limit: rows,
@@ -269,7 +269,7 @@ const TabShop = ({
               onClick={() => {
                 table.nextPage();
                 fetchData(
-                  '/api/manager/shop',
+                  '/api/manager/user',
                   {
                     page: data.pagination.page + 1,
                     limit: rows,
@@ -310,4 +310,4 @@ const TabShop = ({
     </>
   );
 };
-export default TabShop;
+export default TabUser;

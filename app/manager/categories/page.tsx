@@ -120,7 +120,7 @@ const CategoryManagePage = () => {
         setCopiedId(value);
         // 2. Clear the feedback after 2 seconds
         toast(t('t_action_noti'), {
-          description: t('t_copy_des_noti'),
+          description: t('t_copy_desc_noti'),
         });
 
         setTimeout(() => {
@@ -129,7 +129,7 @@ const CategoryManagePage = () => {
       })
       .catch((err) => {
         toast(t('t_action_failed_noti'), {
-          description: t('t_copy_failed_des_noti'),
+          description: t('t_copy_failed_desc_noti'),
         });
 
         console.error('Failed to copy ID: ', err);

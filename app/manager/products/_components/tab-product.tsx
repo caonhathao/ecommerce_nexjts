@@ -125,7 +125,6 @@ const TabProduct = ({
   }, [visibilityFilter, isReset]);
 
   useEffect(() => {
-    console.log('category data changed:', data);
     if (data) {
       setProductList(data.data);
     }

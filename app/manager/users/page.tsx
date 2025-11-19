@@ -1,6 +1,5 @@
 'use client';
 import { formatDay } from '@/app/(public)/_components/global-function';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -22,7 +21,7 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { shopDataResponse, shopItemData } from '@/types/manager.data-types';
+import { userDataResponse, userItemData } from '@/types/manager.data-types';
 import {
   DragEndEvent,
   KeyboardSensor,
@@ -39,7 +38,6 @@ import {
   IconDotsVertical,
   IconGripVertical,
   IconLayoutColumns,
-  IconLoader
 } from '@tabler/icons-react';
 import {
   ColumnDef,
@@ -62,12 +60,12 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
-import TabShop from './_components/tab-shop';
+import TabUser from './_components/tab-user';
 import { TableCellViewer } from './_components/table-cell-viewer';
 
-const ShopsPage = () => {
-  const [data, setData] = React.useState<shopDataResponse | null>(null);
-  const [shopList, setShopList] = React.useState<shopItemData[]>([]);
+const UsersPage = () => {
+  const [data, setData] = React.useState<userDataResponse | null>(null);
+  const [userList, setUserList] = React.useState<userItemData[]>([]);
   const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, SetIsReset] = React.useState<boolean>(false);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -82,16 +80,16 @@ const ShopsPage = () => {
     pageSize: 10,
   });
 
-  const t = useTranslations('admin_shop_page');
+  const t = useTranslations('admin_user_page');
   const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => shopList?.map(({ id }) => id) || [],
-    [shopList]
+    () => userList?.map(({ id }) => id) || [],
+    [userList]
   );
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active && over && active.id !== over.id) {
-      setShopList((data) => {
+      setUserList((data) => {
         const oldIndex = dataIds.indexOf(active.id);
         const newIndex = dataIds.indexOf(over.id);
         return arrayMove(data, oldIndex, newIndex);
@@ -131,7 +129,7 @@ const ShopsPage = () => {
     }
   };
 
-  const columns: ColumnDef<shopItemData>[] = [
+  const columns: ColumnDef<userItemData>[] = [
     {
       id: 'drag',
       header: () => null,
@@ -166,59 +164,43 @@ const ShopsPage = () => {
       enableHiding: false,
     },
     {
-      accessorKey: t('t_shop_name'),
-      header: t('t_shop_name'),
+      accessorKey: t('t_user_name'),
+      header: t('t_user_name'),
       cell: ({ row }) => {
         return (
           <TableCellViewer
             item={row.original}
             handleCopy={handleCopy}
-            setShopList={setShopList}
+            setUserList={setUserList}
           />
         );
       },
       enableHiding: false,
     },
     {
-      accessorKey: t('t_owner_name'),
-      header: t('t_owner_name'),
+      accessorKey: t('t_email'),
+      header: () => <div className="w-fit text-right">{t('t_email')}</div>,
       cell: ({ row }) => (
-        <div className="w-full flex flex-row gap-2 justify-start items-center">
-          <Avatar>
-            <AvatarImage src={row.original.owner.image} alt="shopLogo" />
-            <AvatarFallback>UK</AvatarFallback>
-          </Avatar>
-          <div>{row.original.owner.name}</div>
-        </div>
+        <div className="w-full text-right">{row.original.email}</div>
       ),
     },
     {
-      accessorKey: t('t_status'),
-      header: t('t_status'),
+      accessorKey: t('t_email_verified'),
+      header: t('t_email_verified'),
       cell: ({ row }) => (
         <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.status === 'SUSPENDED' ? (
+          {row.original.emailVerified === false ? (
             <FiXCircle className="fill-red-500 dark:fill-red-400" />
-          ) : row.original.status === 'CLOSED' ? (
-            <FaCheckCircle className="fill-amber-500-500 dark:fill-amber-400" />
-          ) : row.original.status === 'ACTIVE' ? (
-            <FaCheckCircle className="fill-green-500 dark:fill-green-400" />
           ) : (
-            <IconLoader />
+            <FaCheckCircle className="fill-green-500 dark:fill-green-400" />
           )}
-          {row.original.status}
+          {row.original.emailVerified === true
+            ? t('t_verified')
+            : t('t_no_verified')}
         </Badge>
       ),
     },
-    {
-      accessorKey: t('t_rating'),
-      header: () => <div className="w-fit text-right">{t('t_rating')}</div>,
-      cell: ({ row }) => (
-        <div className="w-full text-right">
-          {row.original.ratingAvg + '(' + row.original.ratingCount + ')'}
-        </div>
-      ),
-    },
+
     {
       accessorKey: t('t_created_at'),
       header: t('t_created_at'),
@@ -269,7 +251,7 @@ const ShopsPage = () => {
   ];
 
   const table = useReactTable({
-    data: shopList,
+    data: userList,
     columns,
     state: {
       sorting,
@@ -312,7 +294,7 @@ const ShopsPage = () => {
     );
   }
 
-  function DraggableRow({ row }: { row: Row<shopItemData> }) {
+  function DraggableRow({ row }: { row: Row<userItemData> }) {
     const { transform, transition, setNodeRef, isDragging } = useSortable({
       id: row.original.id,
     });
@@ -340,8 +322,8 @@ const ShopsPage = () => {
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
-        baseUrl="/api/manager/shop/search"
-        setData={setShopList}
+        baseUrl="/api/manager/user/search"
+        setData={setUserList}
         setIsReset={SetIsReset}
         isReset={isReset}
       />
@@ -363,22 +345,18 @@ const ShopsPage = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all-status">{t('t_tab_all')}</SelectItem>
-              <SelectItem value="all-active">{t('t_tab_active')}</SelectItem>
-              <SelectItem value="all-pending">{t('t_tab_pending')}</SelectItem>
-              <SelectItem value="all-suspended">
-                {t('t_tab_suspended')}
+              <SelectItem value="all-un-banned">
+                {t('t_tab_un_banned')}
               </SelectItem>
-              <SelectItem value="all-closed">{t('t_tab_closed')}</SelectItem>
+              <SelectItem value="all-banned">{t('t_tab_banned')}</SelectItem>
             </SelectContent>
           </Select>
           <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
             <TabsTrigger value="all-status">{t('t_tab_all')}</TabsTrigger>
-            <TabsTrigger value="all-active">{t('t_tab_active')}</TabsTrigger>
-            <TabsTrigger value="all-pending">{t('t_tab_pending')}</TabsTrigger>
-            <TabsTrigger value="all-suspended">
-              {t('t_tab_suspended')}
+            <TabsTrigger value="all-un-banned">
+              {t('t_tab_un_banned')}
             </TabsTrigger>
-            <TabsTrigger value="all-closed">{t('t_tab_closed')}</TabsTrigger>
+            <TabsTrigger value="all-banned">{t('t_tab_banned')}</TabsTrigger>
           </TabsList>
           <div className="flex items-center gap-2">
             <DropdownMenu>
@@ -420,7 +398,7 @@ const ShopsPage = () => {
           value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <TabShop
+          <TabUser
             statusFilter=""
             isReset={isReset}
             sensors={sensors}
@@ -429,58 +407,20 @@ const ShopsPage = () => {
             columns={columns}
             data={data}
             setData={setData}
-            shopList={shopList}
-            setShopList={setShopList}
+            userList={userList}
+            setUserList={setUserList}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}
           />
         </TabsContent>
-        <TabsContent value="all-active" className="flex flex-col px-4 lg:px-6">
-          <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabShop
-              statusFilter="ACTIVE"
-              isReset={isReset}
-              sensors={sensors}
-              sortableId={sortableId}
-              table={table}
-              columns={columns}
-              data={data}
-              setData={setData}
-              shopList={shopList}
-              setShopList={setShopList}
-              dataIds={dataIds}
-              DraggableRow={DraggableRow}
-              handleDragEnd={handleDragEnd}
-            />
-          </div>
-        </TabsContent>
-        <TabsContent value="all-pending" className="flex flex-col px-4 lg:px-6">
-          <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabShop
-              statusFilter="PENDING"
-              isReset={isReset}
-              sensors={sensors}
-              sortableId={sortableId}
-              table={table}
-              columns={columns}
-              data={data}
-              setData={setData}
-              shopList={shopList}
-              setShopList={setShopList}
-              dataIds={dataIds}
-              DraggableRow={DraggableRow}
-              handleDragEnd={handleDragEnd}
-            />
-          </div>
-        </TabsContent>
         <TabsContent
-          value="all-suspended"
+          value="all-un-banned"
           className="flex flex-col px-4 lg:px-6"
         >
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabShop
-              statusFilter="SUSPENDED"
+            <TabUser
+              statusFilter="false"
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -488,18 +428,18 @@ const ShopsPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              shopList={shopList}
-              setShopList={setShopList}
+              userList={userList}
+              setUserList={setUserList}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
             />
           </div>
         </TabsContent>
-        <TabsContent value="all-closed" className="flex flex-col px-4 lg:px-6">
+        <TabsContent value="all-banned" className="flex flex-col px-4 lg:px-6">
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabShop
-              statusFilter="CLOSED"
+            <TabUser
+              statusFilter="true"
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -507,8 +447,8 @@ const ShopsPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              shopList={shopList}
-              setShopList={setShopList}
+              userList={userList}
+              setUserList={setUserList}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
@@ -519,5 +459,4 @@ const ShopsPage = () => {
     </div>
   );
 };
-
-export default ShopsPage;
+export default UsersPage;

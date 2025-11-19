@@ -193,7 +193,7 @@ export function TableCellViewer({
               <div className="w-full flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-row justify-start items-center gap-2">
                   <Avatar>
-                    <AvatarImage src={detail?.owner.image} alt="shopLogo" />
+                    <AvatarImage src={detail?.owner.image} alt="ownerLogo" />
                     <AvatarFallback>UK</AvatarFallback>
                   </Avatar>
                   <p>{detail?.owner.name}</p>
@@ -201,7 +201,7 @@ export function TableCellViewer({
                 <Button
                   variant={'outline'}
                   type="button"
-                  onClick={() => handleCopy(detail?.id ?? '')}
+                  onClick={() => handleCopy(detail?.owner.id ?? '')}
                 >
                   <MdOutlineCopyAll />
                 </Button>
@@ -263,7 +263,7 @@ export function TableCellViewer({
 
             <div className="flex flex-col gap-3">
               <Label htmlFor="type">{t('t_desc')}</Label>
-              <textarea defaultValue={detail?.description || ''} />
+              <textarea defaultValue={detail?.description || ''} disabled />
             </div>
 
             <div className="flex flex-col gap-3">
