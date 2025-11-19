@@ -31,7 +31,7 @@ export const TopDealItems = ({
       </div>
       {/* item list */}
       <div
-        className={`w-full grid grid-cols-${size} p-2 gap-3 overflow-x-auto`}
+        className={`w-full grid grid-col-5 p-2 gap-3 overflow-x-auto`}
       >
         {data.map((item: productItemType, index) => (
           <ProductItemSm

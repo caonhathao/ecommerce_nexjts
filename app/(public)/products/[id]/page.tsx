@@ -1,10 +1,11 @@
 'use client';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { fetchProductById, fetchProducts } from '@/funcs/fetch';
 import { productDetailType, productItemType } from '@/types/public.data-types';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
 import {
@@ -33,6 +34,7 @@ import Desc from './_components/desc';
 import Reviews from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 import Decimal = Prisma.Decimal;
+import { authClient } from '@/lib/auth-client';
 
 interface selectedVariant {
   name: string;
@@ -42,6 +44,7 @@ interface selectedVariant {
 }
 
 const detaiPage = () => {
+  const route = useRouter();
   const params = useParams();
   const [data, setData] = React.useState<productDetailType>();
   const [dTopDeal, setDTopDeal] = React.useState<productItemType[]>([]);
@@ -158,6 +161,12 @@ const detaiPage = () => {
   // }, [data]);
 
   const addProductToCart = async (params: AddToCartRequest) => {
+
+    const session = await authClient.getSession();
+    if (session.data == null) {
+      route.push('/auth/login');
+    }
+
     try {
       const response = await fetch('/api/cart', {
         method: 'POST',

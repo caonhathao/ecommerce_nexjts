@@ -9,48 +9,61 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 export async function POST(req: NextRequest) {
   try {
     const { draftId } = await req.json();
-    const headersList = await headers();
-    const origin =
-      headersList.get('origin') || process.env.NEXT_PUBLIC_BASE_URL;
+    const origin = process.env.NEXT_PUBLIC_BASE_URL!;
 
     const result = await createOrder(draftId);
     if (!result.success) {
       return NextResponse.json({ error: result.error }, { status: 400 });
     }
-    const order = result.order;
 
+    const order = result.order;
+    const totalAmount = order.reduce(
+      (acc, item) => acc + Number(item.grandTotal),
+      0
+    );
+    const orderIds = order.map(o => o.id).join(",");
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cancel`,
+      success_url: `${origin}/success`,
+      cancel_url: `${origin}/cancel`,
       metadata: {
-        orderId: order.id,
+        orderId: orderIds,
       },
       line_items: [
         {
           price_data: {
             currency: 'vnd',
             product_data: {
-              name: 'Thanh toán đơn hàng #' + order.orderNumber,
+              name: 'Thanh toán đơn hàng #' + order[0].orderNumber + "/n" + order[1].orderNumber,
             },
-            unit_amount: Math.round(order.grandTotal.toNumber()),
+            unit_amount: Math.round(totalAmount),
           },
           quantity: 1,
         },
       ],
     });
 
-    await prisma.payment.create({
+    const payment = await prisma.payment.create({
       data: {
-        orderId: order.id,
-        provider: "STRIPE",
-        method: "CARD",
-        amount: order.grandTotal,
+        provider: 'STRIPE',
+        method: 'CARD',
+        amount: totalAmount,
         status: 'PENDING',
         currency: 'VND',
         externalId: session.id,
-        rawPayload: session as any,       }
+        rawPayload: session as any,
+      },
+    });
+    if(!payment) {
+      throw new Error('Failed to create payment record');
+    }
+
+    await prisma.orderPayment.createMany({
+      data: order.map(order => ({
+        orderId: order.id,
+        paymentId: payment.id,
+      })),
     });
 
     return NextResponse.json({ url: session.url });

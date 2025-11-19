@@ -9,15 +9,9 @@ import { Prisma } from '@/lib/generated/prisma';
 
 export async function createOrderDraft(formData: FormData) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) return { success: false, error: 'Unauthorized' };
 
-    if (!session?.user) {
-      return { success: false, error: 'Unauthorized' };
-    }
-
-    //Get user id
     const userId = session.user.id;
 
     const rawData = Object.fromEntries(formData.entries());
@@ -25,23 +19,14 @@ export async function createOrderDraft(formData: FormData) {
 
     const parseData = JSON.parse(rawData.data as string);
     const data = createOrderDraftSchema.parse(parseData);
-
     const { notes, items, voucher } = data;
 
+    // 1️⃣ Get Default Shipping Address
     const defaultAddress = await prisma.address.findFirst({
       where: { userId, isDefault: true },
-      select: {
-        fullName: true,
-        phone: true,
-        line1: true,
-        city: true,
-        district: true,
-        ward: true,
-      },
     });
-    if (!defaultAddress) {
-      throw new Error('Default address not found');
-    }
+    if (!defaultAddress) throw new Error('Default address not found');
+
     const shippingInfor = {
       name: defaultAddress.fullName,
       phone: defaultAddress.phone,
@@ -51,7 +36,7 @@ export async function createOrderDraft(formData: FormData) {
       ward: defaultAddress.ward,
     };
 
-    // Query for take items information
+    // 2️⃣ Fetch product + variant and build item details
     const itemDetails = await Promise.all(
       items.map(async (item) => {
         const variant = await prisma.productVariant.findUnique({
@@ -67,71 +52,116 @@ export async function createOrderDraft(formData: FormData) {
         return {
           productId: product.id,
           variantId: variant.id,
+          shopId: product.shopId,
           quantity: item.quantity,
           unitPrice: variant.price,
-          title: variant?.name || product?.title,
+          title: variant.name || product.title,
           total: Number(variant.price) * item.quantity,
         };
       })
     );
 
-    //Query for take voucher information
+    // 3️⃣ Voucher
     const voucherDetail = voucher
       ? await Promise.all(
-          voucher.map(async (item) => {
-            const v = await prisma.voucher.findUnique({
-              where: { code: item.code },
+          voucher.map(async (v) => {
+            const vc = await prisma.voucher.findUnique({
+              where: { code: v.code },
             });
-            if (!v) throw new Error(`Voucher not found: ${item.code}`);
-            return v;
+            if (!vc) throw new Error(`Voucher not found: ${v.code}`);
+            return vc;
           })
         )
       : [];
 
-    const itemsTotal = itemDetails.reduce((sum, item) => sum + item.total, 0);
+    // 4️⃣ Group items by shop
+    const itemsByShop = itemDetails.reduce(
+      (acc, item) => {
+        if (!acc[item.shopId]) acc[item.shopId] = [];
+        acc[item.shopId].push(item);
+        return acc;
+      },
+      {} as Record<string, typeof itemDetails>
+    );
 
-    const shippingFee = voucherDetail.reduce((fee, item) => {
-      if (item.type === 'SHIPPING') {
-        const result = 30000 - Number(item.value);
-        return result <= 0 ? 0 : result;
-      }
-      return fee;
-    }, 30000);
+    const shops = Object.entries(itemsByShop).map(([shopId, items]) => {
+      const subtotal = items.reduce((s, i) => s + i.total, 0);
+      return {
+        shopId,
+        items,
+        subtotal,
+      };
+    });
 
-    const voucherDiscount = voucherDetail.reduce((sum, item) => {
-      if (item.type === 'PERCENT') {
-        return sum + (itemsTotal * Number(item.value)) / 100;
-      } else if (item.type === 'FIXED') {
-        return sum + Number(item.value);
-      }
+    const totalSubtotal = shops.reduce((s, x) => s + x.subtotal, 0);
+
+    // 5️⃣ Shipping Fee + Discount phân bổ theo tỷ lệ subtotal
+    const BASE_SHIPPING = 30000;
+
+    const totalDiscount = voucherDetail.reduce((sum, v) => {
+      if (v.type === 'PERCENT')
+        return sum + (totalSubtotal * Number(v.value)) / 100;
+      if (v.type === 'FIXED') return sum + Number(v.value);
       return sum;
     }, 0);
-    const grandTotal = itemsTotal + shippingFee - voucherDiscount;
 
-    const itemsTotalPrisma = new Prisma.Decimal(itemsTotal);
-    const shippingFeePrisma = new Prisma.Decimal(shippingFee);
-    const voucherDiscountPrisma = new Prisma.Decimal(voucherDiscount);
-    const grandTotalPrisma = new Prisma.Decimal(grandTotal);
+    const totalShippingDiscount = voucherDetail.reduce((sum, v) => {
+      if (v.type === 'SHIPPING') return sum + Number(v.value);
+      return sum;
+    }, 0);
 
+    const shopCalculations = shops.map((shop) => {
+      const ratio = shop.subtotal / totalSubtotal;
+      const shopShipping =
+        BASE_SHIPPING - totalShippingDiscount < 0
+          ? 0
+          : BASE_SHIPPING - totalShippingDiscount;
+      const shopDiscount = totalDiscount * ratio;
+      const total = shop.subtotal + shopShipping - shopDiscount;
+      return {
+        ...shop,
+        shopShipping,
+        shopDiscount,
+        total,
+      };
+    });
+
+    const itemsTotal = new Prisma.Decimal(totalSubtotal);
+    const shippingFee = new Prisma.Decimal(
+      shopCalculations.reduce((s, x) => s + x.shopShipping, 0)
+    );
+
+    const discountTotal = new Prisma.Decimal(
+      shopCalculations.reduce((s, x) => s + x.shopDiscount, 0)
+    );
+
+    const grandTotal = new Prisma.Decimal(
+      shopCalculations.reduce((s, x) => s + x.total, 0)
+    );
+
+    // 6️⃣ Check Existing Draft
     const existingDraft = await prisma.orderDraft.findFirst({
       where: { userId, status: 'AWAITING_PAYMENT' },
-      include: { items: true, vouchers: true },
     });
 
     if (existingDraft) {
-      // 🔄 Cập nhật draft cũ
       await prisma.orderDraft.update({
         where: { id: existingDraft.id },
         data: {
           notes,
-          itemsTotal: itemsTotalPrisma,
-          shippingFee: shippingFeePrisma,
-          discountTotal: voucherDiscountPrisma,
-          grandTotal: grandTotalPrisma,
-          shippingInfor: shippingInfor,
+          itemsTotal,
+          shippingFee,
+          discountTotal,
+          grandTotal,
+          shippingInfor,
+          updatedAt: new Date(),
           items: {
-            deleteMany: {}, // xóa items cũ
-            create: itemDetails,
+            deleteMany: {},
+            create: itemDetails.map((i) => ({
+              ...i,
+              total: new Prisma.Decimal(i.total),
+              unitPrice: new Prisma.Decimal(i.unitPrice),
+            })),
           },
           vouchers: {
             deleteMany: {},
@@ -139,47 +169,48 @@ export async function createOrderDraft(formData: FormData) {
               voucher: { connect: { id: v.id } },
             })),
           },
-          updatedAt: new Date(),
         },
       });
 
       revalidatePath('/draft');
-      return { success: true, draft: existingDraft, updated: true };
+      return { success: true, updated: true };
     }
 
-    // 🆕 Nếu chưa có, tạo mới draft
+    // 7️⃣ Create new OrderDraft
     const draft = await prisma.orderDraft.create({
       data: {
         userId,
         orderNumber: `ORD-${Date.now()}`,
         status: 'AWAITING_PAYMENT',
-
-        itemsTotal: itemsTotalPrisma,
-        shippingFee: shippingFeePrisma,
-        discountTotal: voucherDiscountPrisma,
-        grandTotal: grandTotalPrisma,
-
+        itemsTotal,
+        shippingFee,
+        discountTotal,
+        grandTotal,
         notes,
-        items: { create: itemDetails },
+        shippingInfor,
+        items: {
+          create: itemDetails.map((i) => ({
+            ...i,
+            total: new Prisma.Decimal(i.total),
+            unitPrice: new Prisma.Decimal(i.unitPrice),
+          })),
+        },
         vouchers: {
           create: voucherDetail.map((v) => ({
             voucher: { connect: { id: v.id } },
           })),
         },
-        shippingInfor,
       },
     });
 
     revalidatePath('/draft');
     return { success: true, draft };
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error);
-      return { success: false, error: error.message };
-    } else {
-      console.error('Unknown error:', error);
-      return { success: false, error: 'An unknown error occurred' };
-    }
+    console.error(error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
   }
 }
 
