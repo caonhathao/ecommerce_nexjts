@@ -112,7 +112,7 @@ const ProductsPage = () => {
   const handleCopy = React.useCallback((value: string) => {
     if (!value || value.length === 0 || value === undefined) {
       toast(t('t_action_failed_noti'), {
-        description: t('t_copy_failed_des_noti'),
+        description: t('t_copy_failed_desc_noti'),
       });
       return;
     }
@@ -123,7 +123,7 @@ const ProductsPage = () => {
         setCopiedId(value);
         // 2. Clear the feedback after 2 seconds
         toast(t('t_action_noti'), {
-          description: t('t_copy_des_noti'),
+          description: t('t_copy_desc_noti'),
         });
 
         setTimeout(() => {
@@ -132,7 +132,7 @@ const ProductsPage = () => {
       })
       .catch((err) => {
         toast(t('t_action_failed_noti'), {
-          description: t('t_copy_failed_des_noti'),
+          description: t('t_copy_failed_desc_noti'),
         });
 
         console.error('Failed to copy ID: ', err);
@@ -192,8 +192,8 @@ const ProductsPage = () => {
       enableHiding: false,
     },
     {
-      accessorKey: 'shop', // Use stable data key
-      header: t('t_shop_name'), // Use i18n key
+      accessorKey: t('t_shop_name'),
+      header: t('t_shop_name'),
       cell: ({ row }) => (
         <div className="w-full flex flex-row gap-2 justify-start items-center">
           <Avatar>
@@ -205,8 +205,8 @@ const ProductsPage = () => {
       ),
     },
     {
-      accessorKey: 'visibility', // Use stable data key
-      header: t('t_visibility'), // Use i18n key
+      accessorKey: t('t_visibility'), 
+      header: t('t_visibility'), 
       cell: ({ row }) => (
         <Badge variant="outline" className="text-muted-foreground px-1.5">
           {row.original.visibility === 'UNLISTED' ? (
@@ -216,13 +216,12 @@ const ProductsPage = () => {
           ) : (
             <IconLoader />
           )}
-          {/* You may also want to translate these values */}
           {row.original.visibility}
         </Badge>
       ),
     },
     {
-      accessorKey: '_count.variants', // Use stable data key
+      accessorKey: t('t_variant_count'),
       header: () => (
         <div className="w-fit text-right">{t('t_variant_count')}</div>
       ), // Use i18n key
@@ -233,15 +232,15 @@ const ProductsPage = () => {
       ),
     },
     {
-      accessorKey: 'createdAt', // Use stable data key
-      header: t('t_created_at'), // Use i18n key
+      accessorKey: 'createdAt',
+      header: t('t_created_at'),
       cell: ({ row }) => {
         return <div className="w-32">{formatDay(row.original.createdAt)}</div>;
       },
     },
     {
-      accessorKey: 'updatedAt', // Use stable data key
-      header: t('t_updated_at'), // Use i1Goodn key
+      accessorKey: 'updatedAt',
+      header: t('t_updated_at'),
       cell: ({ row }) => {
         return <div className="w-32">{formatDay(row.original.updatedAt)}</div>;
       },

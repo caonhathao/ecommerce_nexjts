@@ -43,14 +43,13 @@ interface selectedVariant {
   price: string;
   amount: number;
 }
-
 type itemType = {
   productId: string;
   variantId: string;
   quantity: number;
 };
 
-const detaiPage = () => {
+const detailPage = () => {
   const route = useRouter();
   const params = useParams();
   const [data, setData] = React.useState<productDetailType>();
@@ -372,7 +371,7 @@ const detaiPage = () => {
               </div>
               {/* shipping info */}
               <div className="bg-[var(--background)] p-3 rounded-lg flex flex-col justify-start items-start gap-1">
-                <p className="font-semibold text-xl">Thông tin vân chuyển</p>
+                <p className="font-semibold text-xl">Thông tin vận chuyển</p>
                 <p>Giao đến thị trấn Teyvalt</p>
                 <Separator />
                 <div className="flex flex-row justify-start items-center gap-1">
@@ -564,4 +563,4 @@ const detaiPage = () => {
     </div>
   );
 };
-export default detaiPage;
+export default detailPage;

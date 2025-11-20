@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,23 +11,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  query: z.string().min(1, "Please enter a search term"),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
 const SearchingBar = () => {
   const t = useTranslations("layout");
-  const form = useForm<FormSchemaType>();
+  const router = useRouter();
+
+  const form = useForm<FormSchemaType>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      query: ''
+    }
+  });
 
   function onSubmit(values: FormSchemaType) {
-    console.log(values);
+    const term = values.query.trim();
+    if (!term) return;
+
+    router.push(`/search?q=${encodeURIComponent(term)}`);
   }
 
   return (
@@ -34,30 +45,37 @@ const SearchingBar = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-row gap-4 w-full border border-gray-300 rounded-2xl p-1"
+          className="flex flex-row items-center gap-2 w-full border border-gray-300 rounded-2xl p-1 bg-white"
         >
           <FormField
             control={form.control}
-            name="username"
+            name="query"
             render={({ field }) => (
-              <FormItem className="flex-1 ">
-                {" "}
+              <FormItem className="flex-1 mb-0">
                 <FormControl>
                   <Input
                     placeholder={t("search_placeholder")}
                     {...field}
-                    className="w-full border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none"
+                    className="w-full border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none bg-transparent"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        form.handleSubmit(onSubmit)();
+                      }
+                    }}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="sr-only" />
               </FormItem>
             )}
           />
-          <Separator orientation="vertical" />
+
+          <Separator orientation="vertical" className="h-6" />
+
           <Button
-            variant={"ghost"}
+            variant="ghost"
             type="submit"
-            className="text-[var(--primary)] hover:cursor-pointer"
+            className="text-[var(--primary)] hover:bg-transparent hover:text-blue-600"
           >
             {t("search_button")}
           </Button>

@@ -9,7 +9,6 @@ datasource db {
 }
 
 // ---------- Enums ----------
-
 enum Role {
   user
   seller
@@ -248,7 +247,6 @@ model Shop {
   updatedAt     DateTime   @updatedAt
   deletedAt     DateTime?
 
-  //Relation
   members                 ShopMember[]
   products                Product[]
   orders                  Order[]
@@ -256,7 +254,6 @@ model Shop {
   Voucher                 Voucher[]
   ConversationParticipant ConversationParticipant[]
   Message                 Message[]
-  orderItems              OrderItem[]
 
   @@index([ownerId, status])
   @@map("shop")
@@ -477,13 +474,13 @@ model Order {
   user              User                @relation(fields: [userId], references: [id], onDelete: Restrict)
   shop              Shop?               @relation(fields: [shopId], references: [id], onDelete: Restrict)
   items             OrderItem[]
+  payments          Payment[]
   shipments         Shipment[]
   refunds           Refund[]
   vouchers          OrderVoucher[]
   ReturnRequest     ReturnRequest[]
   VoucherRedemption VoucherRedemption[]
   drafts            OrderDraft?
-  payments          OrderPayment[]
 
   @@index([userId, placedAt])
   @@index([shopId, status])
@@ -495,7 +492,6 @@ model OrderItem {
   orderId      String? @db.Uuid
   orderDraftId String? @db.Uuid
   productId    String  @db.Uuid
-  shopId       String? @db.Uuid
 
   variantId String? @db.Uuid
   title     String
@@ -509,7 +505,6 @@ model OrderItem {
   order      Order?          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderDraft OrderDraft?     @relation(fields: [orderDraftId], references: [id], onDelete: Cascade)
   product    Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
-  shop       Shop?           @relation(fields: [shopId], references: [id], onDelete: Restrict)
   variant    ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
   review     Review?
   ReturnItem ReturnItem[]
@@ -553,6 +548,7 @@ model OrderDraft {
 
 model Payment {
   id         String          @id @default(uuid()) @db.Uuid
+  orderId    String          @db.Uuid
   provider   PaymentProvider
   method     String?
   amount     Decimal         @db.Decimal(14, 2)
@@ -564,21 +560,11 @@ model Payment {
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @default(now()) @updatedAt
 
-  orders OrderPayment[]
+  order  Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   Refund Refund[]
 
+  @@index([orderId, status])
   @@map("payment")
-}
-
-model OrderPayment {
-  id        String @id @default(uuid())
-  orderId   String @db.Uuid
-  paymentId String @db.Uuid
-
-  order   Order   @relation(fields: [orderId], references: [id])
-  payment Payment @relation(fields: [paymentId], references: [id])
-
-  @@unique([orderId, paymentId])
 }
 
 model Shipment {

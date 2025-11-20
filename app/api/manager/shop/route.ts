@@ -6,7 +6,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
-  // Lấy pagination params
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 10;
   const skip = (page - 1) * limit;
@@ -29,7 +28,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       owner: {
         select: {
           id: true,
-          image:true,
+          image: true,
           name: true,
         },
       },

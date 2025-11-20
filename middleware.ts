@@ -11,6 +11,7 @@ export async function middleware(request: NextRequest) {
     '/products',
     '/api/products',
     '/api/stripe/webhook',
+    '/search',
     '/',
   ];
   if (publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
