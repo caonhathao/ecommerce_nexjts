@@ -76,7 +76,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
         <div className="w-[80%] h-fit p-2 flex flex-row justify-center items-center gap-4">
           {/* logo and slogan */}
           <div
-            className="w-[10%] flex flex-col gap-1 justify-center items-center"
+            className="w-[10%] flex flex-col gap-1 justify-center items-center cursor-pointer"
             onClick={() => handleHome()}
           >
             <Image

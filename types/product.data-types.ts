@@ -18,3 +18,42 @@ export interface SellerProductListItem {
     alt?: string | null;
   }[];
 }
+
+
+export interface SearchProduct {
+  id:string;
+  title:string;
+  minPrice: string;
+  maxPrice: string;
+  currency: string;
+  ratingAvg: number;
+  origin: string | null;
+  imageUrl: string | null;
+  imageAlt: string | null;
+  shop: {
+    id: string;
+    name: string;
+    logoUrl: string | null;
+  };
+  category: {
+    id: string;
+    name: string;
+  } | null;
+  voucher: {
+    type: string;
+    value: number;
+    maxDiscount: number;
+  } | null;
+}
+
+export interface SearchFilters {
+  query: string;
+  categoryId?: string;
+  shopId?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  sortBy: 'createdAt' | 'price' | 'rating' | 'name';
+  sortOrder: 'asc' | 'desc';
+  page: number;
+  limit: number;
+}
