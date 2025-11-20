@@ -28,7 +28,7 @@ export const TopDealItems = ({
   const t = useTranslations('top_deal_items');
 
   const gridClass =
-    sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4'; 
+    sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4';
 
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-[var(--background)] rounded-lg">

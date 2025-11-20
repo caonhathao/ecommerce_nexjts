@@ -1,14 +1,15 @@
 import { prisma } from '@/lib/db';
-import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.SECRET_WEBHOOK_STRIPE!;
+
 console.log('⚡ Stripe webhook route triggered');
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  const sig = (await headers()).get('stripe-signature');
+  const sig = req.headers.get('stripe-signature');
 
   try {
     const event = stripe.webhooks.constructEvent(body, sig!, endpointSecret);
@@ -19,37 +20,44 @@ export async function POST(req: NextRequest) {
         console.log('✅ Payment success for:', session.id);
 
         const orderId = session.metadata?.orderId;
-        const paymentIntentId = session.payment_intent as string;
+        if (!orderId) break;
+        const orderIds = orderId.split(',');
 
-        if (orderId) {
-          await prisma.payment.updateMany({
-            where: { orderId, provider: "STRIPE" },
-            data: {
-              status: 'PAID',
-              externalId: paymentIntentId,
-              updatedAt: new Date(),
-            },
-          });
+        await prisma.payment.updateMany({
+          where: { externalId: session.id, provider: 'STRIPE' },
+          data: { status: 'PAID', updatedAt: new Date() },
+        });
 
-          await prisma.order.update({
-            where: { id: orderId },
-            data: {
-              paymentStatus: 'PAID',
-              status: 'PAID',
-              updatedAt: new Date(),
-            },
-          });
-        }
+        await prisma.order.updateMany({
+          where: { id: { in: orderIds } },
+          data: {
+            paymentStatus: 'PAID',
+            status: 'PROCESSING',
+            updatedAt: new Date(),
+          },
+        });
+        console.log(`✅ Payment success for session ${session.id}, updated ${orderIds.length} orders`);
         break;
       }
       case 'checkout.session.expired': {
-        const session = event.data.object;
+        const session = event.data.object as Stripe.Checkout.Session;
         const orderId = session.metadata?.orderId;
+        if (!orderId) break;
+        console.log('⚠️ Payment expired for:', session.id);
+        const orderIds = orderId.split(',');
 
         await prisma.payment.updateMany({
-          where: { orderId, provider: 'STRIPE' },
-          data: { status: 'FAILED' },
+          where: { externalId: session.id, provider: 'STRIPE' },
+          data: { status: 'FAILED', updatedAt: new Date() },
         });
+
+        await prisma.order.updateMany({
+          where: { id: { in: orderIds } },
+          data: { paymentStatus: 'FAILED', updatedAt: new Date() },
+        });
+
+        console.log('⚠️ Payment failure for:', session.id);
+
         break;
       }
       default:

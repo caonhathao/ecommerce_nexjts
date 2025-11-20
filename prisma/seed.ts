@@ -986,8 +986,6 @@ async function main() {
       return prisma.payment.create({
         data: {
           id: faker.string.uuid(),
-
-          order: { connect: { id: faker.helpers.arrayElement(orders).id } },
           provider: faker.helpers.arrayElement(Object.values(PaymentProvider)),
           method: null,
           amount: faker.number.int({ min: 100000, max: 3000000 }),
@@ -1004,6 +1002,21 @@ async function main() {
   );
 
   console.log(`✅ Created ${payment.length} payments`);
+
+  const orderPayments = await Promise.all(
+    orders.map((order) => {
+      const payments = faker.helpers.arrayElement(payment);
+      return prisma.orderPayment.create({
+        data: {
+          orderId: order.id,
+          paymentId: payments.id,
+        },
+      });
+    })
+  );
+
+  console.log(`✅ Created ${orderPayments.length} order-payments`);
+
 
   // ------------------------
   // 8️⃣ SHIPMENTS

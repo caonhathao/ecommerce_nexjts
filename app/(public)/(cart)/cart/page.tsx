@@ -176,10 +176,13 @@ export default function Cart() {
     try {
       const existing = await getOrderDrafts();
       if (existing.success && existing.draft) {
-        toast.info('Bạn có đơn hàng đang chờ xử lý. Chuyển đến trang thanh toán...', {
-          duration: 4000,
-          position: 'top-right',
-        });
+        toast.info(
+          'Bạn có đơn hàng đang chờ xử lý. Chuyển đến trang thanh toán...',
+          {
+            duration: 4000,
+            position: 'top-right',
+          }
+        );
         router.push('/checkout');
         return;
       }
@@ -189,10 +192,10 @@ export default function Cart() {
         items: selectedItem,
         voucher: [
           {
-            code: 'VC-GN59AEGX',
+            code: 'VC-6KSWBFG9',
           },
           {
-            code: 'VC-HALD6C8B',
+            code: 'VC-KSXTMQ0T',
           },
         ],
       };
@@ -204,6 +207,12 @@ export default function Cart() {
       if (res.success) {
         toast.success('Đang chuyển đến trang thanh toán...');
         router.push('/checkout');
+      } else if (!res.success && res.redirectTo) {
+        toast.error(res.message,{
+          position: 'top-right',
+          duration: 3000,
+        });
+        router.push(res.redirectTo);
       } else {
         toast.error('Lỗi: ' + res.error);
         console.error(res.error);

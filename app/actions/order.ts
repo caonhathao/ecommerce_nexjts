@@ -6,100 +6,128 @@ import { prisma } from '@/lib/db';
 import { OrderStatus, Prisma } from '@/lib/generated/prisma';
 import { revalidatePath } from 'next/cache';
 import { OrderWithRelations } from '@/types/order.data-types';
+import { Decimal } from '@/lib/generated/prisma/runtime/library';
 
 type CreateOrderResult =
-  | { success: true; order: OrderWithRelations }
+  | { success: true; order: OrderWithRelations[] }
   | { success: false; error: string };
 
 export async function createOrder(draftId: string): Promise<CreateOrderResult> {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-    if (!session) {
-      return { success: false, error: 'Unauthorized' };
-    }
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session) return { success: false, error: 'Unauthorized' };
+
     const userId = session.user.id;
 
-    const draft = await prisma.orderDraft.findFirst({
+    const draft = await prisma.orderDraft.findUnique({
       where: { id: draftId, userId },
-      include: {
-        items: true,
-        vouchers: {
-          include: { voucher: true },
-        },
-      },
-    });
-    if (!draft) {
-      return { success: false, error: 'Không tìm thấy bản nháp đơn hàng' };
-    }
-
-    const order = await prisma.order.create({
-      data: {
-        orderNumber: draft.orderNumber,
-        userId: userId,
-        status: draft.status,
-        paymentStatus: 'PENDING',
-
-        itemsTotal: draft.itemsTotal,
-        shippingFee: draft.shippingFee,
-        discountTotal: draft.discountTotal,
-        grandTotal: draft.grandTotal,
-
-        shippingAddress: draft.shippingInfor as Prisma.InputJsonValue,
-        notes: draft.notes,
-
-        items: {
-          create: draft.items.map((item) => ({
-            productId: item.productId,
-            variantId: item.variantId,
-            quantity: item.quantity,
-            unitPrice: item.unitPrice,
-            total: item.total,
-            title: item.title,
-          })),
-        },
-
-        vouchers: {
-          create: draft.vouchers.map((v) => ({
-            voucher: { connect: { id: v.voucherId } },
-          })),
-        },
-      },
       include: {
         items: true,
         vouchers: { include: { voucher: true } },
       },
     });
-    if (order) {
-      await prisma.orderDraft.delete({
-        where: { id: draft.id },
-      });
 
-      const cart = await prisma.cart.findUnique({
-        where: { userId: userId },
-      });
-      if (!cart) {
-        return { success: false, error: 'Không tìm thấy giỏ hàng' };
-      }
+    if (!draft) {
+      return { success: false, error: 'Draft not found' };
+    }
 
-      const variantIds = order.items
-        .map((i) => i.variantId)
-        .filter((id): id is string => !!id);
+    const itemsByShop = draft.items.reduce(
+      (acc, item) => {
+        if (!item.shopId) throw new Error('OrderItem missing shopId!');
+        if (!acc[item.shopId]) acc[item.shopId] = [];
+        acc[item.shopId].push(item);
+        return acc;
+      },
+      {} as Record<string, typeof draft.items>
+    );
 
-      const productIds = order.items.map((i) => i.productId);
+    const shopIds = Object.keys(itemsByShop);
+    const timestamp = Date.now();
 
+    const createdOrders = await Promise.all(
+      shopIds.map(async (shopId, index) => {
+        const shopItems = itemsByShop[shopId];
+
+        const itemsTotal = shopItems.reduce(
+          (sum, item) => sum + Number(item.total),
+          0
+        );
+
+        const ratio = itemsTotal / Number(draft.itemsTotal);
+
+        const shippingFee = Number(draft.shippingFee);
+        const discountTotal = Number(draft.discountTotal) * ratio;
+        const grandTotal = itemsTotal + shippingFee - discountTotal;
+
+        const orderNumber = `ORD-${timestamp}-${index + 1}`;
+
+        return prisma.order.create({
+          data: {
+            orderNumber,
+            userId,
+            shopId,
+            status: draft.status,
+            paymentStatus: 'PENDING',
+
+            itemsTotal: new Prisma.Decimal(itemsTotal),
+            shippingFee: new Prisma.Decimal(shippingFee),
+            discountTotal: new Prisma.Decimal(discountTotal),
+            grandTotal: new Prisma.Decimal(grandTotal),
+
+            shippingAddress: draft.shippingInfor as Prisma.InputJsonValue,
+            notes: draft.notes,
+
+            items: {
+              create: shopItems.map((item) => ({
+                productId: item.productId,
+                variantId: item.variantId,
+                shopId: item.shopId!,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice,
+                total: item.total,
+                title: item.title,
+              })),
+            },
+
+            vouchers: {
+              create: draft.vouchers.map((v) => ({
+                voucher: { connect: { id: v.voucherId } },
+              })),
+            },
+          },
+          include: {
+            items: true,
+            vouchers: { include: { voucher: true } },
+          },
+        });
+      })
+    );
+
+    await prisma.orderDraft.delete({
+      where: { id: draft.id },
+    });
+
+    const cart = await prisma.cart.findUnique({ where: { userId } });
+    if (cart) {
       await prisma.cartItem.deleteMany({
         where: {
           cartId: cart.id,
-          variantId: { in: variantIds },
+          variantId: {
+            in: draft.items
+              .map((i) => i.variantId)
+              .filter((id): id is string => !!id),
+          },
         },
       });
       revalidatePath('/cart');
     }
-    return { success: true, order };
+
+    return {
+      success: true,
+      order: createdOrders,
+    };
   } catch (error: any) {
-    console.error('Error creating order:', error);
+    console.error('Error createOrder:', error);
     return { success: false, error: error.message };
   }
 }
@@ -148,10 +176,11 @@ export async function getOrder(
     const hasNextPage = order.length > limit;
     const nextCursor = hasNextPage ? order[limit - 1].id : undefined;
 
-    return {
-      orders: hasNextPage ? order.slice(0, limit) : order,
-      nextCursor,
-    };
+    return JSON.parse(
+      JSON.stringify({
+        orders: hasNextPage ? order.slice(0, limit) : order,
+        nextCursor,
+      }));
   } catch (error: any) {
     console.error('Error fetching orders:', error);
     throw new Error(error.message || 'Internal Server Error');
