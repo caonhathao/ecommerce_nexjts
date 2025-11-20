@@ -1,124 +1,53 @@
-import { formatDay } from '@/app/(public)/_components/global-function';
-import { RatingStars } from '@/app/(public)/_components/rating-starts';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+'use client';
+
+import { LoadingComponent } from '@/app/(public)/_components/loading';
 import { fetchData } from '@/funcs/fetch';
-import { reviewResponse, reviewsType } from '@/types/public.data-types';
-import React, { useEffect } from 'react';
-import { AiOutlineLike } from 'react-icons/ai';
+import { reviewResponse } from '@/types/public.data-types';
+import { useEffect, useState } from 'react'; // Import hooks
+import { ReviewsClient } from './reviews-client';
 
 interface props {
   ratingAvg: number;
   ratingCount: number;
   id: string;
 }
-export async function Reviews({ id, ratingAvg, ratingCount }: props) {
-  const [response, setResponse] = React.useState<reviewResponse | null>(null);
-  const [data, setData] = React.useState<reviewsType[] | null>(null);
 
+// 2. Remove 'async' keyword
+export function Reviews({ id, ratingAvg, ratingCount }: props) {
+  const [initialResponse, setInitialResponse] = useState<reviewResponse | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
+
+  // 3. Fetch data inside useEffect instead of 'await'
   useEffect(() => {
-    fetchData('/api/reviews', { id: id, page: 1, limit: 5 }, setResponse);
-  }, []);
+    const loadReviews = async () => {
+      try {
+        await fetchData(
+          '/api/reviews',
+          { id: id, page: 1, limit: 5 },
+          setInitialResponse
+        );
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    if (response) setData(response.data);
-  }, [response]);
+    if (id) loadReviews();
+  }, [id]);
 
-  const renderReview = (reviewData: reviewsType) => {
-    return (
-      <div className="flex flex-row justify-start items-start w-full gap-2 py-2">
-        <div
-          className="w-[25%] flex flex-row gap-2 justify-start items-center"
-          key={reviewData.user.id}
-        >
-          <img
-            src={reviewData.user.image}
-            alt="user-avatar"
-            className="w-20 rounded-full"
-          />
-          <p>{reviewData.user.name}</p>
-        </div>
-        <div className="w-[75%] flex flex-col gap-2">
-          <RatingStars value={reviewData.rating} />
-          <p>{reviewData.body}</p>
-          <div className="flex flex-col italic gap-1 text-sm">
-            <p>Đánh giá lúc: {formatDay(reviewData.createdAt)}</p>
-          </div>
-          <div className="flex flex-row justify-end items-center">
-            <AiOutlineLike size={15} color="var(--primary)" />
-            {reviewData.likes}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // if (!response) {
-  //   return <LoadingComponent />;
-  // }
+  if (loading || !initialResponse) {
+    return <LoadingComponent />;
+  }
 
   return (
-    <div className="w-full bg-[var(--background)] rounded-lg mt-3 p-3 flex flex-col justify-start items-start">
-      {/* summary */}
-      <div className="flex flex-col justify-start items-start py-2 gap-2">
-        <p className="font-medium text-lg">Khách hàng đánh giá</p>
-        <p className="font-medium">Tổng quan</p>
-        <div className="flex flex-row justify-start items-center gap-4">
-          <RatingStars value={ratingAvg} />
-          <p>{ratingCount} đánh giá</p>
-        </div>
-      </div>
-      <Separator />
-      {/* detail */}
-      <div>
-        <div className="py-2">
-          <p>Lọc theo</p>
-          <ul className="flex flex-row justify-start items-start gap-2 py-2">
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              Mới nhất
-            </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              Có hình ảnh
-            </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              Mua lại
-            </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              5 sao
-            </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              4 sao
-            </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              3 sao
-            </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              2 sao
-            </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              1 sao
-            </li>
-          </ul>
-        </div>
-      </div>
-      <Separator />
-      {/* show reviews */}
-      <div className="flex flex-col justify-start items-start gap-2 py-2">
-        {data?.map((value, index) => (
-          <>
-            {renderReview(value)}
-            <Separator />
-          </>
-        ))}
-      </div>
-      <div className="w-full flex justify-center items-center">
-        <Button
-          variant="outline"
-          className="text-[var(--primary)] hover:cursor-pointer"
-        >
-          Xem thêm
-        </Button>
-      </div>
-    </div>
+    <ReviewsClient
+      id={id}
+      ratingAvg={ratingAvg}
+      ratingCount={ratingCount}
+      initialResponse={initialResponse}
+    />
   );
 }

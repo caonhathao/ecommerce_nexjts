@@ -3,30 +3,32 @@ import { formatDay } from '@/app/(public)/_components/global-function';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Label } from '@/components/ui/label';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
-    shopDetail,
-    shopItemData,
-    shopMember,
+  shopDetail,
+  shopItemData,
+  shopMember,
 } from '@/types/manager.data-types';
+import { useTranslations } from 'next-intl';
 import React, { SetStateAction, useEffect } from 'react';
 import { MdOutlineCopyAll } from 'react-icons/md';
 import { toast } from 'sonner';
@@ -45,8 +47,8 @@ export function TableCellViewer({
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
   const [defaultStatus, setDefaultStatus] = React.useState<string>('');
-
   const [value, setValue] = React.useState<string>('');
+  const t = useTranslations('admin_shop_page.shop_drawer');
 
   // This effect runs when 'openIndex' changes
   useEffect(() => {
@@ -75,14 +77,29 @@ export function TableCellViewer({
       return () => clearTimeout(timer);
     }
   }, [openIndex]);
+
+  // useEffect(() => {
+  //   console.log(detail);
+  // }, [detail]);
+
   async function fetchDetail() {
     try {
-      const response = await fetch(`/api/manager/shop/query?id=${item.id}`);
-      const detail = await response.json();
-      console.log(detail.data);
-      setDetail(detail.data);
+      const response = await fetchData(
+        '/api/manager/shop/query',
+        { id: item.id },
+        undefined,
+        'default',
+        true
+      );
+      if (response && response.ok) {
+        const parse = await response?.json();
+        setDetail(parse.data);
+      }
     } catch (err) {
       console.error(err);
+      toast(t('t_process_failed_noti'), {
+        description: t('t_conn_failed_desc_noti'),
+      });
     }
   }
 
@@ -94,8 +111,8 @@ export function TableCellViewer({
         body: JSON.stringify({ visibility: value }),
       });
       if (response.status === 200) {
-        toast('Đã cập nhật sản phẩm', {
-          description: 'Sản phẩm được cấp phép hiển thị',
+        toast(t('t_action_noti'), {
+          description: t('t_update_desc_noti'),
         });
         setShopList((prev) => prev.filter((shop) => shop.id !== item.id));
       }
@@ -106,7 +123,7 @@ export function TableCellViewer({
 
   useEffect(() => {
     if (detail) {
-      console.log('fetched');
+      //console.log('fetched');
       setDefaultStatus(detail.status);
     }
   }, [detail]);
@@ -125,7 +142,7 @@ export function TableCellViewer({
       <DrawerContent>
         <DrawerHeader className="gap-1">
           <DrawerTitle>{detail?.name || 'unknown'}</DrawerTitle>
-          <DrawerDescription>Thông tin chi tiết cửa hàng</DrawerDescription>
+          <DrawerDescription>{t('t_shop_desc')}</DrawerDescription>
         </DrawerHeader>
         <div
           className="flex flex-col gap-4 overflow-y-auto px-4 text-sm"
@@ -151,7 +168,7 @@ export function TableCellViewer({
             </div>
 
             <div className="flex flex-col gap-3">
-              <Label htmlFor="shop">Cửa hàng</Label>
+              <Label htmlFor="shop">{t('t_shop')}</Label>
               <div className="w-full flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-row justify-start items-center gap-2">
                   <Avatar>
@@ -165,18 +182,18 @@ export function TableCellViewer({
                   type="button"
                   onClick={() => handleCopy(detail?.id ?? '')}
                 >
-                  Sao chép ID
+                  {t('t_copy_action')}
                   <MdOutlineCopyAll />
                 </Button>
               </div>
             </div>
 
             <div className="flex flex-col gap-3">
-              <Label htmlFor="shop">Chủ sở hữu</Label>
+              <Label htmlFor="shop">{t('t_owner_name')}</Label>
               <div className="w-full flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-row justify-start items-center gap-2">
                   <Avatar>
-                    <AvatarImage src={detail?.owner.image} alt="shopLogo" />
+                    <AvatarImage src={detail?.owner.image} alt="ownerLogo" />
                     <AvatarFallback>UK</AvatarFallback>
                   </Avatar>
                   <p>{detail?.owner.name}</p>
@@ -184,7 +201,7 @@ export function TableCellViewer({
                 <Button
                   variant={'outline'}
                   type="button"
-                  onClick={() => handleCopy(detail?.id ?? '')}
+                  onClick={() => handleCopy(detail?.owner.id ?? '')}
                 >
                   <MdOutlineCopyAll />
                 </Button>
@@ -193,11 +210,11 @@ export function TableCellViewer({
 
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="title">Ngày tạo</Label>
+                <Label htmlFor="title">{t('t_created_at')}</Label>
                 <div className="w-full">{formatDay(detail?.createdAt)}</div>
               </div>
               <div className="flex flex-col gap-3">
-                <Label htmlFor="status">Ngày cập nhật</Label>
+                <Label htmlFor="status">{t('t_updated_at')}</Label>
                 <div className="flex flex-col gap-3">
                   <div className="w-full">{formatDay(detail?.updatedAt)}</div>
                 </div>
@@ -206,28 +223,28 @@ export function TableCellViewer({
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="target">Điểm đánh giá</Label>
+                <Label htmlFor="target">{t('t_rating')}</Label>
                 <div>{detail?.ratingAvg}</div>
               </div>
               <div className="flex flex-col gap-3">
-                <Label htmlFor="limit">Tổng đánh giá</Label>
+                <Label htmlFor="limit">{t('t_rating_count')}</Label>
                 <div>{detail?.ratingCount}</div>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="target">Email</Label>
+                <Label htmlFor="target">{t('t_email')}</Label>
                 <div>{detail?.contactEmail}</div>
               </div>
               <div className="flex flex-col gap-3">
-                <Label htmlFor="limit">Điện thoại</Label>
+                <Label htmlFor="limit">{t('t_number_phone')}</Label>
                 <div>{detail?.contactPhone}</div>
               </div>
             </div>
 
             <div className="flex flex-col gap-3">
-              <Label htmlFor="visibility">Trạng thái</Label>
+              <Label htmlFor="visibility">{t('t_status')}</Label>
               <Select
                 value={defaultStatus}
                 onValueChange={(value) => setValue(value)}
@@ -236,21 +253,21 @@ export function TableCellViewer({
                   <SelectValue placeholder="Select a type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ACTIVE">Đang hoạt động</SelectItem>
-                  <SelectItem value="PENDING">Đang chờ</SelectItem>
-                  <SelectItem value="SUSPENDED">Bị cấm</SelectItem>
-                  <SelectItem value="CLOSED">Đóng cửa</SelectItem>
+                  <SelectItem value="ACTIVE">{t('c_active')}</SelectItem>
+                  <SelectItem value="PENDING">{t('c_pending')}</SelectItem>
+                  <SelectItem value="SUSPENDED">{t('c_suspended')}</SelectItem>
+                  <SelectItem value="CLOSED">{t('c_closed')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="flex flex-col gap-3">
-              <Label htmlFor="type">Mô tả</Label>
-              <textarea defaultValue={detail?.description || ''} />
+              <Label htmlFor="type">{t('t_desc')}</Label>
+              <textarea defaultValue={detail?.description || ''} disabled />
             </div>
 
             <div className="flex flex-col gap-3">
-              <Label htmlFor="variants-list">Thành viên</Label>
+              <Label htmlFor="variants-list">{t('t_members')}</Label>
               <div className="flex flex-col  gap-4">
                 <ul className="w-full flex flex-col gap-2 ">
                   {detail?.members.map((value: shopMember, index) => (
@@ -292,9 +309,11 @@ export function TableCellViewer({
           </form>
         </div>
         <DrawerFooter>
-          <Button onClick={() => handleSubmit(value)}>Submit</Button>
+          <Button onClick={() => handleSubmit(value)}>
+            {t('t_submit_action')}
+          </Button>
           <DrawerClose asChild>
-            <Button variant="outline">Done</Button>
+            <Button variant="outline">{t('t_cancel_action')}</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

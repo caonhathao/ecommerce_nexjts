@@ -277,7 +277,6 @@ export function TableCellViewer({
                             {...field}
                             defaultValue={field.value}
                             onChange={field.onChange}
-                            value={field.value}
                           />
                         </FormControl>
                         <FormMessage />

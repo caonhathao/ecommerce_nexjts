@@ -16,7 +16,9 @@ type QueryParams = Record<string, string | number | boolean | null | undefined>;
 export const fetchData = async (
   baseUrl: string,
   params: QueryParams,
-  setData: React.Dispatch<SetStateAction<any>>
+  setData: React.Dispatch<SetStateAction<any>> | undefined,
+  cacheType: RequestCache = 'default',
+  isExport: boolean = false
 ) => {
   try {
     // 1. Build the URL with query parameters
@@ -35,7 +37,7 @@ export const fetchData = async (
     const url = queryString ? `${baseUrl}?${queryString}` : baseUrl;
 
     // 2. Fetch the data
-    const response = await fetch(url);
+    const response = await fetch(url, { cache: cacheType });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -44,10 +46,13 @@ export const fetchData = async (
       );
     }
 
+    if (isExport) return response;
+
     const data = await response.json();
+    console.log('data: ', data);
 
     // 3. Update state with the fetched data
-    setData(data);
+    if (setData) setData(data);
   } catch (e) {
     // 4. Handle any errors
     const error = e instanceof Error ? e.message : 'An unknown error occurred';
