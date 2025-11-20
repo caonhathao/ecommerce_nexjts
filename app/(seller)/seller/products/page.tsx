@@ -27,7 +27,8 @@ export default function SellerProductsDashboard() {
       .then((data) => {
         setProducts(data.data || []);
         setLoading(false);
-      });
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   return (
@@ -36,29 +37,41 @@ export default function SellerProductsDashboard() {
         <CardTitle>Product Listing</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Image</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Visibility</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Shop</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
+        {loading ? (
+          <div className="py-8 text-center">Loading...</div>
+        ) : (!products || products.length === 0) ? (
+          <div className="flex flex-col items-center justify-center py-12 gap-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-12 w-12 text-muted-foreground"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h18M3 12h18M3 17h18" />
+            </svg>
+            <h3 className="text-lg font-medium">No products yet</h3>
+            <p className="text-sm text-muted-foreground">
+              You haven't created any products. Create your first product to get started.
+            </p>
+            <Button onClick={() => router.push('/seller/products/create')}>Create product</Button>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={7}>Loading...</TableCell>
+                <TableHead>Image</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Visibility</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Shop</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
-            ) : products.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7}>No products found.</TableCell>
-              </TableRow>
-            ) : (
-              products.map((product) => (
+            </TableHeader>
+            <TableBody>
+              {products.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell>
                     {product.images?.[0]?.url ? (
@@ -101,18 +114,16 @@ export default function SellerProductsDashboard() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() =>
-                        router.push(`/seller/products/${product.id}/edit`)
-                      }
+                      onClick={() => router.push(`/seller/products/${product.id}/edit`)}
                     >
                       Edit
                     </Button>
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </CardContent>
     </Card>
   );
