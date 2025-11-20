@@ -10,6 +10,7 @@ export async function middleware(request: NextRequest) {
     '/api/auth',
     '/products',
     '/api/products',
+    '/search',
     '/',
   ];
   if (publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
