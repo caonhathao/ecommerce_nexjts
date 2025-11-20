@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { toast } from 'sonner';
 import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
 import { useRouter } from 'next/navigation';
+import { env } from '@/lib/env';
 
 const emptyCart: CartType = {
   id: '',
@@ -381,7 +382,7 @@ export default function Cart() {
                 {/* voucher 1 */}
                 <div className="flex items-center justify-between bg-blue-50 border border-blue-300 rounded-xl p-3 shadow-sm">
                   <div className="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                    TIKI
+                    {env.NEXT_PUBLIC_WEB_NAME}
                   </div>
                   <div className="mx-3 w-px h-8 border-r border-dashed border-blue-400"></div>
                   <div className="flex-1 flex items-center gap-2 text-blue-800 text-sm">

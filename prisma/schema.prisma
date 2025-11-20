@@ -77,9 +77,15 @@ enum PaymentProvider {
 }
 
 enum ConversationType {
-  USER_SELLER
-  USER_PLATFORM
-  SELLER_PLATFORM
+  ORDER_INQUIRY // User <-> Seller (Linked to a specific product/order?)
+  SUPPORT_TICKET // User/Seller <-> Admin
+  GENERAL // General chat
+}
+
+enum ConversationStatus {
+  OPEN
+  RESOLVED
+  ARCHIVED
 }
 
 enum MessageType {
@@ -484,6 +490,7 @@ model Order {
   VoucherRedemption VoucherRedemption[]
   drafts            OrderDraft?
   payments          OrderPayment[]
+  Conversation      Conversation[]
 
   @@index([userId, placedAt])
   @@index([shopId, status])
@@ -763,27 +770,35 @@ model OrderVoucher {
 }
 
 model Conversation {
-  id        String           @id @default(uuid()) @db.Uuid
-  type      ConversationType
-  shopId    String?          @db.Uuid
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @default(now()) @updatedAt
+  id      String             @id @default(uuid()) @db.Uuid
+  type    ConversationType   @default(GENERAL)
+  status  ConversationStatus @default(OPEN)
+  subject String? // Optional: "Order #1234 Issue"
 
-  shop         Shop?                     @relation(fields: [shopId], references: [id], onDelete: SetNull)
+  // Optional links for context
+  orderId String? @db.Uuid
+  order   Order?  @relation(fields: [orderId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
   participants ConversationParticipant[]
   messages     Message[]
+  Shop         Shop?                     @relation(fields: [shopId], references: [id])
+  shopId       String?                   @db.Uuid
 
-  @@index([type, shopId])
-  @@map("conversation")
+  @@index([updatedAt])
 }
 
 model ConversationParticipant {
-  id             String   @id @default(uuid()) @db.Uuid
-  conversationId String   @db.Uuid
-  userId         String?  @db.Uuid
-  shopId         String?  @db.Uuid
-  role           String?
-  joinedAt       DateTime @default(now())
+  id             String @id @default(uuid()) @db.Uuid
+  conversationId String @db.Uuid
+
+  // logic: A participant is EITHER a User (Customer/Admin) OR a Shop (Seller)
+  userId     String?   @db.Uuid
+  shopId     String?   @db.Uuid
+  lastReadAt DateTime?
+  joinedAt   DateTime  @default(now())
 
   conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   user         User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -794,15 +809,16 @@ model ConversationParticipant {
 }
 
 model Message {
-  id             String      @id @default(uuid()) @db.Uuid
-  conversationId String      @db.Uuid
-  senderUserId   String?     @db.Uuid
-  senderShopId   String?     @db.Uuid
-  type           MessageType @default(TEXT)
-  content        String
-  attachments    Json?
-  createdAt      DateTime    @default(now())
-  readAt         DateTime?
+  id              String      @id @default(uuid()) @db.Uuid
+  conversationId  String      @db.Uuid
+  senderUserId    String?     @db.Uuid
+  senderShopId    String?     @db.Uuid
+  type            MessageType @default(TEXT)
+  content         String
+  attachments     Json? // Array of { url, type, name }
+  isSystemMessage Boolean     @default(false) // e.g., "Ticket Closed"
+
+  createdAt DateTime @default(now())
 
   conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   senderUser   User?        @relation("MessageFromUser", fields: [senderUserId], references: [id], onDelete: SetNull)

@@ -1,4 +1,5 @@
 import {
+  ConversationStatus,
   ConversationType,
   FulfillmentStatus,
   MessageType,
@@ -1017,7 +1018,6 @@ async function main() {
 
   console.log(`✅ Created ${orderPayments.length} order-payments`);
 
-
   // ------------------------
   // 8️⃣ SHIPMENTS
   // ------------------------
@@ -1498,75 +1498,147 @@ async function main() {
   console.log(`✅ Created ${orderVoucher.length} order–voucher links`);
 
   // ------------------------
-  // 8️⃣ CONVERSATIONS
+  // 9️⃣ CONVERSATIONS & MESSAGES (REALISTIC SCENARIO)
   // ------------------------
+  console.log('💬 Seeding Conversations (Order Inquiries & General)...');
 
-  const conversations = await Promise.all(
-    Array.from({ length: 15 }).map(() =>
-      prisma.conversation.create({
+  // SCENARIO A: ORDER INQUIRIES
+  // Pick 30 orders to have associated conversations
+  const ordersForChat = orders.slice(0, 30);
+
+  for (const order of ordersForChat) {
+    // 1. Create the Conversation
+    const conversation = await prisma.conversation.create({
+      data: {
+        type: ConversationType.ORDER_INQUIRY,
+        status: faker.helpers.arrayElement(Object.values(ConversationStatus)),
+        subject: `Inquiry about Order #${order.orderNumber}`,
+        orderId: order.id,
+        shopId: order.shopId, // The shop receiving the inquiry
+        createdAt: faker.date.between({ from: order.placedAt, to: new Date() }),
+      },
+    });
+
+    // 2. Add Participants: The Buyer (User) and the Seller (Shop)
+    // Note: In your schema, ShopMember links User to Shop, but ConversationParticipant links Shop directly.
+
+    // Participant 1: The Buyer
+    await prisma.conversationParticipant.create({
+      data: {
+        conversationId: conversation.id,
+        userId: order.userId,
+        shopId: null,
+        joinedAt: conversation.createdAt,
+      },
+    });
+
+    // Participant 2: The Shop (represented by the Shop entity)
+    if (order.shopId) {
+      await prisma.conversationParticipant.create({
         data: {
-          id: faker.string.uuid(),
-          type: faker.helpers.arrayElement(Object.values(ConversationType)),
-          shop: { connect: { id: faker.helpers.arrayElement(shops).id } },
-          createdAt: faker.date.past({ years: 1 }),
-          updatedAt: faker.date.recent({ days: 30 }),
-        },
-      })
-    )
-  );
-
-  console.log(`✅ Created ${conversations.length} conversations`);
-
-  // ------------------------
-  // 8️⃣ CONVERSATION PARTICIPANTS
-  // ------------------------
-
-  const participants = await Promise.all(
-    Array.from({ length: 40 }).map(() => {
-      const conversation = faker.helpers.arrayElement(conversations);
-      const isUser = faker.datatype.boolean(); // 50% user, 50% shop
-      return prisma.conversationParticipant.create({
-        data: {
-          id: faker.string.uuid(),
           conversationId: conversation.id,
-          userId: isUser ? faker.helpers.arrayElement(users).id : null,
-          shopId: isUser ? null : faker.helpers.arrayElement(shops).id,
-          joinedAt: faker.date.past({ years: 1 }),
+          userId: null,
+          shopId: order.shopId,
+          joinedAt: conversation.createdAt,
         },
       });
-    })
-  );
+    }
 
-  console.log(`✅ Created ${participants.length} conversation participants`);
+    // 3. Generate Messages (Back and Forth)
+    const msgCount = faker.number.int({ min: 2, max: 6 });
+    let lastMsgTime = conversation.createdAt;
 
-  // ------------------------
-  // 8️⃣ MESSAGES
-  // ------------------------
+    for (let i = 0; i < msgCount; i++) {
+      const isBuyerSender = i % 2 === 0; // Alternate: Buyer -> Shop -> Buyer
+      lastMsgTime = faker.date.soon({ refDate: lastMsgTime, days: 1 });
 
-  const messages = await Promise.all(
-    Array.from({ length: 100 }).map(() => {
-      const conversation = faker.helpers.arrayElement(conversations);
-      const isShopSender = faker.datatype.boolean();
-      return prisma.message.create({
+      await prisma.message.create({
         data: {
-          id: faker.string.uuid(),
           conversationId: conversation.id,
-          senderUserId: isShopSender
-            ? null
-            : faker.helpers.arrayElement(users).id,
-          senderShopId: isShopSender
-            ? faker.helpers.arrayElement(shops).id
-            : null,
-          type: faker.helpers.arrayElement(Object.values(MessageType)),
-          content: faker.lorem.sentences({ min: 1, max: 3 }),
-          createdAt: faker.date.past({ years: 1 }),
+          type: MessageType.TEXT,
+          // If Buyer sends, senderUserId = order.userId. If Shop sends, senderShopId = order.shopId
+          senderUserId: isBuyerSender ? order.userId : null,
+          senderShopId: isBuyerSender ? null : order.shopId,
+          content: isBuyerSender
+            ? faker.helpers.arrayElement([
+                'When will this be shipped?',
+                'Can I change the delivery address?',
+                'I haven not received my tracking number yet.',
+                'Is this item genuine?',
+              ])
+            : faker.helpers.arrayElement([
+                'We will ship it tomorrow.',
+                'Please check your email for updates.',
+                'Yes, it is 100% authentic.',
+                'Sorry for the delay.',
+              ]),
+          createdAt: lastMsgTime,
         },
       });
-    })
-  );
+    }
+  }
 
-  console.log(`✅ Created ${messages.length} messages`);
+  // SCENARIO B: GENERAL SHOP INQUIRIES (No specific Order)
+  // Create 20 random conversations
+  for (let i = 0; i < 20; i++) {
+    const randomUser = faker.helpers.arrayElement(users);
+    const randomShop = faker.helpers.arrayElement(shops);
 
+    // 1. Create Conversation
+    const conversation = await prisma.conversation.create({
+      data: {
+        type: ConversationType.GENERAL,
+        status: ConversationStatus.OPEN,
+        subject: faker.commerce.productName(), // Asking about a product
+        shopId: randomShop.id,
+        createdAt: faker.date.recent({ days: 60 }),
+      },
+    });
+
+    // 2. Add Participants
+    await prisma.conversationParticipant.create({
+      data: {
+        conversationId: conversation.id,
+        userId: randomUser.id,
+      },
+    });
+
+    await prisma.conversationParticipant.create({
+      data: {
+        conversationId: conversation.id,
+        shopId: randomShop.id,
+      },
+    });
+
+    // 3. Create Messages
+    await prisma.message.create({
+      data: {
+        conversationId: conversation.id,
+        senderUserId: randomUser.id,
+        content: 'Do you have this item in Red color?',
+        createdAt: faker.date.soon({
+          refDate: new Date(
+            new Date(conversation.createdAt).getTime() + 10 * 60 * 1000
+          ),
+        }),
+      },
+    });
+
+    await prisma.message.create({
+      data: {
+        conversationId: conversation.id,
+        senderShopId: randomShop.id,
+        content: 'Hi, unfortunately we are out of stock for Red.',
+        createdAt: faker.date.soon({
+          refDate: new Date(
+            new Date(conversation.createdAt).getTime() + 60 * 60 * 1000
+          ),
+        }),
+      },
+    });
+  }
+
+  console.log(`✅ Created Conversations and Messages`);
   console.log('🎉 SEED HOÀN TẤT!');
 }
 
