@@ -790,20 +790,18 @@ async function main() {
   // ------------------------
   // 8️⃣ WISHLIST
   // ------------------------
-  const wishlists = await Promise.all(
-    users.map((user) =>
-      prisma.wishlist.create({
-        data: {
-          id: faker.string.uuid(),
-          user: { connect: { id: user.id } },
-          createdAt: faker.date.past(),
-        },
-      })
-    )
-  );
+  await prisma.wishlist.createMany({
+    data: users.map((user) => ({
+      id: faker.string.uuid(), // Ensure you generate the ID here if not auto-generated
+      userId: user.id,         // Use the foreign key directly
+      createdAt: faker.date.past(),
+    })),
+    skipDuplicates: true,
+  });
+
+  const wishlists = await prisma.wishlist.findMany();
 
   console.log(`✅ Created ${wishlists.length} wishlists`);
-
   // ------------------------
   // 8️⃣ WISHLIST ITEMS
   // ------------------------
