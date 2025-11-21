@@ -60,8 +60,8 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { productId: string } }
-) {
+  props: { params: Promise<{ productId: string }> }) {
+  const prams = await props.params;
   try {
     const body = await req.json();
     const parsed = manageProductSchema.parse(body);
@@ -139,7 +139,7 @@ export async function PUT(
     }
 
     const product = await prisma.product.update({
-      where: { id: params.productId },
+      where: { id: prams.productId },
       data: updateData,
     });
 
