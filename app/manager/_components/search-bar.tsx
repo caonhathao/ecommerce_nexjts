@@ -25,7 +25,7 @@ const formSchema = z.object({
 });
 
 const SearchBar = ({ baseUrl, setData, setIsReset, isReset }: SearchProps) => {
-  const t=useTranslations('admin_search_bar');
+  const t = useTranslations('admin_search_bar');
   async function onSubmit(value: z.infer<typeof formSchema>) {
     try {
       const response = await fetch(`${baseUrl}?id=${value.id}`);
@@ -56,7 +56,10 @@ const SearchBar = ({ baseUrl, setData, setIsReset, isReset }: SearchProps) => {
             render={({ field }) => (
               <FormItem>
                 <InputGroup>
-                  <InputGroupInput placeholder={t('t_search_placeholder')} {...field} />
+                  <InputGroupInput
+                    placeholder={t('t_search_placeholder')}
+                    {...field}
+                  />
                   <InputGroupAddon align="inline-end">
                     <InputGroupButton
                       variant={'outline'}

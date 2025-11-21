@@ -30,10 +30,11 @@ export async function GET(req: NextRequest) {
     include: {
       images: true,
       variants: true,
-      tags: { select: { tagId: true, tag: { select: { name: true, slug: true } } } },
+      tags: {
+        select: { tagId: true, tag: { select: { name: true, slug: true } } },
+      },
     },
   });
-
 
   if (!product) {
     return NextResponse.json(
@@ -51,16 +52,19 @@ export async function GET(req: NextRequest) {
       price: Number(v.price),
       compareAt: v.compareAt != null ? Number(v.compareAt) : null,
     })),
-    tags: product.tags.map((t) => ({ tagId: t.tagId, name: (t as any).tag?.name })),
-
+    tags: product.tags.map((t) => ({
+      tagId: t.tagId,
+      name: (t as any).tag?.name,
+    })),
   };
 
-  return NextResponse.json({ success: true, data: normalized })
+  return NextResponse.json({ success: true, data: normalized });
 }
 
 export async function PUT(
   req: NextRequest,
-  props: { params: Promise<{ productId: string }> }) {
+  props: { params: Promise<{ productId: string }> }
+) {
   const prams = await props.params;
   try {
     const body = await req.json();

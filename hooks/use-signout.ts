@@ -13,7 +13,7 @@ export function useSignOut() {
         onSuccess: () => {
           router.push('/');
           toast.success('Signed out Successfully');
-          router.refresh()
+          router.refresh();
         },
         onError: () => {
           toast.error('Failed to sign out');

@@ -34,17 +34,22 @@ export const productVariantSchema = z.object({
 });
 
 // Product Tag Schema
-export const productTagSchema = z.object({
-  tagId: z
-    .preprocess(emptyToUndefined, z.string().uuid('Invalid UUID'))
-    .optional(),
-  name: z
-    .preprocess(emptyToUndefined, z.string().min(1, 'Tag name is required').max(50))
-    .optional(),
-}).refine((d) => !!d.tagId || !!d.name, {
-  message: 'Provide a tag id or a tag name',
-  path: ['tagId'],
-});
+export const productTagSchema = z
+  .object({
+    tagId: z
+      .preprocess(emptyToUndefined, z.string().uuid('Invalid UUID'))
+      .optional(),
+    name: z
+      .preprocess(
+        emptyToUndefined,
+        z.string().min(1, 'Tag name is required').max(50)
+      )
+      .optional(),
+  })
+  .refine((d) => !!d.tagId || !!d.name, {
+    message: 'Provide a tag id or a tag name',
+    path: ['tagId'],
+  });
 
 // Base Product Schema
 const baseProductSchema = z.object({

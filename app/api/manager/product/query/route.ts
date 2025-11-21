@@ -57,7 +57,7 @@ export const PUT = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
   const id = String(searchParams.get('id'));
-  
+
   try {
     const body = await request.json();
     const { visibility } = body;

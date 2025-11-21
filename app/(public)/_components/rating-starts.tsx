@@ -1,4 +1,4 @@
-import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
 
 interface RatingProps {
   value: number; // ví dụ: 4.3, 3.5, ...

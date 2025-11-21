@@ -34,7 +34,7 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const t=useTranslations('admin_layout.admin_app_sidebar');
+  const t = useTranslations('admin_layout.admin_app_sidebar');
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{t('t_quick_access')}</SidebarGroupLabel>

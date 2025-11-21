@@ -280,7 +280,9 @@ function NavItem({
           className={cn(
             'w-full justify-between px-3 py-2 text-sm',
             'rounded-md transition-colors',
-            active ? 'bg-gray-200 dark:bg-gray-800 font-medium' : 'hover:bg-gray-200 dark:hover:bg-gray-800'
+            active
+              ? 'bg-gray-200 dark:bg-gray-800 font-medium'
+              : 'hover:bg-gray-200 dark:hover:bg-gray-800'
           )}
         >
           <Link

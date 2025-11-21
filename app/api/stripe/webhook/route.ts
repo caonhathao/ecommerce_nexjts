@@ -36,7 +36,9 @@ export async function POST(req: NextRequest) {
             updatedAt: new Date(),
           },
         });
-        console.log(`✅ Payment success for session ${session.id}, updated ${orderIds.length} orders`);
+        console.log(
+          `✅ Payment success for session ${session.id}, updated ${orderIds.length} orders`
+        );
         break;
       }
       case 'checkout.session.expired': {

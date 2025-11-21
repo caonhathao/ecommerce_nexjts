@@ -20,8 +20,9 @@ export default function ForbiddenPage() {
 
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            You don&apos;t have permission to view this page.
-            If you think this is a mistake, please contact support or try logging in with another account.
+            You don&apos;t have permission to view this page. If you think this
+            is a mistake, please contact support or try logging in with another
+            account.
           </p>
 
           <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">

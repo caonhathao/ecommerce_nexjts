@@ -1,16 +1,16 @@
 import { deleteData } from '@/funcs/delete';
-import { useTranslations } from 'next-intl';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';
 
 export const handleDelete = async ({
   id,
   setIsReset,
+  t,
 }: {
   id: string;
   setIsReset: Dispatch<SetStateAction<boolean>>;
+  t: (key: string) => string;
 }) => {
-  const t=useTranslations('admin_category_page');
   try {
     const response = await deleteData('/api/manager/category', { id });
     if (response.ok) {

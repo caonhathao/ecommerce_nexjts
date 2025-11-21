@@ -28,7 +28,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
 import {
@@ -63,7 +63,7 @@ import {
   IconChevronDown,
   IconDotsVertical,
   IconGripVertical,
-  IconLayoutColumns
+  IconLayoutColumns,
 } from '@tabler/icons-react';
 import {
   ColumnDef,
@@ -502,6 +502,7 @@ const TableTopProduct = () => {
                       <li
                         id={`variant-item-${index}`}
                         className="flex flex-col gap-2"
+                        key={value.id || index}
                       >
                         <div className="w-full flex flex-row justify-between items-center">
                           <div className="flex flex-row justify-start items-center gap-2">

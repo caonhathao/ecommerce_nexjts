@@ -119,22 +119,32 @@ export default function OrderPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       {o.items.map((item: any) => (
-                        <div key={item.id} className="flex gap-4 border-b pb-4 last:border-none">
+                        <div
+                          key={item.id}
+                          className="flex gap-4 border-b pb-4 last:border-none"
+                        >
                           <Image
-                            src={item.product.images[0]?.url || "/no-image.png"}
+                            src={item.product.images[0]?.url || '/no-image.png'}
                             alt="..."
                             width={80}
                             height={80}
                             className="rounded-md"
                           />
                           <div className="flex flex-col justify-start items-start flex-1 overflow-hidden text-base font-medium">
-                            <span className="truncate">{item.product.slug}</span>
-                            <span className="bg-muted-foreground/20 p-1 rounded-sm">{item.title}</span>
+                            <span className="truncate">
+                              {item.product.slug}
+                            </span>
+                            <span className="bg-muted-foreground/20 p-1 rounded-sm">
+                              {item.title}
+                            </span>
                           </div>
                           <div className="flex flex-col justify-start items-end min-w-[120px] text-right space-y-1">
                             <p className="font-medium">{item.product.name}</p>
                             <p className="text-sm text-muted-foreground">
-                              Số lượng: <span className="font-semibold">{item.quantity}</span>
+                              Số lượng:{' '}
+                              <span className="font-semibold">
+                                {item.quantity}
+                              </span>
                             </p>
                             <p className="text-sm font-semibold text-primary">
                               {formatPrice(item.total)}
@@ -145,10 +155,16 @@ export default function OrderPage() {
                     </CardContent>
 
                     <CardFooter className="flex gap-2 justify-end">
-                      <Button variant="outline" className="border-2 border-secondary">
+                      <Button
+                        variant="outline"
+                        className="border-2 border-secondary"
+                      >
                         Trả hàng / Hoàn tiền
                       </Button>
-                      <Button variant="outline" className="border-2 border-primary">
+                      <Button
+                        variant="outline"
+                        className="border-2 border-primary"
+                      >
                         Đánh giá
                       </Button>
                     </CardFooter>

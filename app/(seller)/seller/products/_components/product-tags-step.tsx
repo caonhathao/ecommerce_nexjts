@@ -44,10 +44,15 @@ export default function ProductTagsStep() {
         <FormControl>
           <div className="flex flex-wrap gap-2">
             {fields.length === 0 ? (
-              <span className="text-sm text-muted-foreground">No tags added yet</span>
+              <span className="text-sm text-muted-foreground">
+                No tags added yet
+              </span>
             ) : (
               fields.map((f, idx) => (
-                <div key={f.id} className="flex items-center gap-2 bg-muted px-2 py-1 rounded-md text-sm">
+                <div
+                  key={f.id}
+                  className="flex items-center gap-2 bg-muted px-2 py-1 rounded-md text-sm"
+                >
                   <span>{(f as any).name ?? (f as any).tagId}</span>
                   <button
                     type="button"
@@ -61,7 +66,9 @@ export default function ProductTagsStep() {
             )}
           </div>
         </FormControl>
-        <FormDescription>These tags will be saved with your product.</FormDescription>
+        <FormDescription>
+          These tags will be saved with your product.
+        </FormDescription>
         <FormMessage />
       </FormItem>
 
@@ -81,7 +88,9 @@ export default function ProductTagsStep() {
               }}
             />
           </FormControl>
-          <Button type="button" onClick={handleAddFreeTag}>Add</Button>
+          <Button type="button" onClick={handleAddFreeTag}>
+            Add
+          </Button>
         </div>
         <FormMessage />
       </FormItem>
@@ -90,8 +99,14 @@ export default function ProductTagsStep() {
       <div className="hidden">
         {fields.map((f, idx) => (
           <div key={f.id}>
-            <input {...register(`tags.${idx}.tagId` as const)} defaultValue={(f as any).tagId} />
-            <input {...register(`tags.${idx}.name` as const)} defaultValue={(f as any).name} />
+            <input
+              {...register(`tags.${idx}.tagId` as const)}
+              defaultValue={(f as any).tagId}
+            />
+            <input
+              {...register(`tags.${idx}.name` as const)}
+              defaultValue={(f as any).name}
+            />
           </div>
         ))}
       </div>

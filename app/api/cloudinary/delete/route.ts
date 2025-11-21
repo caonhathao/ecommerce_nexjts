@@ -6,10 +6,7 @@ export async function DELETE(request: NextRequest) {
     const { publicId } = await request.json();
 
     if (!publicId) {
-      return NextResponse.json(
-        { error: 'Missing publicId' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing publicId' }, { status: 400 });
     }
 
     await deleteFromCloudinary(publicId, {

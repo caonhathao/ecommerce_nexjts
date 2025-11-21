@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 export function formatPrice(value: number | string | null): string {
-
-  value = Number(value)
+  value = Number(value);
 
   if (!value || value <= 0) return '0';
   const c = value.toLocaleString('vi-VN', {

@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       (acc, item) => acc + Number(item.grandTotal),
       0
     );
-    const orderIds = order.map(o => o.id).join(",");
+    const orderIds = order.map((o) => o.id).join(',');
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -55,12 +55,12 @@ export async function POST(req: NextRequest) {
         rawPayload: session as any,
       },
     });
-    if(!payment) {
+    if (!payment) {
       throw new Error('Failed to create payment record');
     }
 
     await prisma.orderPayment.createMany({
-      data: order.map(order => ({
+      data: order.map((order) => ({
         orderId: order.id,
         paymentId: payment.id,
       })),

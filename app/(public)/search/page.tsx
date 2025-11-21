@@ -100,14 +100,17 @@ export default function SearchPage() {
         <div className="mb-4">
           <div className="flex items-baseline gap-2">
             <h1 className="text-xl font-medium text-gray-900">
-              {filters.query ? `Results for "${filters.query}"` : `All Products`}
+              {filters.query
+                ? `Results for "${filters.query}"`
+                : `All Products`}
             </h1>
-            <span className="text-sm text-gray-500">({pagination.total} products)</span>
+            <span className="text-sm text-gray-500">
+              ({pagination.total} products)
+            </span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-6 items-start">
-
           {/* Left Sidebar */}
           <aside className="hidden lg:block sticky top-20">
             <SearchFiltersPanel
@@ -131,14 +134,18 @@ export default function SearchPage() {
                   <Skeleton key={i} className="h-[300px] rounded-lg bg-white" />
                 ))}
               </div>
-            ) : (!products || products.length === 0) ? (
+            ) : !products || products.length === 0 ? (
               <Card className="border-none shadow-sm">
                 <CardContent className="py-16 text-center">
                   <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                     <span className="text-3xl">🔍</span>
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900">No products found</h3>
-                  <p className="text-muted-foreground">Try adjusting your search or filters.</p>
+                  <h3 className="text-lg font-medium text-gray-900">
+                    No products found
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Try adjusting your search or filters.
+                  </p>
                 </CardContent>
               </Card>
             ) : (

@@ -18,7 +18,7 @@ export const SuggestDealToday = ({ data }: TopDealItemsProps) => {
       {/* content here */}
       <div className="grid grid-cols-4 gap-2 w-full">
         {data.map((item, index) => (
-          <div key={index} className='w-full'>
+          <div key={index} className="w-full">
             <ProductItem item={item} size="1" />
           </div>
         ))}

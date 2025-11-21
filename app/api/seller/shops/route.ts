@@ -56,14 +56,17 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     });
 
-    const normalized = shops.map(s => ({
+    const normalized = shops.map((s) => ({
       ...s,
       ratingAvg: Number(s.ratingAvg),
     }));
 
     return NextResponse.json(normalized, { status: 200 });
   } catch (err: any) {
-    return NextResponse.json({ error: err?.message ?? 'Server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: err?.message ?? 'Server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -76,7 +79,10 @@ export async function POST(req: Request) {
 
     const parse = createShopSchema.safeParse(body);
     if (!parse.success) {
-      return NextResponse.json({ error: parse.error.flatten() }, { status: 400 });
+      return NextResponse.json(
+        { error: parse.error.flatten() },
+        { status: 400 }
+      );
     }
     const payload = parse.data;
 
@@ -86,9 +92,14 @@ export async function POST(req: Request) {
     }
     const ownerId = session.user.id;
 
-    const existing = await prisma.shop.findUnique({ where: { slug: payload.slug } });
+    const existing = await prisma.shop.findUnique({
+      where: { slug: payload.slug },
+    });
     if (existing) {
-      return NextResponse.json({ error: 'Slug already taken' }, { status: 409 });
+      return NextResponse.json(
+        { error: 'Slug already taken' },
+        { status: 409 }
+      );
     }
 
     const shop = await prisma.shop.create({
@@ -119,8 +130,14 @@ export async function POST(req: Request) {
   } catch (err: any) {
     console.error('create shop error', err);
     if (err?.code === 'P2002' && err?.meta?.target?.includes('slug')) {
-      return NextResponse.json({ error: 'Slug already taken' }, { status: 409 });
+      return NextResponse.json(
+        { error: 'Slug already taken' },
+        { status: 409 }
+      );
     }
-    return NextResponse.json({ error: err?.message ?? 'Server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: err?.message ?? 'Server error' },
+      { status: 500 }
+    );
   }
 }

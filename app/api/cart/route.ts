@@ -51,7 +51,7 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
     const body: AddToCartRequest = await request.json();
 
     //check cart
-    let cart = await prisma.cart.findUnique({
+    const cart = await prisma.cart.findUnique({
       where: { userId },
     });
 

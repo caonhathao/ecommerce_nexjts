@@ -1,4 +1,3 @@
-
 import data from './data.json';
 import { SectionCardsSeller } from '@/app/(seller)/_components/sidebar/section-cards-seller';
 import { ChartAreaInteractiveSeller } from '@/app/(seller)/_components/sidebar/chart-area-interactive-seller';

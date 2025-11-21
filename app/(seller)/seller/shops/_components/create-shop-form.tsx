@@ -28,10 +28,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  CreateShopInput,
-  createShopSchema,
-} from './shopSchema';
+import { CreateShopInput, createShopSchema } from './shopSchema';
 import { generateClientSlug } from '@/helpers/slug-helper';
 
 function slugify(input: string) {
@@ -106,11 +103,15 @@ export default function CreateShopForm() {
           toast.error(body?.error ?? 'Slug already taken — try another');
         } else if (res.status === 401) {
           toast.error('You must be signed in to create a shop');
-          router.push(`/auth/login?callbackUrl=${encodeURIComponent('/seller/shops/new')}`);
+          router.push(
+            `/auth/login?callbackUrl=${encodeURIComponent('/seller/shops/new')}`
+          );
         } else if (res.status === 400) {
           const body = await res.json().catch(() => ({}));
           // show best-effort error message
-          toast.error(body?.error ?? 'Validation error — please check the form');
+          toast.error(
+            body?.error ?? 'Validation error — please check the form'
+          );
         } else {
           const body = await res.json().catch(() => ({}));
           toast.error(body?.error ?? 'Failed to create shop');
@@ -126,7 +127,9 @@ export default function CreateShopForm() {
     <Card>
       <CardHeader>
         <CardTitle>Create a Shop</CardTitle>
-        <CardDescription>Create your seller shop to list products.</CardDescription>
+        <CardDescription>
+          Create your seller shop to list products.
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -162,7 +165,9 @@ export default function CreateShopForm() {
                   <FormControl>
                     <Input {...field} placeholder="my-awesome-shop" />
                   </FormControl>
-                  <p className="text-sm text-muted-foreground">Lowercase letters, numbers and hyphens only.</p>
+                  <p className="text-sm text-muted-foreground">
+                    Lowercase letters, numbers and hyphens only.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -197,7 +202,9 @@ export default function CreateShopForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Logo</FormLabel>
-                    <p className="text-sm text-muted-foreground mb-2">Recommended: square image</p>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Recommended: square image
+                    </p>
                     <FormControl>
                       <Controller
                         control={control}
@@ -205,22 +212,37 @@ export default function CreateShopForm() {
                         render={({ field: cfield }) => (
                           <Uploader
                             value={
-                              cfield.value && (cfield.value as unknown as { url: string; publicId: string })
+                              cfield.value &&
+                              (cfield.value as unknown as {
+                                url: string;
+                                publicId: string;
+                              })
                                 ? {
-                                  url: (form.getValues('logoUrl') as string) ?? '',
-                                  publicId: cfield.value as string,
-                                }
+                                    url:
+                                      (form.getValues('logoUrl') as string) ??
+                                      '',
+                                    publicId: cfield.value as string,
+                                  }
                                 : null
                             }
                             onChange={(file) => {
                               if (!file) {
-                                setValue('logoUrl', null, { shouldDirty: true, shouldValidate: true });
+                                setValue('logoUrl', null, {
+                                  shouldDirty: true,
+                                  shouldValidate: true,
+                                });
                                 cfield.onChange(null);
                                 setValue('logoPublicId', null);
                               } else {
-                                setValue('logoUrl', file.url, { shouldDirty: true, shouldValidate: true });
+                                setValue('logoUrl', file.url, {
+                                  shouldDirty: true,
+                                  shouldValidate: true,
+                                });
                                 cfield.onChange(file.publicId);
-                                setValue('logoPublicId', file.publicId, { shouldDirty: true, shouldValidate: true });
+                                setValue('logoPublicId', file.publicId, {
+                                  shouldDirty: true,
+                                  shouldValidate: true,
+                                });
                               }
                             }}
                           />
@@ -238,7 +260,9 @@ export default function CreateShopForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Cover</FormLabel>
-                    <p className="text-sm text-muted-foreground mb-2">Recommended: wide banner</p>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Recommended: wide banner
+                    </p>
                     <FormControl>
                       <Controller
                         control={control}
@@ -246,22 +270,37 @@ export default function CreateShopForm() {
                         render={({ field: cfield }) => (
                           <Uploader
                             value={
-                              cfield.value && (cfield.value as unknown as { url: string; publicId: string })
+                              cfield.value &&
+                              (cfield.value as unknown as {
+                                url: string;
+                                publicId: string;
+                              })
                                 ? {
-                                  url: (form.getValues('coverUrl') as string) ?? '',
-                                  publicId: cfield.value as string,
-                                }
+                                    url:
+                                      (form.getValues('coverUrl') as string) ??
+                                      '',
+                                    publicId: cfield.value as string,
+                                  }
                                 : null
                             }
                             onChange={(file) => {
                               if (!file) {
-                                setValue('coverUrl', null, { shouldDirty: true, shouldValidate: true });
+                                setValue('coverUrl', null, {
+                                  shouldDirty: true,
+                                  shouldValidate: true,
+                                });
                                 cfield.onChange(null);
                                 setValue('coverPublicId', null);
                               } else {
-                                setValue('coverUrl', file.url, { shouldDirty: true, shouldValidate: true });
+                                setValue('coverUrl', file.url, {
+                                  shouldDirty: true,
+                                  shouldValidate: true,
+                                });
                                 cfield.onChange(file.publicId);
-                                setValue('coverPublicId', file.publicId, { shouldDirty: true, shouldValidate: true });
+                                setValue('coverPublicId', file.publicId, {
+                                  shouldDirty: true,
+                                  shouldValidate: true,
+                                });
                               }
                             }}
                           />

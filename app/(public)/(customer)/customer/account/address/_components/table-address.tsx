@@ -22,7 +22,6 @@ export function AddressCard(order: AddressDTO) {
               Mặc định
               <Check className="text-green-500 w-5 h-5" />
             </p>
-
           ) : null}
         </CardTitle>
         <CardDescription>

@@ -210,7 +210,10 @@ export default function VariantStep() {
                           <Uploader
                             value={
                               fieldItem.image && fieldItem.imagePublicId
-                                ? { url: fieldItem.image, publicId: fieldItem.imagePublicId }
+                                ? {
+                                    url: fieldItem.image,
+                                    publicId: fieldItem.imagePublicId,
+                                  }
                                 : null
                             }
                             onChange={(file) => {
@@ -222,10 +225,14 @@ export default function VariantStep() {
                                 shouldDirty: true,
                                 shouldValidate: true,
                               });
-                              form.setValue(`variants.${index}.imagePublicId`, publicId, {
-                                shouldDirty: true,
-                                shouldValidate: true,
-                              });
+                              form.setValue(
+                                `variants.${index}.imagePublicId`,
+                                publicId,
+                                {
+                                  shouldDirty: true,
+                                  shouldValidate: true,
+                                }
+                              );
 
                               form.trigger([
                                 `variants.${index}.image`,
@@ -256,4 +263,3 @@ export default function VariantStep() {
     </div>
   );
 }
-

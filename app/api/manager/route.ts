@@ -12,8 +12,11 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
         image: true,
       },
     });
-    return NextResponse.json({data:data});
+    return NextResponse.json({ data: data });
   } catch (err) {
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 });

@@ -53,7 +53,6 @@ export function mapToUserProfileResponseDTO(
 }
 
 export function mapRequestToUserProfileData(req: UpdateUserProfileRequestDTO) {
-
   console.log('Mapping request to user profile data:', req);
   return {
     phone: req.phone ?? undefined,

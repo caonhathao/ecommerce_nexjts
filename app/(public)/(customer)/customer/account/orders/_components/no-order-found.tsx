@@ -5,10 +5,7 @@ interface EmptyStateProps {
   title?: string;
 }
 
-export function EmptyState({
-  imageSrc,
-  title
-}: EmptyStateProps) {
+export function EmptyState({ imageSrc, title }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center text-center py-20">
       <div className="relative w-48 h-48 mb-6">
@@ -19,9 +16,7 @@ export function EmptyState({
           className="object-contain opacity-90"
         />
       </div>
-      <h2 className="text-gray-700 font-medium text-lg">
-        {title}
-      </h2>
+      <h2 className="text-gray-700 font-medium text-lg">{title}</h2>
     </div>
   );
 }
