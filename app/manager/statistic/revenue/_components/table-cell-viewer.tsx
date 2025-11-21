@@ -267,6 +267,7 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
                     <li
                       id={`variant-item-${index}`}
                       className="flex flex-col gap-2"
+                      key={value.id || index}
                     >
                       <div className="w-full flex flex-row justify-between items-center">
                         <div className="flex flex-row justify-start items-center gap-2">

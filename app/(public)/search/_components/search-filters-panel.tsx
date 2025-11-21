@@ -13,20 +13,20 @@ interface SearchFiltersProps {
 }
 
 export function SearchFiltersPanel({
-                                     filters,
-                                     onFilterChange,
-                                     categories = [],
-                                   }: SearchFiltersProps) {
+  filters,
+  onFilterChange,
+  categories = [],
+}: SearchFiltersProps) {
   // Local state for price inputs to avoid triggering fetch on every keystroke
   const [priceRange, setPriceRange] = useState({
     min: filters.minPrice || '',
-    max: filters.maxPrice || ''
+    max: filters.maxPrice || '',
   });
 
   const handlePriceApply = () => {
     onFilterChange({
       minPrice: priceRange.min || undefined,
-      maxPrice: priceRange.max || undefined
+      maxPrice: priceRange.max || undefined,
     });
   };
 
@@ -90,7 +90,9 @@ export function SearchFiltersPanel({
             type="number"
             placeholder="0"
             value={priceRange.min}
-            onChange={(e) => setPriceRange(prev => ({...prev, min: e.target.value}))}
+            onChange={(e) =>
+              setPriceRange((prev) => ({ ...prev, min: e.target.value }))
+            }
             className="h-8 text-sm bg-gray-50"
           />
           <span className="text-gray-400">-</span>
@@ -98,7 +100,9 @@ export function SearchFiltersPanel({
             type="number"
             placeholder="Max"
             value={priceRange.max}
-            onChange={(e) => setPriceRange(prev => ({...prev, max: e.target.value}))}
+            onChange={(e) =>
+              setPriceRange((prev) => ({ ...prev, max: e.target.value }))
+            }
             className="h-8 text-sm bg-gray-50"
           />
         </div>
@@ -118,10 +122,12 @@ export function SearchFiltersPanel({
         <h4 className="text-sm font-semibold text-gray-900">Supplier</h4>
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <div className="w-4 h-4 border rounded bg-gray-50"></div> Tiki Trading
+            <div className="w-4 h-4 border rounded bg-gray-50"></div> Tiki
+            Trading
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <div className="w-4 h-4 border rounded bg-gray-50"></div> Global Store
+            <div className="w-4 h-4 border rounded bg-gray-50"></div> Global
+            Store
           </div>
         </div>
       </div>

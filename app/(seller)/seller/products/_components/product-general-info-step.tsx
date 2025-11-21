@@ -60,7 +60,11 @@ export default function ProductGeneralInfo() {
               Shop <span className="text-destructive">*</span>
             </FormLabel>
             <FormControl>
-              <Select value={field.value} onValueChange={field.onChange} disabled={shopsLoading}>
+              <Select
+                value={field.value}
+                onValueChange={field.onChange}
+                disabled={shopsLoading}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select shop" />
                 </SelectTrigger>

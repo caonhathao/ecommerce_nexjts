@@ -1,16 +1,46 @@
-# Don't format these folders
+# Dependencies
 node_modules
+
+# Next.js build output
 .next
+out
 build
 dist
 
-# Don't format these files
+# Generated Next.js types
+next-env.d.ts
+
+# Package Manager locks (these are auto-generated)
+pnpm-lock.yaml
 package-lock.json
 yarn.lock
+
+# Prisma
+# We ignore migrations because they are historical records
+prisma/migrations
+
+# IDEs and System
+.idea
+.vscode
+.DS_Store
+*.suo
+*.ntvs
+*.njsproj
+*.sln
+
+# Environment files
 .env
 .env.local
+.env.development
+.env.test
+.env.production
 
-# Don't format images and icons
-public/**/*.svg
-public/**/*.png
-public/**/*.jpg
+# Vercel
+.vercel
+
+
+messages
+
+local
+
+prisma

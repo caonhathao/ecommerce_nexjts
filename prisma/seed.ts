@@ -245,7 +245,7 @@ async function main() {
   const usedPairs = new Set();
 
   const shopMembers = await Promise.all(
-    users.slice(0, 200).map(async (user) => {
+    users.slice(0, 200).map(async () => {
       let shopId, userId, key;
 
       do {

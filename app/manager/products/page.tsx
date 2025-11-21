@@ -205,8 +205,8 @@ const ProductsPage = () => {
       ),
     },
     {
-      accessorKey: t('t_visibility'), 
-      header: t('t_visibility'), 
+      accessorKey: t('t_visibility'),
+      header: t('t_visibility'),
       cell: ({ row }) => (
         <Badge variant="outline" className="text-muted-foreground px-1.5">
           {row.original.visibility === 'UNLISTED' ? (

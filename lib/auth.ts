@@ -33,8 +33,8 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        after: async(user) => {
-          await prisma.$transaction(async(tx) => {
+        after: async (user) => {
+          await prisma.$transaction(async (tx) => {
             await prisma.$transaction(async (tx) => {
               await tx.userProfile.upsert({
                 where: { userId: user.id },
@@ -52,10 +52,10 @@ export const auth = betterAuth({
                 create: { userId: user.id },
               });
             });
-          })
-        }
-      }
-    }
+          });
+        },
+      },
+    },
   },
   plugins: [
     emailOTP({

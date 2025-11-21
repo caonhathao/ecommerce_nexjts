@@ -1,14 +1,14 @@
-import {Prisma} from "@/lib/generated/prisma";
+import { Prisma } from '@/lib/generated/prisma';
 
-export interface AddToCartRequest{
-    variantId: string;
-    quantity: number;
-    priceSnap: Prisma.Decimal;
-    currency: "VND";
+export interface AddToCartRequest {
+  variantId: string;
+  quantity: number;
+  priceSnap: Prisma.Decimal;
+  currency: 'VND';
 }
 
 export interface UpdateCartRequest {
-    items: CartItem[];
+  items: CartItem[];
 }
 
 export type CartType = {
@@ -45,4 +45,3 @@ export type ProductImage = {
   alt: string;
   position: number;
 };
-

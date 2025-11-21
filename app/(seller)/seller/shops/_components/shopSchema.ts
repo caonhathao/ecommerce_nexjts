@@ -8,7 +8,10 @@ export const createShopSchema = z.object({
     .string()
     .min(1, 'Slug is required')
     .max(200)
-    .regex(slugRegex, 'Invalid slug format (lowercase letters, numbers and hyphens only)'),
+    .regex(
+      slugRegex,
+      'Invalid slug format (lowercase letters, numbers and hyphens only)'
+    ),
   description: z.string().nullable().optional(),
   logoUrl: z.url().nullable().optional(),
   logoPublicId: z.string().nullable().optional(),

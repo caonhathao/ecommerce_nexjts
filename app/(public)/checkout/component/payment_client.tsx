@@ -36,7 +36,6 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
     }
   };
 
-
   return (
     <Button
       onClick={handlePayment}
@@ -46,4 +45,4 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
       {isLoading ? 'Đang xử lý...' : 'Thanh toán '}
     </Button>
   );
-}
+};

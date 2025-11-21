@@ -7,6 +7,9 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
     "postinstall": "prisma generate"
   },
   "prisma": {

@@ -95,7 +95,10 @@ export function TableCellViewer({
       parentId: '',
     },
   });
-  const t = useTranslations('admin_category_page.category_drawer');
+  const t = useTranslations('admin_category_page');
+  const t_category_drawer = useTranslations(
+    'admin_category_page.category_drawer'
+  );
 
   // This effect runs when 'openIndex' changes
   useEffect(() => {
@@ -151,8 +154,8 @@ export function TableCellViewer({
     try {
       const data = await putData('/api/manager/category', values);
       if (data.status === 200) {
-        toast(t('t_action_noti'), {
-          description: t('t_update_des_noti'),
+        toast(t_category_drawer('t_action_noti'), {
+          description: t_category_drawer('t_update_des_noti'),
         });
         setTimeout(() => {
           setOpen(false);
@@ -161,8 +164,8 @@ export function TableCellViewer({
       }
     } catch (error) {
       console.error('Failed to create category:', error);
-      toast(t('t_action_noti'), {
-        description: t('t_update_des_noti'),
+      toast(t_category_drawer('t_action_noti'), {
+        description: t_category_drawer('t_update_des_noti'),
       });
     }
   }
@@ -178,7 +181,7 @@ export function TableCellViewer({
       >
         <div className="flex flex-row justify-between items-center gap-4">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="name">{t('t_category_name')}</Label>
+            <Label htmlFor="name">{t_category_drawer('t_category_name')}</Label>
             <div className="w-full">{value.name}</div>
           </div>
           <DropdownMenu>
@@ -199,7 +202,7 @@ export function TableCellViewer({
                   className="text-left"
                   onClick={() => handleCopy(value.id)}
                 >
-                  {t('t_copy_action')}
+                  {t_category_drawer('t_copy_action')}
                 </Button>
               </DropdownMenuItem>
               <Separator />
@@ -211,11 +214,12 @@ export function TableCellViewer({
                     handleDelete({
                       id: value.id,
                       setIsReset: setIsReset,
+                      t,
                     });
                     setOpen(false);
                   }}
                 >
-                  {t('t_del_action')}
+                  {t_category_drawer('t_del_action')}
                 </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -252,7 +256,9 @@ export function TableCellViewer({
       <DrawerContent>
         <DrawerHeader className="gap-1">
           <DrawerTitle>{detail?.name || 'unknown'}</DrawerTitle>
-          <DrawerDescription>{t('t_category_desc')}</DrawerDescription>
+          <DrawerDescription>
+            {t_category_drawer('t_category_desc')}
+          </DrawerDescription>
         </DrawerHeader>
         <div
           className="flex flex-col gap-4 overflow-y-auto px-4 text-sm"
@@ -266,7 +272,9 @@ export function TableCellViewer({
             >
               <div className="flex flex-col gap-4">
                 <div className="grid gap-3">
-                  <Label htmlFor="name-1">{t('t_category_name')}</Label>
+                  <Label htmlFor="name-1">
+                    {t_category_drawer('t_category_name')}
+                  </Label>
                   <FormField
                     control={form.control}
                     name="name"
@@ -307,7 +315,9 @@ export function TableCellViewer({
               </div>
 
               <div className="flex flex-col gap-3">
-                <Label htmlFor="visibility">{t('t_is_active')}</Label>
+                <Label htmlFor="visibility">
+                  {t_category_drawer('t_is_active')}
+                </Label>
                 <FormField
                   control={form.control}
                   name="isActive"
@@ -327,16 +337,18 @@ export function TableCellViewer({
                             id="active-1"
                           >
                             <SelectValue
-                              placeholder={t('t_is_active_placeholder')}
+                              placeholder={t_category_drawer(
+                                't_is_active_placeholder'
+                              )}
                             />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
                               <SelectItem value="true">
-                                {t('c_active')}
+                                {t_category_drawer('c_active')}
                               </SelectItem>
                               <SelectItem value="false">
-                                {t('c_inactive')}
+                                {t_category_drawer('c_inactive')}
                               </SelectItem>
                             </SelectGroup>
                           </SelectContent>
@@ -350,11 +362,15 @@ export function TableCellViewer({
 
               <div className="grid grid-cols-1 gap-4">
                 <div className="w-full flex flex-col gap-3">
-                  <Label htmlFor="target">{t('t_parent_category')}</Label>
+                  <Label htmlFor="target">
+                    {t_category_drawer('t_parent_category')}
+                  </Label>
                   {detail?.parent ? (
                     <div className="flex flex-row justify-between items-center gap-4">
                       <div className="flex flex-col gap-3">
-                        <Label htmlFor="name">{t('t_category_name')}</Label>
+                        <Label htmlFor="name">
+                          {t_category_drawer('t_category_name')}
+                        </Label>
                         <div className="w-full">{detail.name}</div>
                       </div>
                       <DropdownMenu>
@@ -375,20 +391,22 @@ export function TableCellViewer({
                               className="text-left"
                               onClick={() => handleCopy(detail.parent.id)}
                             >
-                              {t('t_copy_action')}
+                              {t_category_drawer('t_copy_action')}
                             </Button>
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
                   ) : (
-                    <div>{t('t_no_parent')}</div>
+                    <div>{t_category_drawer('t_no_parent')}</div>
                   )}
                 </div>
               </div>
 
               <div className="flex flex-col gap-3">
-                <Label htmlFor="variants-list">{t('t_child_categories')}</Label>
+                <Label htmlFor="variants-list">
+                  {t_category_drawer('t_child_categories')}
+                </Label>
                 {detail?.children.length !== 0 ? (
                   <div className="flex flex-col  gap-4">
                     <ul className="w-full flex flex-col gap-2 ">
@@ -431,7 +449,7 @@ export function TableCellViewer({
                     </ul>
                   </div>
                 ) : (
-                  <div>{t('t_no_child')}</div>
+                  <div>{t_category_drawer('t_no_child')}</div>
                 )}
               </div>
             </form>
@@ -439,10 +457,12 @@ export function TableCellViewer({
         </div>
         <DrawerFooter>
           <Button type="submit" form={'form-edit-category'}>
-            {t('t_submit_action')}
+            {t_category_drawer('t_submit_action')}
           </Button>
           <DrawerClose asChild>
-            <Button variant="outline">{t('t_cancel_action')}</Button>
+            <Button variant="outline">
+              {t_category_drawer('t_cancel_action')}
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

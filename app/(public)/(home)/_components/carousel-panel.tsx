@@ -1,18 +1,18 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
-  CarouselItem
-} from "@/components/ui/carousel";
-import logo from "@/public/logo-full.jpg";
-import Autoplay from "embla-carousel-autoplay";
+  CarouselItem,
+} from '@/components/ui/carousel';
+import logo from '@/public/logo-full.jpg';
+import Autoplay from 'embla-carousel-autoplay';
 
 export const CarouselPanel = () => {
   return (
     <div className="w-full flex justify-center items-center bg-[var(--background)] rounded-lg p-2">
       <Carousel
         opts={{
-          align: "center",
+          align: 'center',
           loop: true, // 🔁 Cho phép quay vòng
           slidesToScroll: 2,
         }}

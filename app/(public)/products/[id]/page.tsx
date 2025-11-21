@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { fetchProductById, fetchProducts } from '@/funcs/fetch';
 import { productDetailType, productItemType } from '@/types/public.data-types';
 import { useParams, useRouter } from 'next/navigation';
-import React, { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
 import {
   FaBoxOpen,
@@ -49,17 +49,15 @@ type itemType = {
   quantity: number;
 };
 
-const detailPage = () => {
+const DetailPage = () => {
   const route = useRouter();
   const params = useParams();
-  const [data, setData] = React.useState<productDetailType>();
-  const [dTopDeal, setDTopDeal] = React.useState<productItemType[]>([]);
-  const [selVariant, setSelVariant] = React.useState<selectedVariant | null>(
-    null
-  );
-  const [amount, setAmount] = React.useState<number>(1);
+  const [data, setData] = useState<productDetailType>();
+  const [dTopDeal, setDTopDeal] = useState<productItemType[]>([]);
+  const [selVariant, setSelVariant] = useState<selectedVariant | null>(null);
+  const [amount, setAmount] = useState<number>(1);
 
-  const [data1, setData1] = React.useState<productItemType[]>([]);
+  const [data1, setData1] = useState<productItemType[]>([]);
 
   useEffect(() => {
     fetchProducts(1, 10, setData1);
@@ -563,4 +561,4 @@ const detailPage = () => {
     </div>
   );
 };
-export default detailPage;
+export default DetailPage;

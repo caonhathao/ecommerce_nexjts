@@ -20,7 +20,11 @@ export default function CreateProductPage() {
         const res = await fetch('/api/seller/shops');
         const data = await res.json().catch(() => ({}));
         // endpoint returns an array of shops on success
-        const shopsArray = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
+        const shopsArray = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+            ? data.data
+            : [];
         if (mounted) setHasShop((shopsArray?.length || 0) > 0);
       } catch {
         if (mounted) setHasShop(false);
@@ -73,7 +77,9 @@ export default function CreateProductPage() {
             </p>
           </div>
           <div>
-            <Button onClick={() => router.push('/seller/shops/create')}>Create shop</Button>
+            <Button onClick={() => router.push('/seller/shops/create')}>
+              Create shop
+            </Button>
           </div>
         </div>
       ) : null}

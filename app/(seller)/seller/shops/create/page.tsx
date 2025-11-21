@@ -9,8 +9,6 @@ export const metadata = {
 };
 
 export default async function NewShopPage() {
-
-
   return (
     <div className="mx-auto max-w-3xl py-8 px-4">
       <h1 className="text-2xl font-semibold mb-4">Create a Shop</h1>

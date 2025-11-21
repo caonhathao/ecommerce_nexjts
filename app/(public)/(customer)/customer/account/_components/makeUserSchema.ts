@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const makeUserProfileSchema = (msg: {
   fullNameRequired: string;
@@ -11,13 +11,13 @@ export const makeUserProfileSchema = (msg: {
       .object({ day: z.string(), month: z.string(), year: z.string() })
       .optional()
       .nullable(),
-    gender: z.enum(["male", "female", "other"]).optional().nullable(),
+    gender: z.enum(['male', 'female', 'other']).optional().nullable(),
     phone: z
       .string()
       .optional()
       .nullable()
       .refine((v) => !v || v.trim().length >= 5, msg.phoneInvalid),
-    emailForBill: z.email(msg.emailInvalid)
+    emailForBill: z.email(msg.emailInvalid),
   });
 
 export type UserProfileFormValues = z.infer<

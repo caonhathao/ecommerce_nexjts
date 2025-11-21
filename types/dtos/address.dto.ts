@@ -14,7 +14,7 @@ export type AddressDTO = {
   isDefault: boolean;
   createAt?: string;
   updateAt?: string;
-}
+};
 
 export type CreateAddressResult =
   | { success: true; address: AddressRequestDTO }

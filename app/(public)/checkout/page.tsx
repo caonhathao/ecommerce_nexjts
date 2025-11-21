@@ -38,7 +38,7 @@ export default async function CheckoutPage() {
     shippingFee: draft.shippingFee.toString(),
     discountTotal: draft.discountTotal.toString(),
     grandTotal: draft.grandTotal.toString(),
-    items: draft.items.map(item => ({
+    items: draft.items.map((item) => ({
       ...item,
       unitPrice: item.unitPrice.toString(),
       total: item.total.toString(),

@@ -1,6 +1,10 @@
 'use client';
 
-import { IconDashboard, IconDotsVertical, IconLogout } from '@tabler/icons-react';
+import {
+  IconDashboard,
+  IconDotsVertical,
+  IconLogout,
+} from '@tabler/icons-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -51,7 +55,9 @@ export function NavSeller({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
-                <span className="text-muted-foreground truncate text-xs">{user.email}</span>
+                <span className="text-muted-foreground truncate text-xs">
+                  {user.email}
+                </span>
               </div>
               <IconDotsVertical className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -69,11 +75,17 @@ export function NavSeller({
                     src={user.image ?? `https://avatar.vercel.sh/${user.email}`}
                     alt={user.name}
                   />
-                  <AvatarFallback className="rounded-lg">{getUserInitial(user)}</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {getUserInitial(user)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{getUserNameOrEmailPrefix(user)}</span>
-                  <span className="text-muted-foreground truncate text-xs">{user.email}</span>
+                  <span className="truncate font-medium">
+                    {getUserNameOrEmailPrefix(user)}
+                  </span>
+                  <span className="text-muted-foreground truncate text-xs">
+                    {user.email}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -110,14 +122,20 @@ export function NavSeller({
   );
 }
 
-export function getUserInitial(user: { name?: string | null; email: string }): string {
+export function getUserInitial(user: {
+  name?: string | null;
+  email: string;
+}): string {
   if (user.name && user.name.trim().length > 0) {
     return user.name.trim()[0].toUpperCase();
   }
   return user.email.trim()[0].toUpperCase();
 }
 
-export function getUserNameOrEmailPrefix(user: { name?: string | null; email: string }): string {
+export function getUserNameOrEmailPrefix(user: {
+  name?: string | null;
+  email: string;
+}): string {
   if (user.name && user.name.trim().length > 0) {
     return user.name.trim();
   }
@@ -127,4 +145,3 @@ export function getUserNameOrEmailPrefix(user: { name?: string | null; email: st
   }
   return 'User';
 }
-

@@ -52,7 +52,7 @@ export async function GET(
             price: true,
             stock: true,
             attributes: true,
-            name:true
+            name: true,
           },
         },
         VoucherProduct: {

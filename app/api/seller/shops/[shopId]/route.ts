@@ -23,7 +23,7 @@ const updateShopSchema = z.object({
 
 export async function GET(
   req: Request,
-  props: { params : Promise<{ shopId: string }>}
+  props: { params: Promise<{ shopId: string }> }
 ) {
   const params = await props.params;
   try {
@@ -76,7 +76,7 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  props: { params : Promise<{ shopId: string }>}
+  props: { params: Promise<{ shopId: string }> }
 ) {
   const params = await props.params;
   try {
@@ -149,7 +149,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  props: { params : Promise<{ shopId: string }>}
+  props: { params: Promise<{ shopId: string }> }
 ) {
   const params = await props.params;
   try {

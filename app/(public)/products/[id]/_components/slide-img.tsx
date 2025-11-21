@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/free-mode';

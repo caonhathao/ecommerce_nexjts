@@ -39,7 +39,7 @@ import {
   IconDotsVertical,
   IconGripVertical,
   IconLayoutColumns,
-  IconLoader
+  IconLoader,
 } from '@tabler/icons-react';
 import {
   ColumnDef,

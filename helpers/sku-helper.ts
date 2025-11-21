@@ -6,7 +6,8 @@ import { prisma } from '@/lib/db';
 function randomSuffix(length = 6) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let out = '';
-  for (let i = 0; i < length; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  for (let i = 0; i < length; i++)
+    out += chars[Math.floor(Math.random() * chars.length)];
   return out;
 }
 
@@ -32,7 +33,10 @@ export function generateClientSku(name?: string): string {
 /**
  * Server-side check: is SKU taken globally (uses prisma)
  */
-export async function isSkuTaken(sku: string, excludeId?: string): Promise<boolean> {
+export async function isSkuTaken(
+  sku: string,
+  excludeId?: string
+): Promise<boolean> {
   const existing = await prisma.productVariant.findFirst({
     where: {
       sku,

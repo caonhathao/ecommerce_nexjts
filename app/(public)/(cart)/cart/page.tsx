@@ -209,7 +209,7 @@ export default function Cart() {
         toast.success('Đang chuyển đến trang thanh toán...');
         router.push('/checkout');
       } else if (!res.success && res.redirectTo) {
-        toast.error(res.message,{
+        toast.error(res.message, {
           position: 'top-right',
           duration: 3000,
         });

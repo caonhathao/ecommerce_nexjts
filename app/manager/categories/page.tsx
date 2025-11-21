@@ -68,7 +68,7 @@ import TabCategory from './_components/tab-category';
 import { TableCellViewer } from './_components/table-cell-viewer';
 import { handleDelete } from './_funcs/funcs';
 import Image from 'next/image';
-import PlaceholderCategoryIcon from '@/public/placeholder-icon-category.png'
+import PlaceholderCategoryIcon from '@/public/placeholder-icon-category.png';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
@@ -296,6 +296,7 @@ const CategoryManagePage = () => {
                     handleDelete({
                       id: row.original.id,
                       setIsReset: setIsReset,
+                      t,
                     })
                   }
                 >

@@ -26,7 +26,11 @@ type UploaderProps = {
   maxFiles?: number;
 };
 
-export function MultiUploader({ value = [], onChange, maxFiles = MAX_FILES }: UploaderProps) {
+export function MultiUploader({
+  value = [],
+  onChange,
+  maxFiles = MAX_FILES,
+}: UploaderProps) {
   const [files, setFiles] = useState<FileItem[]>(
     value.map((v) => ({
       url: v.url,

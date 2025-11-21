@@ -30,7 +30,7 @@ export async function getUserProfile(
   if (!profile || !user) {
     return null;
   }
-  
+
   return mapToUserProfileResponseDTO(profile, user);
 }
 
@@ -61,7 +61,7 @@ export async function updateUserProfile(
       });
     }
 
-    if(req.name !== undefined && req.name !== null) {
+    if (req.name !== undefined && req.name !== null) {
       await tx.user.update({
         where: { id: userId },
         data: { name: req.name },

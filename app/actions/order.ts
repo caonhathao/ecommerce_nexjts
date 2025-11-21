@@ -180,7 +180,8 @@ export async function getOrder(
       JSON.stringify({
         orders: hasNextPage ? order.slice(0, limit) : order,
         nextCursor,
-      }));
+      })
+    );
   } catch (error: any) {
     console.error('Error fetching orders:', error);
     throw new Error(error.message || 'Internal Server Error');

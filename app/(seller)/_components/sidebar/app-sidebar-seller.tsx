@@ -162,7 +162,9 @@ const data = {
   // ],
 };
 
-export function AppSidebarSeller({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebarSeller({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const { data: session, isPending } = authClient.useSession();
   return (
     <Sidebar collapsible="offcanvas" {...props}>

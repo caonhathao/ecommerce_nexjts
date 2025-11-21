@@ -5,13 +5,9 @@ import { Prisma } from '@/lib/generated/prisma';
 import { requireSeller } from '@/lib/require-role';
 import { withAuth } from '@/lib/with-auth';
 
-
-
-
-export async function GET( req: NextRequest){
-
+export async function GET(req: NextRequest) {
   const sellerSession = await requireSeller();
-  if(!sellerSession) {
+  if (!sellerSession) {
     return NextResponse.json(
       { success: false, error: 'Unauthorized' },
       { status: 401 }
@@ -65,8 +61,8 @@ export async function GET( req: NextRequest){
 
 export async function POST(req: NextRequest) {
   try {
-    const sellerSession = requireSeller()
-    if(!sellerSession) {
+    const sellerSession = requireSeller();
+    if (!sellerSession) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -75,29 +71,29 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const parsed = manageProductSchema.parse(body);
-    if(!parsed) {
+    if (!parsed) {
       return NextResponse.json(
         { success: false, error: 'Invalid product data' },
         { status: 400 }
       );
     }
 
-    if(!parsed.variants || parsed.variants.length === 0) {
+    if (!parsed.variants || parsed.variants.length === 0) {
       return NextResponse.json(
         { success: false, error: 'At least one product variant is required' },
         { status: 400 }
       );
     }
 
-    if(!parsed.shopId) {
+    if (!parsed.shopId) {
       return NextResponse.json(
         { success: false, error: 'Shop ID is required' },
         { status: 400 }
       );
     }
 
-    const numericMinPrice = Math.min(...parsed.variants.map(v => v.price));
-    const numericMaxPrice = Math.max(...parsed.variants.map(v => v.price));
+    const numericMinPrice = Math.min(...parsed.variants.map((v) => v.price));
+    const numericMaxPrice = Math.max(...parsed.variants.map((v) => v.price));
 
     const minPriceDecimal = new Prisma.Decimal(numericMinPrice.toString());
     const maxPriceDecimal = new Prisma.Decimal(numericMaxPrice.toString());
@@ -163,4 +159,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-

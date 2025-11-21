@@ -26,13 +26,13 @@ export function Uploader({ value = null, onChange }: UploaderProps) {
   const [file, setFile] = useState<SingleFile | null>(
     value
       ? {
-        url: value.url,
-        publicId: value.publicId,
-        uploading: false,
-        progress: 100,
-        error: false,
-        isDeleting: false,
-      }
+          url: value.url,
+          publicId: value.publicId,
+          uploading: false,
+          progress: 100,
+          error: false,
+          isDeleting: false,
+        }
       : null
   );
 
@@ -134,12 +134,14 @@ export function Uploader({ value = null, onChange }: UploaderProps) {
 
   return (
     <div className="space-y-4">
-
       <div className="grid grid-cols-1 gap-4">
         {file ? (
           <div className="relative group border rounded overflow-hidden h-32">
             {file.uploading ? (
-              <RenderUploadingState progress={file.progress} file={{} as File} />
+              <RenderUploadingState
+                progress={file.progress}
+                file={{} as File}
+              />
             ) : file.error ? (
               <div className="p-2 text-red-500 text-center text-sm">Error</div>
             ) : (

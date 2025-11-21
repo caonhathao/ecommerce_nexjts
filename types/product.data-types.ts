@@ -19,10 +19,9 @@ export interface SellerProductListItem {
   }[];
 }
 
-
 export interface SearchProduct {
-  id:string;
-  title:string;
+  id: string;
+  title: string;
   minPrice: string;
   maxPrice: string;
   currency: string;

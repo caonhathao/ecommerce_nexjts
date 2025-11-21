@@ -23,9 +23,14 @@ export function EmailTemplateSeller({ otp }: EmailTemplateProps) {
       >
         {otp}
       </div>
-      <p>Please enter this code to verify your email address. This code will expire soon.</p>
+      <p>
+        Please enter this code to verify your email address. This code will
+        expire soon.
+      </p>
       <p>If you did not request this, you can safely ignore this email.</p>
-      <p style={{ fontSize: '0.9em', color: '#888' }}>&mdash; The LMS-Courses Team</p>
+      <p style={{ fontSize: '0.9em', color: '#888' }}>
+        &mdash; The LMS-Courses Team
+      </p>
     </div>
   );
 }
