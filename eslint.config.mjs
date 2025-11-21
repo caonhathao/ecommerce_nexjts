@@ -1,7 +1,7 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -47,6 +47,7 @@ const eslintConfig = [
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
+      'react-compiler/react-compiler': 'off',
     },
   },
   prettierRecommended,

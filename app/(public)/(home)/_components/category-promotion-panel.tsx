@@ -1,4 +1,3 @@
-import logo from '@/public/logo.jpg';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 const data = [
@@ -42,10 +41,10 @@ const data = [
 export const CategoryPromotionPanel = () => {
   const t = useTranslations('category_promotion_panel');
   return (
-    <div className="w-full flex flex-row justify-evenly items-center bg-[var(--background)] rounded-lg py-3 overflow-x-auto">
+    <div className="w-full flex flex-row justify-evenly items-center bg-background rounded-lg py-3 overflow-x-auto">
       {data.map((item, index) => (
         <div
-          key={item.name}
+          key={index}
           className="flex flex-col gap-1 justify-center items-center hover:cursor-pointer"
         >
           <Image

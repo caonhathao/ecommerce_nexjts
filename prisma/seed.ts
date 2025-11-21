@@ -12,6 +12,7 @@ import {
   Visibility,
   VoucherType,
 } from '@/lib/generated/prisma';
+import { Decimal } from '@/lib/generated/prisma/runtime/library';
 import { faker } from '@faker-js/faker';
 import { Currency, OrderStatus } from '../lib/generated/prisma';
 
@@ -227,8 +228,7 @@ async function main() {
         data: {
           ownerId: user.id,
           name: faker.company.name(),
-          slug: faker.helpers.slugify(faker.company.name().toLowerCase()),
-          description: faker.company.catchPhrase(),
+          slug: faker.company.name() + '-' + faker.string.uuid().slice(0, 8),          description: faker.company.catchPhrase(),
           logoUrl: faker.image.urlPicsumPhotos({ width: 200, height: 200 }),
           coverUrl: faker.image.urlPicsumPhotos({ width: 800, height: 300 }),
           status: 'ACTIVE',
@@ -703,7 +703,7 @@ async function main() {
   // ------------------------
   // 5️⃣ PRODUCT VARIANTS
   // ------------------------
-  const variants: { id: string; price: any }[] = [];
+  const variants: { id: string; price: Decimal }[] = [];
 
   for (const product of products) {
     for (let i = 0; i < 3; i++) {
@@ -1157,7 +1157,7 @@ async function main() {
 
     // 50% review có orderItem
     const useOrderItem = faker.datatype.boolean();
-    let orderItem: any = null;
+    let orderItem = null;
 
     if (useOrderItem && orderItems.length > 0) {
       let attempts = 0;
@@ -1358,7 +1358,7 @@ async function main() {
   // 8️⃣ VOUCHER CATEGORIES
   // ------------------------
 
-  const voucherCategories: any[] = [];
+  const voucherCategories = [];
 
   // Mỗi voucher sẽ áp dụng cho 1–3 category ngẫu nhiên
   for (const voucher of vouchers) {
@@ -1393,7 +1393,7 @@ async function main() {
   // 8️⃣ VOUCHER PRODUCTS
   // ------------------------
 
-  const voucherProducts: any[] = [];
+  const voucherProducts = [];
 
   // Mỗi voucher áp dụng cho 2–4 sản phẩm ngẫu nhiên
   for (const voucher of vouchers) {
@@ -1428,7 +1428,7 @@ async function main() {
   // 8️⃣ VOUCHER REDENTIONS
   // ------------------------
 
-  const redemptions: any[] = [];
+  const redemptions = [];
 
   // Tạo 20 lượt sử dụng voucher ngẫu nhiên
   for (let i = 0; i < 20; i++) {
@@ -1462,7 +1462,7 @@ async function main() {
   // 8️⃣ ORDER VOUCHERS
   // ------------------------
 
-  const orderVouchers: any[] = [];
+  const orderVouchers = [];
 
   // Mỗi đơn hàng có thể áp dụng 0–2 voucher ngẫu nhiên
   for (const order of orders) {

@@ -53,19 +53,16 @@ import { toast } from 'sonner';
 export function TableCellViewer({
   item,
   setProductList,
-  setIsReset,
   handleCopy,
 }: {
   item: productItemData;
   setProductList: React.Dispatch<React.SetStateAction<productItemData[]>>;
-  setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
   handleCopy: (id: string) => void;
 }) {
   const isMobile = useIsMobile();
   const [detail, setDetail] = React.useState<productDetail | null>(null);
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
-  const [defaultVisibility, setDefaultVisibility] = React.useState<string>('');
   const t = useTranslations('admin_product_page.product_drawer');
 
   const [value, setValue] = React.useState<string>('');
@@ -100,12 +97,7 @@ export function TableCellViewer({
     }
   }, [openIndex]);
 
-  useEffect(() => {
-    if (detail) {
-      //console.log(detail);
-      setDefaultVisibility(detail.visibility);
-    }
-  }, [detail]);
+  const defaultVisibility: string = detail?.visibility ?? '';
 
   async function fetchDetail() {
     try {
@@ -161,10 +153,13 @@ export function TableCellViewer({
         key={index}
       >
         <div className="w-full flex justify-center items-center">
-          <img
+          <Image
             src={value.image}
             alt={value.image || index.toString()}
-            className="w-[50%]"
+            width={0}
+            height={0}
+            sizes="50vw"
+            className="w-[50%] h-auto" // h-auto is REQUIRED to keep the aspect ratio
           />
         </div>
 
@@ -358,7 +353,11 @@ export function TableCellViewer({
                           type="button"
                         >
                           <div
-                            className={`${openIndex !== index ? `transform-[rotate(180deg)]` : `transform-[rotate(0deg)]`} transition ease-in-out`}
+                            className={`${
+                              openIndex !== index
+                                ? `transform-[rotate(180deg)]`
+                                : `transform-[rotate(0deg)]`
+                            } transition ease-in-out`}
                           >
                             <IoIosArrowUp />
                           </div>

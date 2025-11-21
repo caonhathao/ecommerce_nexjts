@@ -245,7 +245,9 @@ export interface userDetail {
   }[];
 }
 
-export type response =
+export type responseData =
   | categoryDataResponse
   | shopDataResponse
   | productDataResponse;
+
+export type itemData = categoryItemData[] | productItemData[] | shopItemData[];

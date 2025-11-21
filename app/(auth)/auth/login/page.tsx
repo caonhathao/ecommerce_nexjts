@@ -1,6 +1,5 @@
-import { auth, getSessionUser } from '@/lib/auth';
+import { getSessionUser } from '@/lib/auth';
 import { LoginForm } from './_components/login-form';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 type Props = {
