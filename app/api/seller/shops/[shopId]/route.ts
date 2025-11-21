@@ -23,8 +23,9 @@ const updateShopSchema = z.object({
 
 export async function GET(
   req: Request,
-  { params }: { params: { shopId: string } }
+  props: { params : Promise<{ shopId: string }>}
 ) {
+  const params = await props.params;
   try {
     const session = await requireSeller();
     if (!session?.user?.id) {
@@ -75,8 +76,9 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { shopId: string } }
+  props: { params : Promise<{ shopId: string }>}
 ) {
+  const params = await props.params;
   try {
     const session = await requireSeller();
     if (!session?.user?.id) {
@@ -147,8 +149,9 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { shopId: string } }
+  props: { params : Promise<{ shopId: string }>}
 ) {
+  const params = await props.params;
   try {
     const session = await requireSeller();
     if (!session?.user?.id) {
