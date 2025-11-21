@@ -1,5 +1,4 @@
-import { auth, getSessionUser } from '@/lib/auth';
-import { headers } from 'next/headers';
+import { getSessionUser } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export function withAuth(

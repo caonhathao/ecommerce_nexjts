@@ -1,3 +1,13 @@
+export interface productDataResponse {
+  data: productItemType[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 export interface productItemType {
   id: string;
   imageUrl: string;

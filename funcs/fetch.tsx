@@ -61,21 +61,6 @@ export const fetchData = async (
   }
 };
 
-export const fetchProducts = async (
-  page: number,
-  limit: number,
-  setData: React.Dispatch<SetStateAction<any>>
-) => {
-  try {
-    const response = await fetch(`/api/product?page=${page}&limit=${limit}`);
-    const data = await response.json();
-    setData(data.data);
-    console.log(data.data);
-  } catch (error) {
-    console.error('Error fetching products:', error);
-  }
-};
-
 export const fetchReviews = async (
   setData: React.Dispatch<SetStateAction<any>>,
   id: string,

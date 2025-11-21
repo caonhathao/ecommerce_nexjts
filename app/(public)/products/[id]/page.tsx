@@ -3,10 +3,14 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { fetchProductById, fetchProducts } from '@/funcs/fetch';
-import { productDetailType, productItemType } from '@/types/public.data-types';
+import { fetchData, fetchProductById } from '@/funcs/fetch';
+import {
+  productDataResponse,
+  productDetailType,
+  productItemType,
+} from '@/types/public.data-types';
 import { useParams, useRouter } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
 import {
   FaBoxOpen,
@@ -25,6 +29,8 @@ import { Loading, LoadingComponent } from '../../_components/loading';
 import { RatingStars } from '../../_components/rating-starts';
 import SlideImg from './_components/slide-img';
 
+import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
+import { authClient } from '@/lib/auth-client';
 import { Prisma } from '@/lib/generated/prisma';
 import { AddToCartRequest } from '@/types/cart.data-types';
 import Image from 'next/image';
@@ -34,8 +40,6 @@ import Desc from './_components/desc';
 import { Reviews } from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 import Decimal = Prisma.Decimal;
-import { authClient } from '@/lib/auth-client';
-import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
 
 interface selectedVariant {
   name: string;
@@ -53,15 +57,18 @@ const DetailPage = () => {
   const route = useRouter();
   const params = useParams();
   const [data, setData] = useState<productDetailType>();
-  const [dTopDeal, setDTopDeal] = useState<productItemType[]>([]);
   const [selVariant, setSelVariant] = useState<selectedVariant | null>(null);
-  const [amount, setAmount] = useState<number>(1);
+  const amount: number = 1;
 
-  const [data1, setData1] = useState<productItemType[]>([]);
+  const [response, setResponse] = useState<productDataResponse | null>(null);
 
   useEffect(() => {
-    fetchProducts(1, 10, setData1);
+    fetchData('/api/product', { page: 1, limit: 4 }, setResponse);
   }, []);
+
+  const data1: productItemType[] = useMemo(() => {
+    return response?.data || [];
+  }, [response]);
 
   const renderPriceSale = (
     typeVoucher: string | null,
@@ -86,17 +93,15 @@ const DetailPage = () => {
               )}
             </p>
             {/* sale discount */}
-            <p className="bg-[var(--muted-foreground)] rounded-lg p-1 text-sm">
+            <p className="bg-muted-foreground rounded-lg p-1 text-sm">
               {'-'} {valueVoucher} {'%'}
             </p>
             {/* origin price */}
-            <p className="text-[var(--muted-foreground)] line-through">
+            <p className="text-muted-foreground line-through">
               {formatPrice(Number(price))}
             </p>
           </div>
-          <p className="text-[var(--muted-foreground)]">
-            Giá sau áp dụng khuyến mãi
-          </p>
+          <p className="text-muted-foreground">Giá sau áp dụng khuyến mãi</p>
         </div>
       );
     }
@@ -139,10 +144,6 @@ const DetailPage = () => {
       setData(undefined);
     }
   }, [params?.id]);
-
-  useEffect(() => {
-    fetchProducts(1, 4, setDTopDeal);
-  }, []);
 
   useEffect(() => {
     if (data != null || data != undefined) {
@@ -228,7 +229,6 @@ const DetailPage = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         toast.success('Thêm vào giỏ hàng thành công', {
           duration: 3000,
           position: 'top-right',
@@ -280,7 +280,7 @@ const DetailPage = () => {
         <section className="w-[70%] flex flex-col justify-start items-start gap-2">
           <div className="w-full flex flex-row gap-2">
             {/* product's image */}
-            <div className="w-[40%] h-fit bg-[var(--background)] rounded-lg flex flex-col p-2 sticky top-3">
+            <div className="w-[40%] h-fit bg-background rounded-lg flex flex-col p-2 sticky top-3">
               {/* slider */}
               <div className="w-full p-2">
                 <SlideImg data={data.images} />
@@ -307,7 +307,7 @@ const DetailPage = () => {
             {/* name and variants, shipping info, suggestions and description  */}
             <div className="w-[60%] flex flex-col gap-4">
               {/* name and variants*/}
-              <div className="relative bg-[var(--background)] rounded-lg p-3 flex flex-col justify-start items-start">
+              <div className="relative bg-background rounded-lg p-3 flex flex-col justify-start items-start">
                 {/* badges */}
                 <div className="absolute top-0 left-3 flex gap-2">
                   {[
@@ -329,7 +329,7 @@ const DetailPage = () => {
                 {/* title */}
                 <div className="text-xl font-medium mt-5">{data.title}</div>
                 {/* ratingAvg, ratingCount, sold */}
-                <div className="flex flex-row justify-start items-center gap-2 text-[var(--muted-background)] text-sm mt-2">
+                <div className="flex flex-row justify-start items-center gap-2 text-(--muted-background) text-sm mt-2">
                   {data.ratingAvg} <RatingStars value={data.ratingAvg} />
                   {'(' + data.ratingCount + ')'} |
                   <p className="text-secondary">
@@ -368,7 +368,7 @@ const DetailPage = () => {
                 </div>
               </div>
               {/* shipping info */}
-              <div className="bg-[var(--background)] p-3 rounded-lg flex flex-col justify-start items-start gap-1">
+              <div className="bg-background p-3 rounded-lg flex flex-col justify-start items-start gap-1">
                 <p className="font-semibold text-xl">Thông tin vận chuyển</p>
                 <p>Giao đến thị trấn Teyvalt</p>
                 <Separator />
@@ -378,7 +378,7 @@ const DetailPage = () => {
                 </div>
                 <p>
                   Trước 19h, 31/10:{' '}
-                  <strong className="text-[var(--chart-2)]">Miễn phí</strong>
+                  <strong className="text-chart-2">Miễn phí</strong>
                 </p>
                 <Separator />
                 <div className="flex flex-row justify-start items-center gap-1">
@@ -388,7 +388,7 @@ const DetailPage = () => {
               </div>
               {/* vouchers (if has) */}
               {data.VoucherProduct.length !== 0 ? (
-                <div className="flex flex-col p-2 gap-2 bg-[var(--background)] rounded-lg">
+                <div className="flex flex-col p-2 gap-2 bg-background rounded-lg">
                   <p className="text-xl font-semibold">Ưu đãi khác</p>
                   <div className="w-full flex justify-between items-center">
                     <p>{data.VoucherProduct.length} Mã Giảm Giá</p>
@@ -400,7 +400,7 @@ const DetailPage = () => {
               ) : null}
 
               {/* others services */}
-              <div className="bg-[var(--background)] p-2 rounded-lg">
+              <div className="bg-background p-2 rounded-lg">
                 <p className="font-semibold text-xl">Dịch vụ bổ sung</p>
                 <div className="flex flex-row justify-start items-center gap-2">
                   <CiCreditCard1 color="var(--primary)" size={15} />
@@ -414,9 +414,9 @@ const DetailPage = () => {
               </div>
 
               {/* top deals */}
-              <TopDealItems data={dTopDeal} size="4" renderSaleValue={false} />
+              <TopDealItems size="4" renderSaleValue={false} />
               {/* slo-gan */}
-              <div className="bg-[var(--background)] p-3 rounded-lg">
+              <div className="bg-background p-3 rounded-lg">
                 <p className="font-semibold text-xl">An tâm mua sắm</p>
                 <div className="flex flex-row justify-start items-center gap-2 py-1">
                   <FaBoxOpen color="var(--primary)" size={15} />
@@ -454,14 +454,14 @@ const DetailPage = () => {
 
         {/* payment methods */}
         <section className="w-[30%] sticky top-3">
-          <div className="w-full bg-[var(--background)] rounded-lg p-3 flex flex-col gap-3">
+          <div className="w-full bg-background rounded-lg p-3 flex flex-col gap-3">
             {/* title */}
             <div className="flex flex-row justify-start items-center gap-2">
               <p>2T3H</p>
               <div className="flex flex-col justify-start items-start">
                 {/*<p className="font-semibold">2T3H Trading</p>*/}
                 <div className="flex flex-row justify-start items-start gap-2">
-                  <Badge className="flex flex-row gap-2 justify-start items-center bg-blue-200 text-[var(--primary)] font-semibold">
+                  <Badge className="flex flex-row gap-2 justify-start items-center bg-blue-200 text-primary font-semibold">
                     <HiMiniCheckBadge color="var(--primary)" size={20} />
                     OFFICAL
                   </Badge>
@@ -484,7 +484,7 @@ const DetailPage = () => {
               <p className="font-semibold">Số lượng</p>
               <div className="flex flex-row gap-2 justify-start items-start">
                 <button
-                  className={`w-10 h-10 border border-[var(--muted-foreground)] rounded-lg font-bold flex justify-center items-center ${
+                  className={`w-10 h-10 border border-muted-foreground rounded-lg font-bold flex justify-center items-center ${
                     amount === 1
                       ? 'opacity-50 cursor-not-allowed'
                       : 'cursor-pointer '
@@ -493,11 +493,11 @@ const DetailPage = () => {
                 >
                   <FaMinus size={10} />
                 </button>
-                <button className="w-10 h-10 border border-[var(--muted-foreground)] rounded-lg flex justify-center items-center">
+                <button className="w-10 h-10 border border-muted-foreground rounded-lg flex justify-center items-center">
                   {selVariant?.amount}
                 </button>
                 <button
-                  className="w-10 h-10 border border-[var(--muted-foreground)] rounded-lg font-bold flex justify-center items-center cursor-pointer"
+                  className="w-10 h-10 border border-muted-foreground rounded-lg font-bold flex justify-center items-center cursor-pointer"
                   onClick={() => handlePlus()}
                 >
                   <FaPlus size={10} />
@@ -530,7 +530,7 @@ const DetailPage = () => {
               </Button>
               <Button
                 variant={'outline'}
-                className="border border-[var(--primary)] text-[var(--primary)] w-full cursor-pointer"
+                className="border border-primary text-primary w-full cursor-pointer"
                 onClick={() => {
                   if (selVariant) {
                     const payload: AddToCartRequest = {
@@ -547,7 +547,7 @@ const DetailPage = () => {
               </Button>
               <Button
                 variant={'outline'}
-                className="border border-[var(--primary)] text-[var(--primary)] w-full cursor-pointer"
+                className="border border-primary text-primary w-full cursor-pointer"
               >
                 Mua trước trả sau
               </Button>

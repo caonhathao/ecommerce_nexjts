@@ -1,9 +1,7 @@
 import { SearchFilters } from '@/types/product.data-types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { X } from 'lucide-react';
 import { useState } from 'react';
 
 interface SearchFiltersProps {
@@ -63,7 +61,11 @@ export function SearchFiltersPanel({
         <div className="flex flex-col space-y-2">
           <button
             onClick={() => onFilterChange({ categoryId: undefined })}
-            className={`text-sm text-left px-2 py-1.5 rounded-md transition-colors ${!filters.categoryId ? 'bg-gray-100 font-medium text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
+            className={`text-sm text-left px-2 py-1.5 rounded-md transition-colors ${
+              !filters.categoryId
+                ? 'bg-gray-100 font-medium text-blue-600'
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
           >
             All Categories
           </button>
@@ -71,7 +73,11 @@ export function SearchFiltersPanel({
             <button
               key={cat.id}
               onClick={() => onFilterChange({ categoryId: cat.id })}
-              className={`text-sm text-left px-2 py-1.5 rounded-md transition-colors ${filters.categoryId === cat.id ? 'bg-gray-100 font-medium text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`text-sm text-left px-2 py-1.5 rounded-md transition-colors ${
+                filters.categoryId === cat.id
+                  ? 'bg-gray-100 font-medium text-blue-600'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
             >
               {cat.name}
             </button>

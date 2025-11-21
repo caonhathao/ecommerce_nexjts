@@ -125,7 +125,7 @@ const TabCategory = ({
       { page: 1, limit: rows, isActive: activeFilter },
       setData
     );
-  }, [activeFilter, isReset]);
+  }, [activeFilter, isReset, rows, setData]);
 
   useEffect(() => {
     //console.log('category data changed:', data);

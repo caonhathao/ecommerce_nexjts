@@ -2,20 +2,30 @@
 
 import { CarouselPanel } from '@/app/(public)/(home)/_components/carousel-panel';
 import { CategoryPromotionPanel } from '@/app/(public)/(home)/_components/category-promotion-panel';
-import { fetchProducts } from '@/funcs/fetch';
-import { productItemType } from '@/types/public.data-types';
-import React, { useEffect } from 'react';
+import { fetchData } from '@/funcs/fetch';
+import {
+  productDataResponse,
+  productItemType,
+} from '@/types/public.data-types';
+import React, { useEffect, useMemo } from 'react';
 import { Loading } from '../_components/loading';
 import { HotForeign } from './_components/hot-foreign';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 import { TopDealItems } from './_components/top-deal-items';
 
 export default function Home() {
-  const [data1, setData1] = React.useState<productItemType[]>([]);
+  const [response, setResponse] = React.useState<productDataResponse | null>(
+    null
+  );
 
   useEffect(() => {
-    fetchProducts(1, 5, setData1);
+    fetchData('/api/product', { page: 1, limit: 10 }, setResponse);
   }, []);
+
+  const data1: productItemType[] = useMemo(() => {
+    // Return empty array if undefined
+    return response?.data || [];
+  }, [response]);
 
   useEffect(() => {
     console.log('Fetched Products:', data1);

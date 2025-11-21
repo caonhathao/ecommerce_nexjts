@@ -60,7 +60,6 @@ export const NewCategoryForm = ({
   setIsReset: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
-  const [list, setList] = React.useState<categoryItemData[]>([]);
   const [open, setOpen] = React.useState<boolean>(false);
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
@@ -100,11 +99,8 @@ export const NewCategoryForm = ({
       setData
     );
   }, []);
-  useEffect(() => {
-    if (data) {
-      setList(data.data);
-    }
-  }, [data]);
+
+  const list: categoryItemData[] = data?.data || [];
 
   if (!data) {
     return <Loading />;

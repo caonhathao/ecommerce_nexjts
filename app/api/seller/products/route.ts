@@ -3,9 +3,8 @@ import { prisma } from '@/lib/db';
 import { manageProductSchema } from '@/app/(seller)/seller/products/_components/productSchema';
 import { Prisma } from '@/lib/generated/prisma';
 import { requireSeller } from '@/lib/require-role';
-import { withAuth } from '@/lib/with-auth';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const sellerSession = await requireSeller();
   if (!sellerSession) {
     return NextResponse.json(
