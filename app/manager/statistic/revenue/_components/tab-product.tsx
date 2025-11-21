@@ -17,7 +17,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { productData, productItemData } from '@/types/manager.data-types';
+import {
+  productDataResponse,
+  productItemData,
+} from '@/types/manager.data-types';
 import {
   closestCenter,
   DndContext,
@@ -68,10 +71,10 @@ interface tabProductProps {
   columns: ColumnDef<productItemData>[];
 
   /** The complete data object from the API, including pagination. */
-  data: productData | null;
+  data: productDataResponse | null;
 
   /** The React state setter for the `data` object. */
-  setData: Dispatch<SetStateAction<productData | null>>;
+  setData: Dispatch<SetStateAction<productDataResponse | null>>;
 
   /** The array of product items currently rendered in the table. */
   productList: productItemData[];

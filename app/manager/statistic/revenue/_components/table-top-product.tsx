@@ -43,7 +43,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
-  productData,
+  productDataResponse,
   productDetail,
   productItemData,
   variantDetail,
@@ -88,7 +88,7 @@ import { toast } from 'sonner';
 import TabProduct from './tab-product';
 
 const TableTopProduct = () => {
-  const [data, setData] = React.useState<productData | null>(null);
+  const [data, setData] = React.useState<productDataResponse | null>(null);
   const [productList, setProductList] = React.useState<productItemData[]>([]);
   const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, SetIsReset] = React.useState<boolean>(false);
