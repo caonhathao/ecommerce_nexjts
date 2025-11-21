@@ -1,3 +1,4 @@
+import { response } from '@/types/manager.data-types';
 import React, { SetStateAction } from 'react';
 
 /**
@@ -16,7 +17,7 @@ type QueryParams = Record<string, string | number | boolean | null | undefined>;
 export const fetchData = async (
   baseUrl: string,
   params: QueryParams,
-  setData: React.Dispatch<SetStateAction<any>> | undefined,
+  setData: React.Dispatch<SetStateAction<response>> | undefined,
   cacheType: RequestCache = 'default',
   isExport: boolean = false
 ) => {
