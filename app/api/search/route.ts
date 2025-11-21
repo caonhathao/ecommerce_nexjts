@@ -4,6 +4,45 @@ import { prisma } from '@/lib/db';
 import ProductWhereInput = Prisma.ProductWhereInput;
 import ProductOrderByWithRelationInput = Prisma.ProductOrderByWithRelationInput;
 
+async function getCategoryWithChildren(
+  rootId: string,
+  maxDepth = 6
+): Promise<string[]> {
+  const allIds: string[] = [];
+  const visited = new Set<string>();
+  let currentLevelIds = [rootId];
+
+  visited.add(rootId);
+  allIds.push(rootId);
+
+  let depth = 0;
+  while (currentLevelIds.length > 0) {
+    if (++depth > maxDepth) break;
+
+    const subCategories = await prisma.category.findMany({
+      where: { parentId: { in: currentLevelIds } },
+      select: { id: true },
+    });
+
+    if (subCategories.length === 0) break;
+
+    const subIds = subCategories
+      .map((c) => c.id)
+      .filter((id) => !visited.has(id));
+
+    if (subIds.length === 0) break;
+
+    subIds.forEach((id) => {
+      visited.add(id);
+      allIds.push(id);
+    });
+
+    currentLevelIds = subIds;
+  }
+
+  return allIds;
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -35,7 +74,8 @@ export async function GET(req: NextRequest) {
     }
 
     if (categoryId) {
-      whereClause.categoryId = categoryId;
+      const categoryIds = await getCategoryWithChildren(categoryId);
+      whereClause.categoryId = { in: categoryIds };
     }
 
     if (shopId) {
