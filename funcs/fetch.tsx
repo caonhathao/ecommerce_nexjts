@@ -1,3 +1,4 @@
+import { reviewsType } from '@/types/public.data-types';
 import React, { SetStateAction } from 'react';
 
 /**
@@ -67,7 +68,7 @@ export const fetchData = async <T,>({
 };
 
 export const fetchReviews = async (
-  setData: React.Dispatch<SetStateAction<any>>,
+  setData: React.Dispatch<SetStateAction<reviewsType[]>>,
   id: string,
   page?: number,
   limit?: number
@@ -83,14 +84,13 @@ export const fetchReviews = async (
   }
 };
 
-export const fetchProductById = async (
-  id: string,
-  setData: React.Dispatch<SetStateAction<any>>
-) => {
+export const fetchProductById = async (id: string) => {
   try {
     const response = await fetch(`/api/product/${id}`);
-    const data = await response.json();
-    setData(data.data);
+    if (response && response.ok) {
+      const data = await response.json();
+      return data.data;
+    } else return null;
   } catch (error) {
     console.error('Error fetching product by ID:', error);
   }

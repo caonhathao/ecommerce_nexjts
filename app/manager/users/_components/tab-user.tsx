@@ -24,6 +24,7 @@ import {
   DndContext,
   DragEndEvent,
   SensorDescriptor,
+  SensorOptions,
   UniqueIdentifier,
 } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
@@ -58,7 +59,7 @@ interface tabShopProps {
   isReset: boolean;
 
   /** Array of sensor descriptors from dnd-kit for enabling drag-and-drop. */
-  sensors: SensorDescriptor<any>[];
+  sensors: SensorDescriptor<SensorOptions>[];
 
   /** A unique string ID passed to the SortableContext. */
   sortableId: string;

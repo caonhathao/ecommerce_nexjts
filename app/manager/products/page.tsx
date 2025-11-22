@@ -111,28 +111,31 @@ const ProductsPage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = React.useCallback((value: string) => {
-    if (!value || value.length === 0 || value === undefined) {
-      toast(t('t_action_failed_noti'), {
-        description: t('t_copy_failed_desc_noti'),
-      });
-      return;
-    }
-    navigator.clipboard
-      .writeText(value)
-      .then(() => {
-        toast(t('t_action_noti'), {
-          description: t('t_copy_desc_noti'),
-        });
-      })
-      .catch((err) => {
+  const handleCopy = React.useCallback(
+    (value: string) => {
+      if (!value || value.length === 0 || value === undefined) {
         toast(t('t_action_failed_noti'), {
           description: t('t_copy_failed_desc_noti'),
         });
+        return;
+      }
+      navigator.clipboard
+        .writeText(value)
+        .then(() => {
+          toast(t('t_action_noti'), {
+            description: t('t_copy_desc_noti'),
+          });
+        })
+        .catch((err) => {
+          toast(t('t_action_failed_noti'), {
+            description: t('t_copy_failed_desc_noti'),
+          });
 
-        console.error('Failed to copy ID: ', err);
-      });
-  }, []);
+          console.error('Failed to copy ID: ', err);
+        });
+    },
+    [t]
+  );
 
   // Assume you have a `t` function in scope, for example:
   // const t = useTranslations('admin_product_page');
@@ -273,6 +276,7 @@ const ProductsPage = () => {
     },
   ];
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: productList,
     columns,

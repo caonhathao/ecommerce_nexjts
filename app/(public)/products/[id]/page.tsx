@@ -53,7 +53,7 @@ type itemType = {
 const DetailPage = () => {
   const route = useRouter();
   const params = useParams();
-  const [data, setData] = useState<productDetailType>();
+  const [data, setData] = useState<productDetailType | null>(null);
   const [selVariant, setSelVariant] = useState<selectedVariant | null>(null);
   const amount: number = 1;
   const t = useTranslations('product_detail');
@@ -127,20 +127,25 @@ const DetailPage = () => {
 
   useEffect(() => {
     if (typeof params?.id === 'string') {
-      // Wrap the setter to update both states at once
-      fetchProductById(params.id, (incomingData) => {
-        setData(incomingData); // 1. Update main data
+      // 1. Define an async function inside the effect
+      const loadData = async () => {
+        // 2. Await the data (assuming fetchProductById returns a Promise or data)
+        const res = await fetchProductById(params.id as string);
 
-        // 2. Initialize selected variant immediately (prevents 2nd render)
-        if (incomingData && incomingData.variants.length > 0) {
+        if (res) {
+          setData(res);
+          // 3. Set the variant only AFTER you have the data
           setSelVariant({
-            name: incomingData.variants[0].name,
-            id: incomingData.variants[0].id,
-            price: incomingData.variants[0].price,
+            name: res.variants[0].name,
+            id: res.variants[0].id,
+            price: res.variants[0].price,
             amount: 1,
           });
         }
-      });
+      };
+
+      // 4. Call the async function
+      loadData();
     }
   }, [params?.id]);
 
