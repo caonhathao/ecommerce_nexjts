@@ -24,12 +24,14 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { fetchData } from '@/funcs/fetch';
 import { revenueEleChart } from '@/types/manager.data-types';
+import { useTranslations } from 'next-intl';
 import React, { useEffect } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 const ChartAreaRevenue = () => {
-  const [data, setData] = React.useState<revenueEleChart[] | null>([]);
+  const [data, setData] = React.useState<revenueEleChart[]>([]);
   const [timeRange, setTimeRange] = React.useState('month');
+  const t = useTranslations('admin_statistic_page.chart_area_revenue');
 
   const chartConfig = {
     visitors: {
@@ -46,14 +48,14 @@ const ChartAreaRevenue = () => {
   } satisfies ChartConfig;
 
   const TITLE_MAP: Record<string, string> = {
-    week: '7 ngày',
-    month: '30 ngày',
-    '3months': '90 ngày',
-    months: '12 tháng',
+    week: t('t_week'),
+    month: t('t_month'),
+    '3months': t('t_3months'),
+    months: t('t_months'),
   };
 
   // "Derived State": Calculates immediately during the first render
-  const subTitle = TITLE_MAP[timeRange] || '30 ngày';
+  const subTitle = TITLE_MAP[timeRange] || t('t_month');
 
   useEffect(() => {
     const response = async () => {
@@ -64,7 +66,7 @@ const ChartAreaRevenue = () => {
         cacheType: 'default',
       });
       if (res) {
-        setData(res);
+        setData(res.data);
       }
     };
     response();
@@ -108,12 +110,14 @@ const ChartAreaRevenue = () => {
   return (
     <Card className="@container/card">
       <CardHeader>
-        <CardTitle>Tổng doanh thu</CardTitle>
+        <CardTitle>{t('t_title')}</CardTitle>
         <CardDescription>
           <span className="hidden @[540px]/card:block">
-            Số liệu từ {subTitle} gần nhất
+            {t('t_data_from')} {subTitle} {t('t_most_recent')}
           </span>
-          <span className="@[540px]/card:hidden">Last 3 months</span>
+          <span className="@[540px]/card:hidden">
+            {subTitle} {t('t_most_recent')}
+          </span>
         </CardDescription>
         <CardAction>
           <ToggleGroup
@@ -123,10 +127,10 @@ const ChartAreaRevenue = () => {
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
           >
-            <ToggleGroupItem value="months">12 tháng</ToggleGroupItem>
-            <ToggleGroupItem value="3months">3 tháng</ToggleGroupItem>
-            <ToggleGroupItem value="month">30 ngày</ToggleGroupItem>
-            <ToggleGroupItem value="week">7 ngày</ToggleGroupItem>
+            <ToggleGroupItem value="months">{t('t_months')}</ToggleGroupItem>
+            <ToggleGroupItem value="3months">{t('t_3months')}</ToggleGroupItem>
+            <ToggleGroupItem value="month">{t('t_month')}</ToggleGroupItem>
+            <ToggleGroupItem value="week">{t('t_week')}</ToggleGroupItem>
           </ToggleGroup>
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger
@@ -138,16 +142,16 @@ const ChartAreaRevenue = () => {
             </SelectTrigger>
             <SelectContent className="rounded-xl">
               <SelectItem value="months" className="rounded-lg">
-                12 tháng
+                {t('t_months')}
               </SelectItem>
               <SelectItem value="3months" className="rounded-lg">
-                3 tháng
+                {t('t_3months')}
               </SelectItem>
               <SelectItem value="month" className="rounded-lg">
-                30 ngày
+                {t('t_month')}
               </SelectItem>
               <SelectItem value="week" className="rounded-lg">
-                7 ngày
+                {t('t_week')}
               </SelectItem>
             </SelectContent>
           </Select>

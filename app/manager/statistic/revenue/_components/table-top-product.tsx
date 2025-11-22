@@ -41,6 +41,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   productDataResponse,
@@ -80,7 +81,7 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
@@ -89,7 +90,6 @@ import TabProduct from './tab-product';
 const TableTopProduct = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
   const [productList, setProductList] = React.useState<productItemData[]>([]);
-
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -236,6 +236,7 @@ const TableTopProduct = () => {
   });
 
   function TableCellViewer({ item }: { item: productItemData }) {
+    const [open, setOpen] = useState<boolean>(false);
     const isMobile = useIsMobile();
     const [detail, setDetail] = React.useState<productDetail | null>(null);
     const [openIndex, setOpenIndex] = React.useState<number | null>(null);
@@ -279,10 +280,15 @@ const TableTopProduct = () => {
 
     async function fetchDetail() {
       try {
-        const response = await fetch(`/api/manager/product/${item.id}`);
-        const detail = await response.json();
-        console.log(detail.data);
-        setDetail(detail.data);
+        const response = await fetchData({
+          baseUrl: '/api/manager/product/query',
+          params: { id: item.id },
+          setData: undefined,
+        });
+        if (response) {
+          //        console.log(detail.data);
+          setDetail(response.data);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -337,12 +343,18 @@ const TableTopProduct = () => {
     };
 
     return (
-      <Drawer direction={isMobile ? 'bottom' : 'right'}>
+      <Drawer
+        direction={isMobile ? 'bottom' : 'right'}
+        open={open}
+        onOpenChange={setOpen}
+      >
         <DrawerTrigger asChild>
           <Button
             variant="link"
             className="text-foreground w-fit px-0 text-left"
-            onClick={fetchDetail}
+            onClick={() => {
+              fetchDetail();
+            }}
           >
             {item.title}
           </Button>

@@ -1,5 +1,6 @@
 import { FlatCompat } from '@eslint/eslintrc';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import reactCompiler from 'eslint-plugin-react-compiler';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -45,9 +46,12 @@ const eslintConfig = [
     ],
   },
   {
+    plugins: {
+      'react-compiler': reactCompiler,
+    },
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
-      'react-compiler/react-compiler': 'off',
+      'react-compiler/react-compiler': 'error',
     },
   },
   prettierRecommended,

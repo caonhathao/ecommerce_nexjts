@@ -62,7 +62,7 @@ export function TableCellViewer({
         cacheType: 'default',
       });
       if (res) {
-        setDetail(res);
+        setDetail(res.data);
       }
     } catch (err) {
       console.error(err);
@@ -100,7 +100,7 @@ export function TableCellViewer({
         <Button
           variant="link"
           className="text-foreground w-fit px-0 text-left"
-          onClick={fetchDetail}
+          onClick={() => fetchDetail()}
         >
           {item.name}
         </Button>
@@ -118,13 +118,15 @@ export function TableCellViewer({
             <div className="w-full flex justify-center items-center mb-3">
               {/* show cover image */}
               <div className="w-full relative">
-                <Image
-                  src={detail ? detail.coverUrl : ''}
-                  alt="shop cover image"
-                  width={0}
-                  height={0}
-                  className="w-full"
-                />
+                {detail ? (
+                  <Image
+                    src={detail.coverUrl}
+                    alt="shop cover image"
+                    width={0}
+                    height={0}
+                    className="w-full"
+                  />
+                ) : null}
                 <div className="absolute left-5 -bottom-5">
                   <Image
                     src={detail ? detail?.logoUrl : ''}

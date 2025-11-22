@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { productDetail, variantDetail } from '@/types/manager.data-types';
 import Image from 'next/image';
@@ -79,10 +80,15 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
   useEffect(() => {
     async function fetchDetail() {
       try {
-        const response = await fetch(`/api/manager/product/${id}`);
-        const detail = await response.json();
-        //console.log(detail.data);
-        setDetail(detail.data);
+        const response = await fetchData({
+          baseUrl: '/api/manager/product/query',
+          params: { id: id },
+          setData: undefined,
+        });
+        if (response) {
+          console.log(response.data);
+          setDetail(response.data);
+        }
       } catch (err) {
         console.error(err);
       }

@@ -1,25 +1,26 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { SearchFilters, SearchProduct } from '@/types/product.data-types';
-import { Card, CardContent } from '@/components/ui/card';
+import { ProductItem } from '@/app/(public)/_components/product-item';
 import { SearchFiltersPanel } from '@/app/(public)/search/_components/search-filters-panel';
+import { SearchSortBar } from '@/app/(public)/search/_components/search-sort-bar.tsxsearch-sort-bar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useCategories } from '@/hooks/use-categories';
+import { SearchFilters, SearchProduct } from '@/types/product.data-types';
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ProductItem } from '@/app/(public)/_components/product-item';
-import { SearchSortBar } from '@/app/(public)/search/_components/search-sort-bar.tsxsearch-sort-bar';
-import { useCategories } from '@/hooks/use-categories';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function SearchPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const [products, setProducts] = useState<SearchProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,26 +59,42 @@ export default function SearchPage() {
     return params;
   };
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const params = buildSearchParams(filters);
-      const res = await fetch(`/api/search?${params.toString()}`);
-      if (!res.ok) throw new Error('Failed to fetch products');
-      const data = await res.json();
-      console.log('Fetched products:', data);
-      setProducts(data.products);
-      setPagination(data.pagination);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const params = buildSearchParams(filters);
+        const res = await fetch(`/api/search?${params.toString()}`);
+        if (!res.ok) throw new Error('Failed to fetch products');
+        const data = await res.json();
+        console.log('Fetched products:', data);
+        setProducts(data.products);
+        setPagination(data.pagination);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [filters, pathname]);
 
   useEffect(() => {
-    fetchProducts();
-  }, [filters]);
+    //const url = `${pathname}?${searchParams}`;
+    //console.log('Route changed to:', url);
+
+    setFilters({
+      query: searchParams.get('q') || '',
+      categoryId: searchParams.get('categoryId') || undefined,
+      shopId: searchParams.get('shopId') || undefined,
+      minPrice: searchParams.get('minPrice') || undefined,
+      maxPrice: searchParams.get('maxPrice') || undefined,
+      sortBy: (searchParams.get('sortBy') as any) || 'createdAt',
+      sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
+      page: Number(searchParams.get('page')) || 1,
+      limit: Number(searchParams.get('limit')) || 20,
+    });
+  }, [pathname, searchParams]); // Re-run this effect when path or params change
 
   const handleFilterChange = (newFilters: Partial<SearchFilters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }));
@@ -164,8 +181,6 @@ export default function SearchPage() {
                         voucher: product.voucher,
                         origin: product.origin || '',
                       }}
-                      size="1"
-                      // Ensure ProductItem card has 'bg-white hover:shadow-md transition-shadow'
                     />
                   ))}
                 </div>

@@ -44,6 +44,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IconDotsVertical } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoIosArrowUp } from 'react-icons/io';
@@ -61,6 +62,10 @@ const formSchema = z.object({
   }),
   isActive: z.enum(['true', 'false']),
   parentId: z.string().optional(),
+  image: z
+    .file()
+    .min(1)
+    .max(200 * 200),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -87,12 +92,10 @@ export function TableCellViewer({
       slug: '',
       isActive: 'false',
       parentId: '',
+      image: undefined,
     },
   });
-  const t = useTranslations('admin_category_page');
-  const t_category_drawer = useTranslations(
-    'admin_category_page.category_drawer'
-  );
+  const t = useTranslations('admin_category_page.category_drawer');
 
   // This effect runs when 'openIndex' changes
   useEffect(() => {
@@ -147,8 +150,8 @@ export function TableCellViewer({
     try {
       const data = await putData('/api/manager/category', values);
       if (data.status === 200) {
-        toast(t_category_drawer('t_action_noti'), {
-          description: t_category_drawer('t_update_des_noti'),
+        toast(t('t_action_noti'), {
+          description: t('t_update_des_noti'),
         });
         setTimeout(() => {
           setOpen(false);
@@ -157,11 +160,23 @@ export function TableCellViewer({
       }
     } catch (error) {
       console.error('Failed to create category:', error);
-      toast(t_category_drawer('t_action_noti'), {
-        description: t_category_drawer('t_update_des_noti'),
+      toast(t('t_action_noti'), {
+        description: t('t_update_des_noti'),
       });
     }
   }
+
+  // 1. Watch the specific field so the component re-renders when a file is chosen
+  const selectedFile = form.watch('image');
+
+  // 2. Create a temporary preview URL if a file exists
+  // Note: We check if 'selectedFile' is actually a File object to avoid errors
+  const previewUrl = React.useMemo(() => {
+    if (selectedFile instanceof File) {
+      return URL.createObjectURL(selectedFile);
+    }
+    return null;
+  }, [selectedFile]);
 
   const renderVariant = (index: number, value: categoryChildDetail) => {
     return (
@@ -174,7 +189,7 @@ export function TableCellViewer({
       >
         <div className="flex flex-row justify-between items-center gap-4">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="name">{t_category_drawer('t_category_name')}</Label>
+            <Label htmlFor="name">{t('t_category_name')}</Label>
             <div className="w-full">{value.name}</div>
           </div>
           <DropdownMenu>
@@ -195,7 +210,7 @@ export function TableCellViewer({
                   className="text-left"
                   onClick={() => handleCopy(value.id)}
                 >
-                  {t_category_drawer('t_copy_action')}
+                  {t('t_copy_action')}
                 </Button>
               </DropdownMenuItem>
               <Separator />
@@ -212,7 +227,7 @@ export function TableCellViewer({
                     setOpen(false);
                   }}
                 >
-                  {t_category_drawer('t_del_action')}
+                  {t('t_del_action')}
                 </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -249,9 +264,7 @@ export function TableCellViewer({
       <DrawerContent>
         <DrawerHeader className="gap-1">
           <DrawerTitle>{detail?.name || 'unknown'}</DrawerTitle>
-          <DrawerDescription>
-            {t_category_drawer('t_category_desc')}
-          </DrawerDescription>
+          <DrawerDescription>{t('t_category_desc')}</DrawerDescription>
         </DrawerHeader>
         <div
           className="flex flex-col gap-4 overflow-y-auto px-4 text-sm"
@@ -265,20 +278,14 @@ export function TableCellViewer({
             >
               <div className="flex flex-col gap-4">
                 <div className="grid gap-3">
-                  <Label htmlFor="name-1">
-                    {t_category_drawer('t_category_name')}
-                  </Label>
+                  <Label htmlFor="name-1">{t('t_category_name')}</Label>
                   <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem className="flex-1 ">
                         <FormControl>
-                          <Input
-                            {...field}
-                            defaultValue={field.value}
-                            onChange={field.onChange}
-                          />
+                          <Input {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -293,12 +300,109 @@ export function TableCellViewer({
                     render={({ field }) => (
                       <FormItem className="flex-1 ">
                         <FormControl>
-                          <Input
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              {/* show icon and select box for active/inactive */}
+              <div className="flex flex-row justify-between items-center">
+                <div className="flex flex-col gap-3">
+                  <Label htmlFor="visibility">{t('t_icon')}</Label>
+                  <div className="flex flex-row gap-2 justify-start items-center">
+                    {detail && detail.imageUrl !== null ? (
+                      <Image
+                        src={detail.imageUrl}
+                        alt="icon"
+                        width={30}
+                        height={30}
+                      />
+                    ) : previewUrl ? (
+                      <Image
+                        src={previewUrl}
+                        alt="icon"
+                        width={30}
+                        height={30}
+                      />
+                    ) : (
+                      <p className="italic">Trống</p>
+                    )}
+                    <Button
+                      type="button"
+                      onClick={() =>
+                        document.getElementById('input-image-file')?.click()
+                      }
+                    >
+                      {previewUrl ? 'Đổi' : 'Thêm'}
+                    </Button>
+
+                    <FormField
+                      control={form.control}
+                      name="image"
+                      render={({
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        field: { value, onChange, ...fieldProps },
+                      }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              id="input-image-file"
+                              {...fieldProps}
+                              placeholder="Upload an image"
+                              type="file"
+                              accept="image/*"
+                              onChange={(event) => {
+                                onChange(
+                                  event.target.files && event.target.files[0]
+                                );
+                              }}
+                              hidden={true}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <Label htmlFor="visibility">{t('t_is_active')}</Label>
+                  <FormField
+                    control={form.control}
+                    name="isActive"
+                    render={({ field }) => (
+                      <FormItem className="flex-1 ">
+                        <FormControl>
+                          <Select
                             {...field}
+                            name="isActive"
                             defaultValue={field.value}
-                            onChange={field.onChange}
+                            onValueChange={field.onChange}
                             value={field.value}
-                          />
+                          >
+                            <SelectTrigger
+                              className="flex w-fit @4xl/main:hidden"
+                              size="sm"
+                              id="active-1"
+                            >
+                              <SelectValue
+                                placeholder={t('t_is_active_placeholder')}
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectItem value="true">
+                                  {t('c_active')}
+                                </SelectItem>
+                                <SelectItem value="false">
+                                  {t('c_inactive')}
+                                </SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -307,63 +411,13 @@ export function TableCellViewer({
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="visibility">
-                  {t_category_drawer('t_is_active')}
-                </Label>
-                <FormField
-                  control={form.control}
-                  name="isActive"
-                  render={({ field }) => (
-                    <FormItem className="flex-1 ">
-                      <FormControl>
-                        <Select
-                          {...field}
-                          name="isActive"
-                          defaultValue={field.value}
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger
-                            className="flex w-fit @4xl/main:hidden"
-                            size="sm"
-                            id="active-1"
-                          >
-                            <SelectValue
-                              placeholder={t_category_drawer(
-                                't_is_active_placeholder'
-                              )}
-                            />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value="true">
-                                {t_category_drawer('c_active')}
-                              </SelectItem>
-                              <SelectItem value="false">
-                                {t_category_drawer('c_inactive')}
-                              </SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
               <div className="grid grid-cols-1 gap-4">
                 <div className="w-full flex flex-col gap-3">
-                  <Label htmlFor="target">
-                    {t_category_drawer('t_parent_category')}
-                  </Label>
+                  <Label htmlFor="target">{t('t_parent_category')}</Label>
                   {detail?.parent ? (
                     <div className="flex flex-row justify-between items-center gap-4">
                       <div className="flex flex-col gap-3">
-                        <Label htmlFor="name">
-                          {t_category_drawer('t_category_name')}
-                        </Label>
+                        <Label htmlFor="name">{t('t_category_name')}</Label>
                         <div className="w-full">{detail.name}</div>
                       </div>
                       <DropdownMenu>
@@ -384,22 +438,19 @@ export function TableCellViewer({
                               className="text-left"
                               onClick={() => handleCopy(detail.parent.id)}
                             >
-                              {t_category_drawer('t_copy_action')}
+                              {t('t_copy_action')}
                             </Button>
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
                   ) : (
-                    <div>{t_category_drawer('t_no_parent')}</div>
+                    <div className="italic">{t('t_no_parent')}</div>
                   )}
                 </div>
               </div>
-
               <div className="flex flex-col gap-3">
-                <Label htmlFor="variants-list">
-                  {t_category_drawer('t_child_categories')}
-                </Label>
+                <Label htmlFor="variants-list">{t('t_child_categories')}</Label>
                 {detail?.children.length !== 0 ? (
                   <div className="flex flex-col  gap-4">
                     <ul className="w-full flex flex-col gap-2 ">
@@ -446,7 +497,7 @@ export function TableCellViewer({
                     </ul>
                   </div>
                 ) : (
-                  <div>{t_category_drawer('t_no_child')}</div>
+                  <div>{t('t_no_child')}</div>
                 )}
               </div>
             </form>
@@ -454,12 +505,10 @@ export function TableCellViewer({
         </div>
         <DrawerFooter>
           <Button type="submit" form={'form-edit-category'}>
-            {t_category_drawer('t_submit_action')}
+            {t('t_submit_action')}
           </Button>
           <DrawerClose asChild>
-            <Button variant="outline">
-              {t_category_drawer('t_cancel_action')}
-            </Button>
+            <Button variant="outline">{t('t_cancel_action')}</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

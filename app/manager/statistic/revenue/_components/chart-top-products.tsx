@@ -24,24 +24,15 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { fetchData } from '@/funcs/fetch';
 import { topProductChart } from '@/types/manager.data-types';
+import { useTranslations } from 'next-intl';
 import React, { useEffect } from 'react';
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 import TableCellViewer from './table-cell-viewer';
 
-const chartConfig = {
-  totalQuantity: {
-    label: 'Số lượng',
-    color: 'var(--chart-2)',
-  },
-  label: {
-    color: 'var(--background)',
-  },
-} satisfies ChartConfig;
-
 const TopProduct = () => {
   const [data, setData] = React.useState<topProductChart[] | null>(null);
   const [timeRange, setTimeRange] = React.useState('month');
-
+  const t = useTranslations('admin_statistic_page.chart_top_products');
   const amountTop: number = 5;
   const [openDetail, setOpenDetail] = React.useState<boolean>(false);
   const [id, setId] = React.useState<string | null>(null);
@@ -50,16 +41,25 @@ const TopProduct = () => {
     setOpenDetail(true);
     setId(id);
   };
+  const chartConfig = {
+    totalQuantity: {
+      label: t('t_label_1'),
+      color: 'var(--chart-2)',
+    },
+    label: {
+      color: 'var(--background)',
+    },
+  } satisfies ChartConfig;
 
   const TITLE_MAP: Record<string, string> = {
-    week: '7 ngày',
-    month: '30 ngày',
-    '3months': '90 ngày',
-    months: '12 tháng',
+    week: t('t_week'),
+    month: t('t_month'),
+    '3months': t('t_3months'),
+    months: t('t_months'),
   };
 
   // "Derived State": Calculates immediately during the first render
-  const subTitle = TITLE_MAP[timeRange] || '30 ngày';
+  const subTitle = TITLE_MAP[timeRange] || t('t_month');
 
   useEffect(() => {
     const response = async () => {
@@ -70,7 +70,8 @@ const TopProduct = () => {
         cacheType: 'default',
       });
       if (res) {
-        setData(res);
+        console.log(res.data);
+        setData(res.data);
       }
     };
     response();
@@ -85,12 +86,14 @@ const TopProduct = () => {
     <div className="w-[50%]">
       <Card className="@container/card">
         <CardHeader>
-          <CardTitle>Top sản phẩm</CardTitle>
+          <CardTitle>{t('t_title')}</CardTitle>
           <CardDescription>
             <span className="hidden @[540px]/card:block">
-              Dữ liệu từ {subTitle} gần nhất
+              {t('t_data_from')} {subTitle} {t('t_most_recent')}
             </span>
-            <span className="@[540px]/card:hidden">{subTitle} gần nhất</span>
+            <span className="@[540px]/card:hidden">
+              {subTitle} {t('t_most_recent')}
+            </span>
           </CardDescription>
           <CardAction>
             <ToggleGroup
@@ -100,10 +103,12 @@ const TopProduct = () => {
               variant="outline"
               className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
             >
-              <ToggleGroupItem value="months">12 tháng</ToggleGroupItem>
-              <ToggleGroupItem value="3months">3 tháng</ToggleGroupItem>
-              <ToggleGroupItem value="month">30 ngày</ToggleGroupItem>
-              <ToggleGroupItem value="week">7 ngày</ToggleGroupItem>
+              <ToggleGroupItem value="months">{t('t_months')}</ToggleGroupItem>
+              <ToggleGroupItem value="3months">
+                {t('t_3months')}
+              </ToggleGroupItem>
+              <ToggleGroupItem value="month">{t('t_month')}</ToggleGroupItem>
+              <ToggleGroupItem value="week">{t('t_week')}</ToggleGroupItem>
             </ToggleGroup>
             <Select value={timeRange} onValueChange={setTimeRange}>
               <SelectTrigger
@@ -115,16 +120,16 @@ const TopProduct = () => {
               </SelectTrigger>
               <SelectContent className="rounded-xl">
                 <SelectItem value="months" className="rounded-lg">
-                  12 tháng
+                  {t('t_months')}
                 </SelectItem>
                 <SelectItem value="3months" className="rounded-lg">
-                  3 tháng
+                  {t('t_3months')}
                 </SelectItem>
                 <SelectItem value="month" className="rounded-lg">
-                  30 ngày
+                  {t('t_month')}
                 </SelectItem>
                 <SelectItem value="week" className="rounded-lg">
-                  7 ngày
+                  {t('t_week')}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -155,7 +160,7 @@ const TopProduct = () => {
               />
               <Bar
                 dataKey="totalQuantity"
-                fill="var(--color-desktop)"
+                fill="var(--chart-2)"
                 radius={5}
                 onClick={(data) => handleOpenDetail(data.productId)}
                 className="hover:cursor-pointer"

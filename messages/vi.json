@@ -266,7 +266,8 @@
       "t_category_name": "Tên danh mục",
       "t_copy_action": "Sao chép ID",
       "t_del_action": "Xóa",
-      "t_is_active": "hiển thị",
+      "t_icon":"Ảnh",
+      "t_is_active": "Hiển thị",
       "t_is_active_placeholder": "Chọn trạng thái",
       "c_active": "Hoạt động",
       "c_inactive": "Không hoạt động",
@@ -512,6 +513,42 @@
 
       "t_submit_action": "Lưu thay đổi",
       "t_cancel_action": "Hủy"
+    }
+  },
+  "admin_statistic_page":{
+    "chart_area_revenue":{
+      "t_title":"Tổng doanh thu",
+      "t_week":"7 ngày",
+      "t_month":"30 ngày",
+      "t_3months":"90 ngày",
+      "t_months":"12 tháng",
+      "t_data_from":"Số liệu từ",
+      "t_most_recent":"gần nhất"
+    },
+    "chart_order_state_rate":{
+      "t_title":"Tỉ lệ trạng thái đơn hàng",
+      "t_week":"7 ngày",
+      "t_month":"30 ngày",
+      "t_3months":"90 ngày",
+      "t_months":"12 tháng",
+      "t_data_from":"Số liệu từ",
+      "t_most_recent":"gần nhất",
+      "t_label_1":"Trạng thái",
+      "t_label_2":"Đang chờ",
+      "t_label_3":"Đã thanh toán",
+      "t_label_4":"Đang xử lí",
+      "t_label_5":"Đã hủy",
+      "t_label_6":"Đã hoàn tiền"
+    },
+    "chart_top_products":{
+      "t_title":"Top sản phẩm",
+      "t_week":"7 ngày",
+      "t_month":"30 ngày",
+      "t_3months":"90 ngày",
+      "t_months":"12 tháng",
+      "t_data_from":"Số liệu từ",
+      "t_most_recent":"gần nhất",
+      "t_label_1":"Số lượng"
     }
   }
 }
