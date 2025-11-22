@@ -112,22 +112,25 @@ const CategoryManagePage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = React.useCallback((value: string) => {
-    navigator.clipboard
-      .writeText(value)
-      .then(() => {
-        toast(t('t_action_noti'), {
-          description: t('t_copy_desc_noti'),
-        });
-      })
-      .catch((err) => {
-        toast(t('t_action_failed_noti'), {
-          description: t('t_copy_failed_desc_noti'),
-        });
+  const handleCopy = React.useCallback(
+    (value: string) => {
+      navigator.clipboard
+        .writeText(value)
+        .then(() => {
+          toast(t('t_action_noti'), {
+            description: t('t_copy_desc_noti'),
+          });
+        })
+        .catch((err) => {
+          toast(t('t_action_failed_noti'), {
+            description: t('t_copy_failed_desc_noti'),
+          });
 
-        console.error('Failed to copy ID: ', err);
-      });
-  }, []);
+          console.error('Failed to copy ID: ', err);
+        });
+    },
+    [t]
+  );
 
   const columns: ColumnDef<categoryItemData>[] = React.useMemo(
     () => [
