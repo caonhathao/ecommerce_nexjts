@@ -68,7 +68,6 @@ import { TableCellViewer } from './_components/table-cell-viewer';
 const ShopsPage = () => {
   const [data, setData] = React.useState<shopDataResponse | null>(null);
   const [shopList, setShopList] = React.useState<shopItemData[]>([]);
-  const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, SetIsReset] = React.useState<boolean>(false);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -115,15 +114,9 @@ const ShopsPage = () => {
       navigator.clipboard
         .writeText(value)
         .then(() => {
-          // 1. Set the copied ID
-          setCopiedId(value);
-          // 2. Clear the feedback after 2 seconds
           toast(t('t_action_noti'), {
             description: t('t_copy_desc_noti'),
           });
-          setTimeout(() => {
-            setCopiedId(null);
-          }, 2000);
         })
         .catch((err) => {
           console.error('Failed to copy ID: ', err);

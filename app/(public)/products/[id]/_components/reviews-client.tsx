@@ -4,7 +4,9 @@ import { RatingStars } from '@/app/(public)/_components/rating-starts';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { reviewResponse, reviewsType } from '@/types/public.data-types';
-import React, { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { useMemo } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
 
 interface props {
@@ -17,12 +19,9 @@ export function ReviewsClient({
   ratingCount,
   initialResponse,
 }: props) {
-  const [data, setData] = React.useState<reviewsType[] | null>(null);
-
-  useEffect(() => {
-    if (initialResponse) {
-      setData(initialResponse.data);
-    }
+  const t = useTranslations('product_detail.detail_review');
+  const data: reviewsType[] = useMemo(() => {
+    return initialResponse.data || null;
   }, [initialResponse]);
 
   const renderReview = (reviewData: reviewsType) => {
@@ -32,72 +31,75 @@ export function ReviewsClient({
           className="w-[25%] flex flex-row gap-2 justify-start items-center"
           key={reviewData.user.id}
         >
-          <img
+          <Image
             src={reviewData.user.image}
             alt="user-avatar"
-            className="w-20 rounded-full"
+            width={30}
+            height={30}
+            className="rounded-full"
           />
           <p>{reviewData.user.name}</p>
         </div>
         <div className="w-[75%] flex flex-col gap-2">
           <RatingStars value={reviewData.rating} />
           <p>{reviewData.body}</p>
-          <div className="flex flex-col italic gap-1 text-sm">
-            <p>Đánh giá lúc: {formatDay(reviewData.createdAt)}</p>
-          </div>
-          <div className="flex flex-row justify-end items-center">
-            <AiOutlineLike size={15} color="var(--primary)" />
-            {reviewData.likes}
+          <div className="flex flex-row justify-between items-center gap-1 text-sm w-full">
+            <p className="italic">
+              {t('t_review_at')}
+              {formatDay(reviewData.createdAt)}
+            </p>
+            <div className="flex flex-row justify-end items-center">
+              <AiOutlineLike size={15} color="var(--primary)" />
+              {reviewData.likes}
+            </div>
           </div>
         </div>
       </div>
     );
   };
 
-  // if (!response) {
-  //   return <LoadingComponent />;
-  // }
-
   return (
-    <div className="w-full bg-[var(--background)] rounded-lg mt-3 p-3 flex flex-col justify-start items-start">
+    <div className="w-full bg-background rounded-lg mt-3 p-3 flex flex-col justify-start items-start">
       {/* summary */}
       <div className="flex flex-col justify-start items-start py-2 gap-2">
-        <p className="font-medium text-lg">Khách hàng đánh giá</p>
-        <p className="font-medium">Tổng quan</p>
+        <p className="font-medium text-lg">{t('t_custome_review')}</p>
+        <p className="font-medium">{t('t_summary')}</p>
         <div className="flex flex-row justify-start items-center gap-4">
           <RatingStars value={ratingAvg} />
-          <p>{ratingCount} đánh giá</p>
+          <p>
+            {ratingCount} {t('c_reviews')}
+          </p>
         </div>
       </div>
       <Separator />
       {/* detail */}
       <div>
         <div className="py-2">
-          <p>Lọc theo</p>
+          <p>{t('t_filter_by')}</p>
           <ul className="flex flex-row justify-start items-start gap-2 py-2">
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              Mới nhất
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+              {t('c_newest')}
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              Có hình ảnh
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+              {t('c_have_img')}
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              Mua lại
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+              {t('c_buy_again')}
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              5 sao
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+              {t('c_5_stars')}
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              4 sao
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+              {t('c_5_stars')}
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              3 sao
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+              {t('c_3_stars')}
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              2 sao
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+              {t('c_2_stars')}
             </li>
-            <li className="p-2 border border-[var(--muted-foreground)] rounded-xl hover:cursor-pointer">
-              1 sao
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+              {t('c_1_star')}
             </li>
           </ul>
         </div>
@@ -113,11 +115,8 @@ export function ReviewsClient({
         ))}
       </div>
       <div className="w-full flex justify-center items-center">
-        <Button
-          variant="outline"
-          className="text-[var(--primary)] hover:cursor-pointer"
-        >
-          Xem thêm
+        <Button variant="outline" className="text-primary hover:cursor-pointer">
+          {t('t_more_action')}
         </Button>
       </div>
     </div>

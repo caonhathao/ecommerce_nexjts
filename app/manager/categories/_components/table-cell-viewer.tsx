@@ -67,16 +67,10 @@ type FormSchemaType = z.infer<typeof formSchema>;
 
 export function TableCellViewer({
   item,
-  defaultActive,
-  setDefaultActive,
-  setCategoryList,
   setIsReset,
   handleCopy,
 }: {
   item: categoryItemData;
-  defaultActive: string;
-  setDefaultActive: React.Dispatch<React.SetStateAction<string>>;
-  setCategoryList: React.Dispatch<React.SetStateAction<categoryItemData[]>>;
   setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
   handleCopy: (id: string) => void;
 }) {
@@ -130,14 +124,13 @@ export function TableCellViewer({
 
   useEffect(() => {
     if (detail) {
-      setDefaultActive(detail.isActive.toString());
       form.setValue('id', detail.id);
       form.setValue('name', detail.name);
       form.setValue('slug', detail.slug);
       form.setValue('isActive', detail.isActive === true ? 'true' : 'false');
       form.setValue('parentId', detail?.parentId || '');
     }
-  }, [detail]);
+  }, [detail, form]);
 
   async function fetchDetail() {
     try {
@@ -435,7 +428,11 @@ export function TableCellViewer({
                                 type="button"
                               >
                                 <div
-                                  className={`${openIndex !== index ? `transform-[rotate(180deg)]` : `transform-[rotate(0deg)]`} transition ease-in-out`}
+                                  className={`${
+                                    openIndex !== index
+                                      ? `transform-[rotate(180deg)]`
+                                      : `transform-[rotate(0deg)]`
+                                  } transition ease-in-out`}
                                 >
                                   <IoIosArrowUp />
                                 </div>

@@ -6,7 +6,6 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group';
-import { itemData } from '@/types/manager.data-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { Dispatch, SetStateAction } from 'react';
@@ -14,9 +13,9 @@ import { useForm } from 'react-hook-form';
 import { RiResetRightLine } from 'react-icons/ri';
 import { z } from 'zod';
 
-interface SearchProps {
+interface SearchProps<T> {
   baseUrl: string;
-  setData: Dispatch<SetStateAction<itemData>>;
+  setData: Dispatch<SetStateAction<T[]>>;
   isReset: boolean;
   setIsReset: Dispatch<SetStateAction<boolean>>;
 }
@@ -25,7 +24,12 @@ const formSchema = z.object({
   id: z.string().nonempty('Thiếu id'),
 });
 
-const SearchBar = ({ baseUrl, setData, setIsReset, isReset }: SearchProps) => {
+const SearchBar = <T,>({
+  baseUrl,
+  setData,
+  setIsReset,
+  isReset,
+}: SearchProps<T>) => {
   const t = useTranslations('admin_search_bar');
   async function onSubmit(value: z.infer<typeof formSchema>) {
     try {

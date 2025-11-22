@@ -29,7 +29,8 @@ import {
   shopMember,
 } from '@/types/manager.data-types';
 import { useTranslations } from 'next-intl';
-import React, { SetStateAction, useEffect } from 'react';
+import Image from 'next/image';
+import React, { SetStateAction, useMemo } from 'react';
 import { MdOutlineCopyAll } from 'react-icons/md';
 import { toast } from 'sonner';
 
@@ -44,39 +45,9 @@ export function TableCellViewer({
 }) {
   const isMobile = useIsMobile();
   const [detail, setDetail] = React.useState<shopDetail | null>(null);
-  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
-  const [defaultStatus, setDefaultStatus] = React.useState<string>('');
   const [value, setValue] = React.useState<string>('');
   const t = useTranslations('admin_shop_page.shop_drawer');
-
-  // This effect runs when 'openIndex' changes
-  useEffect(() => {
-    // Only run if an item was OPENED
-    if (openIndex !== null) {
-      // We must wait for your 300ms animation to finish
-      const timer = setTimeout(() => {
-        const container = scrollContainerRef.current;
-
-        // Find the specific <li> element we want to scroll to
-        const element = document.getElementById(`variant-item-${openIndex}`);
-
-        if (container && element) {
-          // This calculates the <li>'s position *inside* the scroll container
-          const scrollToPosition = element.offsetTop - container.offsetTop;
-
-          // Scroll the container to the element
-          container.scrollTo({
-            top: scrollToPosition,
-            behavior: 'smooth',
-          });
-        }
-      }, 300); // 300ms matches your animation
-
-      // Clean up the timer
-      return () => clearTimeout(timer);
-    }
-  }, [openIndex]);
 
   // useEffect(() => {
   //   console.log(detail);
@@ -84,16 +55,14 @@ export function TableCellViewer({
 
   async function fetchDetail() {
     try {
-      const response = await fetchData(
-        '/api/manager/shop/query',
-        { id: item.id },
-        undefined,
-        'default',
-        true
-      );
-      if (response && response.ok) {
-        const parse = await response?.json();
-        setDetail(parse.data);
+      const res = await fetchData({
+        baseUrl: '/api/manager/shop/query',
+        params: { id: item.id },
+        setData: undefined,
+        cacheType: 'default',
+      });
+      if (res) {
+        setDetail(res);
       }
     } catch (err) {
       console.error(err);
@@ -121,11 +90,8 @@ export function TableCellViewer({
     }
   };
 
-  useEffect(() => {
-    if (detail) {
-      //console.log('fetched');
-      setDefaultStatus(detail.status);
-    }
+  const defaultStatus = useMemo(() => {
+    return detail?.status || '';
   }, [detail]);
 
   return (
@@ -152,15 +118,19 @@ export function TableCellViewer({
             <div className="w-full flex justify-center items-center mb-3">
               {/* show cover image */}
               <div className="w-full relative">
-                <img
-                  src={detail?.coverUrl}
+                <Image
+                  src={detail ? detail.coverUrl : ''}
                   alt="shop cover image"
+                  width={0}
+                  height={0}
                   className="w-full"
                 />
                 <div className="absolute left-5 -bottom-5">
-                  <img
-                    src={detail?.logoUrl}
+                  <Image
+                    src={detail ? detail?.logoUrl : ''}
                     alt="shop cover image"
+                    width={0}
+                    height={0}
                     className="w-10 rounded-full border border-white"
                   />
                 </div>

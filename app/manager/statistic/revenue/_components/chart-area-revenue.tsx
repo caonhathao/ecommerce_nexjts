@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { fetchData } from '@/funcs/fetch';
 import { revenueEleChart } from '@/types/manager.data-types';
 import React, { useEffect } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
@@ -29,19 +30,6 @@ import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 const ChartAreaRevenue = () => {
   const [data, setData] = React.useState<revenueEleChart[] | null>([]);
   const [timeRange, setTimeRange] = React.useState('month');
-  const [subTitle, setSubTitle] = React.useState<string>('30 ngày');
-
-  const fetchData = async (period: string, month?: string) => {
-    try {
-      const response = await fetch(
-        `/api/manager/statistic/revenue?period=${period}&&month=${month}`
-      );
-      const parseData = await response.json();
-      setData(parseData.data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const chartConfig = {
     visitors: {
@@ -57,25 +45,29 @@ const ChartAreaRevenue = () => {
     },
   } satisfies ChartConfig;
 
+  const TITLE_MAP: Record<string, string> = {
+    week: '7 ngày',
+    month: '30 ngày',
+    '3months': '90 ngày',
+    months: '12 tháng',
+  };
+
+  // "Derived State": Calculates immediately during the first render
+  const subTitle = TITLE_MAP[timeRange] || '30 ngày';
+
   useEffect(() => {
-    fetchData(timeRange);
-    switch (timeRange) {
-      case 'week':
-        setSubTitle('7 ngày');
-        break;
-      case 'month':
-        setSubTitle('30 ngày');
-        break;
-      case '3months':
-        setSubTitle('90 ngày');
-        break;
-      case 'months':
-        setSubTitle('12 tháng');
-        break;
-      default:
-        setSubTitle('30 ngày');
-        break;
-    }
+    const response = async () => {
+      const res = await fetchData({
+        baseUrl: '/api/manager/statistic/revenue',
+        params: { period: timeRange },
+        setData: undefined,
+        cacheType: 'default',
+      });
+      if (res) {
+        setData(res);
+      }
+    };
+    response();
   }, [timeRange]);
 
   // useEffect(() => {
@@ -129,7 +121,7 @@ const ChartAreaRevenue = () => {
             value={timeRange}
             onValueChange={setTimeRange}
             variant="outline"
-            className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+            className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
           >
             <ToggleGroupItem value="months">12 tháng</ToggleGroupItem>
             <ToggleGroupItem value="3months">3 tháng</ToggleGroupItem>

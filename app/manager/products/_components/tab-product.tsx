@@ -18,7 +18,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { fetchData } from '@/funcs/fetch';
-import { productData, productItemData } from '@/types/manager.data-types';
+import {
+  productDataResponse,
+  productItemData,
+} from '@/types/manager.data-types';
 import {
   closestCenter,
   DndContext,
@@ -70,10 +73,10 @@ interface tabProductProps {
   columns: ColumnDef<productItemData>[];
 
   /** The complete data object from the API, including pagination. */
-  data: productData | null;
+  data: productDataResponse | null;
 
   /** The React state setter for the `data` object. */
-  setData: Dispatch<SetStateAction<productData | null>>;
+  setData: Dispatch<SetStateAction<productDataResponse | null>>;
 
   /** The array of product items currently rendered in the table. */
   productList: productItemData[];
@@ -117,18 +120,18 @@ const TabProduct = ({
   const t = useTranslations('admin_product_page.product_tab');
 
   useEffect(() => {
-    fetchData(
-      '/api/manager/product',
-      { page: 1, limit: rows, visibility: visibilityFilter },
-      setData
-    );
-  }, [visibilityFilter, isReset]);
+    fetchData({
+      baseUrl: '/api/manager/product',
+      params: { page: 1, limit: rows, visibility: visibilityFilter },
+      setData: setData,
+    });
+  }, [visibilityFilter, isReset, rows, setData]);
 
   useEffect(() => {
     if (data) {
       setProductList(data.data);
     }
-  }, [data]);
+  }, [data, setProductList]);
 
   if (!data || !productList) return <Loading />;
 
@@ -200,11 +203,15 @@ const TabProduct = ({
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
                 setRows(Number(value));
-                fetchData(
-                  '/api/manager/product',
-                  { page: 1, limit: Number(value), isActive: visibilityFilter },
-                  setData
-                );
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: {
+                    page: 1,
+                    limit: Number(value),
+                    isActive: visibilityFilter,
+                  },
+                  setData: setData,
+                });
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -231,11 +238,11 @@ const TabProduct = ({
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => {
                 table.setPageIndex(0);
-                fetchData(
-                  '/api/manager/product',
-                  { page: 1, limit: rows, isActive: visibilityFilter },
-                  setData
-                );
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: { page: 1, limit: rows, isActive: visibilityFilter },
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -248,15 +255,15 @@ const TabProduct = ({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                fetchData(
-                  '/api/manager/product',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: {
                     page: data.pagination.page - 1,
                     limit: rows,
                     isActive: visibilityFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -269,15 +276,15 @@ const TabProduct = ({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                fetchData(
-                  '/api/manager/product',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: {
                     page: data.pagination.page + 1,
                     limit: rows,
                     isActive: visibilityFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >
@@ -290,15 +297,15 @@ const TabProduct = ({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                fetchData(
-                  '/api/manager/product',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: {
                     page: data.pagination.totalPages,
                     limit: rows,
                     isActive: visibilityFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >

@@ -19,7 +19,11 @@ export default function Home() {
   );
 
   useEffect(() => {
-    fetchData('/api/product', { page: 1, limit: 10 }, setResponse);
+    fetchData({
+      baseUrl: '/api/product',
+      params: { page: 1, limit: 10 },
+      setData: setResponse,
+    });
   }, []);
 
   const data1: productItemType[] = useMemo(() => {

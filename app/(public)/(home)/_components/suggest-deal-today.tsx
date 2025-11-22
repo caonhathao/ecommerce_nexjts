@@ -24,14 +24,14 @@ export const SuggestDealToday = ({ data, size }: TopDealItemsProps) => {
   const gridClass =
     sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4';
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-2 bg-[var(--background)] rounded-lg mt-5 p-2">
+    <div className="w-full flex flex-col justify-center items-center gap-2 bg-background rounded-lg mt-5 p-2">
       {/* top-title */}
       <p className="w-full p-2 text-lg text-left font-bold">{t('title')}</p>
       {/* content here */}
       <div className={`w-full grid ${gridClass} gap-3 p-2 overflow-x-auto`}>
         {data.map((item: productItemType, index) => (
           <div key={index} className="w-full">
-            <ProductItem item={item} size={'5'} />
+            <ProductItem item={item} />
           </div>
         ))}
       </div>
@@ -41,7 +41,7 @@ export const SuggestDealToday = ({ data, size }: TopDealItemsProps) => {
           href={'#'}
           className={buttonVariants({
             variant: 'outline',
-            className: 'text-[var(--primary)]',
+            className: 'text-primary',
           })}
         >
           {t('watch_more')}
