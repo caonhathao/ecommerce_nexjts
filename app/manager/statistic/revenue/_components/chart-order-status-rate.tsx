@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { fetchData } from '@/funcs/fetch';
 import { orderStatusRateChart } from '@/types/manager.data-types';
 import React, { useEffect } from 'react';
 import { Pie, PieChart } from 'recharts';
@@ -57,59 +58,40 @@ const OrderStatusRate = () => {
   const [data, setData] = React.useState<orderStatusRateChart[] | null>(null);
   const [isReady, setIsReady] = React.useState<boolean>(false);
   const [timeRange, setTimeRange] = React.useState('month');
-  const [subTitle, setSubTitle] = React.useState<string>('30 ngày');
 
-  const fetchData = async (period: string, month?: string) => {
-    try {
-      const response = await fetch(
-        `/api/manager/statistic/order-status?period=${period}&&month=${month}`
-      );
-      const parseData = await response.json();
-      console.log(parseData.data);
-      setData(parseData.data);
-      setIsReady(false);
-    } catch (e) {
-      console.error(e);
-    }
+  const TITLE_MAP: Record<string, string> = {
+    week: '7 ngày',
+    month: '30 ngày',
+    '3months': '90 ngày',
+    months: '12 tháng',
   };
 
-  useEffect(() => {
-    fetchData(timeRange);
-  }, []);
+  // "Derived State": Calculates immediately during the first render
+  const subTitle = TITLE_MAP[timeRange] || '30 ngày';
 
   useEffect(() => {
-    fetchData(timeRange);
-    switch (timeRange) {
-      case 'week':
-        setSubTitle('7 ngày');
-        break;
-      case 'month':
-        setSubTitle('30 ngày');
-        break;
-      case '3months':
-        setSubTitle('90 ngày');
-        break;
-      case 'months':
-        setSubTitle('12 tháng');
-        break;
-      default:
-        setSubTitle('30 ngày');
-        break;
-    }
+    const response = async () => {
+      const res = await fetchData({
+        baseUrl: '/api/manager/statistic/revenue',
+        params: { period: timeRange },
+        setData: undefined,
+        cacheType: 'default',
+      });
+
+      if (res) {
+        const formattedData = res.map(
+          (item: orderStatusRateChart, index: number) => ({
+            ...item,
+            fill: `var(--chart-${index + 1})`,
+          })
+        );
+
+        setData(formattedData);
+        setIsReady(true);
+      }
+    };
+    response();
   }, [timeRange]);
-
-  useEffect(() => {
-    if (data && !isReady) {
-      const formattedData = data.map((item, index) => ({
-        ...item, // Copy all existing properties (label, total)
-        fill: `var(--chart-${index + 1})`, // Add the new 'fill' property
-      }));
-
-      // 3. Set the new array into your local state
-      setData(formattedData);
-      setIsReady(true);
-    }
-  }, [data]); // This effect re-runs whenever 'data' changes
 
   //   useEffect(() => {
   //     console.log(data);

@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import PlaceholderCategoryIcon from '@/public/placeholder-icon-category.png';
 import {
   categoryDataResponse,
   categoryItemData,
@@ -58,6 +59,7 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
@@ -67,17 +69,13 @@ import { NewCategoryForm } from './_components/new-category-form';
 import TabCategory from './_components/tab-category';
 import { TableCellViewer } from './_components/table-cell-viewer';
 import { handleDelete } from './_funcs/funcs';
-import Image from 'next/image';
-import PlaceholderCategoryIcon from '@/public/placeholder-icon-category.png';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
   const [categoryList, setCategoryList] = React.useState<categoryItemData[]>(
     []
   );
-  const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, setIsReset] = React.useState<boolean>(false);
-  const [defaultActive, setDefaultActive] = React.useState<string>('true');
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -118,16 +116,9 @@ const CategoryManagePage = () => {
     navigator.clipboard
       .writeText(value)
       .then(() => {
-        // 1. Set the copied ID
-        setCopiedId(value);
-        // 2. Clear the feedback after 2 seconds
         toast(t('t_action_noti'), {
           description: t('t_copy_desc_noti'),
         });
-
-        setTimeout(() => {
-          setCopiedId(null);
-        }, 2000);
       })
       .catch((err) => {
         toast(t('t_action_failed_noti'), {
@@ -180,9 +171,6 @@ const CategoryManagePage = () => {
           return (
             <TableCellViewer
               item={row.original}
-              defaultActive={defaultActive}
-              setDefaultActive={setDefaultActive}
-              setCategoryList={setCategoryList}
               handleCopy={handleCopy}
               setIsReset={setIsReset}
             />
@@ -308,9 +296,10 @@ const CategoryManagePage = () => {
         ),
       },
     ],
-    [handleCopy, setCategoryList, defaultActive, setDefaultActive, t]
+    [handleCopy, t]
   );
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: categoryList,
     columns,

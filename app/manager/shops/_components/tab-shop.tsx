@@ -116,19 +116,19 @@ const TabShop = ({
   const [rows, setRows] = React.useState<number>(10);
   const t = useTranslations('admin_shop_page.shop_tab');
   useEffect(() => {
-    fetchData(
-      '/api/manager/shop',
-      { page: 1, limit: rows, status: statusFilter },
-      setData
-    );
-  }, [statusFilter, isReset]);
+    fetchData({
+      baseUrl: '/api/manager/shop',
+      params: { page: 1, limit: rows, status: statusFilter },
+      setData: setData,
+    });
+  }, [statusFilter, isReset, rows, setData]);
 
   useEffect(() => {
     //console.log('category data changed:', data);
     if (data) {
       setShopList(data.data);
     }
-  }, [data]);
+  }, [data, setShopList]);
 
   if (!data || !shopList) return <Loading />;
 
@@ -200,11 +200,15 @@ const TabShop = ({
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
                 setRows(Number(value));
-                fetchData(
-                  '/api/manager/shop',
-                  { page: 1, limit: Number(value), isActive: statusFilter },
-                  setData
-                );
+                fetchData({
+                  baseUrl: '/api/manager/shop',
+                  params: {
+                    page: 1,
+                    limit: Number(value),
+                    isActive: statusFilter,
+                  },
+                  setData: setData,
+                });
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -230,11 +234,11 @@ const TabShop = ({
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => {
                 table.setPageIndex(0);
-                fetchData(
-                  '/api/manager/shop',
-                  { page: 1, limit: rows, isActive: statusFilter },
-                  setData
-                );
+                fetchData({
+                  baseUrl: '/api/manager/shop',
+                  params: { page: 1, limit: rows, isActive: statusFilter },
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -247,15 +251,15 @@ const TabShop = ({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                fetchData(
-                  '/api/manager/shop',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/shop',
+                  params: {
                     page: data.pagination.page - 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -268,15 +272,15 @@ const TabShop = ({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                fetchData(
-                  '/api/manager/shop',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/shop',
+                  params: {
                     page: data.pagination.page + 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >
@@ -289,15 +293,15 @@ const TabShop = ({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                fetchData(
-                  '/api/manager/shop',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/shop',
+                  params: {
                     page: data.pagination.totalPages,
                     limit: rows,
                     isActive: statusFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >

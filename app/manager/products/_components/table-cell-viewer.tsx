@@ -101,18 +101,15 @@ export function TableCellViewer({
 
   async function fetchDetail() {
     try {
-      const res = await fetchData(
-        '/api/manager/product/query',
-        { id: item.id },
-        undefined,
-        'default',
-        true
-      );
+      const res = await fetchData({
+        baseUrl: '/api/manager/product/query',
+        params: { id: item.id },
+        setData: undefined,
+        cacheType: 'default',
+      });
 
-      if (res && res.ok) {
-        const parse = await res.json();
-        //console.log(parse);
-        setDetail(parse.data);
+      if (res) {
+        setDetail(res);
       }
     } catch (err) {
       console.error(err);

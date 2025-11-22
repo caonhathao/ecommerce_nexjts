@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { fetchData } from '@/funcs/fetch';
 import { topProductChart } from '@/types/manager.data-types';
 import React, { useEffect } from 'react';
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
@@ -39,62 +40,47 @@ const chartConfig = {
 
 const TopProduct = () => {
   const [data, setData] = React.useState<topProductChart[] | null>(null);
-  const [isReady, setIsReady] = React.useState<boolean>(false);
   const [timeRange, setTimeRange] = React.useState('month');
-  const [subTitle, setSubTitle] = React.useState<string>('30 ngày');
-  const [amountTop, setAmountTop] = React.useState<number>(5);
+
+  const amountTop: number = 5;
   const [openDetail, setOpenDetail] = React.useState<boolean>(false);
   const [id, setId] = React.useState<string | null>(null);
-
-  const fetchData = async (period: string, month?: string) => {
-    try {
-      const response = await fetch(
-        `/api/manager/statistic/top-product?amount=${amountTop}&&period=${period}&&month=${month}`
-      );
-      const parseData = await response.json();
-      console.log(parseData.data);
-      setData(parseData.data);
-      setIsReady(false);
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const handleOpenDetail = (id: string) => {
     setOpenDetail(true);
     setId(id);
   };
 
-  useEffect(() => {
-    fetchData(timeRange);
-  }, []);
+  const TITLE_MAP: Record<string, string> = {
+    week: '7 ngày',
+    month: '30 ngày',
+    '3months': '90 ngày',
+    months: '12 tháng',
+  };
+
+  // "Derived State": Calculates immediately during the first render
+  const subTitle = TITLE_MAP[timeRange] || '30 ngày';
 
   useEffect(() => {
-    fetchData(timeRange);
-    switch (timeRange) {
-      case 'week':
-        setSubTitle('7 ngày');
-        break;
-      case 'month':
-        setSubTitle('30 ngày');
-        break;
-      case '3months':
-        setSubTitle('90 ngày');
-        break;
-      case 'months':
-        setSubTitle('12 tháng');
-        break;
-      default:
-        setSubTitle('30 ngày');
-        break;
-    }
-  }, [timeRange]);
+    const response = async () => {
+      const res = await fetchData({
+        baseUrl: '/api/manager/statistic/top-product',
+        params: { amount: amountTop, period: timeRange, month: '' },
+        setData: undefined,
+        cacheType: 'default',
+      });
+      if (res) {
+        setData(res);
+      }
+    };
+    response();
+  }, [amountTop, timeRange]);
 
   useEffect(() => {
     console.log(id);
   }, [id]);
 
-  if (!data && isReady) return <Loading />;
+  if (!data) return <Loading />;
   return (
     <div className="w-[50%]">
       <Card className="@container/card">
@@ -112,7 +98,7 @@ const TopProduct = () => {
               value={timeRange}
               onValueChange={setTimeRange}
               variant="outline"
-              className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+              className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
             >
               <ToggleGroupItem value="months">12 tháng</ToggleGroupItem>
               <ToggleGroupItem value="3months">3 tháng</ToggleGroupItem>

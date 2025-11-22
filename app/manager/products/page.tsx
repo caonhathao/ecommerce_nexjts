@@ -72,7 +72,6 @@ import { TableCellViewer } from './_components/table-cell-viewer';
 const ProductsPage = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
   const [productList, setProductList] = React.useState<productItemData[]>([]);
-  const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, setIsReset] = React.useState<boolean>(false);
 
   const [rowSelection, setRowSelection] = React.useState({});
@@ -122,16 +121,9 @@ const ProductsPage = () => {
     navigator.clipboard
       .writeText(value)
       .then(() => {
-        // 1. Set the copied ID
-        setCopiedId(value);
-        // 2. Clear the feedback after 2 seconds
         toast(t('t_action_noti'), {
           description: t('t_copy_desc_noti'),
         });
-
-        setTimeout(() => {
-          setCopiedId(null);
-        }, 2000);
       })
       .catch((err) => {
         toast(t('t_action_failed_noti'), {
@@ -187,7 +179,6 @@ const ProductsPage = () => {
           <TableCellViewer
             item={row.original}
             handleCopy={handleCopy}
-            setIsReset={setIsReset}
             setProductList={setProductList}
           />
         );

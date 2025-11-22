@@ -250,4 +250,4 @@ export type responseData =
   | shopDataResponse
   | productDataResponse;
 
-export type itemData = categoryItemData[] | productItemData[] | shopItemData[];
+export type itemData = categoryItemData | productItemData | shopItemData;

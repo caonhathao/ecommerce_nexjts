@@ -30,7 +30,7 @@ import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { userDetail, userItemData } from '@/types/manager.data-types';
 import { useTranslations } from 'next-intl';
-import React, { SetStateAction, useEffect } from 'react';
+import React, { SetStateAction, useEffect, useMemo } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
@@ -48,39 +48,8 @@ export function TableCellViewer({
 }) {
   const isMobile = useIsMobile();
   const [detail, setDetail] = React.useState<userDetail | null>(null);
-  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
-  const [defaultBanned, setDefaultBanned] = React.useState<string>('false');
-  const [value, setValue] = React.useState<string>('');
   const t = useTranslations('admin_user_page.user_drawer');
-
-  // This effect runs when 'openIndex' changes
-  useEffect(() => {
-    // Only run if an item was OPENED
-    if (openIndex !== null) {
-      // We must wait for your 300ms animation to finish
-      const timer = setTimeout(() => {
-        const container = scrollContainerRef.current;
-
-        // Find the specific <li> element we want to scroll to
-        const element = document.getElementById(`variant-item-${openIndex}`);
-
-        if (container && element) {
-          // This calculates the <li>'s position *inside* the scroll container
-          const scrollToPosition = element.offsetTop - container.offsetTop;
-
-          // Scroll the container to the element
-          container.scrollTo({
-            top: scrollToPosition,
-            behavior: 'smooth',
-          });
-        }
-      }, 300); // 300ms matches your animation
-
-      // Clean up the timer
-      return () => clearTimeout(timer);
-    }
-  }, [openIndex]);
 
   useEffect(() => {
     console.log(detail);
@@ -88,16 +57,14 @@ export function TableCellViewer({
 
   async function fetchDetail() {
     try {
-      const response = await fetchData(
-        '/api/manager/user/query',
-        { id: item.id },
-        undefined,
-        'default',
-        true
-      );
-      if (response && response.ok) {
-        const parse = await response?.json();
-        setDetail(parse.data);
+      const res = await fetchData({
+        baseUrl: '/api/manager/user/query',
+        params: { id: item.id },
+        setData: undefined,
+        cacheType: 'default',
+      });
+      if (res) {
+        setDetail(res);
       }
     } catch (err) {
       console.error(err);
@@ -125,11 +92,8 @@ export function TableCellViewer({
     }
   };
 
-  useEffect(() => {
-    if (detail) {
-      //console.log('fetched');
-      setDefaultBanned(detail.banned === true ? 'true' : 'false');
-    }
+  const defaultBanned = useMemo(() => {
+    return detail && detail.banned === true ? 'true' : 'false';
   }, [detail]);
 
   return (
@@ -313,10 +277,7 @@ export function TableCellViewer({
 
             <div className="flex flex-col gap-3">
               <Label htmlFor="bannedStatus">{t('t_banned_status')}</Label>
-              <Select
-                value={defaultBanned}
-                onValueChange={(value) => setValue(value)}
-              >
+              <Select value={defaultBanned}>
                 <SelectTrigger id="bannedStatus" className="w-full">
                   <SelectValue placeholder={t('t_status_placeholder')} />
                 </SelectTrigger>

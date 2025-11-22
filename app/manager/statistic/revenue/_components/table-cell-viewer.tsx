@@ -47,9 +47,6 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
   const [detail, setDetail] = React.useState<productDetail | null>(null);
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
-  const [defaultVisibility, setDefaultVisibility] = React.useState<string>('');
-
-  const [value, setValue] = React.useState<string>('');
 
   // This effect runs when 'openIndex' changes
   useEffect(() => {
@@ -79,28 +76,21 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
     }
   }, [openIndex]);
 
-  async function fetchDetail() {
-    try {
-      const response = await fetch(`/api/manager/product/${id}`);
-      const detail = await response.json();
-      console.log(detail.data);
-      setDetail(detail.data);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   useEffect(() => {
+    async function fetchDetail() {
+      try {
+        const response = await fetch(`/api/manager/product/${id}`);
+        const detail = await response.json();
+        //console.log(detail.data);
+        setDetail(detail.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
     if (id) {
       fetchDetail();
     }
   }, [id]);
-
-  useEffect(() => {
-    if (detail) {
-      setDefaultVisibility(detail.visibility);
-    }
-  }, [detail]);
 
   const renderVariant = (index: number, value: variantDetail) => {
     return (
@@ -112,9 +102,11 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
         key={index}
       >
         <div className="w-full flex justify-center items-center">
-          <img
+          <Image
             src={value.image}
             alt={value.image || index.toString()}
+            width={0}
+            height={0}
             className="w-[50%]"
           />
         </div>
@@ -285,7 +277,11 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
                           type="button"
                         >
                           <div
-                            className={`${openIndex !== index ? `transform-[rotate(180deg)]` : `transform-[rotate(0deg)]`} transition ease-in-out`}
+                            className={`${
+                              openIndex !== index
+                                ? `transform-[rotate(180deg)]`
+                                : `transform-[rotate(0deg)]`
+                            } transition ease-in-out`}
                           >
                             <IoIosArrowUp />
                           </div>

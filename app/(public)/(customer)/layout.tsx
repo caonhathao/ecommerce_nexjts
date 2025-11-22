@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { auth, getSessionUser } from '@/lib/auth';
-import { headers } from 'next/headers';
+import { getSessionUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import UserNav from '@/app/(public)/(customer)/_components/user-nav';
 

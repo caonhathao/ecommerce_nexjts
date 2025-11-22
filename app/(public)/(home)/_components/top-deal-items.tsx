@@ -36,7 +36,11 @@ export const TopDealItems = ({
     sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4';
 
   useEffect(() => {
-    fetchData('/api/product', { page: 1, limit: size }, setResponse);
+    fetchData({
+      baseUrl: '/api/product',
+      params: { page: 1, limit: size },
+      setData: setResponse,
+    });
   }, [size]);
 
   const data: productItemType[] = useMemo(() => {
