@@ -1,18 +1,16 @@
-import { FlatCompat } from '@eslint/eslintrc';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import reactCompiler from 'eslint-plugin-react-compiler';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import js from '@eslint/js';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+import pluginReact from 'eslint-plugin-react';
+import { defineConfig } from 'eslint/config';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+export default defineConfig([
   {
+    files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    plugins: { js },
+    extends: ['js/recommended'],
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
     ignores: [
       // Dependencies and Build Outputs
       'node_modules/**',
@@ -45,16 +43,7 @@ const eslintConfig = [
       'yarn.lock',
     ],
   },
-  {
-    plugins: {
-      'react-compiler': reactCompiler,
-    },
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'warn',
-      'react-compiler/react-compiler': 'error',
-    },
-  },
-  prettierRecommended,
-];
-
-export default eslintConfig;
+  tseslint.configs.recommended,
+  pluginReact.configs.flat.recommended,
+  eslintConfigPrettier
+]);
