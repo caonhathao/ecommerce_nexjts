@@ -60,16 +60,23 @@ export const auth = betterAuth({
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp }) {
-        const { data, error } = await resend.emails.send({
-          from: webName + ' <onboarding@resend.dev>',
-          to: [email],
-          subject: webName + ' - Verify your email',
-          react: EmailTemplate({ otp: otp }),
-        });
+        if (process.env.NODE_ENV === 'development') {
+          console.log('----------------------------------------------');
+          console.log(`📧 MOCK EMAIL TO: ${email}`);
+          console.log(`🔑 OTP CODE: ${otp}`);
+          console.log('----------------------------------------------');
+        } else {
+          const { error } = await resend.emails.send({
+            from: webName + ' <onboarding@resend.dev>',
+            to: [email],
+            subject: webName + ' - Verify your email',
+            react: EmailTemplate({ otp: otp }),
+          });
 
-        if (error) {
-          console.error(error);
-          throw new Error('Error sending email');
+          if (error) {
+            console.error(error);
+            throw new Error('Error sending email');
+          }
         }
       },
     }),
