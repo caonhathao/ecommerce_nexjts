@@ -23,7 +23,6 @@ import { useRouter } from 'next/navigation';
 export default function AddressPage() {
   const [address, setAddress] = useState<AddressDTO[]>([]);
   const [isPendingTransition, startTransition] = useTransition();
-  const route = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [state, formAction, isPending] = useActionState(
     async (prevState: any, formData: FormData) => {
@@ -79,7 +78,7 @@ export default function AddressPage() {
   return (
     <div className="p-4 w-full min-h-fit">
       <div className="w-full flex justify-between items-center gap-6">
-        <div className=" flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-primary/90 to-chart-3/90 rounded-xl shadow-lg w-fit">
+        <div className=" flex items-center gap-3 px-5 py-2.5 bg-linear-to-r from-primary/90 to-chart-3/90 rounded-xl shadow-lg w-fit">
           <MapPin className="w-6 h-6 text-background" />
           <h2 className="text-xl md:text-2xl font-medium text-background">
             Địa chỉ của tôi

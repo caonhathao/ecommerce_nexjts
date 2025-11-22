@@ -1,31 +1,10 @@
 'use client';
 
+import SearchingBar from '@/app/(public)/_components/searching-bar';
 import { ModeToogle } from '@/components/custom/mode-toogle';
 import { SelectLanguage } from '@/components/custom/select-language';
-import { Separator } from '@/components/ui/separator';
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import SearchingBar from '@/app/(public)/_components/searching-bar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import {
-  Badge,
-  BadgeCheck,
-  Handshake,
-  LogIn,
-  LogOut,
-  MapPin,
-  Package,
-  Rotate3D,
-  RotateCcw,
-  ShoppingCartIcon,
-  Tag,
-  Timer,
-  Truck,
-  Undo,
-  Undo2,
-  User2,
-} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,10 +13,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useRouter } from 'next/navigation';
+import { Separator } from '@/components/ui/separator';
 import { useSignOut } from '@/hooks/use-signout';
+import {
+  BadgeCheck,
+  Handshake,
+  LogIn,
+  LogOut,
+  MapPin,
+  Package,
+  Rotate3D,
+  ShoppingCartIcon,
+  Tag,
+  Timer,
+  Truck,
+  Undo2,
+  User2,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type Role = 'USER' | 'SELLER' | 'ADMIN';
 type HeaderUser = {
@@ -54,24 +50,16 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
 
   const t = useTranslations('home_layout');
   const n = useTranslations('user_navbar');
-  const [isSticky, setIsSticky] = useState(false);
   const handleHome = () => {
     router.push('/');
   };
-
-  // useEffect(() => {
-  //   const onScroll = () => setIsSticky(window.scrollY > 100);
-  //   window.addEventListener('scroll', onScroll);
-  //   return () => window.removeEventListener('scroll', onScroll);
-  // }, []);
-
   return (
     <div className="w-full h-fit  flex flex-col justify-center items-center relative">
       {/* logo, searching zone and tags  */}
       <div
-        className={`w-full flex justify-center items-center transition-all duration-300  bg-background ${
-          isSticky ? 'fixed top-0 left-0 shadow-md z-50' : 'relative'
-        }`}
+        className={
+          'w-full flex justify-center items-center transition-all duration-300  bg-background '
+        }
       >
         <div className="w-[80%] h-fit p-2 flex flex-row justify-center items-center gap-4">
           {/* logo and slogan */}
@@ -175,7 +163,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
               )}
             </div>
             {/* tags  */}
-            <div className="flex flex-row justify-start items-center gap-3 text-[var(--secondary)] text-sm">
+            <div className="flex flex-row justify-start items-center gap-3 text-primary text-sm">
               <Link href={''}>{t('electronics')}</Link>
               <Link href={''}>{t('vehicles')}</Link>
               <Link href={''}>{t('mom_baby')}</Link>
@@ -189,11 +177,12 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
       </div>
       <Separator />
       {/* slogans */}
-      <div className="w-4/5 h-10 pt-2 pr-2 pl-2 flex flex-row justify-start items-center gap-4 text-[var(--foreground)] font-medium text-xs">
+      <div className="w-4/5 h-10 pt-2 pr-2 pl-2 flex flex-row justify-center items-center gap-4 text-foreground font-medium text-xs">
         <Link href="" className="flex gap-1">
           <Handshake className="w-4 h-4 text-primary" />
           {t('commitment')}
         </Link>
+        <Separator orientation="vertical" />
         <Link href="" className="flex gap-1">
           <BadgeCheck className="w-4 h-4 text-primary" />
           {t('genuine_goods')}

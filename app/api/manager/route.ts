@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export const GET = withAuth(async (userId: string, request: NextRequest) => {
+export const GET = withAuth(async (userId: string) => {
   try {
     const data = await prisma.user.findUnique({
       where: { id: userId },

@@ -312,10 +312,12 @@ export default function Cart() {
                         );
                       }}
                     />
-                    <img
+                    <Image
                       src={item.variant.product.images[0].url}
-                      alt={item.variant.product.alt}
-                      className="w-16 h-16 object-cover rounded-md"
+                      alt={item.variant.product.alt || 'Product image'}
+                      width={64} // w-16 = 64px
+                      height={64} // h-16 = 64px
+                      className="object-cover rounded-md"
                     />
                     <div className="flex flex-col justify-start items-left gap-1 overflow-ellipsis">
                       <Label htmlFor={item.variant.product.title}>
@@ -381,7 +383,7 @@ export default function Cart() {
               <div className="space-y-3">
                 {/* voucher 1 */}
                 <div className="flex items-center justify-between bg-blue-50 border border-blue-300 rounded-xl p-3 shadow-sm">
-                  <div className="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                  <div className="shrink-0 w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
                     {env.NEXT_PUBLIC_WEB_NAME}
                   </div>
                   <div className="mx-3 w-px h-8 border-r border-dashed border-blue-400"></div>
@@ -394,7 +396,7 @@ export default function Cart() {
                 </div>
                 {/* voucher 2 */}
                 <div className="flex items-center justify-between bg-blue-50 border border-blue-300 rounded-xl p-3 shadow-sm">
-                  <div className="flex-shrink-0 w-12 h-12 bg-[#2f9e44] rounded-lg flex items-center justify-center">
+                  <div className="shrink-0 w-12 h-12 bg-[#2f9e44] rounded-lg flex items-center justify-center">
                     <Image
                       width={8}
                       height={8}

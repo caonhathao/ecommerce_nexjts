@@ -50,19 +50,19 @@ export const ProductItemSm = ({
 
       const promotionBadge =
         voucher.type === 'PERCENT' ? (
-          <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-[2px] rounded-md">
+          <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-0.5 rounded-md">
             -{voucher.value}%
           </span>
         ) : (
-          <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-[2px] rounded-md">
+          <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-0.5 rounded-md">
             -{formatPrice(Number(voucher.value))}
           </span>
         );
 
       return (
-        <div className="flex flex-col items-start gap-2">
-          <div className="flex flex-row items-center gap-2">
-            <div className="text-[var(--destructive)] font-medium text-sm">
+        <div className="w-full flex flex-col justify-center items-end gap-1">
+          <div className="flex flex-row justify-end items-center gap-2">
+            <div className="text-red-600 font-medium text-sm">
               {Number(discountedPrice) <= 0 ? (
                 <div className="flex flex-row  gap-1">
                   0<div className="underline">{'đ'}</div>

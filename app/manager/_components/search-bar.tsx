@@ -6,6 +6,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group';
+import { itemData } from '@/types/manager.data-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { Dispatch, SetStateAction } from 'react';
@@ -15,7 +16,7 @@ import { z } from 'zod';
 
 interface SearchProps {
   baseUrl: string;
-  setData: Dispatch<SetStateAction<any>>;
+  setData: Dispatch<SetStateAction<itemData>>;
   isReset: boolean;
   setIsReset: Dispatch<SetStateAction<boolean>>;
 }

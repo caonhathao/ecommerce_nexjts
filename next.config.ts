@@ -1,5 +1,5 @@
-import createNextIntlPlugin from 'next-intl/plugin';
 import { NextConfig } from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
       },
       {
         hostname: 'res.cloudinary.com',
+        port: '',
+        protocol: 'https',
+      },
+      {
+        hostname: 'img.icons8.com',
         port: '',
         protocol: 'https',
       },

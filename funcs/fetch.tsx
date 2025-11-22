@@ -1,3 +1,4 @@
+import { response } from '@/types/manager.data-types';
 import React, { SetStateAction } from 'react';
 
 /**
@@ -16,7 +17,7 @@ type QueryParams = Record<string, string | number | boolean | null | undefined>;
 export const fetchData = async (
   baseUrl: string,
   params: QueryParams,
-  setData: React.Dispatch<SetStateAction<any>> | undefined,
+  setData: React.Dispatch<SetStateAction<response>> | undefined,
   cacheType: RequestCache = 'default',
   isExport: boolean = false
 ) => {
@@ -57,21 +58,6 @@ export const fetchData = async (
     // 4. Handle any errors
     const error = e instanceof Error ? e.message : 'An unknown error occurred';
     console.error('Failed to fetch data:', error);
-  }
-};
-
-export const fetchProducts = async (
-  page: number,
-  limit: number,
-  setData: React.Dispatch<SetStateAction<any>>
-) => {
-  try {
-    const response = await fetch(`/api/product?page=${page}&limit=${limit}`);
-    const data = await response.json();
-    setData(data.data);
-    console.log(data.data);
-  } catch (error) {
-    console.error('Error fetching products:', error);
   }
 };
 

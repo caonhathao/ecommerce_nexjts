@@ -16,7 +16,7 @@ export interface productItemData {
   updatedAt: string;
 }
 
-export interface productData {
+export interface productDataResponse {
   data: productItemData[];
   pagination: {
     page: number;
@@ -244,3 +244,10 @@ export interface userDetail {
     };
   }[];
 }
+
+export type responseData =
+  | categoryDataResponse
+  | shopDataResponse
+  | productDataResponse;
+
+export type itemData = categoryItemData[] | productItemData[] | shopItemData[];

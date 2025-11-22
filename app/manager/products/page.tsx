@@ -22,7 +22,10 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { productData, productItemData } from '@/types/manager.data-types';
+import {
+  productDataResponse,
+  productItemData,
+} from '@/types/manager.data-types';
 import {
   DragEndEvent,
   KeyboardSensor,
@@ -67,7 +70,7 @@ import TabProduct from './_components/tab-product';
 import { TableCellViewer } from './_components/table-cell-viewer';
 
 const ProductsPage = () => {
-  const [data, setData] = React.useState<productData | null>(null);
+  const [data, setData] = React.useState<productDataResponse | null>(null);
   const [productList, setProductList] = React.useState<productItemData[]>([]);
   const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, setIsReset] = React.useState<boolean>(false);

@@ -10,11 +10,9 @@ import { AiOutlineLike } from 'react-icons/ai';
 interface props {
   ratingAvg: number;
   ratingCount: number;
-  id: string;
   initialResponse: reviewResponse;
 }
 export function ReviewsClient({
-  id,
   ratingAvg,
   ratingCount,
   initialResponse,
@@ -22,7 +20,9 @@ export function ReviewsClient({
   const [data, setData] = React.useState<reviewsType[] | null>(null);
 
   useEffect(() => {
-    if (initialResponse) setData(initialResponse.data);
+    if (initialResponse) {
+      setData(initialResponse.data);
+    }
   }, [initialResponse]);
 
   const renderReview = (reviewData: reviewsType) => {
