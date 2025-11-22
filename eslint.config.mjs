@@ -47,7 +47,6 @@ const eslintConfig = [
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
-      'react-compiler/react-compiler': 'off',
     },
   },
   prettierRecommended,
