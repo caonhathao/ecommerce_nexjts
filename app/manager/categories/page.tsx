@@ -21,7 +21,6 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import PlaceholderCategoryIcon from '@/public/placeholder-icon-category.png';
 import {
   categoryDataResponse,
   categoryItemData,
@@ -59,7 +58,6 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
@@ -187,27 +185,6 @@ const CategoryManagePage = () => {
         cell: ({ row }) => (
           <div className="w-full flex flex-row gap-2 justify-start items-center">
             <div>{row.original.position}</div>
-          </div>
-        ),
-      },
-      {
-        accessorKey: 'imageUrl',
-        header: 'Icon',
-        cell: ({ row }) => (
-          <div className="flex items-center justify-start">
-            <div className="w-14 h-14 flex items-center justify-center bg-muted rounded-xl border">
-              <Image
-                width={56}
-                height={56}
-                src={row.original.imageUrl}
-                alt={row.original.name}
-                className="rounded-lg object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    PlaceholderCategoryIcon.src;
-                }}
-              />
-            </div>
           </div>
         ),
       },

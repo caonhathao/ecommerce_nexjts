@@ -64,7 +64,7 @@ export function TableCellViewer({
         cacheType: 'default',
       });
       if (res) {
-        setDetail(res);
+        setDetail(res.data);
       }
     } catch (err) {
       console.error(err);
@@ -250,8 +250,8 @@ export function TableCellViewer({
                   {detail?.profile.gender === 'MALE'
                     ? t('c_male')
                     : detail?.profile.gender === 'FEMALE'
-                      ? t('c_female')
-                      : t('c_other')}
+                    ? t('c_female')
+                    : t('c_other')}
                 </p>
               </div>
             </div>

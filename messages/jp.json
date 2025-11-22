@@ -258,6 +258,7 @@
       "t_category_name": "カテゴリー名",
       "t_copy_action": "IDをコピー",
       "t_del_action": "削除",
+      "t_icon":"Ảnh",
       "t_is_active": "表示",
       "t_is_active_placeholder": "ステータスを選択",
       "c_active": "アクティブ",

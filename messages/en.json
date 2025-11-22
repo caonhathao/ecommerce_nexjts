@@ -258,6 +258,7 @@
       "t_category_name": "Category Name",
       "t_copy_action": "Copy ID",
       "t_del_action": "Delete",
+      "t_icon":"Icon",
       "t_is_active": "Active",
       "t_is_active_placeholder": "Select status",
       "c_active": "Active",

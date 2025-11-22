@@ -64,6 +64,7 @@ export function TableCellViewer({
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
   const t = useTranslations('admin_product_page.product_drawer');
+  const [open, setOpen] = React.useState<boolean>(false);
 
   const [value, setValue] = React.useState<string>('');
 
@@ -109,7 +110,7 @@ export function TableCellViewer({
       });
 
       if (res) {
-        setDetail(res);
+        setDetail(res.data);
       }
     } catch (err) {
       console.error(err);
@@ -190,12 +191,18 @@ export function TableCellViewer({
   };
 
   return (
-    <Drawer direction={isMobile ? 'bottom' : 'right'}>
+    <Drawer
+      direction={isMobile ? 'bottom' : 'right'}
+      open={open}
+      onOpenChange={setOpen}
+    >
       <DrawerTrigger asChild>
         <Button
           variant="link"
           className="text-foreground w-fit px-0 text-left"
-          onClick={fetchDetail}
+          onClick={() => {
+            fetchDetail();
+          }}
         >
           {item.title}
         </Button>

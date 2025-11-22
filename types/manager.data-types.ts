@@ -160,7 +160,6 @@ export interface categoryItemData {
   name: string;
   parentId: string | null;
   position: number;
-  imageUrl: string;
   slug: string;
   updatedAt: string;
   _count: {
@@ -173,7 +172,7 @@ export interface categoryDetail {
   name: string;
   slug: string;
   isActive: boolean;
-
+  imageUrl: string;
   parentId: string | null;
   parent: {
     id: string;

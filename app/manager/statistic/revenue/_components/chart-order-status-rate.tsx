@@ -25,61 +25,62 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { fetchData } from '@/funcs/fetch';
 import { orderStatusRateChart } from '@/types/manager.data-types';
+import { useTranslations } from 'next-intl';
 import React, { useEffect } from 'react';
 import { Pie, PieChart } from 'recharts';
 
-const chartConfig = {
-  STATUS: {
-    label: 'Trạng thái',
-  },
-  PENDING: {
-    label: 'Đang chờ',
-    color: 'var(--chart-5)',
-  },
-  PAID: {
-    label: 'Đã thanh toán',
-    color: 'var(--chart-2)',
-  },
-  PROCESSING: {
-    label: 'Đang xử lí',
-    color: 'var(--chart-3)',
-  },
-  CANCELED: {
-    label: 'Đã hủy',
-    color: 'var(--chart-1)',
-  },
-  REFUNDED: {
-    label: 'Đã hoàn tiền',
-    color: 'var(--chart-4)',
-  },
-} satisfies ChartConfig;
-
 const OrderStatusRate = () => {
   const [data, setData] = React.useState<orderStatusRateChart[] | null>(null);
-  const [isReady, setIsReady] = React.useState<boolean>(false);
   const [timeRange, setTimeRange] = React.useState('month');
+  const t = useTranslations('admin_statistic_page.chart_order_state_rate');
+
+  const chartConfig = {
+    STATUS: {
+      label: t('t_label_1'),
+    },
+    PENDING: {
+      label: t('t_label_2'),
+      color: 'var(--chart-5)',
+    },
+    PAID: {
+      label: t('t_label_3'),
+      color: 'var(--chart-2)',
+    },
+    PROCESSING: {
+      label: t('t_label_4'),
+      color: 'var(--chart-3)',
+    },
+    CANCELED: {
+      label: t('t_label_5'),
+      color: 'var(--chart-1)',
+    },
+    REFUNDED: {
+      label: t('t_label_6'),
+      color: 'var(--chart-4)',
+    },
+  } satisfies ChartConfig;
 
   const TITLE_MAP: Record<string, string> = {
-    week: '7 ngày',
-    month: '30 ngày',
-    '3months': '90 ngày',
-    months: '12 tháng',
+    week: t('t_week'),
+    month: t('t_month'),
+    '3months': t('t_3months'),
+    months: t('t_months'),
   };
 
   // "Derived State": Calculates immediately during the first render
-  const subTitle = TITLE_MAP[timeRange] || '30 ngày';
+  const subTitle = TITLE_MAP[timeRange] || t('t_month');
 
   useEffect(() => {
     const response = async () => {
       const res = await fetchData({
-        baseUrl: '/api/manager/statistic/revenue',
+        baseUrl: '/api/manager/statistic/order-status',
         params: { period: timeRange },
         setData: undefined,
         cacheType: 'default',
       });
 
       if (res) {
-        const formattedData = res.map(
+        const formattedData = res.data.map(
           (item: orderStatusRateChart, index: number) => ({
             ...item,
             fill: `var(--chart-${index + 1})`,
@@ -87,7 +88,6 @@ const OrderStatusRate = () => {
         );
 
         setData(formattedData);
-        setIsReady(true);
       }
     };
     response();
@@ -97,18 +97,20 @@ const OrderStatusRate = () => {
   //     console.log(data);
   //   }, [data]);
 
-  if (!data && isReady) return <Loading />;
+  if (!data) return <Loading />;
 
   return (
     <div className="w-[50%]">
       <Card className="@container/card">
         <CardHeader>
-          <CardTitle>Tỉ lệ trạng thái đơn hàng</CardTitle>
+          <CardTitle>{t('t_title')}</CardTitle>
           <CardDescription>
             <span className="hidden @[540px]/card:block">
-              Dữ liệu từ {subTitle} gần nhất
+              {t('t_data_from')} {subTitle} {t('t_most_recent')}
             </span>
-            <span className="@[540px]/card:hidden">{subTitle} gần nhất</span>
+            <span className="@[540px]/card:hidden">
+              {subTitle} {t('t_most_recent')}
+            </span>
           </CardDescription>
           <CardAction>
             <ToggleGroup
@@ -116,12 +118,14 @@ const OrderStatusRate = () => {
               value={timeRange}
               onValueChange={setTimeRange}
               variant="outline"
-              className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+              className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
             >
-              <ToggleGroupItem value="months">12 tháng</ToggleGroupItem>
-              <ToggleGroupItem value="3months">3 tháng</ToggleGroupItem>
-              <ToggleGroupItem value="month">30 ngày</ToggleGroupItem>
-              <ToggleGroupItem value="week">7 ngày</ToggleGroupItem>
+              <ToggleGroupItem value="months">{t('t_months')}</ToggleGroupItem>
+              <ToggleGroupItem value="3months">
+                {t('t_3months')}
+              </ToggleGroupItem>
+              <ToggleGroupItem value="month">{t('t_month')}</ToggleGroupItem>
+              <ToggleGroupItem value="week">{t('t_week')}</ToggleGroupItem>
             </ToggleGroup>
             <Select value={timeRange} onValueChange={setTimeRange}>
               <SelectTrigger
@@ -133,16 +137,16 @@ const OrderStatusRate = () => {
               </SelectTrigger>
               <SelectContent className="rounded-xl">
                 <SelectItem value="months" className="rounded-lg">
-                  12 tháng
+                  {t('t_months')}
                 </SelectItem>
                 <SelectItem value="3months" className="rounded-lg">
-                  3 tháng
+                  {t('t_3months')}
                 </SelectItem>
                 <SelectItem value="month" className="rounded-lg">
-                  30 ngày
+                  {t('t_month')}
                 </SelectItem>
                 <SelectItem value="week" className="rounded-lg">
-                  7 ngày
+                  {t('t_week')}
                 </SelectItem>
               </SelectContent>
             </Select>

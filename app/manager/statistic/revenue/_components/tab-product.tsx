@@ -112,13 +112,16 @@ const TabProduct = ({
   handleDragEnd,
 }: tabProductProps) => {
   useEffect(() => {
-    fetchData({
-      baseUrl: '/api/manager/product',
-      params: { page: 1, limit: 10, status: visibilityFilter },
-      setData: setData,
-    });
-    setProductList(data ? data.data : []);
-  }, [visibilityFilter, setData, setProductList, data]);
+    const f = async () => {
+      const res = await fetchData({
+        baseUrl: '/api/manager/product',
+        params: { page: 1, limit: 10, status: visibilityFilter },
+        setData: setData,
+      });
+      if (res) setProductList(res.data);
+    };
+    f();
+  }, [setData, setProductList, visibilityFilter]);
 
   // useEffect(() => {
   //   console.log(productList);
