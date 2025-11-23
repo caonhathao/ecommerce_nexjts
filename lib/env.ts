@@ -15,6 +15,10 @@ export const env = createEnv({
     PUSHER_KEY: z.string().min(1),
     PUSHER_SECRET: z.string().min(1),
     PUSHER_CLUSTER: z.string().min(1),
+    EMAIL_SMTP_HOST: z.string().min(1),
+    EMAIL_SMTP_PORT: z.string().min(1),
+    EMAIL_SMTP_USER: z.string().min(1),
+    EMAIL_SMTP_PASS: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_WEB_NAME: z.string().min(1),

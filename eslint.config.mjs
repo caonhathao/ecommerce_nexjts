@@ -45,5 +45,11 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
-  eslintConfigPrettier
+  eslintConfigPrettier,
+  {
+    files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+    },
+  },
 ]);
