@@ -16,10 +16,15 @@ export async function POST(req: Request) {
   const channel = data.get('channel_name') as string;
 
   // private-chat-[conversationId]
-  const channelType = channel.split('-')[1]; // chat
-  const conversationId = channel.split('-')[2]; // UUID
+  const chatPrefix = 'private-chat-';
 
-  if (channelType === 'chat' && conversationId) {
+  if (channel.startsWith(chatPrefix)) {
+    const conversationId = channel.slice(chatPrefix.length);
+
+    if (!conversationId || conversationId.length !== 36) {
+      return new NextResponse('Invalid Conversation ID', { status: 400 });
+    }
+
     const participant = await prisma.conversationParticipant.findFirst({
       where: {
         conversationId,

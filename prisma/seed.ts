@@ -1,4 +1,5 @@
 import {
+  $Enums,
   ConversationStatus,
   ConversationType,
   FulfillmentStatus,
@@ -15,6 +16,7 @@ import {
 import { Decimal } from '@/lib/generated/prisma/runtime/library';
 import { faker } from '@faker-js/faker';
 import { Currency, OrderStatus } from '../lib/generated/prisma';
+import MessageRole = $Enums.MessageRole;
 
 const prisma = new PrismaClient();
 
@@ -1563,6 +1565,7 @@ async function main() {
           // If Buyer sends, senderUserId = order.userId. If Shop sends, senderShopId = order.shopId
           senderUserId: isBuyerSender ? order.userId : null,
           senderShopId: isBuyerSender ? null : order.shopId,
+          senderRole: isBuyerSender ? MessageRole.USER : MessageRole.SHOP,
           content: isBuyerSender
             ? faker.helpers.arrayElement([
                 'When will this be shipped?',
@@ -1619,6 +1622,7 @@ async function main() {
       data: {
         conversationId: conversation.id,
         senderUserId: randomUser.id,
+        senderRole: MessageRole.USER,
         content: 'Do you have this item in Red color?',
         createdAt: faker.date.soon({
           refDate: new Date(
@@ -1632,6 +1636,7 @@ async function main() {
       data: {
         conversationId: conversation.id,
         senderShopId: randomShop.id,
+        senderRole: MessageRole.SHOP,
         content: 'Hi, unfortunately we are out of stock for Red.',
         createdAt: faker.date.soon({
           refDate: new Date(
