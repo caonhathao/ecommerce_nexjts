@@ -1,37 +1,22 @@
-import * as React from 'react';
-import { env } from '@/lib/env';
-
-interface EmailTemplateProps {
-  otp: string;
-}
-
-export function EmailTemplate({ otp }: EmailTemplateProps) {
-  return (
-    <div style={{ fontFamily: 'Arial, sans-serif', color: '#222' }}>
-      <h2>{env.NEXT_PUBLIC_WEB_NAME} Verification Code</h2>
-      <p>Your one-time password (OTP) is:</p>
-      <div
-        style={{
-          fontSize: '2rem',
-          fontWeight: 'bold',
-          letterSpacing: '0.3em',
-          background: '#f4f4f4',
-          padding: '1em',
-          borderRadius: '8px',
-          textAlign: 'center',
-          margin: '1em 0',
-        }}
-      >
-        {otp}
-      </div>
-      <p>
-        Please enter this code to verify your email address. This code will
-        expire soon.
-      </p>
-      <p>If you did not request this, you can safely ignore this email.</p>
-      <p style={{ fontSize: '0.9em', color: '#888' }}>
-        &mdash; The {env.NEXT_PUBLIC_WEB_NAME} Team
-      </p>
-    </div>
-  );
+export function renderEmailTemplate(otp: string): string {
+  return `
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Verify your email</title>
+        <style>
+          body { font-family: Inter, system-ui, -apple-system, sans-serif; color: #111827; padding: 24px; }
+          .code { font-size: 18px; font-weight: 700; background: #f3f4f6; padding: 8px; border-radius: 6px; display: inline-block; }
+        </style>
+      </head>
+      <body>
+        <h1>Verify your email</h1>
+        <p>Your verification code:</p>
+        <div class="code">${otp}</div>
+        <p>If you didn't request this, you can ignore this email.</p>
+      </body>
+    </html>
+  `.trim();
 }
