@@ -66,7 +66,31 @@ const DetailPage = () => {
     if (!typeVoucher || !valueVoucher) {
       return <p>{formatPrice(Number(price))}</p>;
     }
+
+    const numericPrice = Number(price);
+    const numericValue = Number(valueVoucher);
+
     if (typeVoucher === 'FIXED') {
+      const finalPrice = Math.max(0, numericPrice - numericValue);
+      return (
+        <div className="flex flex-col justify-start items-start gap-2">
+          <div className="flex flex-row justify-start items-center gap-2">
+            {/* price-after-sale */}
+            <p className="text-red-500 text-3xl font-bold">
+              {formatPrice(finalPrice)}
+            </p>
+            {/* sale discount (show fixed amount) */}
+            <p className="bg-secondary rounded-lg p-1 text-xs">
+              {'-'} {formatPrice(numericValue)}
+            </p>
+            {/* origin price */}
+            <p className="text-muted-foreground line-through">
+              {formatPrice(numericPrice)}
+            </p>
+          </div>
+          <p className="text-muted-foreground italic">{t('t_price_after')}</p>
+        </div>
+      );
     }
     if (typeVoucher === 'PERCENT') {
       return (
