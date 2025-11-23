@@ -1,12 +1,17 @@
 'use client';
-import { productItemType } from '@/types/public.data-types';
+import { fetchData } from '@/funcs/fetch';
+import {
+  productDataResponse,
+  productItemType,
+} from '@/types/public.data-types';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
+import { Loading } from '../../_components/loading';
 import { ProductItem } from '../../_components/product-item';
 
 type TopDealItemsProps = {
   size: string;
-  data: productItemType[];
 };
 
 const sizeClasses = {
@@ -18,11 +23,24 @@ const sizeClasses = {
   '6': 'grid-cols-6',
 };
 
-export const HotForeign = ({ data, size }: TopDealItemsProps) => {
+export const HotForeign = ({ size }: TopDealItemsProps) => {
   const t = useTranslations('hot_foreign');
+  const [response, setResponse] = useState<productDataResponse | null>(null);
   const gridClass =
     sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4'; // Cung cấp giá trị mặc định
+  useEffect(() => {
+    fetchData({
+      baseUrl: '/api/product',
+      params: { page: 1, limit: size },
+      setData: setResponse,
+    });
+  }, [size]);
 
+  const data: productItemType[] = useMemo(() => {
+    return response?.data || [];
+  }, [response]);
+
+  if (!data) return <Loading />;
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-2 mt-5 bg-background rounded-lg">
       {/* top title */}

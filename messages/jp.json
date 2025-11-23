@@ -147,6 +147,45 @@
     "title": "今日のおすすめ",
     "watch_more": "もっと見る"
   },
+  "product_detail": {
+  "t_price_after": "割引後価格",
+  "t_sold": "販売数",
+  "t_variant_type": "商品タイプ",
+  "t_delivery_info": "配送情報",
+  "t_other_promotion": "その他の特典",
+  "t_discount_code": "クーポンコード",
+  "t_more_action": "もっと見る",
+  "t_more_services": "追加サービス",
+  "t_tiki_card": "TikiCardで最大600k割引",
+  "t_pay_later": "後払い",
+  "t_slogan_1": "安心ショッピング",
+  "t_slogan_2": "商品到着時に確認可能",
+  "t_slogan_3": "偽物なら200%返金保証",
+  "t_slogan_4": "365日以内返品無料。お客様都合の返品も可能。",
+  "t_quantity": "数量",
+  "t_total": "小計",
+  "t_buy_action": "今すぐ購入",
+  "t_add_action": "カートに入れる",
+  "detail_desc": {
+    "t_desc": "商品説明"
+  },
+  "detail_review": {
+    "t_review_at": "投稿日時: ",
+    "t_custome_review": "カスタマーレビュー",
+    "t_summary": "概要",
+    "c_reviews": "件のレビュー",
+    "t_filter_by": "絞り込み",
+    "c_newest": "最新",
+    "c_have_img": "画像あり",
+    "c_buy_again": "リピート",
+    "c_5_stars": "5つ星",
+    "c_4_stars": "4つ星",
+    "c_3_stars": "3つ星",
+    "c_2_stars": "2つ星",
+    "c_1_star": "1つ星",
+    "t_more_action": "もっと見る"
+  }
+},
   "admin_layout": {
     "admin_app_sidebar": {
       "t_quick_access": "クイックアクセス",
@@ -219,6 +258,7 @@
       "t_category_name": "カテゴリー名",
       "t_copy_action": "IDをコピー",
       "t_del_action": "削除",
+      "t_icon":"Ảnh",
       "t_is_active": "表示",
       "t_is_active_placeholder": "ステータスを選択",
       "c_active": "アクティブ",

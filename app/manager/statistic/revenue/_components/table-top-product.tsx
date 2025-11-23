@@ -41,6 +41,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   productDataResponse,
@@ -62,7 +63,6 @@ import { CSS } from '@dnd-kit/utilities';
 import {
   IconChevronDown,
   IconDotsVertical,
-  IconGripVertical,
   IconLayoutColumns,
 } from '@tabler/icons-react';
 import {
@@ -81,7 +81,7 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
@@ -90,10 +90,6 @@ import TabProduct from './tab-product';
 const TableTopProduct = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
   const [productList, setProductList] = React.useState<productItemData[]>([]);
-  const [copiedId, setCopiedId] = React.useState<string | null>('');
-  const [isReset, SetIsReset] = React.useState<boolean>(false);
-  const [timeRange, setTimeRange] = React.useState('month');
-
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -132,15 +128,9 @@ const TableTopProduct = () => {
     navigator.clipboard
       .writeText(value)
       .then(() => {
-        // 1. Set the copied ID
-        setCopiedId(value);
-        // 2. Clear the feedback after 2 seconds
         toast('Hành động', {
           description: 'Đã sao chép ID sản phẩm',
         });
-        setTimeout(() => {
-          setCopiedId(null);
-        }, 2000);
       })
       .catch((err) => {
         console.error('Failed to copy ID: ', err);
@@ -245,34 +235,14 @@ const TableTopProduct = () => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  function DragHandle({ id }: { id: string }) {
-    const { attributes, listeners } = useSortable({
-      id,
-    });
-
-    return (
-      <Button
-        {...attributes}
-        {...listeners}
-        variant="ghost"
-        size="icon"
-        className="text-muted-foreground size-7 hover:bg-transparent"
-      >
-        <IconGripVertical className="text-muted-foreground size-3" />
-        <span className="sr-only">Drag to reorder</span>
-      </Button>
-    );
-  }
-
   function TableCellViewer({ item }: { item: productItemData }) {
+    const [open, setOpen] = useState<boolean>(false);
     const isMobile = useIsMobile();
     const [detail, setDetail] = React.useState<productDetail | null>(null);
     const [openIndex, setOpenIndex] = React.useState<number | null>(null);
     const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
     const [defaultVisibility, setDefaultVisibility] =
       React.useState<string>('');
-
-    const [value, setValue] = React.useState<string>('');
 
     // This effect runs when 'openIndex' changes
     useEffect(() => {
@@ -310,10 +280,15 @@ const TableTopProduct = () => {
 
     async function fetchDetail() {
       try {
-        const response = await fetch(`/api/manager/product/${item.id}`);
-        const detail = await response.json();
-        console.log(detail.data);
-        setDetail(detail.data);
+        const response = await fetchData({
+          baseUrl: '/api/manager/product/query',
+          params: { id: item.id },
+          setData: undefined,
+        });
+        if (response) {
+          //        console.log(detail.data);
+          setDetail(response.data);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -329,9 +304,11 @@ const TableTopProduct = () => {
           key={index}
         >
           <div className="w-full flex justify-center items-center">
-            <img
+            <Image
               src={value.image}
               alt={value.image || index.toString()}
+              width={0}
+              height={0}
               className="w-[50%]"
             />
           </div>
@@ -366,12 +343,18 @@ const TableTopProduct = () => {
     };
 
     return (
-      <Drawer direction={isMobile ? 'bottom' : 'right'}>
+      <Drawer
+        direction={isMobile ? 'bottom' : 'right'}
+        open={open}
+        onOpenChange={setOpen}
+      >
         <DrawerTrigger asChild>
           <Button
             variant="link"
             className="text-foreground w-fit px-0 text-left"
-            onClick={fetchDetail}
+            onClick={() => {
+              fetchDetail();
+            }}
           >
             {item.title}
           </Button>
@@ -474,10 +457,7 @@ const TableTopProduct = () => {
 
               <div className="flex flex-col gap-3">
                 <Label htmlFor="visibility">Hiển thị</Label>
-                <Select
-                  value={defaultVisibility}
-                  onValueChange={(value) => setValue(value)}
-                >
+                <Select value={defaultVisibility}>
                   <SelectTrigger id="visibility" className="w-full">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
@@ -520,7 +500,11 @@ const TableTopProduct = () => {
                             type="button"
                           >
                             <div
-                              className={`${openIndex !== index ? `transform-[rotate(180deg)]` : `transform-[rotate(0deg)]`} transition ease-in-out`}
+                              className={`${
+                                openIndex !== index
+                                  ? `transform-[rotate(180deg)]`
+                                  : `transform-[rotate(0deg)]`
+                              } transition ease-in-out`}
                             >
                               <IoIosArrowUp />
                             </div>
@@ -624,7 +608,6 @@ const TableTopProduct = () => {
         >
           <TabProduct
             visibilityFilter="PUBLIC"
-            isReset={isReset}
             sensors={sensors}
             sortableId={sortableId}
             table={table}

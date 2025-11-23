@@ -33,6 +33,7 @@ async function main() {
   await prisma.returnRequest.deleteMany();
   await prisma.refund.deleteMany();
   await prisma.shipment.deleteMany();
+  await prisma.orderPayment.deleteMany();
   await prisma.payment.deleteMany();
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
@@ -61,20 +62,25 @@ async function main() {
   // ------------------------
   // 1️⃣ USERS
   // ------------------------
+  const uniqueEmails = new Set<string>();
+  while (uniqueEmails.size < 500) {
+    uniqueEmails.add(faker.internet.email().toLowerCase());
+  }
+  const emailList = Array.from(uniqueEmails);
+
   const users = await Promise.all(
-    Array.from({ length: 500 }).map(() =>
+    emailList.map((email) =>
       prisma.user.create({
         data: {
           id: faker.string.uuid(),
           name: faker.person.fullName(),
-          email: faker.internet.email(),
+          email,
           emailVerified: true,
           image: faker.image.avatar(),
         },
       })
     )
   );
-
   console.log(`✅ Created ${users.length} users`);
 
   // ------------------------

@@ -72,7 +72,6 @@ import { TableCellViewer } from './_components/table-cell-viewer';
 const ProductsPage = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
   const [productList, setProductList] = React.useState<productItemData[]>([]);
-  const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, setIsReset] = React.useState<boolean>(false);
 
   const [rowSelection, setRowSelection] = React.useState({});
@@ -112,35 +111,31 @@ const ProductsPage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = React.useCallback((value: string) => {
-    if (!value || value.length === 0 || value === undefined) {
-      toast(t('t_action_failed_noti'), {
-        description: t('t_copy_failed_desc_noti'),
-      });
-      return;
-    }
-    navigator.clipboard
-      .writeText(value)
-      .then(() => {
-        // 1. Set the copied ID
-        setCopiedId(value);
-        // 2. Clear the feedback after 2 seconds
-        toast(t('t_action_noti'), {
-          description: t('t_copy_desc_noti'),
-        });
-
-        setTimeout(() => {
-          setCopiedId(null);
-        }, 2000);
-      })
-      .catch((err) => {
+  const handleCopy = React.useCallback(
+    (value: string) => {
+      if (!value || value.length === 0 || value === undefined) {
         toast(t('t_action_failed_noti'), {
           description: t('t_copy_failed_desc_noti'),
         });
+        return;
+      }
+      navigator.clipboard
+        .writeText(value)
+        .then(() => {
+          toast(t('t_action_noti'), {
+            description: t('t_copy_desc_noti'),
+          });
+        })
+        .catch((err) => {
+          toast(t('t_action_failed_noti'), {
+            description: t('t_copy_failed_desc_noti'),
+          });
 
-        console.error('Failed to copy ID: ', err);
-      });
-  }, []);
+          console.error('Failed to copy ID: ', err);
+        });
+    },
+    [t]
+  );
 
   // Assume you have a `t` function in scope, for example:
   // const t = useTranslations('admin_product_page');
@@ -187,7 +182,6 @@ const ProductsPage = () => {
           <TableCellViewer
             item={row.original}
             handleCopy={handleCopy}
-            setIsReset={setIsReset}
             setProductList={setProductList}
           />
         );
@@ -282,6 +276,7 @@ const ProductsPage = () => {
     },
   ];
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: productList,
     columns,

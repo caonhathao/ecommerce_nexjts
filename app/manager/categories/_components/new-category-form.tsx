@@ -1,5 +1,4 @@
 'use client';
-import { Loading } from '@/app/(public)/_components/loading';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -93,18 +92,14 @@ export const NewCategoryForm = ({
 
   useEffect(() => {
     // Fetch categories or any other data if needed
-    fetchData(
-      '/api/manager/category',
-      { page: 1, limit: 1000, isActive: 'true' },
-      setData
-    );
-  }, []);
+    fetchData({
+      baseUrl: '/api/manager/category',
+      params: { page: 1, limit: 1000, isActive: 'true' },
+      setData: setData,
+    });
+  }, [open]);
 
   const list: categoryItemData[] = data?.data || [];
-
-  if (!data) {
-    return <Loading />;
-  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

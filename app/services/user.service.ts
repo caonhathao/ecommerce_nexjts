@@ -6,13 +6,6 @@ import {
   UserProfileResponseDTO,
 } from '@/types/dtos/user.dto';
 
-type InitUserOpts = {
-  id: string;
-  email?: string | null;
-  name?: string | null;
-  phone?: string | null;
-};
-
 export async function getUserProfile(
   userId: string
 ): Promise<UserProfileResponseDTO | null> {

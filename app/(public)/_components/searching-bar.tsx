@@ -75,7 +75,7 @@ const SearchingBar = () => {
           <Button
             variant="ghost"
             type="submit"
-            className="text-[var(--primary)] hover:bg-transparent hover:text-blue-600"
+            className="text-primary hover:bg-transparent hover:text-blue-600"
           >
             {t('search_button')}
           </Button>

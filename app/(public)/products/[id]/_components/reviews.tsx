@@ -23,11 +23,11 @@ export function Reviews({ id, ratingAvg, ratingCount }: props) {
   useEffect(() => {
     const loadReviews = async () => {
       try {
-        await fetchData(
-          '/api/reviews',
-          { id: id, page: 1, limit: 5 },
-          setInitialResponse
-        );
+        await fetchData({
+          baseUrl: '/api/reviews',
+          params: { id: id, page: 1, limit: 5 },
+          setData: setInitialResponse,
+        });
       } catch (error) {
         console.error(error);
       } finally {
@@ -44,7 +44,6 @@ export function Reviews({ id, ratingAvg, ratingCount }: props) {
 
   return (
     <ReviewsClient
-      id={id}
       ratingAvg={ratingAvg}
       ratingCount={ratingCount}
       initialResponse={initialResponse}

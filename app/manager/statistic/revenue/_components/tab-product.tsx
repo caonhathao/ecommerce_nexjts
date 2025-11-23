@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { fetchData } from '@/funcs/fetch';
 import {
   productDataResponse,
   productItemData,
@@ -54,9 +55,6 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 interface tabProductProps {
   /** The current visibility filter string (e.g., "PUBLIC", "PRIVATE"). */
   visibilityFilter: string;
-
-  /** Check the reset state: If reset data is called, change reset state */
-  isReset: boolean;
 
   /** Array of sensor descriptors from dnd-kit for enabling drag-and-drop. */
   sensors: SensorDescriptor<any>[];
@@ -101,7 +99,6 @@ interface tabProductProps {
  */
 const TabProduct = ({
   visibilityFilter,
-  isReset,
   sensors,
   sortableId,
   table,
@@ -114,28 +111,17 @@ const TabProduct = ({
   DraggableRow,
   handleDragEnd,
 }: tabProductProps) => {
-  const fetchData = async (
-    page: number,
-    limit: number,
-    visibility: string = ''
-  ) => {
-    try {
-      const response = await fetch(
-        `/api/manager/product?page=${page}&&limit=${limit}&&status=${visibility}`
-      );
-      const data = await response.json();
-
-      //console.log(data);
-      setData(data);
-      setProductList(data.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
-    fetchData(1, 10, visibilityFilter);
-  }, [visibilityFilter, isReset]);
+    const f = async () => {
+      const res = await fetchData({
+        baseUrl: '/api/manager/product',
+        params: { page: 1, limit: 10, status: visibilityFilter },
+        setData: setData,
+      });
+      if (res) setProductList(res.data);
+    };
+    f();
+  }, [setData, setProductList, visibilityFilter]);
 
   // useEffect(() => {
   //   console.log(productList);
@@ -210,7 +196,15 @@ const TabProduct = ({
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
-                fetchData(1, Number(value), visibilityFilter);
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: {
+                    page: 1,
+                    limit: Number(value),
+                    status: visibilityFilter,
+                  },
+                  setData,
+                });
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -236,7 +230,15 @@ const TabProduct = ({
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => {
                 table.setPageIndex(0);
-                fetchData(1, 10, visibilityFilter);
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: {
+                    page: 1,
+                    limit: 10,
+                    status: visibilityFilter,
+                  },
+                  setData,
+                });
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -249,7 +251,15 @@ const TabProduct = ({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                fetchData(data.pagination.page - 1, 10, visibilityFilter);
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: {
+                    page: data.pagination.page - 1,
+                    limit: 10,
+                    status: visibilityFilter,
+                  },
+                  setData,
+                });
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -262,7 +272,15 @@ const TabProduct = ({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                fetchData(data.pagination.page + 1, 10, visibilityFilter);
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: {
+                    page: data.pagination.page + 1,
+                    limit: 10,
+                    status: visibilityFilter,
+                  },
+                  setData,
+                });
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >
@@ -275,7 +293,15 @@ const TabProduct = ({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                fetchData(data.pagination.totalPages, 10, visibilityFilter);
+                fetchData({
+                  baseUrl: '/api/manager/product',
+                  params: {
+                    page: data.pagination.totalPages,
+                    limit: 10,
+                    status: visibilityFilter,
+                  },
+                  setData,
+                });
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >

@@ -23,110 +23,94 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { fetchData } from '@/funcs/fetch';
 import { orderStatusRateChart } from '@/types/manager.data-types';
+import { useTranslations } from 'next-intl';
 import React, { useEffect } from 'react';
 import { Pie, PieChart } from 'recharts';
 
-const chartConfig = {
-  STATUS: {
-    label: 'Trạng thái',
-  },
-  PENDING: {
-    label: 'Đang chờ',
-    color: 'var(--chart-5)',
-  },
-  PAID: {
-    label: 'Đã thanh toán',
-    color: 'var(--chart-2)',
-  },
-  PROCESSING: {
-    label: 'Đang xử lí',
-    color: 'var(--chart-3)',
-  },
-  CANCELED: {
-    label: 'Đã hủy',
-    color: 'var(--chart-1)',
-  },
-  REFUNDED: {
-    label: 'Đã hoàn tiền',
-    color: 'var(--chart-4)',
-  },
-} satisfies ChartConfig;
-
 const OrderStatusRate = () => {
   const [data, setData] = React.useState<orderStatusRateChart[] | null>(null);
-  const [isReady, setIsReady] = React.useState<boolean>(false);
   const [timeRange, setTimeRange] = React.useState('month');
-  const [subTitle, setSubTitle] = React.useState<string>('30 ngày');
+  const t = useTranslations('admin_statistic_page.chart_order_state_rate');
 
-  const fetchData = async (period: string, month?: string) => {
-    try {
-      const response = await fetch(
-        `/api/manager/statistic/order-status?period=${period}&&month=${month}`
-      );
-      const parseData = await response.json();
-      console.log(parseData.data);
-      setData(parseData.data);
-      setIsReady(false);
-    } catch (e) {
-      console.error(e);
-    }
+  const chartConfig = {
+    STATUS: {
+      label: t('t_label_1'),
+    },
+    PENDING: {
+      label: t('t_label_2'),
+      color: 'var(--chart-5)',
+    },
+    PAID: {
+      label: t('t_label_3'),
+      color: 'var(--chart-2)',
+    },
+    PROCESSING: {
+      label: t('t_label_4'),
+      color: 'var(--chart-3)',
+    },
+    CANCELED: {
+      label: t('t_label_5'),
+      color: 'var(--chart-1)',
+    },
+    REFUNDED: {
+      label: t('t_label_6'),
+      color: 'var(--chart-4)',
+    },
+  } satisfies ChartConfig;
+
+  const TITLE_MAP: Record<string, string> = {
+    week: t('t_week'),
+    month: t('t_month'),
+    '3months': t('t_3months'),
+    months: t('t_months'),
   };
 
-  useEffect(() => {
-    fetchData(timeRange);
-  }, []);
+  // "Derived State": Calculates immediately during the first render
+  const subTitle = TITLE_MAP[timeRange] || t('t_month');
 
   useEffect(() => {
-    fetchData(timeRange);
-    switch (timeRange) {
-      case 'week':
-        setSubTitle('7 ngày');
-        break;
-      case 'month':
-        setSubTitle('30 ngày');
-        break;
-      case '3months':
-        setSubTitle('90 ngày');
-        break;
-      case 'months':
-        setSubTitle('12 tháng');
-        break;
-      default:
-        setSubTitle('30 ngày');
-        break;
-    }
+    const response = async () => {
+      const res = await fetchData({
+        baseUrl: '/api/manager/statistic/order-status',
+        params: { period: timeRange },
+        setData: undefined,
+        cacheType: 'default',
+      });
+
+      if (res) {
+        const formattedData = res.data.map(
+          (item: orderStatusRateChart, index: number) => ({
+            ...item,
+            fill: `var(--chart-${index + 1})`,
+          })
+        );
+
+        setData(formattedData);
+      }
+    };
+    response();
   }, [timeRange]);
-
-  useEffect(() => {
-    if (data && !isReady) {
-      const formattedData = data.map((item, index) => ({
-        ...item, // Copy all existing properties (label, total)
-        fill: `var(--chart-${index + 1})`, // Add the new 'fill' property
-      }));
-
-      // 3. Set the new array into your local state
-      setData(formattedData);
-      setIsReady(true);
-    }
-  }, [data]); // This effect re-runs whenever 'data' changes
 
   //   useEffect(() => {
   //     console.log(data);
   //   }, [data]);
 
-  if (!data && isReady) return <Loading />;
+  if (!data) return <Loading />;
 
   return (
     <div className="w-[50%]">
       <Card className="@container/card">
         <CardHeader>
-          <CardTitle>Tỉ lệ trạng thái đơn hàng</CardTitle>
+          <CardTitle>{t('t_title')}</CardTitle>
           <CardDescription>
             <span className="hidden @[540px]/card:block">
-              Dữ liệu từ {subTitle} gần nhất
+              {t('t_data_from')} {subTitle} {t('t_most_recent')}
             </span>
-            <span className="@[540px]/card:hidden">{subTitle} gần nhất</span>
+            <span className="@[540px]/card:hidden">
+              {subTitle} {t('t_most_recent')}
+            </span>
           </CardDescription>
           <CardAction>
             <ToggleGroup
@@ -134,12 +118,14 @@ const OrderStatusRate = () => {
               value={timeRange}
               onValueChange={setTimeRange}
               variant="outline"
-              className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+              className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
             >
-              <ToggleGroupItem value="months">12 tháng</ToggleGroupItem>
-              <ToggleGroupItem value="3months">3 tháng</ToggleGroupItem>
-              <ToggleGroupItem value="month">30 ngày</ToggleGroupItem>
-              <ToggleGroupItem value="week">7 ngày</ToggleGroupItem>
+              <ToggleGroupItem value="months">{t('t_months')}</ToggleGroupItem>
+              <ToggleGroupItem value="3months">
+                {t('t_3months')}
+              </ToggleGroupItem>
+              <ToggleGroupItem value="month">{t('t_month')}</ToggleGroupItem>
+              <ToggleGroupItem value="week">{t('t_week')}</ToggleGroupItem>
             </ToggleGroup>
             <Select value={timeRange} onValueChange={setTimeRange}>
               <SelectTrigger
@@ -151,16 +137,16 @@ const OrderStatusRate = () => {
               </SelectTrigger>
               <SelectContent className="rounded-xl">
                 <SelectItem value="months" className="rounded-lg">
-                  12 tháng
+                  {t('t_months')}
                 </SelectItem>
                 <SelectItem value="3months" className="rounded-lg">
-                  3 tháng
+                  {t('t_3months')}
                 </SelectItem>
                 <SelectItem value="month" className="rounded-lg">
-                  30 ngày
+                  {t('t_month')}
                 </SelectItem>
                 <SelectItem value="week" className="rounded-lg">
-                  7 ngày
+                  {t('t_week')}
                 </SelectItem>
               </SelectContent>
             </Select>

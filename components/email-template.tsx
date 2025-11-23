@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { env } from '@/lib/env';
 
 interface EmailTemplateProps {
   otp: string;
@@ -7,7 +8,7 @@ interface EmailTemplateProps {
 export function EmailTemplate({ otp }: EmailTemplateProps) {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', color: '#222' }}>
-      <h2>LMS-Courses Verification Code</h2>
+      <h2>{env.NEXT_PUBLIC_WEB_NAME} Verification Code</h2>
       <p>Your one-time password (OTP) is:</p>
       <div
         style={{
@@ -29,7 +30,7 @@ export function EmailTemplate({ otp }: EmailTemplateProps) {
       </p>
       <p>If you did not request this, you can safely ignore this email.</p>
       <p style={{ fontSize: '0.9em', color: '#888' }}>
-        &mdash; The LMS-Courses Team
+        &mdash; The {env.NEXT_PUBLIC_WEB_NAME} Team
       </p>
     </div>
   );

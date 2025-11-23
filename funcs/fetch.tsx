@@ -1,4 +1,4 @@
-import { response } from '@/types/manager.data-types';
+import { reviewsType } from '@/types/public.data-types';
 import React, { SetStateAction } from 'react';
 
 /**
@@ -14,13 +14,20 @@ type QueryParams = Record<string, string | number | boolean | null | undefined>;
  * @param params - An object of query parameters (e.g., { page: 1, search: 'laptops' })
  * @param setData - The React state setter for the successfully fetched data
  */
-export const fetchData = async (
-  baseUrl: string,
-  params: QueryParams,
-  setData: React.Dispatch<SetStateAction<response>> | undefined,
-  cacheType: RequestCache = 'default',
-  isExport: boolean = false
-) => {
+
+interface fetchProps<T> {
+  baseUrl: string;
+  params: QueryParams;
+  setData: React.Dispatch<SetStateAction<T>> | undefined;
+  cacheType?: RequestCache;
+}
+
+export const fetchData = async <T,>({
+  baseUrl,
+  params,
+  setData,
+  cacheType = 'default',
+}: fetchProps<T>) => {
   try {
     // 1. Build the URL with query parameters
     const searchParams = new URLSearchParams();
@@ -46,14 +53,13 @@ export const fetchData = async (
         `HTTP error! status: ${response.status}, message: ${errorText}`
       );
     }
-
-    if (isExport) return response;
-
     const data = await response.json();
-    console.log('data: ', data);
 
-    // 3. Update state with the fetched data
+    // Method 1: Internal State Update
     if (setData) setData(data);
+
+    // Method 2: Return Data (So you can use it manually if you want)
+    return data;
   } catch (e) {
     // 4. Handle any errors
     const error = e instanceof Error ? e.message : 'An unknown error occurred';
@@ -62,7 +68,7 @@ export const fetchData = async (
 };
 
 export const fetchReviews = async (
-  setData: React.Dispatch<SetStateAction<any>>,
+  setData: React.Dispatch<SetStateAction<reviewsType[]>>,
   id: string,
   page?: number,
   limit?: number
@@ -78,14 +84,13 @@ export const fetchReviews = async (
   }
 };
 
-export const fetchProductById = async (
-  id: string,
-  setData: React.Dispatch<SetStateAction<any>>
-) => {
+export const fetchProductById = async (id: string) => {
   try {
     const response = await fetch(`/api/product/${id}`);
-    const data = await response.json();
-    setData(data.data);
+    if (response && response.ok) {
+      const data = await response.json();
+      return data.data;
+    } else return null;
   } catch (error) {
     console.error('Error fetching product by ID:', error);
   }

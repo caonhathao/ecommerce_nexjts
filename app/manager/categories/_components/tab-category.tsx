@@ -27,6 +27,7 @@ import {
   DndContext,
   DragEndEvent,
   SensorDescriptor,
+  SensorOptions,
   UniqueIdentifier,
 } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
@@ -61,7 +62,7 @@ interface tabProductProps {
   isReset: boolean;
 
   /** Array of sensor descriptors from dnd-kit for enabling drag-and-drop. */
-  sensors: SensorDescriptor<any>[];
+  sensors: SensorDescriptor<SensorOptions>[];
 
   /** A unique string ID passed to the SortableContext. */
   sortableId: string;
@@ -120,11 +121,11 @@ const TabCategory = ({
   const t = useTranslations('admin_category_page.category_tab');
 
   useEffect(() => {
-    fetchData(
-      '/api/manager/category',
-      { page: 1, limit: rows, isActive: activeFilter },
-      setData
-    );
+    fetchData({
+      baseUrl: '/api/manager/category',
+      params: { page: 1, limit: rows, isActive: activeFilter },
+      setData: setData,
+    });
   }, [activeFilter, isReset, rows, setData]);
 
   useEffect(() => {
@@ -132,7 +133,7 @@ const TabCategory = ({
     if (data) {
       setCategoryList(data.data);
     }
-  }, [data]);
+  }, [data, setCategoryList]);
 
   if (!data || !categoryList) return <Loading />;
 
@@ -204,11 +205,15 @@ const TabCategory = ({
               onValueChange={(value) => {
                 setRows(Number(value));
                 table.setPageSize(Number(value));
-                fetchData(
-                  '/api/manager/category',
-                  { page: 1, limit: Number(value), isActive: activeFilter },
-                  setData
-                );
+                fetchData({
+                  baseUrl: '/api/manager/category',
+                  params: {
+                    page: 1,
+                    limit: Number(value),
+                    isActive: activeFilter,
+                  },
+                  setData: setData,
+                });
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -234,11 +239,11 @@ const TabCategory = ({
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => {
                 table.setPageIndex(0);
-                fetchData(
-                  '/api/manager/category',
-                  { page: 1, limit: rows, isActive: activeFilter },
-                  setData
-                );
+                fetchData({
+                  baseUrl: '/api/manager/category',
+                  params: { page: 1, limit: rows, isActive: activeFilter },
+                  setData: setData,
+                });
               }}
               disabled={data.meta.page - 1 <= 0}
             >
@@ -251,15 +256,15 @@ const TabCategory = ({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                fetchData(
-                  '/api/manager/category',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/category',
+                  params: {
                     page: data.meta.page - 1,
                     limit: rows,
                     isActive: activeFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.meta.page - 1 <= 0}
             >
@@ -272,15 +277,15 @@ const TabCategory = ({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                fetchData(
-                  '/api/manager/category',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/category',
+                  params: {
                     page: data.meta.page + 1,
                     limit: rows,
                     isActive: activeFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.meta.page + 1 > data.meta.totalPages}
             >
@@ -293,15 +298,15 @@ const TabCategory = ({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                fetchData(
-                  '/api/manager/category',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/category',
+                  params: {
                     page: data.meta.totalPages,
                     limit: rows,
                     isActive: activeFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.meta.page + 1 > data.meta.totalPages}
             >

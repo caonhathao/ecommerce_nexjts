@@ -3,12 +3,12 @@ import React from 'react';
 import { Sidebar } from '../ui/sidebar';
 
 import { BsTicketPerforated } from 'react-icons/bs';
-import { FaCcAmazonPay, FaCreditCard, FaStore } from 'react-icons/fa';
+import { FaCcAmazonPay, FaCreditCard } from 'react-icons/fa';
 
-import { useTranslations } from 'next-intl';
-import { useCategories } from '@/hooks/use-categories';
-import Image from 'next/image';
 import { categoryIconMap } from '@/constants/category-icon-map';
+import { useCategories } from '@/hooks/use-categories';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 const extensions = [
   {
@@ -39,9 +39,9 @@ export const AppSidebar = ({
     <div className="w-[25%]">
       <div className="w-full overflow-y-auto max-h-[calc(100vh-120px)] scrollbar-hide ">
         <div className="flex flex-col jus-end items-end">
-          <div className="w-[70%] p-2 bg-[var(--background)] rounded-lg border border-gray-200 flex flex-col justify-start items-start">
+          <div className="w-[70%] p-2 bg-background rounded-lg border border-gray-200 flex flex-col justify-start items-start">
             {/* title */}
-            <p className="font-bold text-base px-5 py-1 text-[var(--primary)]">
+            <p className="font-bold text-base px-5 py-1 text-primary">
               {t('category')}
             </p>
 
@@ -49,7 +49,7 @@ export const AppSidebar = ({
               {topCategories.map((item, key) => (
                 <div
                   key={key}
-                  className="w-full hover:bg-[var(--primary-foreground)] px-3 py-4 rounded-lg transition-all"
+                  className="w-full hover:bg-primary-foreground px-3 py-4 rounded-lg transition-all"
                 >
                   <a
                     href={item.slug}
@@ -77,7 +77,7 @@ export const AppSidebar = ({
             </div>
           </div>
 
-          <div className="w-[70%] p-2 bg-[var(--background)] rounded-lg border border-gray-200 flex flex-col justify-start items-start mt-4">
+          <div className="w-[70%] p-2 bg-background rounded-lg border border-gray-200 flex flex-col justify-start items-start mt-4">
             {/* title */}
             <p className="font-bold text-base px-5 py-1 text-primary">
               {t('extensions')}
@@ -87,7 +87,7 @@ export const AppSidebar = ({
               {extensions.map((item, key) => (
                 <div
                   key={key}
-                  className="w-full hover:bg-[var(--primary-foreground)] px-3 py-4 rounded-lg transition-all"
+                  className="w-full hover:bg-primary-foreground px-3 py-4 rounded-lg transition-all"
                 >
                   <a
                     href={item.url}

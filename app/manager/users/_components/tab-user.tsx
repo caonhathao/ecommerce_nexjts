@@ -24,6 +24,7 @@ import {
   DndContext,
   DragEndEvent,
   SensorDescriptor,
+  SensorOptions,
   UniqueIdentifier,
 } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
@@ -58,7 +59,7 @@ interface tabShopProps {
   isReset: boolean;
 
   /** Array of sensor descriptors from dnd-kit for enabling drag-and-drop. */
-  sensors: SensorDescriptor<any>[];
+  sensors: SensorDescriptor<SensorOptions>[];
 
   /** A unique string ID passed to the SortableContext. */
   sortableId: string;
@@ -116,19 +117,19 @@ const TabUser = ({
   const [rows, setRows] = React.useState<number>(10);
   const t = useTranslations('admin_user_page.user_tab');
   useEffect(() => {
-    fetchData(
-      '/api/manager/user',
-      { page: 1, limit: rows, lock: statusFilter },
-      setData
-    );
-  }, [statusFilter, isReset]);
+    fetchData({
+      baseUrl: '/api/manager/user',
+      params: { page: 1, limit: rows, lock: statusFilter },
+      setData: setData,
+    });
+  }, [statusFilter, isReset, rows, setData]);
 
   useEffect(() => {
     //console.log('category data changed:', data);
     if (data) {
       setUserList(data.data);
     }
-  }, [data]);
+  }, [data, setUserList]);
 
   if (!data || !userList) return <Loading />;
 
@@ -200,11 +201,15 @@ const TabUser = ({
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
                 setRows(Number(value));
-                fetchData(
-                  '/api/manager/user',
-                  { page: 1, limit: Number(value), isActive: statusFilter },
-                  setData
-                );
+                fetchData({
+                  baseUrl: '/api/manager/user',
+                  params: {
+                    page: 1,
+                    limit: Number(value),
+                    isActive: statusFilter,
+                  },
+                  setData: setData,
+                });
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -230,11 +235,11 @@ const TabUser = ({
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => {
                 table.setPageIndex(0);
-                fetchData(
-                  '/api/manager/user',
-                  { page: 1, limit: rows, isActive: statusFilter },
-                  setData
-                );
+                fetchData({
+                  baseUrl: '/api/manager/user',
+                  params: { page: 1, limit: rows, isActive: statusFilter },
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -247,15 +252,15 @@ const TabUser = ({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                fetchData(
-                  '/api/manager/user',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/user',
+                  params: {
                     page: data.pagination.page - 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page - 1 <= 0}
             >
@@ -268,15 +273,15 @@ const TabUser = ({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                fetchData(
-                  '/api/manager/user',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/user',
+                  params: {
                     page: data.pagination.page + 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >
@@ -289,15 +294,15 @@ const TabUser = ({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                fetchData(
-                  '/api/manager/shop',
-                  {
+                fetchData({
+                  baseUrl: '/api/manager/shop',
+                  params: {
                     page: data.pagination.totalPages,
                     limit: rows,
                     isActive: statusFilter,
                   },
-                  setData
-                );
+                  setData: setData,
+                });
               }}
               disabled={data.pagination.page + 1 > data.pagination.totalPages}
             >

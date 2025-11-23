@@ -131,7 +131,6 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
 
     // --- 4. Group data for REVENUE chart (from paidOrders) ---
     const groupedData = new Map<string, number>();
-    let totalSum = 0;
 
     for (const order of orders) {
       if (!order.placedAt) continue;
@@ -143,7 +142,6 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       const currentTotal = groupedData.get(key) || 0;
       const newTotal = currentTotal + order.grandTotal.toNumber();
       groupedData.set(key, newTotal);
-      totalSum += order.grandTotal.toNumber();
     }
 
     // --- 5. Fill in gaps for REVENUE chart (from paidOrders) ---

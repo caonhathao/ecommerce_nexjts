@@ -11,14 +11,26 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().min(1),
     CLOUDINARY_API_KEY: z.string().min(1),
     CLOUDINARY_API_SECRET: z.string().min(1),
+    PUSHER_APP_ID: z.string().min(1),
+    PUSHER_KEY: z.string().min(1),
+    PUSHER_SECRET: z.string().min(1),
+    PUSHER_CLUSTER: z.string().min(1),
+    EMAIL_SMTP_HOST: z.string().min(1),
+    EMAIL_SMTP_PORT: z.string().min(1),
+    EMAIL_SMTP_USER: z.string().min(1),
+    EMAIL_SMTP_PASS: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_WEB_NAME: z.string().min(1),
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string().min(1),
+    NEXT_PUBLIC_PUSHER_KEY: z.string().min(1),
+    NEXT_PUBLIC_PUSHER_CLUSTER: z.string().min(1),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_WEB_NAME: process.env.NEXT_PUBLIC_WEB_NAME,
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
+    NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
   },
 });

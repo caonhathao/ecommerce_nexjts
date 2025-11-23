@@ -26,6 +26,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
       isActive: true,
       parentId: true,
+      imageUrl: true,
       children: {
         select: {
           id: true,

@@ -67,17 +67,13 @@ import { NewCategoryForm } from './_components/new-category-form';
 import TabCategory from './_components/tab-category';
 import { TableCellViewer } from './_components/table-cell-viewer';
 import { handleDelete } from './_funcs/funcs';
-import Image from 'next/image';
-import PlaceholderCategoryIcon from '@/public/placeholder-icon-category.png';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
   const [categoryList, setCategoryList] = React.useState<categoryItemData[]>(
     []
   );
-  const [copiedId, setCopiedId] = React.useState<string | null>('');
   const [isReset, setIsReset] = React.useState<boolean>(false);
-  const [defaultActive, setDefaultActive] = React.useState<string>('true');
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -114,29 +110,25 @@ const CategoryManagePage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = React.useCallback((value: string) => {
-    navigator.clipboard
-      .writeText(value)
-      .then(() => {
-        // 1. Set the copied ID
-        setCopiedId(value);
-        // 2. Clear the feedback after 2 seconds
-        toast(t('t_action_noti'), {
-          description: t('t_copy_desc_noti'),
-        });
+  const handleCopy = React.useCallback(
+    (value: string) => {
+      navigator.clipboard
+        .writeText(value)
+        .then(() => {
+          toast(t('t_action_noti'), {
+            description: t('t_copy_desc_noti'),
+          });
+        })
+        .catch((err) => {
+          toast(t('t_action_failed_noti'), {
+            description: t('t_copy_failed_desc_noti'),
+          });
 
-        setTimeout(() => {
-          setCopiedId(null);
-        }, 2000);
-      })
-      .catch((err) => {
-        toast(t('t_action_failed_noti'), {
-          description: t('t_copy_failed_desc_noti'),
+          console.error('Failed to copy ID: ', err);
         });
-
-        console.error('Failed to copy ID: ', err);
-      });
-  }, []);
+    },
+    [t]
+  );
 
   const columns: ColumnDef<categoryItemData>[] = React.useMemo(
     () => [
@@ -180,9 +172,6 @@ const CategoryManagePage = () => {
           return (
             <TableCellViewer
               item={row.original}
-              defaultActive={defaultActive}
-              setDefaultActive={setDefaultActive}
-              setCategoryList={setCategoryList}
               handleCopy={handleCopy}
               setIsReset={setIsReset}
             />
@@ -196,27 +185,6 @@ const CategoryManagePage = () => {
         cell: ({ row }) => (
           <div className="w-full flex flex-row gap-2 justify-start items-center">
             <div>{row.original.position}</div>
-          </div>
-        ),
-      },
-      {
-        accessorKey: 'imageUrl',
-        header: 'Icon',
-        cell: ({ row }) => (
-          <div className="flex items-center justify-start">
-            <div className="w-14 h-14 flex items-center justify-center bg-muted rounded-xl border">
-              <Image
-                width={56}
-                height={56}
-                src={row.original.imageUrl}
-                alt={row.original.name}
-                className="rounded-lg object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    PlaceholderCategoryIcon.src;
-                }}
-              />
-            </div>
           </div>
         ),
       },
@@ -308,9 +276,10 @@ const CategoryManagePage = () => {
         ),
       },
     ],
-    [handleCopy, setCategoryList, defaultActive, setDefaultActive, t]
+    [handleCopy, t]
   );
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: categoryList,
     columns,

@@ -1,11 +1,8 @@
 'use server';
 
-import {
-  CreateAddressResult,
-  GetAddressResult,
-} from '@/types/dtos/address.dto';
 import { auth, getCurrentUserId } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { GetAddressResult } from '@/types/dtos/address.dto';
 import { headers } from 'next/headers';
 
 export async function createAddress(formData: FormData) {

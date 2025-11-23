@@ -147,6 +147,45 @@
     "title": "Gợi ý hôm nay",
     "watch_more": "Xem thêm"
   },
+  "product_detail":{
+    "t_price_after":"Giá sau áp dụng khuyến mãi",
+    "t_sold":"Đã bán",
+    "t_variant_type":"Kiểu sản phẩm",
+    "t_delivery_info":"Thông tin vận chuyển",
+    "t_other_promotion":"Ưu đãi khác",
+    "t_discount_code":"Mã Giảm Giá",
+    "t_more_action":"Xem Thêm",
+    "t_more_services":"Dịch vụ bổ sung",
+    "t_tiki_card":"Ưu đãi đến 600k với thẻ TikiCard",
+    "t_pay_later":"Mua trước trả sau",
+    "t_slogan_1":"An tâm mua sắm",
+    "t_slogan_2":"Được đồng kiểm khi nhận hàng",
+    "t_slogan_3":"Được hoàn tiền 200% nếu là hàng giả",
+    "t_slogan_4":"Đổi trả miển phí lên đén 365 ngày. Được đổi ý.",
+    "t_quantity":"Số lượng",
+    "t_total":"Tạm tính",
+    "t_buy_action":"Mua ngay",
+    "t_add_action":"Thêm vào giỏ",
+    "detail_desc":{
+      "t_desc":"Mô tả sản phẩm"
+    },
+    "detail_review":{
+      "t_review_at":"Đánh giá lúc: ",
+      "t_custome_review":"Khách hàng đánh giá",
+      "t_summary":"Tổng quan",
+      "c_reviews":"đánh giá",
+      "t_filter_by":"Lọc theo",
+      "c_newest":"Mới nhất",
+      "c_have_img":"Có hình ảnh",
+      "c_buy_again":"Mua lại",
+      "c_5_stars":"5 sao",
+      "c_4_stars":"4 sao",
+      "c_3_stars":"3 sao",
+      "c_2_stars":"2 sao",
+      "c_1_star":"1 sao",
+          "t_more_action":"Xem Thêm"
+    }
+  },
   "admin_layout": {
     "admin_app_sidebar": {
       "t_quick_access": "Truy cập nhanh",
@@ -227,7 +266,8 @@
       "t_category_name": "Tên danh mục",
       "t_copy_action": "Sao chép ID",
       "t_del_action": "Xóa",
-      "t_is_active": "hiển thị",
+      "t_icon":"Ảnh",
+      "t_is_active": "Hiển thị",
       "t_is_active_placeholder": "Chọn trạng thái",
       "c_active": "Hoạt động",
       "c_inactive": "Không hoạt động",
@@ -473,6 +513,42 @@
 
       "t_submit_action": "Lưu thay đổi",
       "t_cancel_action": "Hủy"
+    }
+  },
+  "admin_statistic_page":{
+    "chart_area_revenue":{
+      "t_title":"Tổng doanh thu",
+      "t_week":"7 ngày",
+      "t_month":"30 ngày",
+      "t_3months":"90 ngày",
+      "t_months":"12 tháng",
+      "t_data_from":"Số liệu từ",
+      "t_most_recent":"gần nhất"
+    },
+    "chart_order_state_rate":{
+      "t_title":"Tỉ lệ trạng thái đơn hàng",
+      "t_week":"7 ngày",
+      "t_month":"30 ngày",
+      "t_3months":"90 ngày",
+      "t_months":"12 tháng",
+      "t_data_from":"Số liệu từ",
+      "t_most_recent":"gần nhất",
+      "t_label_1":"Trạng thái",
+      "t_label_2":"Đang chờ",
+      "t_label_3":"Đã thanh toán",
+      "t_label_4":"Đang xử lí",
+      "t_label_5":"Đã hủy",
+      "t_label_6":"Đã hoàn tiền"
+    },
+    "chart_top_products":{
+      "t_title":"Top sản phẩm",
+      "t_week":"7 ngày",
+      "t_month":"30 ngày",
+      "t_3months":"90 ngày",
+      "t_months":"12 tháng",
+      "t_data_from":"Số liệu từ",
+      "t_most_recent":"gần nhất",
+      "t_label_1":"Số lượng"
     }
   }
 }
