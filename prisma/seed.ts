@@ -33,6 +33,7 @@ async function main() {
   await prisma.returnRequest.deleteMany();
   await prisma.refund.deleteMany();
   await prisma.shipment.deleteMany();
+  await prisma.orderPayment.deleteMany();
   await prisma.payment.deleteMany();
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
@@ -70,6 +71,7 @@ async function main() {
           email: faker.internet.email(),
           emailVerified: true,
           image: faker.image.avatar(),
+          shopCount:faker.number.int({ min: 10, max: 10000 })
         },
       })
     )
@@ -223,17 +225,21 @@ async function main() {
   // 2️⃣ SHOPS
   // ------------------------
   const shops = await Promise.all(
-    users.slice(0, 100).map((user) =>
-      prisma.shop.create({
+    users.slice(0, 100).map((user) =>{
+      const companyName = faker.company.name();
+      return prisma.shop.create({
         data: {
+          id: faker.string.uuid(),
           ownerId: user.id,
-          name: faker.company.name(),
-          slug: faker.company.name() + '-' + faker.string.uuid().slice(0, 8),          description: faker.company.catchPhrase(),
-          logoUrl: faker.image.urlPicsumPhotos({ width: 200, height: 200 }),
-          coverUrl: faker.image.urlPicsumPhotos({ width: 800, height: 300 }),
+          name: companyName,
+          slug: companyName.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') + '-' + faker.string.uuid().slice(0, 8),
+          logoUrl:  faker.image.urlPicsumPhotos({ width: 300, height: 300 ,blur:0}),
+          coverUrl: faker.image.urlPicsumPhotos({ width: 1200, height: 300,blur:0 }),
           status: 'ACTIVE',
+          followerCount:faker.number.int({ min: 10, max: 10000 })
         },
       })
+    }
     )
   );
 
@@ -690,7 +696,7 @@ async function main() {
         prisma.productImage.create({
           data: {
             productId: product.id,
-            url: faker.image.urlPicsumPhotos({ width: 600, height: 600 }),
+            url: faker.image.urlPicsumPhotos({ width: 600, height: 600 ,blur:0}),
             alt: product.title,
           },
         })
@@ -712,7 +718,7 @@ async function main() {
           productId: product.id,
           sku: `SKU-${faker.string.alphanumeric(8)}-${Date.now()}`,
           name: faker.commerce.productMaterial(),
-          image: faker.image.urlPicsumPhotos({ width: 600, height: 600 }),
+          image: faker.image.urlPicsumPhotos({ width: 600, height: 600 ,blur:0}),
           price: faker.number.float({
             min: 100_000,
             max: 300_000,
