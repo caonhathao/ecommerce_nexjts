@@ -42,6 +42,7 @@ import {
   Coins,
   BookOpenCheck,
   LifeBuoy,
+  Store,
 } from 'lucide-react';
 
 type Messages =
@@ -57,6 +58,7 @@ type Messages =
   | 'recently_viewed'
   | 'wishlist'
   | 'comments'
+  | 'seller_center'
   | 'vip'
   | 'referrals'
   | 'bnpl'
@@ -124,6 +126,11 @@ export default function UserNav({ user }: { user: UserMini }) {
           href: '/customer/account/comments',
           i18nKey: 'comments',
           Icon: MessageSquareText,
+        },
+        {
+          href: '/',
+          i18nKey: 'seller_center',
+          Icon: Store,
         },
       ],
     },

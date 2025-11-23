@@ -22,7 +22,7 @@ const eslintConfig = [
       '.vercel/**',
 
       // Generated Types
-      'next-env.d.ts',
+      'next-.env.d.ts',
 
       // Prisma Migrations (often contain auto-generated SQL/JS)
       'prisma/migrations/**',
@@ -35,8 +35,8 @@ const eslintConfig = [
       '.DS_Store',
 
       // Environment Files
-      '.env',
-      '.env.*',
+      '..env',
+      '..env.*',
 
       // Lock files
       'pnpm-lock.yaml',

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { headers } from 'next/headers';
 import { Stripe } from 'stripe';
 import { createOrder } from '@/app/actions/order';
 import { prisma } from '@/lib/db';
@@ -22,13 +21,15 @@ export async function POST(req: NextRequest) {
       0
     );
     const orderIds = order.map((o) => o.id).join(',');
-    // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       success_url: `${origin}/success`,
       cancel_url: `${origin}/cancel`,
       metadata: {
         orderId: orderIds,
+      },
+      payment_intent_data: {
+        transfer_group: orderIds,
       },
       line_items: [
         {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth, getSessionUser } from '@/lib/auth';
+import { getSessionUser } from '@/lib/auth';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -32,27 +32,48 @@ export async function middleware(request: NextRequest) {
   //check role
   const roleProtectedPaths = {
     admin: ['/manager'],
+    seller: ['/seller'],
   };
 
   const userRole = session.user.role;
 
-  const isRestricted = Object.entries(roleProtectedPaths).some(
-    ([role, paths]) => paths.some((p) => pathname.startsWith(p + '/'))
-  );
-
-  if (isRestricted) {
-    const allowedRole = Object.entries(roleProtectedPaths).find(([_, paths]) =>
-      paths.some((p) => pathname.startsWith(p + '/'))
-    )?.[0];
-
-    if (allowedRole && userRole !== allowedRole) {
-      const url = new URL('/403', request.url);
-      return NextResponse.redirect(url);
+  for (const [requiredRole, paths] of Object.entries(roleProtectedPaths)) {
+    if (paths.some((p) => pathname.startsWith(p))) {
+      if (userRole !== requiredRole) {
+        if (requiredRole === 'seller' && userRole === 'user') {
+          return NextResponse.redirect(
+            new URL('/signup-business', request.url)
+          );
+        }
+        return NextResponse.rewrite(new URL('/403', request.url));
+      }
     }
   }
 
   return NextResponse.next();
 }
+
+//   const isRestricted = Object.entries(roleProtectedPaths).find(
+//     ([role, paths]) => paths.some((p) => pathname.startsWith(p)),
+//   );
+//
+//   if (isRestricted) {
+//     const [requiredRole, _] = isRestricted;
+//     if (requiredRole === 'seller' && userRole === 'user') {
+//       const url = new URL('/signup-business', request.url);
+//       return NextResponse.redirect(url);
+//     }
+//
+//     if (userRole === requiredRole) {
+//       return NextResponse.next();
+//     }
+//
+//     const url = new URL('/403', request.url);
+//     return NextResponse.rewrite(url);
+//   }
+//
+//   return NextResponse.next();
+// }
 
 export const config = {
   runtime: 'nodejs',

@@ -6,7 +6,6 @@ import { prisma } from '@/lib/db';
 import { OrderStatus, Prisma } from '@/lib/generated/prisma';
 import { revalidatePath } from 'next/cache';
 import { OrderWithRelations } from '@/types/order.data-types';
-import { Decimal } from '@/lib/generated/prisma/runtime/library';
 
 type CreateOrderResult =
   | { success: true; order: OrderWithRelations[] }
