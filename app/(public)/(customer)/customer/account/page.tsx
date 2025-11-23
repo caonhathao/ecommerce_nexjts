@@ -1,5 +1,5 @@
 import { getCurrentUserId } from '@/lib/auth';
-import { getUserProfile } from '@/services/user.service';
+import { getUserProfile } from '@/app/services/user.service';
 import EditUserProfileForm from '@/app/(public)/(customer)/customer/account/_components/edit-user-profile-form';
 
 export default async function AccountPage() {

@@ -100,6 +100,12 @@ enum Currency {
   USD
 }
 
+enum MessageRole {
+  USER
+  SHOP
+  ADMIN
+}
+
 model User {
   id            String    @id @default(uuid()) @db.Uuid
   name          String
@@ -558,6 +564,7 @@ model OrderDraft {
 
   @@index([userId, placedAt])
   @@index([orderId])
+  @@map("order_draft")
 }
 
 model Payment {
@@ -588,6 +595,7 @@ model OrderPayment {
   payment Payment @relation(fields: [paymentId], references: [id])
 
   @@unique([orderId, paymentId])
+  @@map("order_payment")
 }
 
 model Shipment {
@@ -790,6 +798,7 @@ model Conversation {
   shopId       String?                   @db.Uuid
 
   @@index([updatedAt])
+  @@map("conversation")
 }
 
 model ConversationParticipant {
@@ -813,6 +822,7 @@ model ConversationParticipant {
 model Message {
   id              String      @id @default(uuid()) @db.Uuid
   conversationId  String      @db.Uuid
+  senderRole      MessageRole @default(USER)
   senderUserId    String?     @db.Uuid
   senderShopId    String?     @db.Uuid
   type            MessageType @default(TEXT)
