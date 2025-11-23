@@ -25,11 +25,13 @@ function createTransporter() {
 }
 
 export async function sendVerificationEmail(to: string, otp: string) {
-  console.log('----------------------------------------------');
-  console.log(`📧 MOCK EMAIL TO: ${to}`);
-  console.log(`🔑 OTP CODE: ${otp}`);
-  console.log('----------------------------------------------');
-
+  if (process.env.NODE_ENV === 'development') {
+    console.log('----------------------------------------------');
+    console.log(`📧 MOCK EMAIL TO: ${to}`);
+    console.log(`🔑 OTP CODE: ${otp}`);
+    console.log('----------------------------------------------');
+    return;
+  }
   const transporter = createTransporter();
   const fromAddress = `${webName} <no-reply@localhost>`;
   const html = renderEmailTemplate(otp);
