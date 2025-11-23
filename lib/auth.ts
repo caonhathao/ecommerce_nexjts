@@ -2,13 +2,12 @@ import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { env } from './env';
 import { admin, emailOTP } from 'better-auth/plugins';
-import { EmailTemplate } from '@/components/email-template';
-import { resend } from '@/lib/resend';
+
 import { prisma } from '@/lib/db';
 import { headers } from 'next/headers';
 import { nextCookies } from 'better-auth/next-js';
+import { sendVerificationEmail } from '@/lib/mailer';
 
-const webName = env.NEXT_PUBLIC_WEB_NAME;
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
@@ -35,22 +34,20 @@ export const auth = betterAuth({
       create: {
         after: async (user) => {
           await prisma.$transaction(async (tx) => {
-            await prisma.$transaction(async (tx) => {
-              await tx.userProfile.upsert({
-                where: { userId: user.id },
-                update: {},
-                create: { userId: user.id, emailForBill: user.email ?? null },
-              });
-              await tx.cart.upsert({
-                where: { userId: user.id },
-                update: {},
-                create: { userId: user.id },
-              });
-              await tx.wishlist.upsert({
-                where: { userId: user.id },
-                update: {},
-                create: { userId: user.id },
-              });
+            await tx.userProfile.upsert({
+              where: { userId: user.id },
+              update: {},
+              create: { userId: user.id, emailForBill: user.email ?? null },
+            });
+            await tx.cart.upsert({
+              where: { userId: user.id },
+              update: {},
+              create: { userId: user.id },
+            });
+            await tx.wishlist.upsert({
+              where: { userId: user.id },
+              update: {},
+              create: { userId: user.id },
             });
           });
         },
@@ -60,24 +57,7 @@ export const auth = betterAuth({
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp }) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('----------------------------------------------');
-          console.log(`📧 MOCK EMAIL TO: ${email}`);
-          console.log(`🔑 OTP CODE: ${otp}`);
-          console.log('----------------------------------------------');
-        } else {
-          const { error } = await resend.emails.send({
-            from: webName + ' <onboarding@resend.dev>',
-            to: [email],
-            subject: webName + ' - Verify your email',
-            react: EmailTemplate({ otp: otp }),
-          });
-
-          if (error) {
-            console.error(error);
-            throw new Error('Error sending email');
-          }
-        }
+        await sendVerificationEmail(email, otp);
       },
     }),
     admin(),
