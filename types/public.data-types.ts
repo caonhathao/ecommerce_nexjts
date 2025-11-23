@@ -51,6 +51,9 @@ export interface productDetailType {
     id: string;
     logoUrl: string;
     name: string;
+    ratingAvg: string;
+    ratingCount: number;
+    slug: string;
   };
   variants: {
     attributes: string | null;
@@ -86,4 +89,15 @@ export interface reviewsType {
     image: string;
     name: string;
   };
+}
+
+export interface shopData {
+  id: string;
+  name: string;
+  logoUrl: string;
+  coverUrl: string;
+  description: string | null;
+  followerCount: number;
+  ratingAvg: string;
+  ratingCount: number;
 }
