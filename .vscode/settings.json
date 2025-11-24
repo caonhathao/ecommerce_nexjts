@@ -1,6 +1,7 @@
 {
 
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.fontFamily": "JetBrainsMono Nerd Font Mono",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
@@ -13,5 +14,8 @@
   "typescriptreact"
 ],
 "prisma.pinToPrisma6": true,
+"[prisma]": {
+  "editor.defaultFormatter": "Prisma.prisma"
+},
 
 }

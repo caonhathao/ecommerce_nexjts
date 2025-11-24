@@ -76,7 +76,7 @@ async function main() {
   const emailList = Array.from(uniqueEmails);
 
   const users = await Promise.all(
-    emailList.map((email,idx) =>
+    emailList.map((email) =>
       prisma.user.create({
         data: {
           id: faker.string.uuid(),
@@ -84,6 +84,7 @@ async function main() {
           email,
           emailVerified: true,
           image: faker.image.avatar(),
+          shopCount:faker.number.int({ min: 10, max: 10000 }),
           role:
             idx < ADMIN_COUNT
               ? Role.admin
@@ -245,18 +246,21 @@ async function main() {
   const SHOP_COUNT = Math.min(100, sellerUsers.length);
 
   const shops = await Promise.all(
-    sellerUsers.slice(0, SHOP_COUNT).map((owner) =>
-      prisma.shop.create({
+    sellerUsers.slice(0, SHOP_COUNT).map((owner) =>{
+       const companyName = faker.company.name();
+  prisma.shop.create({
         data: {
           ownerId: owner.id,
-          name: faker.company.name(),
-          slug: `${faker.helpers.slugify(faker.company.name()).toLowerCase()}-${faker.string.alphanumeric(6).toLowerCase()}`,
+          name: companyName,
+          slug: companyName.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') + '-' + faker.string.uuid().slice(0, 8),
           description: faker.company.catchPhrase(),
           logoUrl: faker.image.urlPicsumPhotos({ width: 200, height: 200 }),
           coverUrl: faker.image.urlPicsumPhotos({ width: 800, height: 300 }),
           status: 'ACTIVE',
+          followerCount:faker.number.int({ min: 10, max: 10000 })
         },
       })
+      }
     )
   );
 
@@ -743,7 +747,7 @@ async function main() {
         prisma.productImage.create({
           data: {
             productId: product.id,
-            url: faker.image.urlPicsumPhotos({ width: 600, height: 600 }),
+            url: faker.image.urlPicsumPhotos({ width: 600, height: 600 ,blur:0}),
             alt: product.title,
           },
         })
@@ -765,7 +769,7 @@ async function main() {
           productId: product.id,
           sku: `SKU-${faker.string.alphanumeric(8)}-${Date.now()}`,
           name: faker.commerce.productMaterial(),
-          image: faker.image.urlPicsumPhotos({ width: 600, height: 600 }),
+          image: faker.image.urlPicsumPhotos({ width: 600, height: 600 ,blur:0}),
           price: faker.number.float({
             min: 100_000,
             max: 300_000,
@@ -1251,7 +1255,7 @@ async function main() {
       likes: faker.number.int({ min: 0, max: 200 }),
       images: faker.helpers.maybe(
         () => [
-          faker.image.urlPicsumPhotos({ width: 600, height: 400 }),
+          `https://placehold.co/600x600?text=Review+${faker.string.alpha(3).toUpperCase()}`,
         ],
         { probability: 0.25 }
       ),
@@ -1564,12 +1568,15 @@ async function main() {
         type: ConversationType.ORDER_INQUIRY,
         status: faker.helpers.arrayElement(Object.values(ConversationStatus)),
         subject: `Inquiry about Order #${order.orderNumber}`,
+        orderId: order.id,
         shopId: order.shopId, // The shop receiving the inquiry
         createdAt: faker.date.between({ from: order.placedAt, to: new Date() }),
       },
     });
 
     // 2. Add Participants: The Buyer (User) and the Seller (Shop)
+    // Note: In your schema, ShopMember links User to Shop, but ConversationParticipant links Shop directly.
+
     // Participant 1: The Buyer
     await prisma.conversationParticipant.create({
       data: {

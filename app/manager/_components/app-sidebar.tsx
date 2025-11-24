@@ -20,21 +20,26 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 
-import { Loading } from '@/app/(public)/_components/loading';
 import { useTranslations } from 'next-intl';
 import { AiOutlineProduct } from 'react-icons/ai';
 import { BsGraphUpArrow } from 'react-icons/bs';
 import { CiBoxList, CiShop } from 'react-icons/ci';
 import { GoPeople } from 'react-icons/go';
 
-interface user {
-  image: string;
-  name: string;
-  email: string;
-}
+type Role = 'USER' | 'SELLER' | 'ADMIN';
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [dataUser, setDataUser] = React.useState<user | null>(null);
+type HeaderUser = {
+  name: string;
+  email?: string;
+  avatar_url?: string;
+  role: Role;
+} | null;
+
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
+  user: HeaderUser;
+};
+
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const t = useTranslations('admin_layout.admin_app_sidebar');
 
   const data = {
@@ -181,21 +186,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
   };
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`/api/manager`);
-        const data = await response.json();
-        setDataUser(data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (!dataUser) return <Loading />;
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -205,7 +195,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={dataUser} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

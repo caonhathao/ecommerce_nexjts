@@ -114,6 +114,7 @@ model User {
   email         String
   emailVerified Boolean   @default(false)
   image         String?
+  shopCount     Int       @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
@@ -131,6 +132,7 @@ model User {
   wishlist                  Wishlist?
   shopsOwned                Shop[]                    @relation("ShopsOwned")
   shopMemberships           ShopMember[]
+  followedShops             ShopFollower[]
   orders                    Order[]
   reviews                   Review[]
   productQuestions          ProductQuestion[]
@@ -177,6 +179,17 @@ model Account {
   updatedAt             DateTime  @updatedAt
 
   @@map("account")
+}
+
+model ShopFollower {
+  id     String @id @default(uuid()) @db.Uuid
+  shopId String @db.Uuid
+  userId String @db.Uuid
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, shopId])
+  @@map("shop_follower")
 }
 
 model Verification {
@@ -259,12 +272,14 @@ model Shop {
   ratingCount   Int        @default(0)
   contactEmail  String?
   contactPhone  String?
+  followerCount Int        @default(0)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   deletedAt     DateTime?
 
   //Relation
   members                 ShopMember[]
+  followers               ShopFollower[]
   products                Product[]
   orders                  Order[]
   conversations           Conversation[]
