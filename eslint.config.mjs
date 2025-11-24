@@ -7,49 +7,49 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default defineConfig([
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    plugins: { js },
-    extends: ['js/recommended'],
-    languageOptions: { globals: { ...globals.browser, ...globals.node } },
     ignores: [
-      // Dependencies and Build Outputs
       'node_modules/**',
       '.next/**',
       'out/**',
       'build/**',
       'dist/**',
       '.vercel/**',
-
-      // Generated Types
       'next-env.d.ts',
-
-      // Prisma Migrations (often contain auto-generated SQL/JS)
       'prisma/migrations/**',
       'lib/generated/**',
       'prisma/schema.prisma',
-
-      // IDE and System files
       '.idea/**',
       '.vscode/**',
       '.DS_Store',
-
-      // Environment Files
       '.env',
       '.env.*',
-
-      // Lock files
       'pnpm-lock.yaml',
       'package-lock.json',
       'yarn.lock',
     ],
   },
-  tseslint.configs.recommended,
+
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   eslintConfigPrettier,
+
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node },
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     rules: {
       'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      'react/prop-types': 'warn',
+      'no-useless-escape': 'warn',
     },
   },
 ]);

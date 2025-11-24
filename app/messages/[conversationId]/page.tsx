@@ -5,7 +5,7 @@ import { ChatArea } from '@/components/chat/chat-area';
 import { Role } from '@/lib/generated/prisma';
 
 export default async function MessagePage({params} : {params:{conversationId:string}}) {
-  const {conversationId} = await params;
+  const { conversationId } = params;
   const session = await getSessionUser();
   if(!session) redirect('/login');
 
