@@ -76,7 +76,7 @@ async function main() {
   const emailList = Array.from(uniqueEmails);
 
   const users = await Promise.all(
-    emailList.map((email) =>
+    emailList.map((email, idx) =>
       prisma.user.create({
         data: {
           id: faker.string.uuid(),
@@ -246,13 +246,12 @@ async function main() {
   const SHOP_COUNT = Math.min(100, sellerUsers.length);
 
   const shops = await Promise.all(
-    sellerUsers.slice(0, SHOP_COUNT).map((owner) =>{
-       const companyName = faker.company.name();
+    sellerUsers.slice(0, SHOP_COUNT).map((owner) =>
   prisma.shop.create({
         data: {
           ownerId: owner.id,
-          name: companyName,
-          slug: companyName.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') + '-' + faker.string.uuid().slice(0, 8),
+          name: faker.company.name(),
+          slug: faker.company.name().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') + '-' + faker.string.uuid().slice(0, 8),
           description: faker.company.catchPhrase(),
           logoUrl: faker.image.urlPicsumPhotos({ width: 200, height: 200 }),
           coverUrl: faker.image.urlPicsumPhotos({ width: 800, height: 300 }),
@@ -260,7 +259,7 @@ async function main() {
           followerCount:faker.number.int({ min: 10, max: 10000 })
         },
       })
-      }
+
     )
   );
 
@@ -1568,7 +1567,6 @@ async function main() {
         type: ConversationType.ORDER_INQUIRY,
         status: faker.helpers.arrayElement(Object.values(ConversationStatus)),
         subject: `Inquiry about Order #${order.orderNumber}`,
-        orderId: order.id,
         shopId: order.shopId, // The shop receiving the inquiry
         createdAt: faker.date.between({ from: order.placedAt, to: new Date() }),
       },
