@@ -39,6 +39,11 @@ export default defineConfig([
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },
     },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     rules: {
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
