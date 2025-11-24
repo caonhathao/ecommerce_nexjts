@@ -12,5 +12,6 @@
   "typescript",
   "typescriptreact"
 ],
+"prisma.pinToPrisma6": true,
 
 }

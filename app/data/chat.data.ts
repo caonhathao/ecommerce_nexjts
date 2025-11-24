@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db';
 
-export async function getUserConversations(
+export async function getUserOrShopConversations(
   userId: string,
   activeShopId?: string
 ) {
@@ -10,8 +10,6 @@ export async function getUserConversations(
   const whereCondition = activeShopId
     ? { participants: { some: { shopId: activeShopId } } }
     : { participants: { some: { userId: userId } } };
-
-  console.log('whereCondition:', whereCondition);
 
   const conversations = await prisma.conversation.findMany({
     where: whereCondition,
@@ -60,13 +58,57 @@ export async function getUserConversations(
   });
 }
 
+export type UserOrShopConversation = Awaited<
+  ReturnType<typeof getUserOrShopConversations>
+>;
+
 export async function getConversationMessages(conversationId: string) {
-  return prisma.message.findMany({
+  const messages = await prisma.message.findMany({
     where: { conversationId },
     orderBy: { createdAt: 'asc' },
     include: {
       senderUser: { select: { id: true, name: true, image: true } },
       senderShop: { select: { id: true, name: true, logoUrl: true } },
+      relatedProduct: {
+        select: {
+          id: true,
+          title: true,
+          images: true,
+          slug: true,
+          minPrice: true,
+          maxPrice: true,
+          ratingAvg: true,
+        },
+      },
+      relatedOrder: {
+        select: { id: true, orderNumber: true, status: true, grandTotal: true },
+      },
     },
   });
+
+  if (!messages) return [];
+
+  const data = messages.map((m) => ({
+    ...m,
+    relatedOrder: m.relatedOrder
+      ? {
+          ...m.relatedOrder,
+          grandTotal: Number(m.relatedOrder.grandTotal) || 0,
+        }
+      : null,
+    relatedProduct: m.relatedProduct
+      ? {
+          ...m.relatedProduct,
+          minPrice: Number(m.relatedProduct.minPrice) || 0,
+          maxPrice: Number(m.relatedProduct.maxPrice) || 0,
+          ratingAvg: Number(m.relatedProduct.ratingAvg) || 0,
+        }
+      : null,
+  }));
+
+  return data;
 }
+
+export type ConversationWithMessages = Awaited<
+  ReturnType<typeof getConversationMessages>
+>;

@@ -93,6 +93,8 @@ enum MessageType {
   TEXT
   IMAGE
   SYSTEM
+  PRODUCT_CARD
+  ORDER_CARD
 }
 
 enum Currency {
@@ -350,6 +352,7 @@ model Product {
   wishlisted     WishlistItem[]
   orderItems     OrderItem[]
   VoucherProduct VoucherProduct[]
+  Message        Message[]
 
   @@index([shopId, status, visibility])
   @@index([categoryId])
@@ -497,7 +500,7 @@ model Order {
   VoucherRedemption VoucherRedemption[]
   drafts            OrderDraft?
   payments          OrderPayment[]
-  Conversation      Conversation[]
+  Message           Message[]
 
   @@index([userId, placedAt])
   @@index([shopId, status])
@@ -780,21 +783,17 @@ model OrderVoucher {
 
 model Conversation {
   id      String             @id @default(uuid()) @db.Uuid
+  Shop    Shop?              @relation(fields: [shopId], references: [id])
+  shopId  String?            @db.Uuid
   type    ConversationType   @default(GENERAL)
   status  ConversationStatus @default(OPEN)
-  subject String? // Optional: "Order #1234 Issue"
-
-  // Optional links for context
-  orderId String? @db.Uuid
-  order   Order?  @relation(fields: [orderId], references: [id])
+  subject String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   participants ConversationParticipant[]
   messages     Message[]
-  Shop         Shop?                     @relation(fields: [shopId], references: [id])
-  shopId       String?                   @db.Uuid
 
   @@index([updatedAt])
   @@map("conversation")
@@ -819,15 +818,21 @@ model ConversationParticipant {
 }
 
 model Message {
-  id              String      @id @default(uuid()) @db.Uuid
-  conversationId  String      @db.Uuid
-  senderRole      MessageRole @default(USER)
-  senderUserId    String?     @db.Uuid
-  senderShopId    String?     @db.Uuid
-  type            MessageType @default(TEXT)
-  content         String
-  attachments     Json? // Array of { url, type, name }
-  isSystemMessage Boolean     @default(false) // e.g., "Ticket Closed"
+  id             String      @id @default(uuid()) @db.Uuid
+  conversationId String      @db.Uuid
+  senderRole     MessageRole @default(USER)
+  senderUserId   String?     @db.Uuid
+  senderShopId   String?     @db.Uuid
+
+  type        MessageType @default(TEXT)
+  content     String
+  attachments Json? // Array of { url, type, name }
+
+  relatedProductId String? @db.Uuid
+  relatedOrderId   String? @db.Uuid
+
+  relatedProduct Product? @relation(fields: [relatedProductId], references: [id])
+  relatedOrder   Order?   @relation(fields: [relatedOrderId], references: [id])
 
   createdAt DateTime @default(now())
 

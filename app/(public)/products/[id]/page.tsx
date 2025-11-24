@@ -36,6 +36,7 @@ import { TopDealItems } from '../../(home)/_components/top-deal-items';
 import Desc from './_components/desc';
 import { Reviews } from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
+import { ChatButton } from '@/components/chat/chat-button';
 import Decimal = Prisma.Decimal;
 
 interface selectedVariant {
@@ -55,8 +56,15 @@ const DetailPage = () => {
   const params = useParams();
   const [data, setData] = useState<productDetailType | null>(null);
   const [selVariant, setSelVariant] = useState<selectedVariant | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const amount: number = 1;
   const t = useTranslations('product_detail');
+
+  useEffect(() => {
+    authClient.getSession().then((session) => {
+      setIsLoggedIn(!!session.data);
+    });
+  }, []);
 
   const renderPriceSale = (
     typeVoucher: string | null,
@@ -505,6 +513,11 @@ const DetailPage = () => {
                 </div>
               </div>
             </div>
+
+            {isLoggedIn && (
+              <ChatButton shopId={data.shop.id} product={{ id: data.id }} />
+            )}
+
             <Separator />
             {/* payment info */}
             <div className="flex flex-col justify-start items-start gap-2">

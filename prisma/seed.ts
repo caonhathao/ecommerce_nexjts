@@ -64,6 +64,11 @@ async function main() {
   // ------------------------
   // 1️⃣ USERS
   // ------------------------
+
+  const TOTAL_USERS = 500;
+  const SELLER_COUNT = 120;
+  const ADMIN_COUNT = 3;
+
   const uniqueEmails = new Set<string>();
   while (uniqueEmails.size < 500) {
     uniqueEmails.add(faker.internet.email().toLowerCase());
@@ -71,7 +76,7 @@ async function main() {
   const emailList = Array.from(uniqueEmails);
 
   const users = await Promise.all(
-    emailList.map((email) =>
+    emailList.map((email,idx) =>
       prisma.user.create({
         data: {
           id: faker.string.uuid(),
@@ -79,6 +84,12 @@ async function main() {
           email,
           emailVerified: true,
           image: faker.image.avatar(),
+          role:
+            idx < ADMIN_COUNT
+              ? Role.admin
+              : idx < ADMIN_COUNT + SELLER_COUNT
+                ? Role.seller
+                : Role.user,
         },
       })
     )
@@ -230,13 +241,17 @@ async function main() {
   // ------------------------
   // 2️⃣ SHOPS
   // ------------------------
+  const sellerUsers = users.filter((u) => u.role === Role.seller);
+  const SHOP_COUNT = Math.min(100, sellerUsers.length);
+
   const shops = await Promise.all(
-    users.slice(0, 100).map((user) =>
+    sellerUsers.slice(0, SHOP_COUNT).map((owner) =>
       prisma.shop.create({
         data: {
-          ownerId: user.id,
+          ownerId: owner.id,
           name: faker.company.name(),
-          slug: faker.company.name() + '-' + faker.string.uuid().slice(0, 8),          description: faker.company.catchPhrase(),
+          slug: `${faker.helpers.slugify(faker.company.name()).toLowerCase()}-${faker.string.alphanumeric(6).toLowerCase()}`,
+          description: faker.company.catchPhrase(),
           logoUrl: faker.image.urlPicsumPhotos({ width: 200, height: 200 }),
           coverUrl: faker.image.urlPicsumPhotos({ width: 800, height: 300 }),
           status: 'ACTIVE',
@@ -250,33 +265,63 @@ async function main() {
   // ------------------------
   // 2️⃣ SHOP MEMBERS
   // ------------------------
-  const usedPairs = new Set();
+  const SHOP_MEMBERS_TO_CREATE = 300;
+  const usedPairs = new Set<string>();
+  const shopMembersPromises = [];
 
-  const shopMembers = await Promise.all(
-    users.slice(0, 200).map(async () => {
-      let shopId, userId, key;
+  for (let i = 0; i < SHOP_MEMBERS_TO_CREATE; i++) {
+    // pick a shop
+    const shop = faker.helpers.arrayElement(shops);
+    // half the time pick a seller user as member, otherwise pick a random user
+    const isSellerMember = faker.datatype.boolean({ probability: 0.6 });
+    const user = isSellerMember ? faker.helpers.arrayElement(sellerUsers) : faker.helpers.arrayElement(users);
+    const key = `${shop.id}_${user.id}`;
+    if (usedPairs.has(key)) continue;
+    usedPairs.add(key);
 
-      do {
-        shopId = faker.helpers.arrayElement(shops).id;
-        userId = faker.helpers.arrayElement(users).id;
-        key = `${shopId}_${userId}`;
-      } while (usedPairs.has(key));
+    shopMembersPromises.push(
+      prisma.shopMember.create({
+        data: {
+          id: faker.string.uuid(),
+          shopId: shop.id,
+          userId: user.id,
+          role: user.role === Role.seller ? Role.seller : Role.user,
+          createdAt: faker.date.past(),
+        },
+      })
+    );
+  }
 
-      usedPairs.add(key);
+  const shopMembers = await Promise.all(shopMembersPromises);
+  console.log(`✅ Created ${shopMembers.length} shop members (mix of sellers and users)`);
 
+  // Ensure every shop owner is also present at least once as a member (optional)
+  const ownerMemberPromises = shops.map(async (s) => {
+    const exists = await prisma.shopMember.findFirst({
+      where: { shopId: s.id, userId: s.ownerId },
+    });
+    if (!exists) {
       return prisma.shopMember.create({
         data: {
           id: faker.string.uuid(),
-          shopId,
-          userId,
-          role: faker.helpers.arrayElement(Object.values(Role)),
-          createdAt: faker.date.past(),
+          shopId: s.id,
+          userId: s.ownerId,
+          role: Role.seller,
+          createdAt: faker.date.recent(),
         },
       });
-    })
-  );
+    }
+    return null;
+  });
 
-  console.log(`✅ Created ${shopMembers.length} shopMemner`);
+  const ownerMembers = (await Promise.all(ownerMemberPromises)).filter(Boolean);
+  if (ownerMembers.length) {
+    console.log(`✅ Ensured ${ownerMembers.length} shop owners are also members`);
+  }
+
+  console.log('🎉 Minimal seed complete: users (with sellers), shops, and shop members created.');
+  console.log('Extend the script to seed products, orders, conversations, etc., as needed.');
+
 
   // ------------------------
   // 3️⃣ CATEGORIES
@@ -1206,7 +1251,7 @@ async function main() {
       likes: faker.number.int({ min: 0, max: 200 }),
       images: faker.helpers.maybe(
         () => [
-          `https://placehold.co/600x600?text=Review+${faker.string.alpha(3).toUpperCase()}`,
+          faker.image.urlPicsumPhotos({ width: 600, height: 400 }),
         ],
         { probability: 0.25 }
       ),
@@ -1519,15 +1564,12 @@ async function main() {
         type: ConversationType.ORDER_INQUIRY,
         status: faker.helpers.arrayElement(Object.values(ConversationStatus)),
         subject: `Inquiry about Order #${order.orderNumber}`,
-        orderId: order.id,
         shopId: order.shopId, // The shop receiving the inquiry
         createdAt: faker.date.between({ from: order.placedAt, to: new Date() }),
       },
     });
 
     // 2. Add Participants: The Buyer (User) and the Seller (Shop)
-    // Note: In your schema, ShopMember links User to Shop, but ConversationParticipant links Shop directly.
-
     // Participant 1: The Buyer
     await prisma.conversationParticipant.create({
       data: {
@@ -1551,34 +1593,51 @@ async function main() {
     }
 
     // 3. Generate Messages (Back and Forth)
-    const msgCount = faker.number.int({ min: 2, max: 6 });
+    const msgCount = faker.number.int({ min: 3, max: 8 });
     let lastMsgTime = conversation.createdAt;
 
     for (let i = 0; i < msgCount; i++) {
       const isBuyerSender = i % 2 === 0; // Alternate: Buyer -> Shop -> Buyer
       lastMsgTime = faker.date.soon({ refDate: lastMsgTime, days: 1 });
 
+      // Randomly insert ORDER_CARD message
+      const messageType =
+        i === 0
+          ? MessageType.ORDER_CARD // First message is always an ORDER_CARD
+          : faker.helpers.arrayElement([
+              MessageType.TEXT,
+              MessageType.TEXT,
+              MessageType.TEXT,
+              MessageType.IMAGE,
+            ]);
+
       await prisma.message.create({
         data: {
           conversationId: conversation.id,
-          type: MessageType.TEXT,
-          // If Buyer sends, senderUserId = order.userId. If Shop sends, senderShopId = order.shopId
+          type: messageType,
           senderUserId: isBuyerSender ? order.userId : null,
           senderShopId: isBuyerSender ? null : order.shopId,
           senderRole: isBuyerSender ? MessageRole.USER : MessageRole.SHOP,
-          content: isBuyerSender
-            ? faker.helpers.arrayElement([
-                'When will this be shipped?',
-                'Can I change the delivery address?',
-                'I haven not received my tracking number yet.',
-                'Is this item genuine?',
-              ])
-            : faker.helpers.arrayElement([
-                'We will ship it tomorrow.',
-                'Please check your email for updates.',
-                'Yes, it is 100% authentic.',
-                'Sorry for the delay.',
-              ]),
+          content:
+            messageType === MessageType.ORDER_CARD
+              ? `Order #${order.orderNumber}`
+              : messageType === MessageType.IMAGE
+                ? faker.image.urlPicsumPhotos({ width: 600, height: 400 })
+                : isBuyerSender
+                  ? faker.helpers.arrayElement([
+                      'When will this be shipped?',
+                      'Can I change the delivery address?',
+                      'I haven not received my tracking number yet.',
+                      'Is this item genuine?',
+                    ])
+                  : faker.helpers.arrayElement([
+                      'We will ship it tomorrow.',
+                      'Please check your email for updates.',
+                      'Yes, it is 100% authentic.',
+                      'Sorry for the delay.',
+                    ]),
+          relatedOrderId:
+            messageType === MessageType.ORDER_CARD ? order.id : null,
           createdAt: lastMsgTime,
         },
       });
@@ -1590,13 +1649,14 @@ async function main() {
   for (let i = 0; i < 20; i++) {
     const randomUser = faker.helpers.arrayElement(users);
     const randomShop = faker.helpers.arrayElement(shops);
+    const randomProduct = faker.helpers.arrayElement(products);
 
     // 1. Create Conversation
     const conversation = await prisma.conversation.create({
       data: {
         type: ConversationType.GENERAL,
         status: ConversationStatus.OPEN,
-        subject: faker.commerce.productName(), // Asking about a product
+        subject: `Inquiry about ${randomProduct.title}`,
         shopId: randomShop.id,
         createdAt: faker.date.recent({ days: 60 }),
       },
@@ -1617,34 +1677,78 @@ async function main() {
       },
     });
 
-    // 3. Create Messages
+    // 3. Create Messages with PRODUCT_CARD
+    let msgTime = conversation.createdAt;
+
+    // First message: PRODUCT_CARD
     await prisma.message.create({
       data: {
         conversationId: conversation.id,
         senderUserId: randomUser.id,
         senderRole: MessageRole.USER,
-        content: 'Do you have this item in Red color?',
-        createdAt: faker.date.soon({
-          refDate: new Date(
-            new Date(conversation.createdAt).getTime() + 10 * 60 * 1000
-          ),
-        }),
+        type: MessageType.PRODUCT_CARD,
+        content: randomProduct.title,
+        relatedProductId: randomProduct.id,
+        createdAt: msgTime,
       },
     });
 
+    // Second message: User question
+    msgTime = faker.date.soon({
+      refDate: new Date(msgTime.getTime() + 5 * 60 * 1000),
+    });
+    await prisma.message.create({
+      data: {
+        conversationId: conversation.id,
+        senderUserId: randomUser.id,
+        senderRole: MessageRole.USER,
+        type: MessageType.TEXT,
+        content: faker.helpers.arrayElement([
+          'Do you have this item in Red color?',
+          'Is this still in stock?',
+          'Can you ship this internationally?',
+          'What is the return policy?',
+        ]),
+        createdAt: msgTime,
+      },
+    });
+
+    // Third message: Shop reply
+    msgTime = faker.date.soon({
+      refDate: new Date(msgTime.getTime() + 60 * 60 * 1000),
+    });
     await prisma.message.create({
       data: {
         conversationId: conversation.id,
         senderShopId: randomShop.id,
         senderRole: MessageRole.SHOP,
-        content: 'Hi, unfortunately we are out of stock for Red.',
-        createdAt: faker.date.soon({
-          refDate: new Date(
-            new Date(conversation.createdAt).getTime() + 60 * 60 * 1000
-          ),
-        }),
+        type: MessageType.TEXT,
+        content: faker.helpers.arrayElement([
+          'Hi, unfortunately we are out of stock for Red.',
+          'Yes, we have it in stock!',
+          'We ship worldwide.',
+          '30-day return policy for all items.',
+        ]),
+        createdAt: msgTime,
       },
     });
+
+    // Optional: Add an image message
+    if (faker.datatype.boolean({ probability: 0.3 })) {
+      msgTime = faker.date.soon({
+        refDate: new Date(msgTime.getTime() + 30 * 60 * 1000),
+      });
+      await prisma.message.create({
+        data: {
+          conversationId: conversation.id,
+          senderShopId: randomShop.id,
+          senderRole: MessageRole.SHOP,
+          type: MessageType.IMAGE,
+          content: faker.image.urlPicsumPhotos({ width: 600, height: 400 }),
+          createdAt: msgTime,
+        },
+      });
+    }
   }
 
   console.log(`✅ Created Conversations and Messages`);

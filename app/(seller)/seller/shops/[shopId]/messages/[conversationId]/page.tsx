@@ -1,6 +1,7 @@
 import { getConversationMessages, getUserOrShopConversations } from '@/app/data/chat.data';
 import { getSessionUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { getShopIdByUserId } from '@/app/data/shop.data';
 import { ChatArea } from '@/components/chat/chat-area';
 import { Role } from '@/lib/generated/prisma';
 
@@ -14,11 +15,12 @@ export default async function MessageSellerPage({params} : {params:Promise<Messa
 
   const session = await getSessionUser();
   if (!session) redirect('/login');
+  const shopId = await getShopIdByUserId(session.user.id)
 
 
   const messages = await getConversationMessages(conversationId);
 
-  const conversations = await getUserOrShopConversations(session.user.id)
+  const conversations = await getUserOrShopConversations(session.user.id,shopId)
 
   const activeConv = conversations.find((c) => c.id === conversationId);
 
@@ -34,7 +36,7 @@ export default async function MessageSellerPage({params} : {params:Promise<Messa
         id: session.user.id,
         globalRole: session.user.role ?? Role.user,
       }}
-      actingAs={{ role: 'USER' }}
+      actingAs={{ role: 'SHOP', shopId }}
       recipient={{
         name: activeConv.recipient.name || 'Unknown',
         image: activeConv.recipient.image,

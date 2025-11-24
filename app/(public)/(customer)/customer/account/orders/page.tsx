@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { formatPrice } from '@/app/(public)/_components/global-function';
+import Link from 'next/link';
 
 export default function OrderPage() {
   const [status, setStatus] = useState<OrderStatus | 'ALL'>('ALL');
@@ -163,10 +164,18 @@ export default function OrderPage() {
                       </Button>
                       <Button
                         variant="outline"
-                        className="border-2 border-primary"
+                        className="border-2 border-s-secondary"
                       >
                         Đánh giá
                       </Button>
+                      <Link href={`/customer/account/orders/${o.id}`}>
+                        <Button
+                          variant="outline"
+                          className="border-2 border-primary"
+                        >
+                          View Detail
+                        </Button>
+                      </Link>
                     </CardFooter>
                   </Card>
                 ))}

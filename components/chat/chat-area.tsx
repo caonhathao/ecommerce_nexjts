@@ -11,17 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Loader2, Send } from 'lucide-react';
 import { env } from '@/lib/env';
 import Pusher from 'pusher-js';
-
-type Message = {
-  id: string;
-  content: string;
-  senderRole: MessageRole;
-  senderUserId?: string | null;
-  senderShopId?: string | null;
-  senderUser?: { name: string | null; image: string | null } | null;
-  senderShop?: { name: string | null; logoUrl: string | null } | null;
-  createdAt: Date;
-};
+import { ConversationWithMessages } from '@/app/data/chat.data';
 
 interface ChatAreaProps {
   conversationId: string;
@@ -38,8 +28,10 @@ interface ChatAreaProps {
     image?: string | null;
     type?: string;
   };
-  initialMessages: Message[];
+  initialMessages: ConversationWithMessages;
 }
+
+type MessageItem = ConversationWithMessages[number];
 
 export function ChatArea({
   conversationId,
@@ -48,7 +40,8 @@ export function ChatArea({
   recipient,
   initialMessages,
 }: ChatAreaProps) {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] =
+    useState<ConversationWithMessages>(initialMessages);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -64,7 +57,7 @@ export function ChatArea({
     });
 
     const channel = pusher.subscribe(`private-chat-${conversationId}`);
-    channel.bind('new-message', (newMsg: Message) => {
+    channel.bind('new-message', (newMsg: MessageItem) => {
       setMessages((prev) => {
         if (prev.find((m) => m.id === newMsg.id)) return prev;
         return [...prev, newMsg];
@@ -95,7 +88,7 @@ export function ChatArea({
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-50/50">
+    <div className="flex flex-col min-h-screen w-full bg-slate-50/50">
       <ChatTopbar
         recipientName={recipient.name}
         recipientImage={recipient.image}
@@ -131,6 +124,9 @@ export function ChatArea({
                 senderImage={senderImage}
                 createdAt={msg.createdAt}
                 isMe={isMe}
+                type={msg.type}
+                relatedProduct={msg.relatedProduct || null}
+                relatedOrder={msg.relatedOrder || null}
               />
             );
           })}

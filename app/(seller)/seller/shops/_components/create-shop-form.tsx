@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import {  useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Loader } from 'lucide-react';
+import { Loader, RefreshCw } from 'lucide-react';
 
 import { Uploader } from '@/components/file-uploader/uploader';
 
@@ -43,15 +43,6 @@ function slugify(input: string) {
 export default function CreateShopForm() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [isEditingSlug, setIsEditingSlug] = useState(false);
-
-  const handleGenerateSlug = () => {
-    const name = form.getValues('name');
-    if (name) {
-      const slug = generateClientSlug(name);
-      form.setValue('slug', slug);
-    }
-  };
 
   const form = useForm<CreateShopInput>({
     resolver: zodResolver(createShopSchema),
@@ -85,6 +76,14 @@ export default function CreateShopForm() {
     setValue('slug', s, { shouldValidate: true, shouldTouch: true });
   }
 
+  const handleGenerateSlug = () => {
+    const name = form.getValues('name');
+    if (name) {
+      const slug = generateClientSlug(name);
+      form.setValue('slug', slug, { shouldValidate: true, shouldTouch: true });
+    }
+  };
+
   async function onSubmit(values: CreateShopInput) {
     startTransition(async () => {
       try {
@@ -96,19 +95,18 @@ export default function CreateShopForm() {
 
         if (res.status === 201) {
           const data = await res.json();
-          toast.success('Shop created');
-          router.push(`/seller/shops/${data.shop.slug}`);
+          toast.success('Shop created' + (data?.name ? `: ${data.name}` : ''));
+          router.push('/seller/shops');
         } else if (res.status === 409) {
           const body = await res.json().catch(() => ({}));
           toast.error(body?.error ?? 'Slug already taken — try another');
         } else if (res.status === 401) {
           toast.error('You must be signed in to create a shop');
           router.push(
-            `/auth/login?callbackUrl=${encodeURIComponent('/seller/shops/new')}`
+            `/auth/login?callbackUrl=${encodeURIComponent('/seller/shops/create')}`
           );
         } else if (res.status === 400) {
           const body = await res.json().catch(() => ({}));
-          // show best-effort error message
           toast.error(
             body?.error ?? 'Validation error — please check the form'
           );
@@ -135,6 +133,7 @@ export default function CreateShopForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+            {/* Shop Name */}
             <FormField
               control={control}
               name="name"
@@ -156,15 +155,27 @@ export default function CreateShopForm() {
               )}
             />
 
+            {/* Slug */}
             <FormField
               control={control}
               name="slug"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Slug (url)</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="my-awesome-shop" />
-                  </FormControl>
+                  <div className="flex gap-2">
+                    <FormControl>
+                      <Input {...field} placeholder="my-awesome-shop" />
+                    </FormControl>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={handleGenerateSlug}
+                      disabled={!watchedName}
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                    </Button>
+                  </div>
                   <p className="text-sm text-muted-foreground">
                     Lowercase letters, numbers and hyphens only.
                   </p>
@@ -173,6 +184,7 @@ export default function CreateShopForm() {
               )}
             />
 
+            {/* Description */}
             <FormField
               control={control}
               name="description"
@@ -195,6 +207,7 @@ export default function CreateShopForm() {
               )}
             />
 
+            {/* Logo and Cover */}
             <div className="grid sm:grid-cols-2 gap-4">
               <FormField
                 control={control}
@@ -313,6 +326,7 @@ export default function CreateShopForm() {
               />
             </div>
 
+            {/* Contact Information */}
             <div className="grid sm:grid-cols-2 gap-2">
               <FormField
                 control={control}
@@ -358,7 +372,15 @@ export default function CreateShopForm() {
               />
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push('/seller/shops')}
+                disabled={isSubmitting || isPending}
+              >
+                Cancel
+              </Button>
               <Button type="submit" disabled={isSubmitting || isPending}>
                 {isSubmitting || isPending ? (
                   <>
