@@ -24,9 +24,13 @@ type ConversationItem = {
 
 type ConversationListProps = {
   conversations: ConversationItem[];
+  baseUrl?: string;
 };
 
-export function ConversationList({ conversations }: ConversationListProps) {
+export function ConversationList({
+  conversations,
+  baseUrl = '/messages',
+}: ConversationListProps) {
   const params = useParams();
   const activeId = params?.id as string;
 
@@ -57,9 +61,10 @@ export function ConversationList({ conversations }: ConversationListProps) {
         <div className="flex-1 overflow-y-auto scrollbar-hide">
           {conversations.map((chat) => {
             const isActive = activeId === chat.id;
+            const chatUrl = `${baseUrl}/${chat.id}`;
             return (
               <Link
-                href={`/messages/${chat.id}`}
+                href={chatUrl}
                 key={chat.id}
                 className={`flex items-center gap-3 p-4 hover:bg-gray-100 transition cursor-pointer ${
                   activeId === chat.id
