@@ -825,23 +825,35 @@ async function main() {
   // ------------------------
   // 8️⃣ CART ITEMS
   // ------------------------
-  const cartItems = await Promise.all(
-    carts.flatMap((cart) => {
-      const selectedVariants = faker.helpers.arrayElements(variants, 4);
-      return selectedVariants.map((variant) =>
-        prisma.cartItem.create({
-          data: {
-            cartId: cart.id,
-            variantId: variant.id,
-            quantity: faker.number.int({ min: 1, max: 3 }),
-            priceSnap: variant.price,
-          },
-        })
-      );
-    })
-  );
+  // 8️⃣ CART ITEMS (batched to avoid P2024 pool exhaustion)
+  {
+    console.log('🌱 Seeding cart items (batched)...');
 
-  console.log(`✅ Created ${cartItems.length} cart items`);
+    const ITEMS_PER_CART = 4;
+    const BATCH_SIZE = 500; // adjust based on pool size
+    const allRows: Prisma.CartItemCreateManyInput[] = [];
+
+    for (const cart of carts) {
+      const picked = faker.helpers.arrayElements(variants, ITEMS_PER_CART);
+      for (const variant of picked) {
+        allRows.push({
+          id: faker.string.uuid(),
+          cartId: cart.id,
+          variantId: variant.id,
+          quantity: faker.number.int({ min: 1, max: 3 }),
+          priceSnap: variant.price,
+        });
+      }
+    }
+
+    // Chunked createMany to keep connection usage low
+    for (let i = 0; i < allRows.length; i += BATCH_SIZE) {
+      const slice = allRows.slice(i, i + BATCH_SIZE);
+      await prisma.cartItem.createMany({ data: slice, skipDuplicates: true });
+    }
+
+    console.log(`✅ Created ${allRows.length} cart items (in batches)`);
+  }
 
   // ------------------------
   // 8️⃣ WISHLIST
