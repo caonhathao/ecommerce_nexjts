@@ -1,8 +1,7 @@
-// app/(signup-business)/page.tsx
 import { getSessionUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import BusinessClient from '@/app/(public)/signup-business/_components/BusinessClient';
-import { getUserProfile } from '@/app/services/user.service';
+import { getUserProfile } from '@/app/data/user.data';
 
 export default async function SignupBusinessPage() {
   const session = await getSessionUser();
