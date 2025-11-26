@@ -48,7 +48,7 @@ export default async function CheckoutPage() {
   const shipping = draft.shippingInfor as Record<string, any>;
 
   return (
-    <div className="w-full min-h-screen py-8 bg-gray-100">
+    <div className="w-full min-h-screen py-8">
       <div className="p-6 w-5/6 mx-auto bg-background grid grid-cols-2 gap-6 rounded-lg shadow-lg">
         {/* ---------------------------- */}
         {/* CỘT TRÁI: Thông tin giao hàng */}
