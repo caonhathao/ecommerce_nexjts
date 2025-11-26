@@ -42,6 +42,7 @@ import {
   Coins,
   BookOpenCheck,
   LifeBuoy,
+  Store,
 } from 'lucide-react';
 
 type Messages =
@@ -57,6 +58,7 @@ type Messages =
   | 'recently_viewed'
   | 'wishlist'
   | 'comments'
+  | 'seller_center'
   | 'vip'
   | 'referrals'
   | 'bnpl'
@@ -80,7 +82,7 @@ type UserMini = { name: string; email?: string; avatar_url?: string };
 
 export default function UserNav({ user }: { user: UserMini }) {
   const pathname = usePathname();
-  const t = useTranslations('user_navbar');
+  const t = useTranslations('customer.user_navbar');
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + '/');
 
@@ -124,6 +126,11 @@ export default function UserNav({ user }: { user: UserMini }) {
           href: '/customer/account/comments',
           i18nKey: 'comments',
           Icon: MessageSquareText,
+        },
+        {
+          href: '/signup-business',
+          i18nKey: 'seller_center',
+          Icon: Store,
         },
       ],
     },

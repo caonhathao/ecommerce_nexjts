@@ -25,4 +25,10 @@ export const paths = {
     create: '/api/manager/category',
     del_one: (id: string) => `/api/manager/category?id=${id}`,
   },
+  seller: {
+    shops: {
+      create: '/seller/shops/create',
+      edit: (shopId: string) => `/seller/shops/${shopId}/edit`,
+    },
+  },
 };

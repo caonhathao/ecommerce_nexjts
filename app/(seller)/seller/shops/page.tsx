@@ -75,8 +75,7 @@ export default function SellerShopsDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rowSelection, setRowSelection] = useState({});
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pagination, setPagination] = useState({
@@ -174,7 +173,10 @@ export default function SellerShopsDashboard() {
       header: 'Logo',
       cell: ({ row }) => (
         <Avatar>
-          <AvatarImage src={row.original.logoUrl || ''} alt={row.original.name} />
+          <AvatarImage
+            src={row.original.logoUrl || ''}
+            alt={row.original.name}
+          />
           <AvatarFallback>{row.original.name[0]}</AvatarFallback>
         </Avatar>
       ),
@@ -248,15 +250,19 @@ export default function SellerShopsDashboard() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-32">
             <DropdownMenuItem
-              onClick={() => router.push(`/seller/shops/${row.original.id}/edit`)}
+              onClick={() =>
+                router.push(paths.seller.shops.edit(row.original.id))
+              }
             >
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => router.push(paths.messages.message_shop(row.original.id))}
+              onClick={() =>
+                router.push(paths.messages.message_shop(row.original.id))
+              }
             >
               Messages
-              </DropdownMenuItem>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
           </DropdownMenuContent>
@@ -349,7 +355,7 @@ export default function SellerShopsDashboard() {
               onChange={(e) => setSearch(e.target.value)}
               className="w-56"
             />
-            <Button onClick={() => router.push('/seller/shops/create')}>
+            <Button onClick={() => router.push(paths.seller.shops.create)}>
               Create Shop
             </Button>
           </div>

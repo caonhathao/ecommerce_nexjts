@@ -49,7 +49,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
   const handleSingout = useSignOut();
 
   const t = useTranslations('home_layout');
-  const n = useTranslations('user_navbar');
+  const n = useTranslations('' + 'customer.user_navbar');
   const handleHome = () => {
     router.push('/');
   };
