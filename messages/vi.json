@@ -63,7 +63,6 @@
       "help": "Hỗ trợ khách hàng",
       "member_badge": "Thành viên"
     },
-    "user_dashboard": {
       "profile_page": {
         "title": "Thông tin cá nhân",
         "fullName": "Họ & Tên",
@@ -97,8 +96,66 @@
           "saved": "Cập nhật hồ sơ thành công",
           "failed": "Cập nhật hồ sơ thất bại"
         }
+      },
+      "orders": {
+        "title": "Đơn hàng của tôi",
+        "back_to_orders": "Quay lại đơn hàng",
+        "detail_title": "Chi tiết đơn hàng",
+        "placed_on": "Đặt lúc:",
+        "shipping_address": "Địa chỉ giao hàng",
+        "phone": "Số điện thoại",
+        "delivery_method": "Phương thức giao hàng",
+        "delivery_fast": "Nhanh",
+        "delivery_economy": "Giao tiết kiệm",
+        "fulfilled_by": "Đơn vị vận chuyển:",
+        "smart_logistics": "Smart Logistics",
+        "shipping_fee": "Phí vận chuyển",
+        "payment_method": "Phương thức thanh toán",
+        "status_paid": "Trạng thái: Đã thanh toán",
+        "status_cod": "Trạng thái: Thanh toán khi nhận hàng",
+        "variation": "Phân loại",
+        "sold_by": "Bán bởi",
+        "status": {
+          "pending": "Chờ xử lý",
+          "paid": "Đã thanh toán",
+          "processing": "Đang xử lý",
+          "shipped": "Đang vận chuyển",
+          "delivered": "Đã giao",
+          "canceled": "Đã hủy",
+          "refunded": "Đã hoàn tiền"
+        },
+        "tabs": {
+          "all": "Tất cả đơn",
+          "awaiting_payment": "Chờ thanh toán",
+          "processing": "Đang xử lý",
+          "shipped": "Đang vận chuyển",
+          "delivered": "Đã giao",
+          "canceled": "Đã hủy"
+        },
+        "loading": "Đang tải đơn hàng...",
+        "empty_title": "Không tìm thấy đơn hàng",
+        "card": {
+          "order": "Đơn hàng",
+          "status": "Trạng thái",
+          "items": "Số lượng"
+        },
+        "buttons": {
+          "view_detail": "Xem chi tiết",
+          "buy_again": "Mua lại",
+          "write_review": "Viết đánh giá",
+          "return_refund": "Trả hàng / Hoàn tiền",
+          "track_order": "Theo dõi đơn hàng",
+          "chat_with_shop": "Chat với cửa hàng"
+        },
+        "summary": {
+          "subtotal": "Tạm tính",
+          "shipping_fee": "Phí vận chuyển",
+          "shipping_discount": "Giảm phí vận chuyển",
+          "discount": "Giảm giá",
+          "grand_total": "Tổng cộng",
+          "vat_included": "(Đã gồm VAT)"
+        }
       }
-    }
   },
 
   "home_layout": {

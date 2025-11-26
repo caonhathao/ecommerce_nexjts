@@ -1,7 +1,7 @@
 import { getOrder } from '@/app/data/order.data';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronLeft, MessageCircle, Truck } from 'lucide-react';
+import { ChevronLeft, Truck } from 'lucide-react';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
@@ -9,27 +9,28 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { ChatButton } from '@/components/chat/chat-button';
+import { useTranslations } from 'next-intl';
 
 interface OrderDetailPageProps {
   orderId: string;
 }
 
-const getStatusLabel = (status: string) => {
+const getStatusLabel = (status: string, t: (k: string) => string) => {
   switch (status) {
     case 'PENDING':
-      return 'Pending';
+      return t('status.pending');
     case 'PAID':
-      return 'Paid';
+      return t('status.paid');
     case 'PROCESSING':
-      return 'Processing';
+      return t('status.processing');
     case 'SHIPPED':
-      return 'Shipped';
+      return t('status.shipped');
     case 'DELIVERED':
-      return 'Delivered';
+      return t('status.delivered');
     case 'CANCELED':
-      return 'Canceled';
+      return t('status.canceled');
     case 'REFUNDED':
-      return 'Refunded';
+      return t('status.refunded');
     default:
       return status;
   }
@@ -67,6 +68,7 @@ export default async function OrderDetailPage({
   const order = await getOrder(orderId);
   const shippingAddress = order.shippingAddress as unknown as AddressJson;
   const paymentMethod = order.payments?.[0]?.method || 'Cash on Delivery (COD)';
+  const t = useTranslations('customer.orders');
 
   return (
     <div className="min-h-screen bg-muted/20 py-8">
@@ -77,7 +79,7 @@ export default async function OrderDetailPage({
             href={'/customer/account/orders'}
             className="text-sm text-info hover:underline flex items-center gap-1"
           >
-            <ChevronLeft className="h-5 w-5" /> Back to Orders
+            <ChevronLeft className="h-5 w-5" /> {t('back_to_orders')}
           </Link>
         </div>
 
@@ -85,20 +87,20 @@ export default async function OrderDetailPage({
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6">
           <div>
             <h1 className="text-xl md:text-2xl font-medium text-foreground">
-              Order Details #{order.orderNumber} -{' '}
+              {t('detail_title')} #{order.orderNumber} -{' '}
               <span className={getStatusColor(order.status)}>
-                {getStatusLabel(order.status)}
+                {getStatusLabel(order.status, t)}
               </span>
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Placed on:{' '}
+              {t('placed_on')}{' '}
               {format(new Date(order.placedAt), 'MMM dd, yyyy HH:mm')}
             </p>
           </div>
           {/* Main Action */}
           <div className="mt-4 md:mt-0">
             <Button className="bg-warning text-warning-foreground hover:bg-warning/90 border-none font-normal">
-              Track Order
+              {t('buttons.track_order')}
             </Button>
           </div>
         </div>
@@ -109,7 +111,7 @@ export default async function OrderDetailPage({
           <Card className="shadow-sm border-none h-full bg-card">
             <CardHeader className="pb-2">
               <CardTitle className="text-xs font-bold uppercase text-muted-foreground tracking-wider">
-                Shipping Address
+                {t('shipping_address')}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm space-y-1">
@@ -122,7 +124,7 @@ export default async function OrderDetailPage({
               </p>
               <p className="text-muted-foreground">{shippingAddress?.city}</p>
               <p className="text-muted-foreground mt-2">
-                Phone: {shippingAddress?.phone}
+                {t('phone')}: {shippingAddress?.phone}
               </p>
             </CardContent>
           </Card>
@@ -131,7 +133,7 @@ export default async function OrderDetailPage({
           <Card className="shadow-sm border-none h-full bg-card">
             <CardHeader className="pb-2">
               <CardTitle className="text-xs font-bold uppercase text-muted-foreground tracking-wider">
-                Delivery Method
+                {t('delivery_method')}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm space-y-1">
@@ -140,18 +142,18 @@ export default async function OrderDetailPage({
                   variant="secondary"
                   className="bg-warning/20 text-warning hover:bg-warning/30 border-none rounded px-1.5 py-0 text-[10px] uppercase font-bold"
                 >
-                  Fast
+                  {t('delivery_fast')}
                 </Badge>
                 <span className="font-medium text-foreground">
-                  Economy Delivery
+                  {t('delivery_economy')}
                 </span>
               </div>
               <p className="text-muted-foreground">
-                Fulfilled by{' '}
-                {order.shipments?.[0]?.carrier || 'Smart Logistics'}
+                {t('fulfilled_by')}{' '}
+                {order.shipments?.[0]?.carrier || t('smart_logistics')}
               </p>
               <p className="text-muted-foreground">
-                Shipping fee: {formatCurrency(order.shippingFee)}
+                {t('shipping_fee')}: {formatCurrency(order.shippingFee)}
               </p>
             </CardContent>
           </Card>
@@ -160,7 +162,7 @@ export default async function OrderDetailPage({
           <Card className="shadow-sm border-none h-full bg-card">
             <CardHeader className="pb-2">
               <CardTitle className="text-xs font-bold uppercase text-muted-foreground tracking-wider">
-                Payment Method
+                {t('payment_method')}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm space-y-1">
@@ -169,8 +171,8 @@ export default async function OrderDetailPage({
                 className={`text-xs ${order.paymentStatus === 'PAID' ? 'text-success' : 'text-muted-foreground'}`}
               >
                 {order.paymentStatus === 'PAID'
-                  ? 'Status: Paid'
-                  : 'Status: Pay on Delivery'}
+                  ? t('status_paid')
+                  : t('status_cod')}
               </p>
             </CardContent>
           </Card>
@@ -223,11 +225,11 @@ export default async function OrderDetailPage({
                         </Link>
                         {item.variant?.name && (
                           <p className="text-xs text-muted-foreground">
-                            Variation: {item.variant.name}
+                            {t('variation')}: {item.variant.name}
                           </p>
                         )}
                         <p className="text-xs text-muted-foreground">
-                          Sold by{' '}
+                          {t('sold_by')}{' '}
                           <span className="text-info cursor-pointer">
                             {order.shop?.name || 'Tiki Trading'}
                           </span>
@@ -274,7 +276,7 @@ export default async function OrderDetailPage({
                         size="sm"
                         className="text-info border-info/30 h-8 text-xs hover:bg-info/10 font-normal"
                       >
-                        Buy Again
+                        {t('buttons.buy_again')}
                       </Button>
                       {order.status === 'DELIVERED' && (
                         <Button
@@ -282,7 +284,7 @@ export default async function OrderDetailPage({
                           size="sm"
                           className="h-8 text-xs font-normal border-border hover:bg-muted"
                         >
-                          Write a Review
+                          {t('buttons.write_review')}
                         </Button>
                       )}
                     </div>
@@ -298,23 +300,23 @@ export default async function OrderDetailPage({
           <Card className="shadow-sm border-none w-full md:w-1/2 lg:w-1/3 ml-auto bg-card">
             <CardContent className="p-6 space-y-3">
               <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Subtotal</span>
+                <span>{t('summary.subtotal')}</span>
                 <span className="text-foreground">
                   {formatCurrency(order.itemsTotal)}
                 </span>
               </div>
               <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Shipping Fee</span>
+                <span>{t('summary.shipping_fee')}</span>
                 <span className="text-foreground">
                   {formatCurrency(order.shippingFee)}
                 </span>
               </div>
               <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Shipping Discount</span>
+                <span>{t('summary.shipping_discount')}</span>
                 <span className="text-success">-0 ₫</span>
               </div>
               <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Discount</span>
+                <span>{t('summary.discount')}</span>
                 <span className="text-success">
                   -{formatCurrency(order.discountTotal)}
                 </span>
@@ -322,14 +324,14 @@ export default async function OrderDetailPage({
               <Separator className="bg-border" />
               <div className="flex justify-between items-center pt-2">
                 <span className="text-base font-medium text-foreground">
-                  Grand Total
+                  {t('summary.grand_total')}
                 </span>
                 <div className="text-right">
                   <p className="text-xl font-bold text-destructive">
                     {formatCurrency(order.grandTotal)}
                   </p>
                   <p className="text-xs text-muted-foreground font-light">
-                    (VAT included)
+                    {t('summary.vat_included')}
                   </p>
                 </div>
               </div>
