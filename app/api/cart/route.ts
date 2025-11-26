@@ -5,7 +5,7 @@ import { withAuth } from '@/lib/with-auth';
 
 const prisma = new PrismaClient();
 
-export const GET = withAuth(async (userId: string, request: NextRequest) => {
+export const GET = withAuth(async (userId: string) => {
   const cart = await prisma.cart.findUnique({
     where: { userId },
     select: {
@@ -171,9 +171,9 @@ export const PATCH = withAuth(async (userId: string, request: NextRequest) => {
   }
 });
 
-export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
+export const DELETE = withAuth(async (userId: string) => {
   try {
-    const cartDel = await prisma.cart.delete({
+    await prisma.cart.delete({
       where: { userId },
     });
 

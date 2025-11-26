@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
 import { useRouter } from 'next/navigation';
 import { env } from '@/lib/env';
+import { voucher } from '@/types/voucher';
 
 const emptyCart: CartType = {
   id: '',
@@ -193,10 +194,10 @@ export default function Cart() {
         items: selectedItem,
         voucher: [
           {
-            code: 'VC-6KSWBFG9',
+            code: voucher.voucher1,
           },
           {
-            code: 'VC-KSXTMQ0T',
+            code: voucher.voucher2,
           },
         ],
       };
