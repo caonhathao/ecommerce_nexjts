@@ -153,6 +153,16 @@ export interface categoryDataResponse {
   };
 }
 
+export interface categoryDataFormResponse {
+  data: categoryDataFormItem[];
+}
+
+export interface categoryDataFormItem {
+  id: string;
+  name: string;
+  children: categoryDataFormItem[];
+}
+
 export interface categoryItemData {
   createdAt: string;
   id: string;

@@ -17,4 +17,12 @@ export const paths = {
     message_detail_shop: (shopId: string, conversationId: string) =>
       `/seller/shops/${shopId}/messages/${conversationId}`,
   },
+
+  //admin's api
+  cateogry: {
+    fetch_all: '/api/manager/category',
+    fetch_form: '/api/manager/category/form',
+    create: '/api/manager/category',
+    del_one: (id: string) => `/api/manager/category?id=${id}`,
+  },
 };
