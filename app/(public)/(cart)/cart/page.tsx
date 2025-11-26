@@ -229,17 +229,19 @@ export default function Cart() {
     noItems = true;
   }
   return (
-    <div className="min-h-screen w-full">
+    <div className="min-h-screen w-full bg-background-darker">
       <div className="w-3/4 mx-auto py-6">
         {/* title */}
-        <h1 className="text-xl font-semibold mb-4">🛒 Giỏ hàng</h1>
+        <h1 className="text-xl font-semibold mb-4 text-foreground">
+          🛒 Giỏ hàng
+        </h1>
 
         {/* layout chính */}
         <div className="grid grid-cols-4 gap-6">
           {/* giỏ hàng */}
           <div className="col-span-3 flex flex-col gap-4">
             {/* header */}
-            <div className="bg-white rounded-2xl shadow-xs">
+            <div className="bg-card rounded-2xl shadow-xs">
               <div className="grid grid-cols-[45%_15%_15%_15%_10%] px-4 gap-2 items-center h-full">
                 <div className="flex items-center gap-3">
                   <Checkbox
@@ -259,11 +261,19 @@ export default function Cart() {
                       }
                     }}
                   />
-                  <Label htmlFor="choose-all">Chọn tất cả</Label>
+                  <Label htmlFor="choose-all" className="text-foreground">
+                    Chọn tất cả
+                  </Label>
                 </div>
-                <div className="text-center font-semibold">Đơn giá</div>
-                <div className="text-center font-semibold">Số lượng</div>
-                <div className="text-center font-semibold">Thành tiền</div>
+                <div className="text-center font-semibold text-foreground">
+                  Đơn giá
+                </div>
+                <div className="text-center font-semibold text-foreground">
+                  Số lượng
+                </div>
+                <div className="text-center font-semibold text-foreground">
+                  Thành tiền
+                </div>
                 <div className="text-center">
                   <Button variant="ghost" size="sm" onClick={() => clearCart()}>
                     <TrashIcon className="w-5 h-5 text-primary" />
@@ -273,15 +283,15 @@ export default function Cart() {
             </div>
 
             {/* danh sách sản phẩm */}
-            <div className="bg-white rounded-2xl shadow-xs divide-y">
+            <div className="bg-card rounded-2xl shadow-xs divide-y divide-border">
               {loading && (
                 <div className="flex items-center justify-center p-8">
                   <div className="animate-spin rounded-full h-10 w-10 border-4 border-muted border-t-primary" />
                 </div>
               )}
               {noItems && (
-                <div className="p-4 text-center text-gray-500">
-                  Không có sản phẩm trong giỏ hàng .
+                <div className="p-4 text-center text-muted-foreground">
+                  Không có sản phẩm trong giỏ hàng.
                 </div>
               )}
               {cart.items.map((item: any) => (
@@ -316,18 +326,28 @@ export default function Cart() {
                     <Image
                       src={item.variant.product.images[0].url}
                       alt={item.variant.product.alt || 'Product image'}
-                      width={64} // w-16 = 64px
-                      height={64} // h-16 = 64px
+                      width={64}
+                      height={64}
                       className="object-cover rounded-md"
                     />
                     <div className="flex flex-col justify-start items-left gap-1 overflow-ellipsis">
-                      <Label htmlFor={item.variant.product.title}>
+                      <Label
+                        htmlFor={item.variant.product.title}
+                        className="text-foreground"
+                      >
                         {item.variant.product.title}
                       </Label>
-                      <Label htmlFor={item.id}>{item.variant.name}</Label>
+                      <Label
+                        htmlFor={item.id}
+                        className="text-muted-foreground"
+                      >
+                        {item.variant.name}
+                      </Label>
                     </div>
                   </div>
-                  <div className="text-center">{item.variant.price} ₫</div>
+                  <div className="text-center text-foreground">
+                    {item.variant.price} ₫
+                  </div>
                   <div className="flex gap-2 items-center justify-center">
                     <Button
                       variant="outline"
@@ -339,7 +359,9 @@ export default function Cart() {
                     >
                       -
                     </Button>
-                    <Label htmlFor={item.id}>{item.quantity}</Label>
+                    <Label htmlFor={item.id} className="text-foreground">
+                      {item.quantity}
+                    </Label>
                     <Button
                       variant="outline"
                       size="icon-sm"
@@ -351,7 +373,7 @@ export default function Cart() {
                       +
                     </Button>
                   </div>
-                  <div className="text-center">
+                  <div className="text-center text-foreground">
                     {item.quantity * item.variant.price} ₫
                   </div>
                   <Button
@@ -370,12 +392,14 @@ export default function Cart() {
           {/* cột phải: khuyến mãi + thanh toán */}
           <div className="col-span-1 flex flex-col gap-4">
             {/* Voucher */}
-            <div className="flex flex-col bg-white rounded-2xl shadow-xs p-4 gap-3">
+            <div className="flex flex-col bg-card rounded-2xl shadow-xs p-4 gap-3">
               <div className="flex items-center gap-3 justify-between">
-                <Label htmlFor="title">Khuyến mãi</Label>
+                <Label htmlFor="title" className="text-foreground">
+                  Khuyến mãi
+                </Label>
                 <Label
                   htmlFor="disable"
-                  className="text-gray-400 cursor-not-allowed select-none"
+                  className="text-muted-foreground cursor-not-allowed select-none"
                 >
                   Có thể áp dụng 2
                 </Label>
@@ -383,21 +407,21 @@ export default function Cart() {
               {/* voucher items */}
               <div className="space-y-3">
                 {/* voucher 1 */}
-                <div className="flex items-center justify-between bg-blue-50 border border-blue-300 rounded-xl p-3 shadow-sm">
-                  <div className="shrink-0 w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                <div className="flex items-center justify-between bg-primary/10 border border-primary/30 rounded-xl p-3 shadow-sm">
+                  <div className="shrink-0 w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-xl">
                     {env.NEXT_PUBLIC_WEB_NAME}
                   </div>
-                  <div className="mx-3 w-px h-8 border-r border-dashed border-blue-400"></div>
-                  <div className="flex-1 flex items-center gap-2 text-blue-800 text-sm">
+                  <div className="mx-3 w-px h-8 border-r border-dashed border-primary/40"></div>
+                  <div className="flex-1 flex items-center gap-2 text-primary text-sm">
                     <span>Giảm 6% tối đa...</span>
                   </div>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm font-medium transition">
+                  <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 py-1 rounded-md text-sm font-medium transition">
                     Bỏ Chọn
                   </button>
                 </div>
                 {/* voucher 2 */}
-                <div className="flex items-center justify-between bg-blue-50 border border-blue-300 rounded-xl p-3 shadow-sm">
-                  <div className="shrink-0 w-12 h-12 bg-[#2f9e44] rounded-lg flex items-center justify-center">
+                <div className="flex items-center justify-between bg-success/10 border border-success/30 rounded-xl p-3 shadow-sm">
+                  <div className="shrink-0 w-12 h-12 bg-success rounded-lg flex items-center justify-center">
                     <Image
                       width={8}
                       height={8}
@@ -406,11 +430,11 @@ export default function Cart() {
                       className="w-8 h-8 object-contain"
                     />
                   </div>
-                  <div className="mx-3 w-px h-8 border-r border-dashed border-blue-400"></div>
-                  <div className="flex-1 flex items-center gap-2 text-blue-800 text-sm">
+                  <div className="mx-3 w-px h-8 border-r border-dashed border-success/40"></div>
+                  <div className="flex-1 flex items-center gap-2 text-success text-sm">
                     <span>Giảm 6% tối đa...</span>
                   </div>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm font-medium transition">
+                  <button className="bg-success hover:bg-success/90 text-success-foreground px-3 py-1 rounded-md text-sm font-medium transition">
                     Bỏ Chọn
                   </button>
                 </div>
@@ -421,16 +445,18 @@ export default function Cart() {
                   className="cursor-pointer mt-2 items-center p-0"
                 >
                   <TicketIcon className="w-5 h-5 text-primary" />
-                  <p>Mua thêm để nhận freeship lên đến 300k ...</p>
+                  <p className="text-primary">
+                    Mua thêm để nhận freeship lên đến 300k ...
+                  </p>
                 </Button>
               </div>
             </div>
 
             {/* Payment info */}
-            <div className="flex flex-col justify-evenly bg-white rounded-2xl shadow-xs p-4 gap-3">
+            <div className="flex flex-col justify-evenly bg-card rounded-2xl shadow-xs p-4 gap-3">
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-gray-400 text-sm">Tổng tiền hàng</p>
-                <p>
+                <p className="text-muted-foreground text-sm">Tổng tiền hàng</p>
+                <p className="text-foreground">
                   {cart.items
                     .filter((item: any) =>
                       selectedItem.some(
@@ -447,8 +473,10 @@ export default function Cart() {
                 </p>
               </div>
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-gray-400 text-sm">Giảm giá trực tiếp</p>
-                <p className="text-green-400">
+                <p className="text-muted-foreground text-sm">
+                  Giảm giá trực tiếp
+                </p>
+                <p className="text-success">
                   -
                   {cart.items
                     .filter((item) =>
@@ -466,25 +494,10 @@ export default function Cart() {
                   ₫
                 </p>
               </div>
-              {/*<div className="flex items-center gap-3 justify-between">*/}
-              {/*  <p className="text-gray-400 text-sm">Mã khuyến mãi</p>*/}
-              {/*  <p className="text-green-400">*/}
-              {/*    -*/}
-              {/*    {cart.items*/}
-              {/*      .reduce(*/}
-              {/*        (total: number, item: any) =>*/}
-              {/*          total +*/}
-              {/*          (Number(item.variant.price) * item.quantity) / 20,*/}
-              {/*        0*/}
-              {/*      )*/}
-              {/*      .toLocaleString('vi-VN')}{' '}*/}
-              {/*    ₫*/}
-              {/*  </p>*/}
-              {/*</div>*/}
               <Separator />
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-gray-400 text-sm">Tổng thanh toán</p>
-                <p className="text-red-400">
+                <p className="text-muted-foreground text-sm">Tổng thanh toán</p>
+                <p className="text-destructive font-semibold">
                   {cart.items
                     .filter((item: any) =>
                       selectedItem.some(

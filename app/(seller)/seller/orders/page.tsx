@@ -15,8 +15,6 @@ import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/app/(public)/(customer)/customer/account/orders/_components/no-order-found';
 import { formatPrice } from '@/app/(public)/_components/global-function';
 
-// Định nghĩa kiểu dữ liệu dựa trên Prisma Model
-// Bạn nên import từ @prisma/client nếu có thể
 enum OrderStatus {
   AWAITING_PAYMENT = 'AWAITING_PAYMENT',
   PROCESSING = 'PROCESSING',
@@ -97,13 +95,11 @@ export default function SellerOrderPage() {
     (node: HTMLDivElement) => {
       if (isLoading) return;
       if (observer.current) observer.current.disconnect();
-
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore && nextCursor) {
           fetchOrders(false, nextCursor);
         }
       });
-
       if (node) observer.current.observe(node);
     },
     [isLoading, hasMore, nextCursor, fetchOrders]
@@ -112,18 +108,19 @@ export default function SellerOrderPage() {
   return (
     <div className="p-6 w-full max-w-6xl mx-auto">
       <div className="mb-8 flex w-fit items-center gap-4 px-6 py-4 bg-gradient-to-r from-primary to-brand rounded-2xl shadow-xl">
-        <div className="p-3 bg-white/20 rounded-full backdrop-blur-sm">
-          <PackageSearch className="w-7 h-7 text-white" />
+        <div className="p-3 bg-primary-foreground/20 rounded-full backdrop-blur-sm">
+          <PackageSearch className="w-7 h-7 text-primary-foreground" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-white drop-shadow-md">
+          <h2 className="text-xl font-bold text-primary-foreground drop-shadow-md">
             Quản lý đơn hàng
           </h2>
-          <p className="text-xs text-violet-100 font-medium">Kênh người bán</p>
+          <p className="text-xs font-medium text-primary-foreground/70">
+            Kênh người bán
+          </p>
         </div>
       </div>
 
-      {/* TABS */}
       <div className="flex w-full flex-col gap-6">
         <Tabs
           defaultValue="ALL"
@@ -143,7 +140,6 @@ export default function SellerOrderPage() {
           </TabsList>
 
           <TabsContent value={activeTab} className="mt-6 w-full space-y-6">
-            {/* Loading Initial */}
             {isInitialLoad && (
               <div className="flex flex-col items-center justify-center py-20 gap-3">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -153,13 +149,10 @@ export default function SellerOrderPage() {
               </div>
             )}
 
-            {/* Order List */}
             {!isInitialLoad && orders.length > 0 ? (
               <div className="space-y-4">
                 {orders.map((order, index) => {
-                  // Kiểm tra xem đây có phải phần tử cuối cùng để gắn ref không
                   const isLastElement = orders.length === index + 1;
-
                   return (
                     <div
                       key={order.id}
@@ -170,14 +163,12 @@ export default function SellerOrderPage() {
                   );
                 })}
 
-                {/* Loading More Indicator */}
                 {isLoading && (
                   <div className="py-4 flex justify-center">
                     <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
                   </div>
                 )}
 
-                {/* End of list */}
                 {!hasMore && (
                   <p className="text-center text-sm text-muted-foreground py-4">
                     Đã hiển thị hết đơn hàng.
@@ -186,9 +177,9 @@ export default function SellerOrderPage() {
               </div>
             ) : (
               !isInitialLoad && (
-                <div className="py-10 bg-white rounded-xl border border-dashed">
+                <div className="py-10 bg-card rounded-xl border border-dashed border-border">
                   <EmptyState
-                    imageSrc="/empty-order.png" // Nhớ thay ảnh phù hợp
+                    imageSrc="/empty-order.png"
                     title="Chưa có đơn hàng nào ở trạng thái này"
                   />
                 </div>
@@ -201,7 +192,6 @@ export default function SellerOrderPage() {
   );
 }
 
-// Sub-component: Tab Item cho gọn
 function TabItem({
   value,
   label,
@@ -213,27 +203,25 @@ function TabItem({
   return (
     <TabsTrigger
       value={value}
-      className="px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all"
+      className="px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all"
     >
       {label}
     </TabsTrigger>
   );
 }
 
-// Sub-component: Card hiển thị đơn hàng
 function SellerOrderCard({ order }: { order: Order }) {
-  // Map màu sắc cho badge trạng thái
   const statusColor: Record<string, string> = {
-    AWAITING_PAYMENT: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    PROCESSING: 'bg-blue-100 text-blue-800 border-blue-200',
-    SHIPPED: 'bg-purple-100 text-purple-800 border-purple-200',
-    DELIVERED: 'bg-green-100 text-green-800 border-green-200',
-    CANCELED: 'bg-red-100 text-red-800 border-red-200',
+    AWAITING_PAYMENT: 'bg-warning/15 text-warning border-warning/30',
+    PROCESSING: 'bg-info/15 text-info border-info/30',
+    SHIPPED: 'bg-primary/15 text-primary border-primary/30',
+    DELIVERED: 'bg-success/15 text-success border-success/30',
+    CANCELED: 'bg-destructive/15 text-destructive border-destructive/30',
   };
 
   return (
-    <Card className="w-full shadow-sm hover:shadow-md transition-shadow border-muted/60 overflow-hidden">
-      <CardHeader className="bg-muted/10 py-3 px-4 flex flex-row justify-between items-center border-b">
+    <Card className="w-full shadow-sm hover:shadow-md transition-shadow border border-border overflow-hidden">
+      <CardHeader className="bg-muted/10 py-3 px-4 flex flex-row justify-between items-center border-b border-border">
         <div className="flex items-center gap-3">
           <span className="font-bold text-sm text-foreground">
             #{order.orderNumber}
@@ -244,7 +232,7 @@ function SellerOrderCard({ order }: { order: Order }) {
         </div>
         <Badge
           variant="outline"
-          className={`border ${statusColor[order.status] || 'bg-gray-100'}`}
+          className={`border ${statusColor[order.status] || 'bg-muted'}`}
         >
           {order.status}
         </Badge>
@@ -253,7 +241,7 @@ function SellerOrderCard({ order }: { order: Order }) {
       <CardContent className="p-4 space-y-4">
         {order.items.map((item) => (
           <div key={item.id} className="flex gap-4 items-start">
-            <div className="relative w-16 h-16 rounded-md overflow-hidden border bg-gray-50 shrink-0">
+            <div className="relative w-16 h-16 rounded-md overflow-hidden border border-border bg-muted shrink-0">
               <Image
                 src={item.product.images[0]?.url || '/placeholder.png'}
                 alt={item.product.name ? item.product.name : ',,,'}
@@ -275,7 +263,9 @@ function SellerOrderCard({ order }: { order: Order }) {
             </div>
 
             <div className="text-right">
-              <p className="text-sm font-medium">x{item.quantity}</p>
+              <p className="text-sm font-medium text-foreground">
+                x{item.quantity}
+              </p>
               <p className="text-sm text-primary font-semibold mt-1">
                 {formatPrice(item.total)}
               </p>
@@ -284,8 +274,8 @@ function SellerOrderCard({ order }: { order: Order }) {
         ))}
       </CardContent>
 
-      <CardFooter className="bg-muted/5 py-3 px-4 flex justify-between items-center border-t">
-        <div className="text-sm">
+      <CardFooter className="bg-muted/5 py-3 px-4 flex justify-between items-center border-t border-border">
+        <div className="text-sm text-foreground">
           Tổng thu:{' '}
           <span className="text-lg font-bold text-primary">
             {formatPrice(order.grandTotal)}
@@ -296,7 +286,10 @@ function SellerOrderCard({ order }: { order: Order }) {
             Xem chi tiết
           </Button>
           {order.status === 'PROCESSING' && (
-            <Button size="sm" className="bg-primary hover:bg-primary/90">
+            <Button
+              size="sm"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
               Chuẩn bị hàng
             </Button>
           )}

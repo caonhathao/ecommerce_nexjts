@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <div className="w-full h-screen">
       <div>
         <HeaderServer />
-        <div className="m-0 p-0 w-full h-full bg-gray-200">{children}</div>
+        <div className="m-0 p-0 w-full h-full bg-background">{children}</div>
       </div>
     </div>
   );
