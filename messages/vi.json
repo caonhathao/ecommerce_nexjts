@@ -294,10 +294,11 @@
     }
   },
   "admin_search_bar": {
-    "t_search_placeholder": "Nhập ID...",
     "t_search_action": "Tìm kiếm"
   },
   "admin_category_page": {
+    "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
+
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa danh mục sản phẩm thành công!",
@@ -348,9 +349,36 @@
       "t_no_child": "Không có danh mục con",
       "t_submit_action": "Lưu thay đổi",
       "t_cancel_action": "Hủy"
+    },
+    "category_new_form":{
+      "t_action_noti": "Hành động",
+      "t_create_desc_noti": "Đã tạo mới danh mục sản phẩm.",
+      "t_del_desc_noti": "Xóa danh mục sản phẩm thành công!",
+
+      "t_action_failed_noti": "Hành động thất bại",
+      "t_create_failed_desc_noti": "'Không thể tạo mới danh mục.'",
+      
+      "t_name_schema":"Tên không được để trống",
+      "t_slug_schema":"Slug không được để trống",
+      "t_file_schema":"Kích thước nhỏ hơn 200KB",
+
+      "t_new_button":"Tạo mới",
+      "t_new_category":"Danh mục mới",
+      "t_desc":"Tạo mới danh mục sản phẩm của bạn.",
+      "t_name":"Tên danh mục",
+      "t_photo":"Ảnh đại diện",
+      "t_status":"Trạng thái",
+      "c_active":"Hiển thị",
+      "c_inactive":"Ẩn",
+      "t_parent_category":"Danh mục cha",
+      "t_belong_category":"Thuộc danh mục",
+      "t_cancel_action":"Hủy",
+      "t_submit_action":"Đồng ý" 
     }
   },
   "admin_product_page": {
+    "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
+
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
@@ -412,6 +440,8 @@
     }
   },
   "admin_shop_page": {
+    "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
+
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
@@ -478,6 +508,8 @@
     }
   },
   "admin_user_page": {
+    "t_search_placeholder": "Nhập ID người dùng...",
+
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",

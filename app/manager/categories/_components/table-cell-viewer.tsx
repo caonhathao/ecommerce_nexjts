@@ -151,7 +151,7 @@ export function TableCellViewer({
       const data = await putData('/api/manager/category', values);
       if (data.status === 200) {
         toast(t('t_action_noti'), {
-          description: t('t_update_des_noti'),
+          description: t('t_update_desc_noti'),
         });
         setTimeout(() => {
           setOpen(false);
@@ -161,7 +161,7 @@ export function TableCellViewer({
     } catch (error) {
       console.error('Failed to create category:', error);
       toast(t('t_action_noti'), {
-        description: t('t_update_des_noti'),
+        description: t('t_update_desc_noti'),
       });
     }
   }
@@ -336,7 +336,11 @@ export function TableCellViewer({
                         document.getElementById('input-image-file')?.click()
                       }
                     >
-                      {previewUrl ? 'Đổi' : 'Thêm'}
+                      {previewUrl
+                        ? 'Đổi'
+                        : detail?.imageUrl && detail?.imageUrl.length
+                          ? 'Đổi'
+                          : 'Thêm'}
                     </Button>
 
                     <FormField

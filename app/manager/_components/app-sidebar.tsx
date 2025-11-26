@@ -73,7 +73,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         items: [
           {
             title: t('t_dashboard'),
-            url: '/manager/dashboard',
+            url: '/manager',
           },
         ],
       },

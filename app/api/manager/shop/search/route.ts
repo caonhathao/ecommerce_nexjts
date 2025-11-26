@@ -5,23 +5,28 @@ import { NextRequest, NextResponse } from 'next/server';
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
-  const id = String(searchParams.get('id'));
+  const keyword = searchParams.get('keyword');
 
-  if (!id) {
-    return NextResponse.json({
-      success: false,
-      data: {
-        message: `Missing product's id`,
+  if (!keyword || keyword.trim() === '') {
+    return NextResponse.json(
+      {
+        success: false,
+        data: {
+          message: 'Missing search keyword',
+        },
       },
-    });
+      { status: 400 }
+    );
   }
-
   let data = null;
 
   try {
     data = await prisma.shop.findFirst({
       where: {
-        id: id,
+        name: {
+          contains: keyword,
+          mode: 'insensitive',
+        },
       },
       select: {
         id: true,
@@ -43,7 +48,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     if (data)
       return NextResponse.json({
         success: true,
-        data: [data],
+        data: data,
       });
     else
       return NextResponse.json({
