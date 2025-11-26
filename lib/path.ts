@@ -17,4 +17,11 @@ export const paths = {
     message_detail_shop: (shopId: string, conversationId: string) =>
       `/seller/shops/${shopId}/messages/${conversationId}`,
   },
+
+  seller: {
+    shops: {
+      create: '/seller/shops/create',
+      edit: (shopId: string) => `/seller/shops/${shopId}/edit`,
+    },
+  },
 };

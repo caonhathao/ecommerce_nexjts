@@ -80,7 +80,7 @@ type UserMini = { name: string; email?: string; avatar_url?: string };
 
 export default function UserNav({ user }: { user: UserMini }) {
   const pathname = usePathname();
-  const t = useTranslations('user_navbar');
+  const t = useTranslations('customer.user_navbar');
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + '/');
 
