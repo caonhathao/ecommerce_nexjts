@@ -21,6 +21,7 @@ import {
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export function NavMainSeller({
   items,
@@ -37,6 +38,26 @@ export function NavMainSeller({
   }[];
 }) {
   const pathname = usePathname();
+
+  const handleLoginTransaction = async () => {
+    try {
+      const res = await fetch('/api/stripe/create-login-link', {
+        method: 'POST',
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        // Mở trong tab mới để user không bị thoát khỏi app của bạn
+        window.open(data.url, '_blank');
+      } else {
+        toast.error(data.error || 'Không thể truy cập ví tiền');
+      }
+    } catch (error) {
+      toast.error('Lỗi kết nối' + error);
+    }
+  };
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
@@ -91,7 +112,15 @@ export function NavMainSeller({
             // Item without submenu
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
+                <a
+                  href={item.url}
+                  onClick={(e) => {
+                    if (item.title === 'Transaction') {
+                      e.preventDefault();
+                      handleLoginTransaction();
+                    }
+                  }}
+                >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </a>

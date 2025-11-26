@@ -105,7 +105,7 @@ export default async function CheckoutPage() {
               Danh sách sản phẩm
             </Label>
 
-            <div className="divide-y">
+            <div className="divide-y max-h-[260px] overflow-y-auto pr-2">
               {draftPlain.items.map((item, i) => (
                 <Item key={i} variant="outline" className="py-3">
                   <ItemMedia>

@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
   for (const [requiredRole, paths] of Object.entries(roleProtectedPaths)) {
     if (paths.some((p) => pathname.startsWith(p))) {
       if (userRole !== requiredRole) {
-        if (requiredRole === 'seller' && userRole === 'user') {
+        if (requiredRole == 'seller' && userRole == 'user') {
           return NextResponse.redirect(
             new URL('/signup-business', request.url)
           );
@@ -60,7 +60,7 @@ export async function middleware(request: NextRequest) {
 //   if (isRestricted) {
 //     const [requiredRole, _] = isRestricted;
 //     if (requiredRole === 'seller' && userRole === 'user') {
-//       const url = new URL('/signup-business', request.url);
+//       const url = new URL('/(signup-business)', request.url);
 //       return NextResponse.redirect(url);
 //     }
 //

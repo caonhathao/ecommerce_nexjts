@@ -128,7 +128,7 @@ export default function UserNav({ user }: { user: UserMini }) {
           Icon: MessageSquareText,
         },
         {
-          href: '/',
+          href: '/signup-business',
           i18nKey: 'seller_center',
           Icon: Store,
         },

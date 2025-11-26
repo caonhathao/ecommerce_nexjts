@@ -2,17 +2,36 @@
 
 import { useState } from 'react';
 import { Loader2, Store, DollarSign, ShieldCheck } from 'lucide-react';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { delay } from 'effect/Micro';
+import { UserProfileResponseDTO } from '@/types/dtos/user.dto';
 
-export default function BusinessClient({ userId }: { userId: string }) {
+interface BusinessClientProps {
+  user: UserProfileResponseDTO | null;
+}
+
+export default function BusinessClient({ user }: BusinessClientProps) {
   const [isLoading, setIsLoading] = useState(false);
-
+  const route = useRouter();
   const handleSellerRegister = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/onboarding', {
+      if (user == null) return;
+      if (user.emailForBill || user.phone || user.name) {
+        toast.warning('Please fill in your user information to continue.', {
+          duration: 3000,
+          position: 'top-right',
+        });
+        await delay(3000);
+        route.push('/customer/account/edit');
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await fetch('/api/stripe/create-connect-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: userId }),
       });
 
       const data = await response.json();
@@ -20,7 +39,10 @@ export default function BusinessClient({ userId }: { userId: string }) {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert('Có lỗi xảy ra, vui lòng thử lại.');
+        toast.error(`Có lỗi xảy ra, vui lòng thử lại. ${data.error}`, {
+          duration: 3000,
+          position: 'top-right',
+        });
       }
     } catch (error) {
       console.error(error);
@@ -33,7 +55,6 @@ export default function BusinessClient({ userId }: { userId: string }) {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
       <div className="max-w-3xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-        {/* Header */}
         <div className="bg-blue-600 p-8 text-center text-white">
           <div className="mx-auto bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center mb-4">
             <Store size={32} />
@@ -86,7 +107,7 @@ export default function BusinessClient({ userId }: { userId: string }) {
           <button
             onClick={handleSellerRegister}
             disabled={isLoading}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transform transition hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+            className="bg-blue-600 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-4 px-8 rounded-full shadow-lg transform transition hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isLoading ? (
               <>

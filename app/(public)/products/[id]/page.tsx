@@ -37,6 +37,7 @@ import Desc from './_components/desc';
 import { Reviews } from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 import Decimal = Prisma.Decimal;
+import { voucher } from '@/types/voucher';
 
 interface selectedVariant {
   name: string;
@@ -174,10 +175,10 @@ const DetailPage = () => {
         items: [params],
         voucher: [
           {
-            code: 'VC-6KSWBFG9',
+            code: voucher.voucher1,
           },
           {
-            code: 'VC-KSXTMQ0T',
+            code: voucher.voucher2,
           },
         ],
       };
