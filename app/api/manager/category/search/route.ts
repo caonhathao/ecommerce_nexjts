@@ -5,23 +5,28 @@ import { NextRequest, NextResponse } from 'next/server';
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
-  const id = String(searchParams.get('id'));
+  const keyword = searchParams.get('keyword');
 
-  if (!id) {
-    return NextResponse.json({
-      success: false,
-      data: {
-        message: `Missing product's id`,
+  if (!keyword || keyword.trim() === '') {
+    return NextResponse.json(
+      {
+        success: false,
+        data: {
+          message: 'Missing search keyword',
+        },
       },
-    });
+      { status: 400 }
+    );
   }
 
-  let data = null;
-
   try {
-    data = await prisma.category.findFirst({
+    // 2. Sử dụng findMany để trả về danh sách kết quả
+    const data = await prisma.category.findMany({
       where: {
-        id: id,
+        name: {
+          contains: keyword,
+          mode: 'insensitive',
+        },
       },
       select: {
         id: true,
@@ -38,29 +43,23 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
-    if (data)
-      return NextResponse.json({
-        success: true,
-        data: [data],
-      });
-    else
-      return NextResponse.json({
-        success: 403,
-        data: {
-          message: 'No result',
-        },
-      });
+
+    return NextResponse.json({
+      success: true,
+      data: data,
+    });
   } catch (e) {
-    // This catch block is still important for REAL errors
-    // (e.g., database connection fails)
-    console.error('Error fetching product:', e);
+    console.error('Error searching category:', e);
     return NextResponse.json(
       {
-        success: 500,
+        success: false, // Thường lỗi server nên để success false hoặc status code rõ ràng
         message: 'Internal Server Error',
       },
-      { status: 500 } // 500 is for unexpected server errors
+      { status: 500 }
     );
   }
 });

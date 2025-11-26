@@ -75,6 +75,7 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
 
     return NextResponse.json({ success: true });
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { success: false, error: 'Internal Server Error' },
       { status: 500 }

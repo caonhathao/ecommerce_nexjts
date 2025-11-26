@@ -334,6 +334,7 @@ const ShopsPage = () => {
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
         baseUrl="/api/manager/shop/search"
+        placeholder={t('t_search_placeholder')}
         setData={setShopList}
         setIsReset={SetIsReset}
         isReset={isReset}
