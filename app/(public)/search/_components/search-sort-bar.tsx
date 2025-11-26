@@ -19,8 +19,8 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 border-b border-gray-200 bg-white p-4 mb-4 rounded-lg">
-      <span className="text-sm text-gray-500 mr-2">Sort by:</span>
+    <div className="flex flex-wrap items-center gap-4 border-b border-border bg-card p-4 mb-4 rounded-lg">
+      <span className="text-sm text-muted-foreground mr-2">Sort by:</span>
 
       {/* Popular / Newest Tabs */}
       <button
@@ -28,8 +28,8 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
         className={cn(
           'px-4 py-2 text-sm rounded-full transition-colors',
           isSortActive('createdAt', 'desc')
-            ? 'bg-blue-50 text-blue-600 font-medium border border-blue-200'
-            : 'text-gray-600 hover:bg-gray-100'
+            ? 'bg-primary/10 text-primary font-medium border border-primary/20'
+            : 'text-muted-foreground hover:bg-muted'
         )}
       >
         Newest
@@ -40,8 +40,8 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
         className={cn(
           'px-4 py-2 text-sm rounded-full transition-colors',
           isSortActive('rating', 'desc')
-            ? 'bg-blue-50 text-blue-600 font-medium border border-blue-200'
-            : 'text-gray-600 hover:bg-gray-100'
+            ? 'bg-primary/10 text-primary font-medium border border-primary/20'
+            : 'text-muted-foreground hover:bg-muted'
         )}
       >
         Top Rated
@@ -52,8 +52,8 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
         className={cn(
           'px-4 py-2 text-sm rounded-full transition-colors',
           isSortActive('price', 'asc')
-            ? 'bg-blue-50 text-blue-600 font-medium border border-blue-200'
-            : 'text-gray-600 hover:bg-gray-100'
+            ? 'bg-primary/10 text-primary font-medium border border-primary/20'
+            : 'text-muted-foreground hover:bg-muted'
         )}
       >
         Price: Low to High
@@ -64,8 +64,8 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
         className={cn(
           'px-4 py-2 text-sm rounded-full transition-colors',
           isSortActive('price', 'desc')
-            ? 'bg-blue-50 text-blue-600 font-medium border border-blue-200'
-            : 'text-gray-600 hover:bg-gray-100'
+            ? 'bg-primary/10 text-primary font-medium border border-primary/20'
+            : 'text-muted-foreground hover:bg-muted'
         )}
       >
         Price: High to Low

@@ -45,7 +45,7 @@ const SearchingBar = ({ id }: { id: string }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-row items-center gap-2 w-full border border-gray-300 rounded-2xl p-1 bg-white"
+          className="flex flex-row items-center gap-2 w-full border border-transparent rounded-2xl p-1 bg-card"
         >
           <FormField
             control={form.control}
