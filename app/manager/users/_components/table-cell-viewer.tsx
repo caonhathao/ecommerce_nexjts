@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/select';
 import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { paths } from '@/lib/path';
 import { userDetail, userItemData } from '@/types/manager.data-types';
 import { useTranslations } from 'next-intl';
 import React, { SetStateAction, useEffect, useMemo } from 'react';
@@ -58,7 +59,7 @@ export function TableCellViewer({
   async function fetchDetail() {
     try {
       const res = await fetchData({
-        baseUrl: '/api/manager/user/query',
+        baseUrl: paths.manager.user.fetch_detail,
         params: { id: item.id },
         setData: undefined,
         cacheType: 'default',
@@ -250,8 +251,8 @@ export function TableCellViewer({
                   {detail?.profile.gender === 'MALE'
                     ? t('c_male')
                     : detail?.profile.gender === 'FEMALE'
-                    ? t('c_female')
-                    : t('c_other')}
+                      ? t('c_female')
+                      : t('c_other')}
                 </p>
               </div>
             </div>

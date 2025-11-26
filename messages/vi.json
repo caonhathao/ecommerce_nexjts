@@ -334,6 +334,7 @@
       "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
       "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
       "t_del_failed_desc_noti": "Xóa danh mục sản phẩm không thành công!",
+
       "t_category_desc": "Thông tin chi tiết danh mục",
       "t_category_name": "Tên danh mục",
       "t_copy_action": "Sao chép ID",
@@ -531,6 +532,7 @@
     "t_tab_banned": "Bị khóa",
     "t_showing": "Hiển thị",
     "t_column": "Cột",
+
     "user_tab": {
       "t_no_shop_found": "Không có kết quả",
       "t_of": "của",
@@ -614,6 +616,46 @@
       "t_data_from": "Số liệu từ",
       "t_most_recent": "gần nhất",
       "t_label_1": "Số lượng"
+    },
+    "product_tab": {
+      "t_no_product_found": "Không có sản phẩm nào",
+      "t_of": "của",
+      "t_rows_selected": "số dòng đã chọn.",
+      "t_rows_per_page": "Dòng mỗi trang",
+      "t_page": "Trang"
+    },
+    "product_drawer": {
+      "t_process_failed_noti": "Tiến trình thất bại",
+      "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
+      "t_action_noti": "Hành động",
+      "t_update_desc_noti": "Cập nhật thông tin danh mục thành công!",
+      "t_copy_desc_noti": "Sao chép thông tin thành công!",
+      "t_del_desc_noti": "Xóa sản phẩm thành công!",
+      "t_action_failed_noti": "Hành động thất bại",
+      "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
+      "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
+      "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
+
+      "t_product_desc": "Thông tin chi tiết sản phẩm",
+      "t_shop": "Cửa hàng",
+      "t_watch_shop": "Xem cửa hàng",
+      "t_product_name": "Tên sản phẩm",
+      "t_copy_action": "Sao chép ID",
+      "t_del_action": "Xóa",
+      "t_origin": "Xuất xứ",
+      "t_currency": "Đơn vị tiền tệ",
+      "t_min_price": "Giá tối thiểu",
+      "t_max_price": "Giá tối đa",
+      "t_visibility": "Hiển thị",
+      "t_visibility_placeholder": "Chọn trạng thái",
+      "c_public": "Cho phép",
+      "c_private": "Đang xin phép",
+      "c_unlisted": "Không cho phép",
+      "t_desc": "Mô tả",
+      "t_sku_code": "Mã SKU",
+      "t_price": "Giá",
+      "t_variant": "Sản phẩm con",
+      "t_cancel_action": "Thoát"
     }
   }
 }

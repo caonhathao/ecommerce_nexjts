@@ -66,4 +66,39 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   });
 });
 
-//if denied, send a notify to seller
+//if pass, update status and visibility of product
+export const PUT = withAuth(async (userId: string, request: NextRequest) => {
+  try {
+    const body = await request.json();
+    const { id, visibility } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Missing id' },
+        { status: 400 }
+      );
+    }
+
+    if (!visibility) {
+      return NextResponse.json(
+        { success: false, error: 'Missing visibility field' },
+        { status: 400 }
+      );
+    }
+
+    // Update product status and visibility (adjust values to match your schema/enums)
+    await prisma.product.update({
+      where: { id },
+      data: {
+        visibility: visibility,
+      },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json(
+      { success: false, error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+});

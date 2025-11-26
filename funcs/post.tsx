@@ -4,7 +4,7 @@ export const postData = async ({
   contentType,
 }: {
   url: string;
-  body: FormData | Record<string, number | string | File>;
+  body: FormData | Record<string, number | string>;
   contentType: string | undefined;
 }) => {
   const headers: HeadersInit = {

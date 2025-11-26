@@ -43,6 +43,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { paths } from '@/lib/path';
 import {
   productDataResponse,
   productDetail,
@@ -105,6 +106,10 @@ const TableTopProduct = () => {
     () => productList?.map(({ id }) => id) || [],
     [productList]
   );
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -281,7 +286,7 @@ const TableTopProduct = () => {
     async function fetchDetail() {
       try {
         const response = await fetchData({
-          baseUrl: '/api/manager/product/query',
+          baseUrl: paths.manager.product.fetch_detail,
           params: { id: item.id },
           setData: undefined,
         });
