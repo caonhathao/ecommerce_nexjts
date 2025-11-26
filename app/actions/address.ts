@@ -17,23 +17,21 @@ export async function createAddress(formData: FormData) {
 
   const data = JSON.parse(rawData.data as string);
 
-  const userPhone = await prisma.userProfile.findUnique({
-    where: { userId },
-    select: { phone: true },
-  });
-  if (!userPhone?.phone) {
-    throw new Error('Vui lòng cập nhật số điện thoại trước khi thêm địa chỉ.');
-  }
+  const phone =
+    typeof data.phone === 'string' && data.phone.trim().length > 0
+      ? data.phone.trim()
+      : '';
 
   const address = await prisma.address.create({
     data: {
       userId,
       fullName: session.user.name,
-      phone: userPhone.phone,
+      phone,
       line1: data.line1,
       ward: data.ward,
       district: data.district,
       city: data.city,
+      country: data.country ?? 'Vietnam',
       isDefault: true,
     },
   });

@@ -34,7 +34,7 @@ type Props = {
 };
 
 export default function EditUserProfileForm({ defaultValues }: Props) {
-  const t = useTranslations('user_dashboard.profile_page');
+  const t = useTranslations('customer.user_dashboard.profile_page');
 
   const schema = useMemo(
     () =>

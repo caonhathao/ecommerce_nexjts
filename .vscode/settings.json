@@ -1,7 +1,7 @@
 {
 
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "editor.fontFamily": "CaskaydiaCove NF",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"

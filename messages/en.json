@@ -9,76 +9,98 @@
     "dark_mode": "Dark",
     "system_mode": "System"
   },
-  "user_navbar": {
-    "home": "Home",
-    "categories": "Categories",
-    "deals": "Deals",
-    "support": "Support",
-    "track_order": "Track Order",
-    "search_placeholder": "Search products, brands, and more...",
-    "login": "Sign in",
-    "register": "Create account",
-    "account": "My account",
-    "profile": "Account info",
-    "notifications": "Notifications",
-    "orders": "Orders",
-    "returns": "Returns",
-    "addresses": "Addresses",
-    "payments": "Payment methods",
-    "reviews": "Product reviews",
-    "recently_viewed": "Recently viewed",
-    "wishlist": "Wishlist",
-    "comments": "My comments",
-    "vip": "2T3H VIP",
-    "referrals": "Referral rewards",
-    "bnpl": "Buy now, pay later",
-    "vouchers": "Vouchers",
-    "astra": "Your Astra",
-    "coins": "My 2T3H Coins",
-    "bookcare": "My BookCare",
-    "logout": "Sign out",
-    "cart": "Cart",
-    "seller_center": "Seller Center",
-    "membership": "Perks & Membership",
-    "help": "Customer support",
-    "member_badge": "Member"
-  },
-  "user_dashboard": {
-    "profile_page": {
-      "title": "Personal information",
-      "fullName": "Full name",
-      "nickname": "Nickname",
-      "birthday": "Birthday",
-      "day": "Day",
-      "month": "Month",
-      "year": "Year",
-      "gender": "Gender",
-      "male": "Male",
-      "female": "Female",
-      "other": "Other",
-      "nationality": "Nationality",
-      "phoneEmailSectionTitle": "Phone number & Email",
-      "phone": "Phone number",
-      "emailForBill": "Email address",
-      "save": "Save changes",
-      "placeholders": {
-        "fullName": "Your full name",
-        "nickname": "Add a nickname",
-        "phone": "Enter phone number",
-        "emailForBill": "Enter Email for Billing",
-        "nationality": "Choose nationality"
-      },
-      "errors": {
-        "fullNameRequired": "Full name is required",
-        "emailInvalid": "Invalid email address",
-        "phoneInvalid": "Invalid phone number"
-      },
-      "toasts": {
-        "saved": "Profile updated successfully",
-        "failed": "Failed to update profile"
+  "customer": {
+    "address": {
+      "title": "My addresses",
+      "add_new": "Add new address",
+      "modal_title": "Add your address",
+      "phone": "Phone",
+      "line1": "Street / House number",
+      "ward": "Ward",
+      "district": "District",
+      "city": "City",
+      "country": "Country",
+      "country_default": "Vietnam",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "loading": "Loading...",
+      "empty": "You have no addresses yet. Please add a new one.",
+      "toast_create_success": "Address added successfully!",
+      "toast_create_failed": "Failed to add address!"
+    },
+    "user_navbar": {
+      "home": "Home",
+      "categories": "Categories",
+      "deals": "Deals",
+      "support": "Support",
+      "track_order": "Track Order",
+      "search_placeholder": "Search products, brands, and more...",
+      "login": "Sign in",
+      "register": "Create account",
+      "account": "My account",
+      "profile": "Account info",
+      "notifications": "Notifications",
+      "orders": "Orders",
+      "returns": "Returns",
+      "addresses": "Addresses",
+      "payments": "Payment methods",
+      "reviews": "Product reviews",
+      "recently_viewed": "Recently viewed",
+      "wishlist": "Wishlist",
+      "comments": "My comments",
+      "vip": "2T3H VIP",
+      "referrals": "Referral rewards",
+      "bnpl": "Buy now, pay later",
+      "vouchers": "Vouchers",
+      "astra": "Your Astra",
+      "coins": "My 2T3H Coins",
+      "bookcare": "My BookCare",
+      "logout": "Sign out",
+      "cart": "Cart",
+      "seller_center": "Seller Center",
+      "membership": "Perks & Membership",
+      "help": "Customer support",
+      "member_badge": "Member"
+    },
+    "user_dashboard": {
+      "profile_page": {
+        "title": "Personal information",
+        "fullName": "Full name",
+        "nickname": "Nickname",
+        "birthday": "Birthday",
+        "day": "Day",
+        "month": "Month",
+        "year": "Year",
+        "gender": "Gender",
+        "male": "Male",
+        "female": "Female",
+        "other": "Other",
+        "nationality": "Nationality",
+        "phoneEmailSectionTitle": "Phone number & Email",
+        "phone": "Phone number",
+        "emailForBill": "Email address",
+        "save": "Save changes",
+        "placeholders": {
+          "fullName": "Your full name",
+          "nickname": "Add a nickname",
+          "phone": "Enter phone number",
+          "emailForBill": "Enter Email for Billing",
+          "nationality": "Choose nationality"
+        },
+        "errors": {
+          "fullNameRequired": "Full name is required",
+          "emailInvalid": "Invalid email address",
+          "phoneInvalid": "Invalid phone number"
+        },
+        "toasts": {
+          "saved": "Profile updated successfully",
+          "failed": "Failed to update profile"
+        }
       }
     }
   },
+
   "home_layout": {
     "slogan": "good & fast",
     "electronics": "home appliances",
@@ -148,44 +170,44 @@
     "watch_more": "See More"
   },
   "product_detail": {
-  "t_price_after": "Price after discount",
-  "t_sold": "Sold",
-  "t_variant_type": "Variation",
-  "t_delivery_info": "Shipping Information",
-  "t_other_promotion": "Other offers",
-  "t_discount_code": "Voucher Code",
-  "t_more_action": "View More",
-  "t_more_services": "Add-on Services",
-  "t_tiki_card": "Save up to 600k with TikiCard",
-  "t_pay_later": "Buy now, pay later",
-  "t_slogan_1": "Shop with confidence",
-  "t_slogan_2": "Inspect goods upon delivery",
-  "t_slogan_3": "200% refund if proven fake",
-  "t_slogan_4": "Free returns up to 365 days. Change of mind allowed.",
-  "t_quantity": "Quantity",
-  "t_total": "Subtotal",
-  "t_buy_action": "Buy Now",
-  "t_add_action": "Add to Cart",
-  "detail_desc": {
-    "t_desc": "Product Description"
+    "t_price_after": "Price after discount",
+    "t_sold": "Sold",
+    "t_variant_type": "Variation",
+    "t_delivery_info": "Shipping Information",
+    "t_other_promotion": "Other offers",
+    "t_discount_code": "Voucher Code",
+    "t_more_action": "View More",
+    "t_more_services": "Add-on Services",
+    "t_tiki_card": "Save up to 600k with TikiCard",
+    "t_pay_later": "Buy now, pay later",
+    "t_slogan_1": "Shop with confidence",
+    "t_slogan_2": "Inspect goods upon delivery",
+    "t_slogan_3": "200% refund if proven fake",
+    "t_slogan_4": "Free returns up to 365 days. Change of mind allowed.",
+    "t_quantity": "Quantity",
+    "t_total": "Subtotal",
+    "t_buy_action": "Buy Now",
+    "t_add_action": "Add to Cart",
+    "detail_desc": {
+      "t_desc": "Product Description"
+    },
+    "detail_review": {
+      "t_review_at": "Reviewed at: ",
+      "t_custome_review": "Customer Reviews",
+      "t_summary": "Overview",
+      "c_reviews": "reviews",
+      "t_filter_by": "Filter by",
+      "c_newest": "Newest",
+      "c_have_img": "With photos",
+      "c_buy_again": "Repurchase",
+      "c_5_stars": "5 stars",
+      "c_4_stars": "4 stars",
+      "c_3_stars": "3 stars",
+      "c_2_stars": "2 stars",
+      "c_1_star": "1 star",
+      "t_more_action": "View More"
+    }
   },
-  "detail_review": {
-    "t_review_at": "Reviewed at: ",
-    "t_custome_review": "Customer Reviews",
-    "t_summary": "Overview",
-    "c_reviews": "reviews",
-    "t_filter_by": "Filter by",
-    "c_newest": "Newest",
-    "c_have_img": "With photos",
-    "c_buy_again": "Repurchase",
-    "c_5_stars": "5 stars",
-    "c_4_stars": "4 stars",
-    "c_3_stars": "3 stars",
-    "c_2_stars": "2 stars",
-    "c_1_star": "1 star",
-    "t_more_action": "View More"
-  }
-},
   "admin_layout": {
     "admin_app_sidebar": {
       "t_quick_access": "Quick Access",
@@ -258,7 +280,7 @@
       "t_category_name": "Category Name",
       "t_copy_action": "Copy ID",
       "t_del_action": "Delete",
-      "t_icon":"Icon",
+      "t_icon": "Icon",
       "t_is_active": "Active",
       "t_is_active_placeholder": "Select status",
       "c_active": "Active",
@@ -275,29 +297,23 @@
     "t_action_noti": "Action",
     "t_copy_desc_noti": "Information copied successfully!",
     "t_del_desc_noti": "Product deleted successfully!",
-
     "t_action_failed_noti": "Action Failed",
     "t_copy_failed_desc_noti": "Failed to copy information!",
     "t_del_failed_desc_noti": "Failed to delete product!",
-
     "t_product_name": "Product Name",
     "t_shop_name": "Shop",
     "t_visibility": "Visibility",
     "t_variant_count": "Variant Count",
     "t_created_at": "Created At",
     "t_updated_at": "Updated At",
-
     "t_copy_action": "Copy ID",
     "t_del_action": "Delete",
-
     "t_tab_all": "All",
     "t_tab_public": "Public",
     "t_tab_private": "Hidden",
     "t_tab_inlisted": "Banned",
-
     "t_showing": "Showing",
     "t_column": "Columns",
-
     "product_tab": {
       "t_no_product_found": "No products found",
       "t_of": "of",
@@ -308,36 +324,29 @@
     "product_drawer": {
       "t_process_failed_noti": "Process Failed",
       "t_conn_failed_desc_noti": "Cannot connect to server!",
-
       "t_action_noti": "Action",
       "t_update_desc_noti": "Category info updated successfully!",
       "t_copy_desc_noti": "Information copied successfully!",
       "t_del_desc_noti": "Product deleted successfully!",
-
       "t_action_failed_noti": "Action Failed",
       "t_update_failed_desc_noti": "Failed to update information!",
       "t_copy_failed_desc_noti": "Failed to copy information!",
       "t_del_failed_desc_noti": "Failed to delete product!",
-
       "t_product_desc": "Product Details",
       "t_shop": "Shop",
       "t_product_name": "Product Name",
       "t_copy_action": "Copy ID",
       "t_del_action": "Delete",
-
       "t_origin": "Origin",
       "t_currency": "Currency",
       "t_min_price": "Min Price",
       "t_max_price": "Max Price",
-
       "t_visibility": "Visibility",
       "t_visibility_placeholder": "Select Status",
       "c_public": "Allowed",
       "c_private": "Pending Approval",
       "c_unlisted": "Not Allowed",
-
       "t_desc": "Description",
-
       "t_sku_code": "SKU Code",
       "t_price": "Price",
       "t_variant": "Variants",
@@ -349,30 +358,24 @@
     "t_action_noti": "Action",
     "t_copy_desc_noti": "Information copied successfully!",
     "t_del_desc_noti": "Shop deleted successfully!",
-
     "t_action_failed_noti": "Action Failed",
     "t_copy_failed_desc_noti": "Failed to copy information!",
     "t_del_failed_desc_noti": "Failed to delete shop!",
-
     "t_shop_name": "Shop Name",
     "t_owner_name": "Owner",
     "t_status": "Status",
     "t_rating": "Rating",
     "t_created_at": "Created At",
     "t_updated_at": "Updated At",
-
     "t_copy_action": "Copy ID",
     "t_del_action": "Delete",
-
     "t_tab_all": "All",
     "t_tab_active": "Active",
     "t_tab_pending": "Pending",
     "t_tab_suspended": "Suspended",
     "t_tab_closed": "Closed",
-
     "t_showing": "Showing",
     "t_column": "Columns",
-
     "shop_tab": {
       "t_no_shop_found": "No shops found",
       "t_of": "of",
@@ -383,17 +386,14 @@
     "shop_drawer": {
       "t_process_failed_noti": "Process Failed",
       "t_conn_failed_desc_noti": "Cannot connect to server!",
-
       "t_action_noti": "Action",
       "t_update_desc_noti": "Shop info updated successfully!",
       "t_copy_desc_noti": "Information copied successfully!",
       "t_del_desc_noti": "Shop deleted successfully!",
-
       "t_action_failed_noti": "Action Failed",
       "t_update_failed_desc_noti": "Failed to update information!",
       "t_copy_failed_desc_noti": "Failed to copy information!",
       "t_del_failed_desc_noti": "Failed to delete shop!",
-
       "t_shop_desc": "Shop Details",
       "t_shop": "Shop",
       "t_owner_name": "Owner",
@@ -406,16 +406,13 @@
       "t_members": "Members",
       "t_created_at": "Created At",
       "t_updated_at": "Updated At",
-
       "t_status": "Status",
       "t_status_placeholder": "Select Status",
       "c_active": "Active",
       "c_pending": "Pending",
       "c_suspended": "Suspended",
       "c_closed": "Closed",
-
       "t_desc": "Description",
-
       "t_sku_code": "SKU Code",
       "t_price": "Price",
       "t_variant": "Variants",
@@ -427,11 +424,9 @@
     "t_action_noti": "Action",
     "t_copy_desc_noti": "Information copied successfully!",
     "t_del_desc_noti": "Product deleted successfully!",
-
     "t_action_failed_noti": "Action failed",
     "t_copy_failed_desc_noti": "Failed to copy information!",
     "t_del_failed_desc_noti": "Failed to delete product!",
-
     "t_user_name": "Username",
     "t_email": "Email",
     "t_email_verified": "Email Verification",
@@ -440,17 +435,13 @@
     "t_rating": "Rating",
     "t_created_at": "Created At",
     "t_updated_at": "Updated At",
-
     "t_copy_action": "Copy ID",
     "t_del_action": "Delete",
-
     "t_tab_all": "All",
     "t_tab_un_banned": "Active",
     "t_tab_banned": "Banned",
-
     "t_showing": "Showing",
     "t_column": "Columns",
-
     "user_tab": {
       "t_no_shop_found": "No results found",
       "t_of": "of",
@@ -461,17 +452,14 @@
     "user_drawer": {
       "t_process_failed_noti": "Process failed",
       "t_conn_failed_desc_noti": "Cannot connect to server!",
-
       "t_action_noti": "Action",
       "t_update_desc_noti": "Shop information updated successfully!",
       "t_copy_desc_noti": "Information copied successfully!",
       "t_del_desc_noti": "Shop deleted successfully!",
-
       "t_action_failed_noti": "Action failed",
       "t_update_failed_desc_noti": "Failed to update information!",
       "t_copy_failed_desc_noti": "Failed to copy information!",
       "t_del_failed_desc_noti": "Failed to delete shop!",
-
       "t_user_name": "Username",
       "t_user_desc": "User Details",
       "t_shop_owned": "Shop Owner",
@@ -491,18 +479,14 @@
       "c_male": "Male",
       "c_female": "Female",
       "c_other": "Other",
-
       "t_created_at": "Created At",
       "t_updated_at": "Updated At",
-
       "t_banned_status": "Status",
       "t_status_placeholder": "Select status",
       "c_no_banned": "Normal",
       "c_banned": "Banned",
-
       "t_ban_reason": "Ban Reason",
       "t_ban_expired": "Ban Expiration",
-
       "t_submit_action": "Save Changes",
       "t_cancel_action": "Cancel"
     }
