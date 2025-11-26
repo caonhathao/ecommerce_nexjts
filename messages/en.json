@@ -63,7 +63,6 @@
       "help": "Customer support",
       "member_badge": "Member"
     },
-    "user_dashboard": {
       "profile_page": {
         "title": "Personal information",
         "fullName": "Full name",
@@ -97,6 +96,64 @@
           "saved": "Profile updated successfully",
           "failed": "Failed to update profile"
         }
+    },
+    "orders": {
+      "title": "My Orders",
+      "back_to_orders": "Back to Orders",
+      "detail_title": "Order Details",
+      "placed_on": "Placed on:",
+      "shipping_address": "Shipping Address",
+      "phone": "Phone",
+      "delivery_method": "Delivery Method",
+      "delivery_fast": "Fast",
+      "delivery_economy": "Economy Delivery",
+      "fulfilled_by": "Fulfilled by",
+      "smart_logistics": "Smart Logistics",
+      "shipping_fee": "Shipping fee",
+      "payment_method": "Payment Method",
+      "status_paid": "Status: Paid",
+      "status_cod": "Status: Pay on Delivery",
+      "variation": "Variation",
+      "sold_by": "Sold by",
+      "status": {
+        "pending": "Pending",
+        "paid": "Paid",
+        "processing": "Processing",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "canceled": "Canceled",
+        "refunded": "Refunded"
+      },
+      "tabs": {
+        "all": "All",
+        "awaiting_payment": "Awaiting Payment",
+        "processing": "Processing",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "canceled": "Canceled"
+      },
+      "loading": "Loading orders...",
+      "empty_title": "No orders found",
+      "card": {
+        "order": "Order",
+        "status": "Status",
+        "items": "Items"
+      },
+      "buttons": {
+        "view_detail": "View Detail",
+        "buy_again": "Buy Again",
+        "write_review": "Write a Review",
+        "return_refund": "Return / Refund",
+        "track_order": "Track Order",
+        "chat_with_shop": "Chat with Seller"
+      },
+      "summary": {
+        "subtotal": "Subtotal",
+        "shipping_fee": "Shipping Fee",
+        "shipping_discount": "Shipping Discount",
+        "discount": "Discount",
+        "grand_total": "Grand Total",
+        "vat_included": "(VAT included)"
       }
     }
   },
