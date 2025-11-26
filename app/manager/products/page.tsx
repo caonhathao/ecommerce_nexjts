@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { paths } from '@/lib/path';
 import {
   productDataResponse,
   productItemData,
@@ -304,7 +305,7 @@ const ProductsPage = () => {
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
-        baseUrl="/api/manager/product/search"
+        baseUrl={paths.manager.product.search}
         placeholder={t('t_search_placeholder')}
         setData={setProductList}
         setIsReset={setIsReset}

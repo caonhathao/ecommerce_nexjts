@@ -18,6 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { fetchData } from '@/funcs/fetch';
+import { paths } from '@/lib/path';
 import { shopDataResponse, shopItemData } from '@/types/manager.data-types';
 import {
   closestCenter,
@@ -115,9 +116,10 @@ const TabShop = ({
 }: tabShopProps) => {
   const [rows, setRows] = React.useState<number>(10);
   const t = useTranslations('admin_shop_page.shop_tab');
+
   useEffect(() => {
     fetchData({
-      baseUrl: '/api/manager/shop',
+      baseUrl: paths.manager.shop.fetch_all,
       params: { page: 1, limit: rows, status: statusFilter },
       setData: setData,
     });
@@ -201,7 +203,7 @@ const TabShop = ({
                 table.setPageSize(Number(value));
                 setRows(Number(value));
                 fetchData({
-                  baseUrl: '/api/manager/shop',
+                  baseUrl: paths.manager.shop.fetch_all,
                   params: {
                     page: 1,
                     limit: Number(value),
@@ -235,7 +237,7 @@ const TabShop = ({
               onClick={() => {
                 table.setPageIndex(0);
                 fetchData({
-                  baseUrl: '/api/manager/shop',
+                  baseUrl: paths.manager.shop.fetch_all,
                   params: { page: 1, limit: rows, isActive: statusFilter },
                   setData: setData,
                 });
@@ -252,7 +254,7 @@ const TabShop = ({
               onClick={() => {
                 table.previousPage();
                 fetchData({
-                  baseUrl: '/api/manager/shop',
+                  baseUrl: paths.manager.shop.fetch_all,
                   params: {
                     page: data.pagination.page - 1,
                     limit: rows,
@@ -273,7 +275,7 @@ const TabShop = ({
               onClick={() => {
                 table.nextPage();
                 fetchData({
-                  baseUrl: '/api/manager/shop',
+                  baseUrl: paths.manager.shop.fetch_all,
                   params: {
                     page: data.pagination.page + 1,
                     limit: rows,
@@ -294,7 +296,7 @@ const TabShop = ({
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
                 fetchData({
-                  baseUrl: '/api/manager/shop',
+                  baseUrl: paths.manager.shop.fetch_all,
                   params: {
                     page: data.pagination.totalPages,
                     limit: rows,

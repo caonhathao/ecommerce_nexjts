@@ -1,13 +1,27 @@
-export const putData = async (url: string, body: Record<string, any>) => {
+export const putData = async ({
+  url,
+  body,
+  contentType = undefined,
+}: {
+  url: string;
+  body: FormData | Record<string, string | number>;
+  contentType?: string | undefined;
+}) => {
+  const headers: HeadersInit = {
+    Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+  };
+
+  if (contentType) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   try {
     const response = await fetch(url, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-      },
-      body: JSON.stringify(body),
+      headers: headers,
+      body: !contentType ? (body as BodyInit) : JSON.stringify(body),
     });
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
