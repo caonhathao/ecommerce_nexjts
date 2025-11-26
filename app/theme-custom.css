@@ -1,15 +1,38 @@
 :root {
     --brand: oklch(0.705 0.2 355.467);
     --brand-foreground: oklch(1 0 0);
+
+    --background-darker: oklch(0.958 0 89.876);
+    --success: oklch(0.627 0.194 149.214);
+    --success-foreground: oklch(0.985 0 0);
+    --warning: oklch(0.795 0.184 86.047);
+    --warning-foreground: oklch(0.233 0.076 82.553);
+    --info: oklch(0.546 0.245 262.88);
+    --info-foreground: oklch(1 0 0);
 }
 
-/* Custom Dark Values */
 .dark {
     --brand: oklch(0.705 0.2 355.467);
     --brand-foreground: oklch(1 0 0);
+
+    --background-darker: oklch(0.097 0.041 295.123);
+    --success: oklch(0.627 0.194 149.214);
+    --success-foreground: oklch(0.985 0 0);
+    --warning: oklch(0.795 0.184 86.047);
+    --warning-foreground: oklch(0.233 0.076 82.553);
+    --info: oklch(0.546 0.245 262.88);
+    --info-foreground: oklch(1 0 0);
 }
 
 @theme inline {
     --color-brand: var(--brand);
     --color-brand-foreground: var(--brand-foreground);
+
+    --color-background-darker: var(--background-darker);
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-info: var(--info);
+    --color-info-foreground: var(--info-foreground);
 }

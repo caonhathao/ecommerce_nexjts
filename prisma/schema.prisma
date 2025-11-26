@@ -288,6 +288,7 @@ model Shop {
   ConversationParticipant ConversationParticipant[]
   Message                 Message[]
   orderItems              OrderItem[]
+  ShopInvitation          ShopInvitation[]
 
   @@index([ownerId, status])
   @@map("shop")
@@ -305,6 +306,21 @@ model ShopMember {
 
   @@unique([shopId, userId])
   @@map("shop_member")
+}
+
+model ShopInvitation {
+  id        String   @id @default(uuid())
+  email     String
+  shopId    String   @db.Uuid
+  token     String   @unique
+  role      Role     @default(seller)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@unique([shopId, email])
+  @@map("shop_invitation")
 }
 
 model Category {

@@ -10,7 +10,7 @@ const ShopProfile = () => {
             <p className="font-semibold">Danh mục chính</p>
             <p className="italic">Không rõ</p>
           </div>
-          <Separator orientation="vertical" className="bg-gray-400" />
+          <Separator orientation="vertical" className="bg-muted" />
         </div>
 
         {/* show time joined */}
@@ -19,7 +19,7 @@ const ShopProfile = () => {
             <p className="font-semibold">Đã tham gia</p>
             <p className="italic">Không rõ</p>
           </div>
-          <Separator orientation="vertical" className="bg-gray-400" />
+          <Separator orientation="vertical" className="bg-muted" />
         </div>
         {/* show shipped on time */}
         <div className="flex felx-row justify-between items-start">
@@ -27,7 +27,7 @@ const ShopProfile = () => {
             <p className="font-semibold">Vận chuyển trong giờ</p>
             <p className="italic">Không rõ</p>
           </div>
-          <Separator orientation="vertical" className="bg-gray-400" />
+          <Separator orientation="vertical" className="bg-muted" />
         </div>
         {/* show canceled rate */}
         <div className="flex felx-row justify-between items-start">
@@ -35,7 +35,7 @@ const ShopProfile = () => {
             <p className="font-semibold">Tỉ lệ hủy hàng</p>
             <p className="italic">Không rõ</p>
           </div>
-          <Separator orientation="vertical" className="bg-gray-400" />
+          <Separator orientation="vertical" className="bg-muted" />
         </div>
         {/* show chat rate */}
         <div className="flex flex-col justify-center items-start">
