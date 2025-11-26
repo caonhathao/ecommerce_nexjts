@@ -93,6 +93,8 @@ enum MessageType {
   TEXT
   IMAGE
   SYSTEM
+  PRODUCT_CARD
+  ORDER_CARD
 }
 
 enum Currency {
@@ -113,6 +115,7 @@ model User {
   email         String
   emailVerified Boolean   @default(false)
   image         String?
+  shopCount     Int       @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
@@ -130,6 +133,7 @@ model User {
   wishlist                  Wishlist?
   shopsOwned                Shop[]                    @relation("ShopsOwned")
   shopMemberships           ShopMember[]
+  followedShops             ShopFollower[]
   orders                    Order[]
   reviews                   Review[]
   productQuestions          ProductQuestion[]
@@ -176,6 +180,17 @@ model Account {
   updatedAt             DateTime  @updatedAt
 
   @@map("account")
+}
+
+model ShopFollower {
+  id     String @id @default(uuid()) @db.Uuid
+  shopId String @db.Uuid
+  userId String @db.Uuid
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, shopId])
+  @@map("shop_follower")
 }
 
 model Verification {
@@ -258,12 +273,14 @@ model Shop {
   ratingCount   Int        @default(0)
   contactEmail  String?
   contactPhone  String?
+  followerCount Int        @default(0)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   deletedAt     DateTime?
 
   //Relation
   members                 ShopMember[]
+  followers               ShopFollower[]
   products                Product[]
   orders                  Order[]
   conversations           Conversation[]
@@ -351,6 +368,7 @@ model Product {
   wishlisted     WishlistItem[]
   orderItems     OrderItem[]
   VoucherProduct VoucherProduct[]
+  Message        Message[]
 
   @@index([shopId, status, visibility])
   @@index([categoryId])
@@ -498,7 +516,7 @@ model Order {
   VoucherRedemption VoucherRedemption[]
   drafts            OrderDraft?
   payments          OrderPayment[]
-  Conversation      Conversation[]
+  Message           Message[]
 
   @@index([userId, placedAt])
   @@index([shopId, status])
@@ -781,21 +799,17 @@ model OrderVoucher {
 
 model Conversation {
   id      String             @id @default(uuid()) @db.Uuid
+  Shop    Shop?              @relation(fields: [shopId], references: [id])
+  shopId  String?            @db.Uuid
   type    ConversationType   @default(GENERAL)
   status  ConversationStatus @default(OPEN)
-  subject String? // Optional: "Order #1234 Issue"
-
-  // Optional links for context
-  orderId String? @db.Uuid
-  order   Order?  @relation(fields: [orderId], references: [id])
+  subject String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   participants ConversationParticipant[]
   messages     Message[]
-  Shop         Shop?                     @relation(fields: [shopId], references: [id])
-  shopId       String?                   @db.Uuid
 
   @@index([updatedAt])
   @@map("conversation")
@@ -820,15 +834,21 @@ model ConversationParticipant {
 }
 
 model Message {
-  id              String      @id @default(uuid()) @db.Uuid
-  conversationId  String      @db.Uuid
-  senderRole      MessageRole @default(USER)
-  senderUserId    String?     @db.Uuid
-  senderShopId    String?     @db.Uuid
-  type            MessageType @default(TEXT)
-  content         String
-  attachments     Json? // Array of { url, type, name }
-  isSystemMessage Boolean     @default(false) // e.g., "Ticket Closed"
+  id             String      @id @default(uuid()) @db.Uuid
+  conversationId String      @db.Uuid
+  senderRole     MessageRole @default(USER)
+  senderUserId   String?     @db.Uuid
+  senderShopId   String?     @db.Uuid
+
+  type        MessageType @default(TEXT)
+  content     String
+  attachments Json? // Array of { url, type, name }
+
+  relatedProductId String? @db.Uuid
+  relatedOrderId   String? @db.Uuid
+
+  relatedProduct Product? @relation(fields: [relatedProductId], references: [id])
+  relatedOrder   Order?   @relation(fields: [relatedOrderId], references: [id])
 
   createdAt DateTime @default(now())
 

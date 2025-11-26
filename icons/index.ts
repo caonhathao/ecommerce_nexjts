@@ -18,6 +18,13 @@ export const Fa = FaIcons;
 export type FontAwesomeIcon = IconType;
 
 // -------------------------
+// 🌟 Font Awesome Icons 6
+// -------------------------
+import * as Fa6Icons from 'react-icons/fa6';
+export const Fa6 = Fa6Icons;
+export type Font6AwesomeIcon = IconType;
+
+// -------------------------
 // 💼 Bootstrap Icons
 // -------------------------
 import * as BsIcons from 'react-icons/bs';
@@ -65,6 +72,13 @@ export type HeroIcon = IconType;
 import * as GoIcons from 'react-icons/go';
 export const go = GoIcons;
 export type GithubOctionsIcons = IconType;
+
+// -------------------------
+// 🧱 Ionicons 5
+// -------------------------
+import * as Ionicons from 'react-icons/io5';
+export const io5 = Ionicons;
+export type IoniconsIcons = IconType;
 
 // -------------------------
 // ✅ Xuất type chung (tuỳ chọn)

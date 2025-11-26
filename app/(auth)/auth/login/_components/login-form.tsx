@@ -26,25 +26,6 @@ export function LoginForm() {
   const [emailPending, startEmailTransition] = useTransition();
   const [email, setEmail] = useState('');
 
-  async function handlePostLogin(
-    userId: string,
-    email: string | null,
-    name: string | null,
-    image: string | null,
-    phone: string | null
-  ) {
-    try {
-      await fetch('/api/user/initialize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, email, name, image, phone }),
-      });
-    } catch (err) {
-      console.error('Failed to initialize user data:', err);
-      toast.error('Error initializing your account. Please try again.');
-    }
-  }
-
   async function signInWithGithub() {
     startGithubTransition(async () => {
       await authClient.signIn.social({

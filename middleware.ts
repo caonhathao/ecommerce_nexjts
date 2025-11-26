@@ -1,3 +1,4 @@
+import { getSessionUser } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionUser } from '@/lib/auth';
 
@@ -12,6 +13,8 @@ export async function middleware(request: NextRequest) {
     '/api/products',
     '/api/stripe/webhook',
     '/search',
+    '/shop',
+    '/api/shop',
     '/',
   ];
   if (publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))) {

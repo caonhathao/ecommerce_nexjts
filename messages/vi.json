@@ -9,76 +9,155 @@
     "dark_mode": "Tối",
     "system_mode": "Hệ thống"
   },
-  "user_navbar": {
-    "home": "Trang chủ",
-    "categories": "Danh mục",
-    "deals": "Ưu đãi",
-    "support": "Hỗ trợ",
-    "track_order": "Theo dõi đơn hàng",
-    "search_placeholder": "Tìm sản phẩm, thương hiệu và hơn thế nữa...",
-    "login": "Đăng nhập",
-    "register": "Tạo tài khoản",
-    "account": "Tài khoản của tôi",
-    "profile": "Thông tin tài khoản",
-    "notifications": "Thông báo",
-    "orders": "Đơn hàng",
-    "returns": "Đổi trả",
-    "addresses": "Sổ địa chỉ",
-    "payments": "Phương thức thanh toán",
-    "reviews": "Đánh giá sản phẩm",
-    "recently_viewed": "Sản phẩm đã xem",
-    "wishlist": "Yêu thích",
-    "comments": "Nhận xét của tôi",
-    "vip": "2T3H VIP",
-    "referrals": "Chia sẻ có lời",
-    "bnpl": "Mua trước trả sau",
-    "vouchers": "Mã giảm giá",
-    "astra": "Astra của bạn",
-    "coins": "2T3H Xu của tôi",
-    "bookcare": "BookCare của tôi",
-    "logout": "Đăng xuất",
-    "cart": "Giỏ hàng",
-    "seller_center": "Kênh người bán",
-    "membership": "Ưu đãi & Thành viên",
-    "help": "Hỗ trợ khách hàng",
-    "member_badge": "Thành viên"
-  },
-  "user_dashboard": {
-    "profile_page": {
-      "title": "Thông tin cá nhân",
-      "fullName": "Họ & Tên",
-      "nickname": "Nickname",
-      "birthday": "Ngày sinh",
-      "day": "Ngày",
-      "month": "Tháng",
-      "year": "Năm",
-      "gender": "Giới tính",
-      "male": "Nam",
-      "female": "Nữ",
-      "other": "Khác",
-      "nationality": "Quốc tịch",
-      "phoneEmailSectionTitle": "Số điện thoại & Email",
+  "customer": {
+    "address": {
+      "title": "Địa chỉ của tôi",
+      "add_new": "Thêm địa chỉ mới",
+      "modal_title": "Thêm địa chỉ của bạn",
       "phone": "Số điện thoại",
-      "emailForBill": "Địa chỉ email cho hóa đơn",
-      "save": "Lưu thay đổi",
-      "placeholders": {
-        "fullName": "Nhập họ & tên",
-        "nickname": "Thêm nickname",
-        "phone": "Nhập số điện thoại",
-        "emailForBill": "Nhập email của bạn",
-        "nationality": "Chọn quốc tịch"
+      "line1": "Số nhà",
+      "ward": "Phường",
+      "district": "Quận",
+      "city": "Thành phố",
+      "country": "Quốc gia",
+      "country_default": "Việt Nam",
+      "cancel": "Hủy bỏ",
+      "save": "Lưu",
+      "saving": "Đang lưu...",
+      "loading": "Đang tải...",
+      "empty": "Bạn chưa có địa chỉ nào. Vui lòng thêm địa chỉ mới.",
+      "toast_create_success": "Thêm địa chỉ thành công!",
+      "toast_create_failed": "Thêm địa chỉ thất bại!"
+    },
+    "user_navbar": {
+      "home": "Trang chủ",
+      "categories": "Danh mục",
+      "deals": "Ưu đãi",
+      "support": "Hỗ trợ",
+      "track_order": "Theo dõi đơn hàng",
+      "search_placeholder": "Tìm sản phẩm, thương hiệu và hơn thế nữa...",
+      "login": "Đăng nhập",
+      "register": "Tạo tài khoản",
+      "account": "Tài khoản của tôi",
+      "profile": "Thông tin tài khoản",
+      "notifications": "Thông báo",
+      "orders": "Đơn hàng",
+      "returns": "Đổi trả",
+      "addresses": "Sổ địa chỉ",
+      "payments": "Phương thức thanh toán",
+      "reviews": "Đánh giá sản phẩm",
+      "recently_viewed": "Sản phẩm đã xem",
+      "wishlist": "Yêu thích",
+      "comments": "Nhận xét của tôi",
+      "vip": "2T3H VIP",
+      "referrals": "Chia sẻ có lời",
+      "bnpl": "Mua trước trả sau",
+      "vouchers": "Mã giảm giá",
+      "astra": "Astra của bạn",
+      "coins": "2T3H Xu của tôi",
+      "bookcare": "BookCare của tôi",
+      "logout": "Đăng xuất",
+      "cart": "Giỏ hàng",
+      "seller_center": "Kênh người bán",
+      "membership": "Ưu đãi & Thành viên",
+      "help": "Hỗ trợ khách hàng",
+      "member_badge": "Thành viên"
+    },
+      "profile_page": {
+        "title": "Thông tin cá nhân",
+        "fullName": "Họ & Tên",
+        "nickname": "Nickname",
+        "birthday": "Ngày sinh",
+        "day": "Ngày",
+        "month": "Tháng",
+        "year": "Năm",
+        "gender": "Giới tính",
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác",
+        "nationality": "Quốc tịch",
+        "phoneEmailSectionTitle": "Số điện thoại & Email",
+        "phone": "Số điện thoại",
+        "emailForBill": "Địa chỉ email cho hóa đơn",
+        "save": "Lưu thay đổi",
+        "placeholders": {
+          "fullName": "Nhập họ & tên",
+          "nickname": "Thêm nickname",
+          "phone": "Nhập số điện thoại",
+          "emailForBill": "Nhập email của bạn",
+          "nationality": "Chọn quốc tịch"
+        },
+        "errors": {
+          "fullNameRequired": "Vui lòng nhập họ & tên",
+          "emailInvalid": "Email không hợp lệ",
+          "phoneInvalid": "Số điện thoại không hợp lệ"
+        },
+        "toasts": {
+          "saved": "Cập nhật hồ sơ thành công",
+          "failed": "Cập nhật hồ sơ thất bại"
+        }
       },
-      "errors": {
-        "fullNameRequired": "Vui lòng nhập họ & tên",
-        "emailInvalid": "Email không hợp lệ",
-        "phoneInvalid": "Số điện thoại không hợp lệ"
-      },
-      "toasts": {
-        "saved": "Cập nhật hồ sơ thành công",
-        "failed": "Cập nhật hồ sơ thất bại"
+      "orders": {
+        "title": "Đơn hàng của tôi",
+        "back_to_orders": "Quay lại đơn hàng",
+        "detail_title": "Chi tiết đơn hàng",
+        "placed_on": "Đặt lúc:",
+        "shipping_address": "Địa chỉ giao hàng",
+        "phone": "Số điện thoại",
+        "delivery_method": "Phương thức giao hàng",
+        "delivery_fast": "Nhanh",
+        "delivery_economy": "Giao tiết kiệm",
+        "fulfilled_by": "Đơn vị vận chuyển:",
+        "smart_logistics": "Smart Logistics",
+        "shipping_fee": "Phí vận chuyển",
+        "payment_method": "Phương thức thanh toán",
+        "status_paid": "Trạng thái: Đã thanh toán",
+        "status_cod": "Trạng thái: Thanh toán khi nhận hàng",
+        "variation": "Phân loại",
+        "sold_by": "Bán bởi",
+        "status": {
+          "pending": "Chờ xử lý",
+          "paid": "Đã thanh toán",
+          "processing": "Đang xử lý",
+          "shipped": "Đang vận chuyển",
+          "delivered": "Đã giao",
+          "canceled": "Đã hủy",
+          "refunded": "Đã hoàn tiền"
+        },
+        "tabs": {
+          "all": "Tất cả đơn",
+          "awaiting_payment": "Chờ thanh toán",
+          "processing": "Đang xử lý",
+          "shipped": "Đang vận chuyển",
+          "delivered": "Đã giao",
+          "canceled": "Đã hủy"
+        },
+        "loading": "Đang tải đơn hàng...",
+        "empty_title": "Không tìm thấy đơn hàng",
+        "card": {
+          "order": "Đơn hàng",
+          "status": "Trạng thái",
+          "items": "Số lượng"
+        },
+        "buttons": {
+          "view_detail": "Xem chi tiết",
+          "buy_again": "Mua lại",
+          "write_review": "Viết đánh giá",
+          "return_refund": "Trả hàng / Hoàn tiền",
+          "track_order": "Theo dõi đơn hàng",
+          "chat_with_shop": "Chat với cửa hàng"
+        },
+        "summary": {
+          "subtotal": "Tạm tính",
+          "shipping_fee": "Phí vận chuyển",
+          "shipping_discount": "Giảm phí vận chuyển",
+          "discount": "Giảm giá",
+          "grand_total": "Tổng cộng",
+          "vat_included": "(Đã gồm VAT)"
+        }
       }
-    }
   },
+
   "home_layout": {
     "slogan": "Tốt & Nhanh",
     "electronics": "điện gia dụng",
@@ -147,43 +226,43 @@
     "title": "Gợi ý hôm nay",
     "watch_more": "Xem thêm"
   },
-  "product_detail":{
-    "t_price_after":"Giá sau áp dụng khuyến mãi",
-    "t_sold":"Đã bán",
-    "t_variant_type":"Kiểu sản phẩm",
-    "t_delivery_info":"Thông tin vận chuyển",
-    "t_other_promotion":"Ưu đãi khác",
-    "t_discount_code":"Mã Giảm Giá",
-    "t_more_action":"Xem Thêm",
-    "t_more_services":"Dịch vụ bổ sung",
-    "t_tiki_card":"Ưu đãi đến 600k với thẻ TikiCard",
-    "t_pay_later":"Mua trước trả sau",
-    "t_slogan_1":"An tâm mua sắm",
-    "t_slogan_2":"Được đồng kiểm khi nhận hàng",
-    "t_slogan_3":"Được hoàn tiền 200% nếu là hàng giả",
-    "t_slogan_4":"Đổi trả miển phí lên đén 365 ngày. Được đổi ý.",
-    "t_quantity":"Số lượng",
-    "t_total":"Tạm tính",
-    "t_buy_action":"Mua ngay",
-    "t_add_action":"Thêm vào giỏ",
-    "detail_desc":{
-      "t_desc":"Mô tả sản phẩm"
+  "product_detail": {
+    "t_price_after": "Giá sau áp dụng khuyến mãi",
+    "t_sold": "Đã bán",
+    "t_variant_type": "Kiểu sản phẩm",
+    "t_delivery_info": "Thông tin vận chuyển",
+    "t_other_promotion": "Ưu đãi khác",
+    "t_discount_code": "Mã Giảm Giá",
+    "t_more_action": "Xem Thêm",
+    "t_more_services": "Dịch vụ bổ sung",
+    "t_tiki_card": "Ưu đãi đến 600k với thẻ TikiCard",
+    "t_pay_later": "Mua trước trả sau",
+    "t_slogan_1": "An tâm mua sắm",
+    "t_slogan_2": "Được đồng kiểm khi nhận hàng",
+    "t_slogan_3": "Được hoàn tiền 200% nếu là hàng giả",
+    "t_slogan_4": "Đổi trả miển phí lên đén 365 ngày. Được đổi ý.",
+    "t_quantity": "Số lượng",
+    "t_total": "Tạm tính",
+    "t_buy_action": "Mua ngay",
+    "t_add_action": "Thêm vào giỏ",
+    "detail_desc": {
+      "t_desc": "Mô tả sản phẩm"
     },
-    "detail_review":{
-      "t_review_at":"Đánh giá lúc: ",
-      "t_custome_review":"Khách hàng đánh giá",
-      "t_summary":"Tổng quan",
-      "c_reviews":"đánh giá",
-      "t_filter_by":"Lọc theo",
-      "c_newest":"Mới nhất",
-      "c_have_img":"Có hình ảnh",
-      "c_buy_again":"Mua lại",
-      "c_5_stars":"5 sao",
-      "c_4_stars":"4 sao",
-      "c_3_stars":"3 sao",
-      "c_2_stars":"2 sao",
-      "c_1_star":"1 sao",
-          "t_more_action":"Xem Thêm"
+    "detail_review": {
+      "t_review_at": "Đánh giá lúc: ",
+      "t_custome_review": "Khách hàng đánh giá",
+      "t_summary": "Tổng quan",
+      "c_reviews": "đánh giá",
+      "t_filter_by": "Lọc theo",
+      "c_newest": "Mới nhất",
+      "c_have_img": "Có hình ảnh",
+      "c_buy_again": "Mua lại",
+      "c_5_stars": "5 sao",
+      "c_4_stars": "4 sao",
+      "c_3_stars": "3 sao",
+      "c_2_stars": "2 sao",
+      "c_1_star": "1 sao",
+      "t_more_action": "Xem Thêm"
     }
   },
   "admin_layout": {
@@ -222,28 +301,22 @@
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa danh mục sản phẩm thành công!",
-
     "t_action_failed_noti": "Hành động thất bại",
     "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
     "t_del_failed_desc_noti": "Xóa danh mục sản phẩm không thành công!",
-
     "t_category_name": "Tên danh mục",
     "t_serial": "Thứ tự",
     "t_is_active": "Hiển thị",
     "t_children_count": "Số danh mục con",
     "t_created_at": "Ngày tạo",
     "t_updated_at": "Ngày cập nhật",
-
     "t_copy_action": "Sao chép ID",
     "t_del_action": "Xóa",
-
     "t_tab_all": "Tất cả",
     "t_tab_active": "Đang hoạt động",
     "t_tab_inactive": "Không hoạt động",
-
     "t_showing": "Hiển thị",
     "t_column": "Cột",
-
     "category_tab": {
       "t_no_category_found": "Không có danh mục nào",
       "t_of": "của",
@@ -256,17 +329,15 @@
       "t_update_desc_noti": "Cập nhật thông tin danh mục thành công!",
       "t_copy_desc_noti": "Sao chép thông tin thành công!",
       "t_del_desc_noti": "Xóa danh mục sản phẩm thành công!",
-
       "t_action_failed_noti": "Hành động thất bại",
       "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
       "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
       "t_del_failed_desc_noti": "Xóa danh mục sản phẩm không thành công!",
-
       "t_category_desc": "Thông tin chi tiết danh mục",
       "t_category_name": "Tên danh mục",
       "t_copy_action": "Sao chép ID",
       "t_del_action": "Xóa",
-      "t_icon":"Ảnh",
+      "t_icon": "Ảnh",
       "t_is_active": "Hiển thị",
       "t_is_active_placeholder": "Chọn trạng thái",
       "c_active": "Hoạt động",
@@ -283,29 +354,23 @@
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
-
     "t_action_failed_noti": "Hành động thất bại",
     "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
     "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
-
     "t_product_name": "Tên sản phẩm",
     "t_shop_name": "Cửa hàng",
     "t_visibility": "Hiển thị",
     "t_variant_count": "Số phiên bản",
     "t_created_at": "Ngày tạo",
     "t_updated_at": "Ngày cập nhật",
-
     "t_copy_action": "Sao chép ID",
     "t_del_action": "Xóa",
-
     "t_tab_all": "Tất cả",
     "t_tab_public": "Đang công khai",
     "t_tab_private": "Đang ẩn",
     "t_tab_inlisted": "Bị cấm",
-
     "t_showing": "Hiển thị",
     "t_column": "Cột",
-
     "product_tab": {
       "t_no_product_found": "Không có sản phẩm nào",
       "t_of": "của",
@@ -316,36 +381,29 @@
     "product_drawer": {
       "t_process_failed_noti": "Tiến trình thất bại",
       "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
-
       "t_action_noti": "Hành động",
       "t_update_desc_noti": "Cập nhật thông tin danh mục thành công!",
       "t_copy_desc_noti": "Sao chép thông tin thành công!",
       "t_del_desc_noti": "Xóa sản phẩm thành công!",
-
       "t_action_failed_noti": "Hành động thất bại",
       "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
       "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
       "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
-
       "t_product_desc": "Thông tin chi tiết sản phẩm",
       "t_shop": "Cửa hàng",
       "t_product_name": "Tên sản phẩm",
       "t_copy_action": "Sao chép ID",
       "t_del_action": "Xóa",
-
       "t_origin": "Xuất xứ",
       "t_currency": "Đơn vị tiền tệ",
       "t_min_price": "Giá tối thiểu",
       "t_max_price": "Giá tối đa",
-
       "t_visibility": "Hiển thị",
       "t_visibility_placeholder": "Chọn trạng thái",
       "c_public": "Cho phép",
       "c_private": "Đang xin phép",
       "c_unlisted": "Không cho phép",
-
       "t_desc": "Mô tả",
-
       "t_sku_code": "Mã SKU",
       "t_price": "Giá",
       "t_variant": "Sản phẩm con",
@@ -357,30 +415,24 @@
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
-
     "t_action_failed_noti": "Hành động thất bại",
     "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
     "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
-
     "t_shop_name": "Tên cửa hàng",
     "t_owner_name": "Chủ sở hữu",
     "t_status": "Trạng thái",
     "t_rating": "Điểm đánh giá",
     "t_created_at": "Ngày tạo",
     "t_updated_at": "Ngày cập nhật",
-
     "t_copy_action": "Sao chép ID",
     "t_del_action": "Xóa",
-
     "t_tab_all": "Tất cả",
     "t_tab_active": "Đang hoạt động",
     "t_tab_pending": "Chờ duyệt",
     "t_tab_suspended": "Bị cấm",
     "t_tab_closed": "Đóng cửa",
-
     "t_showing": "Hiển thị",
     "t_column": "Cột",
-
     "shop_tab": {
       "t_no_shop_found": "Không có sản phẩm nào",
       "t_of": "của",
@@ -391,17 +443,14 @@
     "shop_drawer": {
       "t_process_failed_noti": "Tiến trình thất bại",
       "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
-
       "t_action_noti": "Hành động",
       "t_update_desc_noti": "Cập nhật thông tin cửa hàng thành công!",
       "t_copy_desc_noti": "Sao chép thông tin thành công!",
       "t_del_desc_noti": "Xóa cửa hàng thành công!",
-
       "t_action_failed_noti": "Hành động thất bại",
       "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
       "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
       "t_del_failed_desc_noti": "Xóa cửa hàngkhông thành công!",
-
       "t_shop_desc": "Thông tin chi tiết cửa hàng",
       "t_shop": "Cửa hàng",
       "t_owner_name": "Chủ sở hữu",
@@ -414,16 +463,13 @@
       "t_members": "Thành viên",
       "t_created_at": "Ngày tạo",
       "t_updated_at": "Ngày cập nhật",
-
       "t_status": "Trạng thái",
       "t_status_placeholder": "Chọn trạng thái",
       "c_active": "Đang hoạt động",
       "c_pending": "Chờ duyệt",
       "c_suspended": "Bị cấm",
       "c_closed": "Đóng cửa",
-
       "t_desc": "Mô tả",
-
       "t_sku_code": "Mã SKU",
       "t_price": "Giá",
       "t_variant": "Sản phẩm con",
@@ -435,11 +481,9 @@
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
-
     "t_action_failed_noti": "Hành động thất bại",
     "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
     "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
-
     "t_user_name": "Tên người dùng",
     "t_email": "Email",
     "t_email_verified": "Xác thực email",
@@ -448,17 +492,13 @@
     "t_rating": "Điểm đánh giá",
     "t_created_at": "Ngày tạo",
     "t_updated_at": "Ngày cập nhật",
-
     "t_copy_action": "Sao chép ID",
     "t_del_action": "Xóa",
-
     "t_tab_all": "Tất cả",
     "t_tab_un_banned": "Đang hoạt động",
     "t_tab_banned": "Bị khóa",
-
     "t_showing": "Hiển thị",
     "t_column": "Cột",
-
     "user_tab": {
       "t_no_shop_found": "Không có kết quả",
       "t_of": "của",
@@ -469,17 +509,14 @@
     "user_drawer": {
       "t_process_failed_noti": "Tiến trình thất bại",
       "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
-
       "t_action_noti": "Hành động",
       "t_update_desc_noti": "Cập nhật thông tin cửa hàng thành công!",
       "t_copy_desc_noti": "Sao chép thông tin thành công!",
       "t_del_desc_noti": "Xóa cửa hàng thành công!",
-
       "t_action_failed_noti": "Hành động thất bại",
       "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
       "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
       "t_del_failed_desc_noti": "Xóa cửa hàngkhông thành công!",
-
       "t_user_name": "Tên người dùng",
       "t_user_desc": "Thông tin chi tiết người dùng",
       "t_shop_owned": "Là chủ cửa hàng",
@@ -499,56 +536,52 @@
       "c_male": "Nam",
       "c_female": "Nữ",
       "c_other": "Bí ẩn",
-
       "t_created_at": "Ngày tạo",
       "t_updated_at": "Ngày cập nhật",
-
       "t_banned_status": "Trạng thái",
       "t_status_placeholder": "Chọn trạng thái",
       "c_no_banned": "Bình thường",
       "c_banned": "Bị khóa",
-
       "t_ban_reason": "Lí do khóa",
       "t_ban_expired": "Hạn khóa",
-
       "t_submit_action": "Lưu thay đổi",
       "t_cancel_action": "Hủy"
     }
   },
-  "admin_statistic_page":{
-    "chart_area_revenue":{
-      "t_title":"Tổng doanh thu",
-      "t_week":"7 ngày",
-      "t_month":"30 ngày",
-      "t_3months":"90 ngày",
-      "t_months":"12 tháng",
-      "t_data_from":"Số liệu từ",
-      "t_most_recent":"gần nhất"
+  "admin_statistic_page": {
+    "chart_area_revenue": {
+      "t_title": "Tổng doanh thu",
+      "t_week": "7 ngày",
+      "t_month": "30 ngày",
+      "t_3months": "90 ngày",
+      "t_months": "12 tháng",
+      "t_data_from": "Số liệu từ",
+      "t_most_recent": "gần nhất"
     },
-    "chart_order_state_rate":{
-      "t_title":"Tỉ lệ trạng thái đơn hàng",
-      "t_week":"7 ngày",
-      "t_month":"30 ngày",
-      "t_3months":"90 ngày",
-      "t_months":"12 tháng",
-      "t_data_from":"Số liệu từ",
-      "t_most_recent":"gần nhất",
-      "t_label_1":"Trạng thái",
-      "t_label_2":"Đang chờ",
-      "t_label_3":"Đã thanh toán",
-      "t_label_4":"Đang xử lí",
-      "t_label_5":"Đã hủy",
-      "t_label_6":"Đã hoàn tiền"
+    "chart_order_state_rate": {
+      "t_title": "Tỉ lệ trạng thái đơn hàng",
+      "t_week": "7 ngày",
+      "t_month": "30 ngày",
+      "t_3months": "90 ngày",
+      "t_months": "12 tháng",
+      "t_data_from": "Số liệu từ",
+      "t_most_recent": "gần nhất",
+      "t_label_1": "Trạng thái",
+      "t_label_2": "Đang chờ",
+      "t_label_3": "Đã thanh toán",
+      "t_label_4": "Đang xử lí",
+      "t_label_5": "Đã hủy",
+      "t_label_6": "Đã hoàn tiền"
     },
-    "chart_top_products":{
-      "t_title":"Top sản phẩm",
-      "t_week":"7 ngày",
-      "t_month":"30 ngày",
-      "t_3months":"90 ngày",
-      "t_months":"12 tháng",
-      "t_data_from":"Số liệu từ",
-      "t_most_recent":"gần nhất",
-      "t_label_1":"Số lượng"
+    "chart_top_products": {
+      "t_title": "Top sản phẩm",
+      "t_week": "7 ngày",
+      "t_month": "30 ngày",
+      "t_3months": "90 ngày",
+      "t_months": "12 tháng",
+      "t_data_from": "Số liệu từ",
+      "t_most_recent": "gần nhất",
+      "t_label_1": "Số lượng"
     }
   }
 }

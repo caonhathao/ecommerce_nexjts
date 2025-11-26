@@ -2,14 +2,46 @@
 
 import { getSessionUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { ConversationType, MessageRole, Role } from '@/lib/generated/prisma';
+import {
+  ConversationType,
+  MessageRole,
+  MessageType,
+  Role,
+} from '@/lib/generated/prisma';
 import { pusherServer } from '@/lib/pusher';
+
+export async function getOrCreateConversation(shopId: string) {
+  const session = await getSessionUser();
+  if (!session) throw new Error('Unauthorized');
+
+  const existing = await prisma.conversation.findFirst({
+    where: {
+      shopId,
+      participants: { some: { userId: session.user.id } },
+    },
+  });
+
+  if (existing) {
+    return { id: existing.id, isNew: false };
+  }
+
+  const newConv = await prisma.conversation.create({
+    data: {
+      shopId,
+      participants: { create: [{ userId: session.user.id }, { shopId }] },
+    },
+  });
+
+  return { id: newConv.id, isNew: true };
+}
 
 export async function sendMessage(
   conversationId: string,
   content: string,
   senderRole: MessageRole,
-  shopId?: string
+  shopId?: string,
+  relatedProductId?: string,
+  relatedOrderId?: string
 ) {
   const session = await getSessionUser();
   if (!session) throw new Error('Unauthorized');
@@ -59,18 +91,38 @@ export async function sendMessage(
     finalUserId = session.user.id;
   }
 
+  let type: MessageType = MessageType.TEXT;
+  if (relatedOrderId) type = MessageType.ORDER_CARD;
+  if (relatedProductId) type = MessageType.PRODUCT_CARD;
+
   const message = await prisma.message.create({
     data: {
       conversationId,
       content,
-      type: 'TEXT',
+      type: type,
       senderRole,
       senderUserId: finalUserId,
       senderShopId: finalShopId,
+      relatedOrderId,
+      relatedProductId,
     },
     include: {
       senderUser: { select: { name: true, image: true } },
       senderShop: { select: { name: true, logoUrl: true } },
+      relatedProduct: {
+        select: {
+          id: true,
+          title: true,
+          images: true,
+          slug: true,
+          minPrice: true,
+          maxPrice: true,
+          ratingAvg: true,
+        },
+      },
+      relatedOrder: {
+        select: { id: true, orderNumber: true, status: true, grandTotal: true },
+      },
     },
   });
 
@@ -114,7 +166,6 @@ export async function startConversation(
       data: {
         type: ConversationType.ORDER_INQUIRY,
         shopId: targetId,
-        orderId: orderId,
         participants: {
           create: [{ userId: session.user.id }, { shopId: targetId }],
         },

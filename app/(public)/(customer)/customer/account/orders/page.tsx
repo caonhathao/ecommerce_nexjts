@@ -19,8 +19,11 @@ import {
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { formatPrice } from '@/app/(public)/_components/global-function';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function OrderPage() {
+  const t = useTranslations('customer.orders');
   const [status, setStatus] = useState<OrderStatus | 'ALL'>('ALL');
   const [isPendingTransition, startTransition] = useTransition();
   const [data, dispatch, isPending] = useActionState<
@@ -37,7 +40,6 @@ export default function OrderPage() {
     });
   }, [status]);
 
-  console.log(data.orders);
   return (
     <div className="p-6 w-full">
       {/* Header */}
@@ -46,7 +48,7 @@ export default function OrderPage() {
           <ClipboardList className="w-7 h-7 text-background" />
         </div>
         <h2 className="text-xl font-semibold text-background drop-shadow">
-          Đơn hàng của tôi
+          {t('title')}
         </h2>
       </div>
 
@@ -62,37 +64,37 @@ export default function OrderPage() {
               value="ALL"
               className="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
             >
-              Tất cả đơn
+              {t('tabs.all')}
             </TabsTrigger>
             <TabsTrigger
               value={OrderStatus.AWAITING_PAYMENT}
               className="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
             >
-              Chờ thanh toán
+              {t('tabs.awaiting_payment')}
             </TabsTrigger>
             <TabsTrigger
               value={OrderStatus.PROCESSING}
               className="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
             >
-              Đang xử lý
+              {t('tabs.processing')}
             </TabsTrigger>
             <TabsTrigger
               value={OrderStatus.SHIPPED}
               className="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
             >
-              Đang vận chuyển
+              {t('tabs.shipped')}
             </TabsTrigger>
             <TabsTrigger
               value={OrderStatus.DELIVERED}
               className="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
             >
-              Đã giao
+              {t('tabs.delivered')}
             </TabsTrigger>
             <TabsTrigger
               value={OrderStatus.CANCELED}
               className="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
             >
-              Đã hủy
+              {t('tabs.canceled')}
             </TabsTrigger>
           </TabsList>
 
@@ -101,7 +103,7 @@ export default function OrderPage() {
             {isPending ? (
               <div className="flex flex-col items-center justify-center py-16 gap-3">
                 <Loading />
-                <p className="text-gray-500">Đang tải đơn hàng...</p>
+                <p className="text-gray-500">{t('loading')}</p>
               </div>
             ) : data.orders.length > 0 ? (
               <ul className="space-y-4">
@@ -110,10 +112,10 @@ export default function OrderPage() {
                     <CardHeader className="flex flex-row justify-between items-center">
                       <div>
                         <CardTitle className="text-base font-semibold">
-                          Đơn hàng: {o.orderNumber}
+                          {t('card.order')}: {o.orderNumber}
                         </CardTitle>
                         <CardDescription className="text-sm text-chart-2 font-semibold">
-                          Trạng thái: {o.status}
+                          {t('card.status')}: {o.status}
                         </CardDescription>
                       </div>
                     </CardHeader>
@@ -141,7 +143,7 @@ export default function OrderPage() {
                           <div className="flex flex-col justify-start items-end min-w-[120px] text-right space-y-1">
                             <p className="font-medium">{item.product.name}</p>
                             <p className="text-sm text-muted-foreground">
-                              Số lượng:{' '}
+                              {t('card.items')}:{' '}
                               <span className="font-semibold">
                                 {item.quantity}
                               </span>
@@ -159,14 +161,22 @@ export default function OrderPage() {
                         variant="outline"
                         className="border-2 border-secondary"
                       >
-                        Trả hàng / Hoàn tiền
+                        {t('buttons.return_refund')}
                       </Button>
                       <Button
                         variant="outline"
-                        className="border-2 border-primary"
+                        className="border-2 border-s-secondary"
                       >
-                        Đánh giá
+                        {t('buttons.write_review')}
                       </Button>
+                      <Link href={`/customer/account/orders/${o.id}`}>
+                        <Button
+                          variant="outline"
+                          className="border-2 border-primary"
+                        >
+                          {t('buttons.view_detail')}
+                        </Button>
+                      </Link>
                     </CardFooter>
                   </Card>
                 ))}
@@ -175,7 +185,7 @@ export default function OrderPage() {
               <div className="py-16">
                 <EmptyState
                   imageSrc="/empty-order.png"
-                  title="Không tìm thấy đơn hàng"
+                  title={t('empty_title')}
                 />
               </div>
             )}

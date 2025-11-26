@@ -2,7 +2,7 @@
 
 import { getCurrentUserId } from '@/lib/auth';
 import { UpdateUserProfileRequestDTO } from '@/types/dtos/user.dto';
-import { updateUserProfile } from '@/app/services/user.service';
+import { updateUserProfile } from '@/app/data/user.data';
 import { revalidatePath } from 'next/cache';
 
 export async function updateProfileAction(formData: FormData) {

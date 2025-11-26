@@ -18,26 +18,21 @@ import { AddressDTO } from '@/types/dtos/address.dto';
 import { createAddress, getAddress } from '@/app/actions/address';
 import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/_components/table-address';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function AddressPage() {
+  const t = useTranslations('customer.address');
   const [address, setAddress] = useState<AddressDTO[]>([]);
   const [isPendingTransition, startTransition] = useTransition();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [state, formAction, isPending] = useActionState(
-    async (prevState: any, formData: FormData) => {
+    async (_: any, formData: FormData) => {
       try {
-        const address = await createAddress(formData);
-        toast.success('Thêm địa chỉ thành công!', {
-          duration: 3000,
-          position: 'top-right',
-        });
-        return { success: true, address };
+        const addr = await createAddress(formData);
+        toast.success(t('toast_create_success'));
+        return { success: true, address: addr };
       } catch (err: any) {
-        toast.error(err.message, {
-          duration: 3000,
-          position: 'top-right',
-        });
+        toast.error(t('toast_create_failed'));
         return { success: false, error: err.message };
       }
     },
@@ -47,15 +42,14 @@ export default function AddressPage() {
   useEffect(() => {
     startTransition(async () => {
       const data = await getAddress();
-      if (data.success) {
-        setAddress(data.addresses);
-      }
+      if (data.success) setAddress(data.addresses);
     });
     setDialogOpen(false);
   }, []);
 
   const handleSubmit = (formData: FormData) => {
     const data = {
+      phone: formData.get('phone'),
       line1: formData.get('line1'),
       ward: formData.get('ward'),
       district: formData.get('district'),
@@ -72,53 +66,58 @@ export default function AddressPage() {
         const data = await getAddress();
         if (data.success) setAddress(data.addresses);
       });
+      setDialogOpen(false);
     }
   }, [state.success]);
 
   return (
     <div className="p-4 w-full min-h-fit">
       <div className="w-full flex justify-between items-center gap-6">
-        <div className=" flex items-center gap-3 px-5 py-2.5 bg-linear-to-r from-primary/90 to-chart-3/90 rounded-xl shadow-lg w-fit">
+        <div className="flex items-center gap-3 px-5 py-2.5 bg-linear-to-r from-primary/90 to-chart-3/90 rounded-xl shadow-lg w-fit">
           <MapPin className="w-6 h-6 text-background" />
           <h2 className="text-xl md:text-2xl font-medium text-background">
-            Địa chỉ của tôi
+            {t('title')}
           </h2>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button size="lg" variant="outline">
               <MapPlus className="w-6 h-6" />
-              <p>Thêm địa chỉ mới</p>
+              <p>{t('add_new')}</p>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <form action={handleSubmit}>
               <DialogHeader>
-                <DialogTitle>Thêm địa chỉ của bạn</DialogTitle>
+                <DialogTitle>{t('modal_title')}</DialogTitle>
               </DialogHeader>
               <div className="grid gap-4 mt-2">
                 <div className="grid gap-3">
-                  <Label htmlFor="line1">Số nhà</Label>
+                  <Label htmlFor="phone">{t('phone')}</Label>
+                  <Input id="phone" name="phone" />
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="line1">{t('line1')}</Label>
                   <Input id="line1" name="line1" required />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="ward">Phường</Label>
+                  <Label htmlFor="ward">{t('ward')}</Label>
                   <Input id="ward" name="ward" required />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="district">Quận</Label>
+                  <Label htmlFor="district">{t('district')}</Label>
                   <Input id="district" name="district" required />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="city">Thành phố</Label>
+                  <Label htmlFor="city">{t('city')}</Label>
                   <Input id="city" name="city" required />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="country">Quốc gia</Label>
+                  <Label htmlFor="country">{t('country')}</Label>
                   <Input
                     id="country"
                     name="country"
-                    defaultValue="Việt Nam"
+                    defaultValue={t('country_default')}
                     disabled
                   />
                 </div>
@@ -129,11 +128,11 @@ export default function AddressPage() {
                     variant="outline"
                     onClick={() => setDialogOpen(false)}
                   >
-                    Hủy bỏ
+                    {t('cancel')}
                   </Button>
                 </DialogClose>
                 <Button type="submit" disabled={isPending}>
-                  {isPending ? 'Đang lưu...' : 'Lưu'}
+                  {isPending ? t('saving') : t('save')}
                 </Button>
               </DialogFooter>
             </form>
@@ -141,7 +140,7 @@ export default function AddressPage() {
         </Dialog>
       </div>
       {isPendingTransition ? (
-        <p className="text-center mt-10">Đang tải...</p>
+        <p className="text-center mt-10">{t('loading')}</p>
       ) : address.length > 0 ? (
         <div className="mt-6 grid gap-4">
           {address.map((addr) => (
@@ -151,7 +150,7 @@ export default function AddressPage() {
       ) : (
         <div className="mt-12 flex gap-6 text-2xl justify-center text-center text-muted-foreground">
           <MapPinX className="w-6 h-6 mb-2" />
-          Bạn chưa có địa chỉ nào. Vui lòng thêm địa chỉ mới.
+          {t('empty')}
         </div>
       )}
     </div>

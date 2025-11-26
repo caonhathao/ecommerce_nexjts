@@ -17,7 +17,7 @@ import {
 } from 'react-icons/fa';
 import { GrPowerCycle } from 'react-icons/gr';
 import { HiMiniCheckBadge } from 'react-icons/hi2';
-import { MdAttachMoney } from 'react-icons/md';
+import { MdAttachMoney, MdOutlineStore } from 'react-icons/md';
 import { PiTruckLight } from 'react-icons/pi';
 import { toast } from 'sonner';
 import { formatPrice } from '../../_components/global-function';
@@ -32,10 +32,12 @@ import { AddToCartRequest } from '@/types/cart.data-types';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
+import { IoChatboxEllipsesOutline } from 'react-icons/io5';
 import { TopDealItems } from '../../(home)/_components/top-deal-items';
 import Desc from './_components/desc';
 import { Reviews } from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
+import { ChatButton } from '@/components/chat/chat-button';
 import Decimal = Prisma.Decimal;
 import { voucher } from '@/types/voucher';
 
@@ -56,8 +58,15 @@ const DetailPage = () => {
   const params = useParams();
   const [data, setData] = useState<productDetailType | null>(null);
   const [selVariant, setSelVariant] = useState<selectedVariant | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const amount: number = 1;
   const t = useTranslations('product_detail');
+
+  useEffect(() => {
+    authClient.getSession().then((session) => {
+      setIsLoggedIn(!!session.data);
+    });
+  }, []);
 
   const renderPriceSale = (
     typeVoucher: string | null,
@@ -67,7 +76,31 @@ const DetailPage = () => {
     if (!typeVoucher || !valueVoucher) {
       return <p>{formatPrice(Number(price))}</p>;
     }
+
+    const numericPrice = Number(price);
+    const numericValue = Number(valueVoucher);
+
     if (typeVoucher === 'FIXED') {
+      const finalPrice = Math.max(0, numericPrice - numericValue);
+      return (
+        <div className="flex flex-col justify-start items-start gap-2">
+          <div className="flex flex-row justify-start items-center gap-2">
+            {/* price-after-sale */}
+            <p className="text-red-500 text-3xl font-bold">
+              {formatPrice(finalPrice)}
+            </p>
+            {/* sale discount (show fixed amount) */}
+            <p className="bg-secondary rounded-lg p-1 text-xs">
+              {'-'} {formatPrice(numericValue)}
+            </p>
+            {/* origin price */}
+            <p className="text-muted-foreground line-through">
+              {formatPrice(numericPrice)}
+            </p>
+          </div>
+          <p className="text-muted-foreground italic">{t('t_price_after')}</p>
+        </div>
+      );
     }
     if (typeVoucher === 'PERCENT') {
       return (
@@ -126,6 +159,11 @@ const DetailPage = () => {
     }
   };
 
+  const handleOpenShop = ({ slug }: { slug: string }) => {
+    route.push(`/shop/${slug}`);
+  };
+
+  //get full product's detail
   useEffect(() => {
     if (typeof params?.id === 'string') {
       // 1. Define an async function inside the effect
@@ -260,7 +298,6 @@ const DetailPage = () => {
       });
     }
   };
-  console.log(data);
 
   if (!data) return <Loading />;
   if (selVariant === null) {
@@ -268,7 +305,7 @@ const DetailPage = () => {
   }
 
   return (
-    <div className="w-[80%] flex flex-col justify-center items-start gap-2 mt-5">
+    <div className="w-[75%] flex flex-col justify-center items-start gap-2 mt-5">
       <div className="w-full flex flex-row justify-center items-start gap-2">
         <section className="w-[70%] flex flex-col justify-start items-start gap-2">
           <div className="w-full flex flex-row gap-2">
@@ -445,7 +482,44 @@ const DetailPage = () => {
               <Desc data={data.description} />
             </div>
           </div>
-
+          {/* show shop info */}
+          <div className="w-full bg-background p-3 rounded-lg mt-2 border border-border">
+            {/* logo and name */}
+            <div className="flex flex-row items-center justify-between gap-3">
+              <div className="flex flex-row items-center gap-3">
+                <Image
+                  src={data.shop.logoUrl}
+                  width={50}
+                  height={50}
+                  alt="shop-logo"
+                  className="rounded-lg"
+                />
+                <div className="flex flex-col">
+                  <p>{data.shop.name}</p>
+                  <div className="flex flex-row items-center gap-0.5">
+                    {data.shop.ratingAvg} <FaStar color="orange" size={15} />
+                    <div>
+                      {'('} {data.shop.ratingCount} đánh giá {')'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-row items-center gap-3">
+                <Button variant={'outline'} className="hover:cursor-pointer">
+                  <IoChatboxEllipsesOutline color="var(--primary)" />
+                  Chat
+                </Button>
+                <Button
+                  variant={'outline'}
+                  onClick={() => handleOpenShop({ slug: data.shop.slug })}
+                  className="hover:cursor-pointer"
+                >
+                  <MdOutlineStore color="var(--primary)" />
+                  Ghé xem cửa hàng
+                </Button>
+              </div>
+            </div>
+          </div>
           <Suspense fallback={<LoadingComponent />}>
             <Reviews
               key={data.id}
@@ -460,7 +534,7 @@ const DetailPage = () => {
         <section className="w-[30%] sticky top-3">
           <div className="w-full bg-background rounded-lg p-2 flex flex-col gap-3">
             {/* title */}
-            <div className="flex flex-row justify-start items-center gap-2 h-15">
+            <div className="flex flex-row justify-start items-center gap-2 h-15 w-full">
               <Image src={logo} width={40} height={40} alt="logo" />
               <div className="flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-col justify-center items-start gap-2">
@@ -472,16 +546,21 @@ const DetailPage = () => {
                     OFFICAL
                   </Badge>
                 </div>
-                <div className="flex flex-row gap-2 items-center h-15">
-                  <p className="flex flex-row justify-center items-center gap-0.5">
-                    {'4.7'}
-                    <FaStar color="var(--chart-4)" size={15} />
-                  </p>
-                  <Separator orientation="vertical" />
-                  <p>{'5.5tr+ đánh giá'}</p>
-                </div>
+              </div>
+              <div className="flex flex-row gap-2 justify-end items-center h-15 w-full">
+                <p className="flex flex-row justify-center items-center gap-0.5">
+                  {'4.7'}
+                  <FaStar color="var(--chart-4)" size={15} />
+                </p>
+                <Separator orientation="vertical" />
+                <p>{'5.5tr+ đánh giá'}</p>
               </div>
             </div>
+
+            {isLoggedIn && (
+              <ChatButton shopId={data.shop.id} product={{ id: data.id }} />
+            )}
+
             <Separator />
             {/* payment info */}
             <div className="flex flex-col justify-start items-start gap-2">

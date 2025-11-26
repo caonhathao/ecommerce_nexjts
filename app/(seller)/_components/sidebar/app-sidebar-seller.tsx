@@ -8,6 +8,7 @@ import {
   IconFileDescription,
   IconHelp,
   IconListDetails,
+  IconMessageCircle,
   IconSearch,
   IconSettings,
   IconShoppingCart,
@@ -34,6 +35,7 @@ import { NavMainSeller } from '@/app/(seller)/_components/sidebar/nav-main-selle
 import { NavSecondarySeller } from '@/app/(seller)/_components/sidebar/nav-secondary-seller';
 import { NavSeller } from '@/app/(seller)/_components/sidebar/nav-seller';
 import { ListOrdered, Wallet } from 'lucide-react';
+import { paths } from '@/lib/path';
 
 const WEB_NAME = env.NEXT_PUBLIC_WEB_NAME;
 

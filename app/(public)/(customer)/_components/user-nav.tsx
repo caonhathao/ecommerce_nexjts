@@ -82,7 +82,7 @@ type UserMini = { name: string; email?: string; avatar_url?: string };
 
 export default function UserNav({ user }: { user: UserMini }) {
   const pathname = usePathname();
-  const t = useTranslations('user_navbar');
+  const t = useTranslations('customer.user_navbar');
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + '/');
 
@@ -287,8 +287,8 @@ function NavItem({
             'w-full justify-between px-3 py-2 text-sm',
             'rounded-md transition-colors',
             active
-              ? 'bg-gray-200 dark:bg-gray-800 font-medium'
-              : 'hover:bg-gray-200 dark:hover:bg-gray-800'
+              ? 'bg-primary text-secondary-foreground hover:bg-primary hover:text-secondary-foreground'
+              : 'hover:bg-secondary hover:text-secondary-foreground'
           )}
         >
           <Link
