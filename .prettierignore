@@ -38,9 +38,6 @@ prisma/migrations
 # Vercel
 .vercel
 
-
-messages
-
 local
 
 prisma

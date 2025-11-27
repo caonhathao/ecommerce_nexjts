@@ -24,7 +24,7 @@ const sizeClasses = {
 };
 
 export const HotForeign = ({ size }: TopDealItemsProps) => {
-  const t = useTranslations('hot_foreign');
+  const t = useTranslations('home_layout.hot_foreign');
   const [response, setResponse] = useState<productDataResponse | null>(null);
   const gridClass =
     sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4'; // Cung cấp giá trị mặc định

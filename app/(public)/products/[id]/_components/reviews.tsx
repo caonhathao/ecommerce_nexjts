@@ -2,6 +2,7 @@
 
 import { LoadingComponent } from '@/app/(public)/_components/loading';
 import { fetchData } from '@/funcs/fetch';
+import { paths } from '@/lib/path';
 import { reviewResponse } from '@/types/public.data-types';
 import { useEffect, useState } from 'react'; // Import hooks
 import { ReviewsClient } from './reviews-client';
@@ -24,7 +25,7 @@ export function Reviews({ id, ratingAvg, ratingCount }: props) {
     const loadReviews = async () => {
       try {
         await fetchData({
-          baseUrl: '/api/reviews',
+          baseUrl: paths.reviews.fetch_all,
           params: { id: id, page: 1, limit: 5 },
           setData: setInitialResponse,
         });

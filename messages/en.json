@@ -63,39 +63,39 @@
       "help": "Customer support",
       "member_badge": "Member"
     },
-      "profile_page": {
-        "title": "Personal information",
-        "fullName": "Full name",
-        "nickname": "Nickname",
-        "birthday": "Birthday",
-        "day": "Day",
-        "month": "Month",
-        "year": "Year",
-        "gender": "Gender",
-        "male": "Male",
-        "female": "Female",
-        "other": "Other",
-        "nationality": "Nationality",
-        "phoneEmailSectionTitle": "Phone number & Email",
-        "phone": "Phone number",
-        "emailForBill": "Email address",
-        "save": "Save changes",
-        "placeholders": {
-          "fullName": "Your full name",
-          "nickname": "Add a nickname",
-          "phone": "Enter phone number",
-          "emailForBill": "Enter Email for Billing",
-          "nationality": "Choose nationality"
-        },
-        "errors": {
-          "fullNameRequired": "Full name is required",
-          "emailInvalid": "Invalid email address",
-          "phoneInvalid": "Invalid phone number"
-        },
-        "toasts": {
-          "saved": "Profile updated successfully",
-          "failed": "Failed to update profile"
-        }
+    "profile_page": {
+      "title": "Personal information",
+      "fullName": "Full name",
+      "nickname": "Nickname",
+      "birthday": "Birthday",
+      "day": "Day",
+      "month": "Month",
+      "year": "Year",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "nationality": "Nationality",
+      "phoneEmailSectionTitle": "Phone number & Email",
+      "phone": "Phone number",
+      "emailForBill": "Email address",
+      "save": "Save changes",
+      "placeholders": {
+        "fullName": "Your full name",
+        "nickname": "Add a nickname",
+        "phone": "Enter phone number",
+        "emailForBill": "Enter Email for Billing",
+        "nationality": "Choose nationality"
+      },
+      "errors": {
+        "fullNameRequired": "Full name is required",
+        "emailInvalid": "Invalid email address",
+        "phoneInvalid": "Invalid phone number"
+      },
+      "toasts": {
+        "saved": "Profile updated successfully",
+        "failed": "Failed to update profile"
+      }
     },
     "orders": {
       "title": "My Orders",
@@ -174,7 +174,6 @@
     "return_30_days": "30-day return policy",
     "fast_delivery_2h": "2-hour fast delivery",
     "super_cheap_price": "super cheap price",
-    "category": "Category",
     "book_store": "2T3H Bookstore",
     "house_life": "Home & Living",
     "smartphone": "Smartphones & Tablets",
@@ -198,34 +197,55 @@
     "clock_jewelry": "Watches & Jewelry",
     "balo_vali": "Backpacks & Suitcases",
     "vouchers_services": "Vouchers & Services",
-    "extensions": "Utilities",
-    "promotion": "Card & E-Wallet Offers",
-    "pay_top_up": "Bill Payment & Top-up",
-    "pay_later": "Buy Now, Pay Later"
+
+    "app_sidebar": {
+      "category": "Category",
+
+      "fashion-apparel": "Fashion & Apparel",
+      "home-living": "Home & Living",
+      "beauty-personal-care": "Beauty & Personal Care",
+      "food-beverages": "Food & Beverages",
+      "sports-outdoors": "Sports & Outdoors",
+      "health-wellness": "Health & Wellness",
+      "baby-kids-toys": "Baby, Kids & Toys",
+      "books-movies-games": "Books, Movies & Games",
+      "pet-supplies": "Pet Supplies",
+      "bags-luggage-accessories": "Bags, Luggage & Accessories",
+      "automotive-industrial": "Automotive & Industrial",
+      "office-supplies-stationery": "Office Supplies & Stationery",
+      "diy-tools-hardware": "DIY, Tools & Hardware",
+      "gifts-special-occasions": "Gifts & Special Occasions",
+      "extensions": "Utilities",
+
+      "promotion": "Card & E-Wallet Offers",
+      "pay_top_up": "Bill Payment & Top-up",
+      "pay_later": "Buy Now, Pay Later"
+    },
+    "category_promotion_panel": {
+      "deal_vip": "Exclusive VIP 50% Deal",
+      "super_sale": "Mega Sale — Super Deal 10K",
+      "cheap_morning": "2T3H Morning Cheap Deals",
+      "combo_super_sale": "Super Saving Combo",
+      "trading": "2T3H Trading",
+      "hot_coupon": "Hot Coupons",
+      "holiday": "Holiday Mega Sale",
+      "half_price": "Warehouse Clearance — Half Price",
+      "top_book": "Top Bestselling Books"
+    },
+    "top_deal_items": {
+      "title": "TOP DEAL + SUPER CHEAP",
+      "watch_more": "See More"
+    },
+    "hot_foreign": {
+      "title": "Hot Priced Imported Goods",
+      "watch_more": "See More"
+    },
+    "suggest_deal_today": {
+      "title": "Today's Recommendations",
+      "watch_more": "See More"
+    }
   },
-  "category_promotion_panel": {
-    "deal_vip": "Exclusive VIP 50% Deal",
-    "super_sale": "Mega Sale — Super Deal 10K",
-    "cheap_morning": "2T3H Morning Cheap Deals",
-    "combo_super_sale": "Super Saving Combo",
-    "trading": "2T3H Trading",
-    "hot_coupon": "Hot Coupons",
-    "holiday": "Holiday Mega Sale",
-    "half_price": "Warehouse Clearance — Half Price",
-    "top_book": "Top Bestselling Books"
-  },
-  "top_deal_items": {
-    "title": "TOP DEAL + SUPER CHEAP",
-    "watch_more": "See More"
-  },
-  "hot_foreign": {
-    "title": "Hot Priced Imported Goods",
-    "watch_more": "See More"
-  },
-  "suggest_deal_today": {
-    "title": "Today's Recommendations",
-    "watch_more": "See More"
-  },
+
   "product_detail": {
     "t_price_after": "Price after discount",
     "t_sold": "Sold",
@@ -241,6 +261,9 @@
     "t_slogan_2": "Inspect goods upon delivery",
     "t_slogan_3": "200% refund if proven fake",
     "t_slogan_4": "Free returns up to 365 days. Change of mind allowed.",
+    "t_review": "reivews",
+    "t_chat": "Chat",
+    "t_visit": "Visit store",
     "t_quantity": "Quantity",
     "t_total": "Subtotal",
     "t_buy_action": "Buy Now",
@@ -263,7 +286,39 @@
       "c_2_stars": "2 stars",
       "c_1_star": "1 star",
       "t_more_action": "View More"
+    },
+    "t_chat_will_sellter": "Chat will seller"
+  },
+  "shop_layout": {
+    "t_review": "Reviews",
+    "t_chat": "Chat",
+    "t_shop": "Shop",
+    "c_see_review": "See Reviews",
+    "c_info_general": "General Info",
+    "t_product": "Products",
+    "c_all": "All",
+    "c_new": "New Arrivals",
+    "c_special": "Featured",
+    "t_profile": "Profile"
+  },
+  "shop_product_page": {
+    "t_title_new": "New Arrivals",
+    "t_title_top": "Best Sellers",
+    "t_title_all": "All Products",
+    "pagination": {
+      "t_first_page": "First page",
+      "t_lastest_page": "Last page"
     }
+  },
+  "shop_profile_page": {
+    "t_main_category": "Main Category",
+    "t_unknow": "Unknown",
+    "t_joined_time": "Joined",
+    "t_delivery": "Ships within",
+    "t_cancel_rate": "Cancellation Rate",
+    "t_chat": "Chat",
+    "t_response_rate": "Response Rate",
+    "t_time_response": "Response Time"
   },
   "admin_layout": {
     "admin_app_sidebar": {
@@ -300,25 +355,25 @@
   "admin_category_page": {
     "t_search_placeholder": "Enter search keywords...",
 
-  "t_action_noti": "Action",
-  "t_copy_desc_noti": "Information copied successfully!",
-  "t_del_desc_noti": "Product category deleted successfully!",
-  "t_action_failed_noti": "Action failed",
-  "t_copy_failed_desc_noti": "Failed to copy information!",
-  "t_del_failed_desc_noti": "Failed to delete product category!",
-  "t_category_name": "Category Name",
-  "t_serial": "Order",
-  "t_is_active": "Visibility",
-  "t_children_count": "Subcategories Count",
-  "t_created_at": "Created Date",
-  "t_updated_at": "Updated Date",
-  "t_copy_action": "Copy ID",
-  "t_del_action": "Delete",
-  "t_tab_all": "All",
-  "t_tab_active": "Active",
-  "t_tab_inactive": "Inactive",
-  "t_showing": "Showing",
-  "t_column": "Columns",
+    "t_action_noti": "Action",
+    "t_copy_desc_noti": "Information copied successfully!",
+    "t_del_desc_noti": "Product category deleted successfully!",
+    "t_action_failed_noti": "Action failed",
+    "t_copy_failed_desc_noti": "Failed to copy information!",
+    "t_del_failed_desc_noti": "Failed to delete product category!",
+    "t_category_name": "Category Name",
+    "t_serial": "Order",
+    "t_is_active": "Visibility",
+    "t_children_count": "Subcategories Count",
+    "t_created_at": "Created Date",
+    "t_updated_at": "Updated Date",
+    "t_copy_action": "Copy ID",
+    "t_del_action": "Delete",
+    "t_tab_all": "All",
+    "t_tab_active": "Active",
+    "t_tab_inactive": "Inactive",
+    "t_showing": "Showing",
+    "t_column": "Columns",
     "category_tab": {
       "t_no_category_found": "No categories found",
       "t_of": "of",
@@ -374,7 +429,7 @@
       "t_parent_category": "Parent Category",
       "t_belong_category": "Belongs to category",
       "t_cancel_action": "Cancel",
-    "t_submit_action": "Confirm"
+      "t_submit_action": "Confirm"
     }
   },
   "admin_product_page": {
@@ -533,122 +588,122 @@
       "t_rows_per_page": "Rows per page",
       "t_page": "Page"
     },
-   "user_drawer": {
-  "t_process_failed_noti": "Process Failed",
-  "t_conn_failed_desc_noti": "Could not connect to the server!",
-  "t_action_noti": "Action",
-  "t_update_desc_noti": "Shop information updated successfully!",
-  "t_copy_desc_noti": "Information copied successfully!",
-  "t_del_desc_noti": "Shop deleted successfully!",
-  "t_action_failed_noti": "Action Failed",
-  "t_update_failed_desc_noti": "Failed to update information!",
-  "t_copy_failed_desc_noti": "Failed to copy information!",
-  "t_del_failed_desc_noti": "Failed to delete shop!",
-  "t_user_name": "User Name",
-  "t_user_desc": "User Details",
-  "t_shop_owned": "Owned Shops",
-  "t_no_shop_owned": "None",
-  "t_shop_membership": "Shop Membership",
-  "t_no_shop_membership": "None",
-  "t_email": "Email",
-  "t_no_verified": "Unverified",
-  "t_verified": "Verified",
-  "t_email_for_bill": "Billing Email",
-  "t_copy_action": "Copy ID",
-  "t_del_action": "Delete",
-  "t_email_verified": "Email Verification",
-  "t_number_phone": "Phone Number",
-  "t_empty": "Empty",
-  "t_gender": "Gender",
-  "c_male": "Male",
-  "c_female": "Female",
-  "c_other": "Other",
-  "t_created_at": "Created Date",
-  "t_updated_at": "Updated Date",
-  "t_banned_status": "Status",
-  "t_status_placeholder": "Select status",
-  "c_no_banned": "Normal",
-  "c_banned": "Banned",
-  "t_ban_reason": "Ban Reason",
-  "t_ban_expired": "Ban Expiration",
-  "t_submit_action": "Save Changes",
-  "t_cancel_action": "Cancel"
-}
+    "user_drawer": {
+      "t_process_failed_noti": "Process Failed",
+      "t_conn_failed_desc_noti": "Could not connect to the server!",
+      "t_action_noti": "Action",
+      "t_update_desc_noti": "Shop information updated successfully!",
+      "t_copy_desc_noti": "Information copied successfully!",
+      "t_del_desc_noti": "Shop deleted successfully!",
+      "t_action_failed_noti": "Action Failed",
+      "t_update_failed_desc_noti": "Failed to update information!",
+      "t_copy_failed_desc_noti": "Failed to copy information!",
+      "t_del_failed_desc_noti": "Failed to delete shop!",
+      "t_user_name": "User Name",
+      "t_user_desc": "User Details",
+      "t_shop_owned": "Owned Shops",
+      "t_no_shop_owned": "None",
+      "t_shop_membership": "Shop Membership",
+      "t_no_shop_membership": "None",
+      "t_email": "Email",
+      "t_no_verified": "Unverified",
+      "t_verified": "Verified",
+      "t_email_for_bill": "Billing Email",
+      "t_copy_action": "Copy ID",
+      "t_del_action": "Delete",
+      "t_email_verified": "Email Verification",
+      "t_number_phone": "Phone Number",
+      "t_empty": "Empty",
+      "t_gender": "Gender",
+      "c_male": "Male",
+      "c_female": "Female",
+      "c_other": "Other",
+      "t_created_at": "Created Date",
+      "t_updated_at": "Updated Date",
+      "t_banned_status": "Status",
+      "t_status_placeholder": "Select status",
+      "c_no_banned": "Normal",
+      "c_banned": "Banned",
+      "t_ban_reason": "Ban Reason",
+      "t_ban_expired": "Ban Expiration",
+      "t_submit_action": "Save Changes",
+      "t_cancel_action": "Cancel"
+    }
   },
   "admin_statistic_page": {
-  "chart_area_revenue": {
-    "t_title": "Total Revenue",
-    "t_week": "7 days",
-    "t_month": "30 days",
-    "t_3months": "90 days",
-    "t_months": "12 months",
-    "t_data_from": "Data from",
-    "t_most_recent": "most recent"
-  },
-  "chart_order_state_rate": {
-    "t_title": "Order Status Rate",
-    "t_week": "7 days",
-    "t_month": "30 days",
-    "t_3months": "90 days",
-    "t_months": "12 months",
-    "t_data_from": "Data from",
-    "t_most_recent": "most recent",
-    "t_label_1": "Status",
-    "t_label_2": "Pending",
-    "t_label_3": "Paid",
-    "t_label_4": "Processing",
-    "t_label_5": "Cancelled",
-    "t_label_6": "Refunded"
-  },
-  "chart_top_products": {
-    "t_title": "Top Products",
-    "t_week": "7 days",
-    "t_month": "30 days",
-    "t_3months": "90 days",
-    "t_months": "12 months",
-    "t_data_from": "Data from",
-    "t_most_recent": "most recent",
-    "t_label_1": "Quantity"
-  },
-  "product_tab": {
-    "t_no_product_found": "No products found",
-    "t_of": "of",
-    "t_rows_selected": "row(s) selected.",
-    "t_rows_per_page": "Rows per page",
-    "t_page": "Page"
-  },
-"product_drawer": {
-    "t_process_failed_noti": "Process Failed",
-    "t_conn_failed_desc_noti": "Cannot connect to server!",
-    "t_action_noti": "Action",
-    "t_update_desc_noti": "Category information updated successfully!", 
-    "t_copy_desc_noti": "Information copied successfully!",
-    "t_del_desc_noti": "Product deleted successfully!",
-    "t_action_failed_noti": "Action Failed",
-    "t_update_failed_desc_noti": "Failed to update information!",
-    "t_copy_failed_desc_noti": "Failed to copy information!",
-    "t_del_failed_desc_noti": "Failed to delete product!",
+    "chart_area_revenue": {
+      "t_title": "Total Revenue",
+      "t_week": "7 days",
+      "t_month": "30 days",
+      "t_3months": "90 days",
+      "t_months": "12 months",
+      "t_data_from": "Data from",
+      "t_most_recent": "most recent"
+    },
+    "chart_order_state_rate": {
+      "t_title": "Order Status Rate",
+      "t_week": "7 days",
+      "t_month": "30 days",
+      "t_3months": "90 days",
+      "t_months": "12 months",
+      "t_data_from": "Data from",
+      "t_most_recent": "most recent",
+      "t_label_1": "Status",
+      "t_label_2": "Pending",
+      "t_label_3": "Paid",
+      "t_label_4": "Processing",
+      "t_label_5": "Cancelled",
+      "t_label_6": "Refunded"
+    },
+    "chart_top_products": {
+      "t_title": "Top Products",
+      "t_week": "7 days",
+      "t_month": "30 days",
+      "t_3months": "90 days",
+      "t_months": "12 months",
+      "t_data_from": "Data from",
+      "t_most_recent": "most recent",
+      "t_label_1": "Quantity"
+    },
+    "product_tab": {
+      "t_no_product_found": "No products found",
+      "t_of": "of",
+      "t_rows_selected": "row(s) selected.",
+      "t_rows_per_page": "Rows per page",
+      "t_page": "Page"
+    },
+    "product_drawer": {
+      "t_process_failed_noti": "Process Failed",
+      "t_conn_failed_desc_noti": "Cannot connect to server!",
+      "t_action_noti": "Action",
+      "t_update_desc_noti": "Category information updated successfully!",
+      "t_copy_desc_noti": "Information copied successfully!",
+      "t_del_desc_noti": "Product deleted successfully!",
+      "t_action_failed_noti": "Action Failed",
+      "t_update_failed_desc_noti": "Failed to update information!",
+      "t_copy_failed_desc_noti": "Failed to copy information!",
+      "t_del_failed_desc_noti": "Failed to delete product!",
 
-    "t_product_desc": "Product Details",
-    "t_shop": "Shop",
-    "t_watch_shop": "View Shop",
-    "t_product_name": "Product Name",
-    "t_copy_action": "Copy ID",
-    "t_del_action": "Delete",
-    "t_origin": "Origin",
-    "t_currency": "Currency",
-    "t_min_price": "Min Price",
-    "t_max_price": "Max Price",
-    "t_visibility": "Visibility",
-    "t_visibility_placeholder": "Select status",
-    "c_public": "Allowed",
-    "c_private": "Pending Approval",
-    "c_unlisted": "Not Allowed",
-    "t_desc": "Description",
-    "t_sku_code": "SKU Code",
-    "t_price": "Price",
-    "t_variant": "Variants",
-    "t_cancel_action": "Close"
+      "t_product_desc": "Product Details",
+      "t_shop": "Shop",
+      "t_watch_shop": "View Shop",
+      "t_product_name": "Product Name",
+      "t_copy_action": "Copy ID",
+      "t_del_action": "Delete",
+      "t_origin": "Origin",
+      "t_currency": "Currency",
+      "t_min_price": "Min Price",
+      "t_max_price": "Max Price",
+      "t_visibility": "Visibility",
+      "t_visibility_placeholder": "Select status",
+      "c_public": "Allowed",
+      "c_private": "Pending Approval",
+      "c_unlisted": "Not Allowed",
+      "t_desc": "Description",
+      "t_sku_code": "SKU Code",
+      "t_price": "Price",
+      "t_variant": "Variants",
+      "t_cancel_action": "Close"
+    }
   }
-}
 }

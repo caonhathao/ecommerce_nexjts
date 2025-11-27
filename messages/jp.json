@@ -173,7 +173,6 @@
     "return_30_days": "30日間返品可能",
     "fast_delivery_2h": "2時間以内配送",
     "super_cheap_price": "激安価格",
-    "category": "カテゴリー",
     "book_store": "2T3H 書店",
     "house_life": "ホーム - ライフスタイル",
     "smartphone": "スマートフォン - タブレット",
@@ -197,34 +196,55 @@
     "clock_jewelry": "時計・ジュエリー",
     "balo_vali": "バックパック・スーツケース",
     "vouchers_services": "クーポン - サービス",
-    "extensions": "ユーティリティ",
-    "promotion": "カード・ウォレット優待",
-    "pay_top_up": "支払い・チャージ",
-    "pay_later": "後払い"
+
+    "app_sidebar": {
+      "category": "カテゴリー",
+
+      "fashion-apparel": "ファッション・アパレル",
+      "home-living": "ホーム・生活用品",
+      "beauty-personal-care": "ビューティー・パーソナルケア",
+      "food-beverages": "食品・飲料",
+      "sports-outdoors": "スポーツ・アウトドア",
+      "health-wellness": "ヘルスケア・健康",
+      "baby-kids-toys": "ベビー・キッズ・おもちゃ",
+      "books-movies-games": "本・映画・ゲーム",
+      "pet-supplies": "ペット用品",
+      "bags-luggage-accessories": "バッグ・スーツケース",
+      "automotive-industrial": "車・バイク・産業用品",
+      "office-supplies-stationery": "文房具・オフィス用品",
+      "diy-tools-hardware": "DIY・工具",
+      "gifts-special-occasions": "ギフト・パーティー用品",
+      "extensions": "ユーティリティ",
+
+      "promotion": "カード・ウォレット優待",
+      "pay_top_up": "支払い・チャージ",
+      "pay_later": "後払い"
+    },
+    "category_promotion_panel": {
+      "deal_vip": "VIP限定 50%OFF",
+      "super_sale": "メガセール 超特価10k",
+      "cheap_morning": "2T3H 朝市",
+      "combo_super_sale": "超得コンボ",
+      "trading": "2T3H トレーディング",
+      "hot_coupon": "人気クーポン",
+      "holiday": "祝日セール",
+      "half_price": "在庫処分 半額セール",
+      "top_book": "ベストセラー本"
+    },
+    "top_deal_items": {
+      "title": "トップセール + 激安",
+      "watch_more": "もっと見る"
+    },
+    "hot_foreign": {
+      "title": "人気の海外商品",
+      "watch_more": "もっと見る"
+    },
+    "suggest_deal_today": {
+      "title": "今日のおすすめ",
+      "watch_more": "もっと見る"
+    }
   },
-  "category_promotion_panel": {
-    "deal_vip": "VIP限定 50%OFF",
-    "super_sale": "メガセール 超特価10k",
-    "cheap_morning": "2T3H 朝市",
-    "combo_super_sale": "超得コンボ",
-    "trading": "2T3H トレーディング",
-    "hot_coupon": "人気クーポン",
-    "holiday": "祝日セール",
-    "half_price": "在庫処分 半額セール",
-    "top_book": "ベストセラー本"
-  },
-  "top_deal_items": {
-    "title": "トップセール + 激安",
-    "watch_more": "もっと見る"
-  },
-  "hot_foreign": {
-    "title": "人気の海外商品",
-    "watch_more": "もっと見る"
-  },
-  "suggest_deal_today": {
-    "title": "今日のおすすめ",
-    "watch_more": "もっと見る"
-  },
+
   "product_detail": {
     "t_price_after": "割引適用後の価格",
     "t_sold": "販売済み",
@@ -240,6 +260,9 @@
     "t_slogan_2": "受け取り時の確認可能",
     "t_slogan_3": "偽物の場合は200%返金",
     "t_slogan_4": "365日以内の無料返品交換。気が変わっても大丈夫。",
+    "t_review": "レビュー",
+    "t_chat": "チャット",
+    "t_visit": "店舗を訪問",
     "t_quantity": "数量",
     "t_total": "小計",
     "t_buy_action": "今すぐ購入",
@@ -262,7 +285,39 @@
       "c_2_stars": "2つ星",
       "c_1_star": "1つ星",
       "t_more_action": "もっと見る"
+    },
+    "t_chat_will_sellter": "チャット販売者"
+  },
+  "shop_layout": {
+    "t_review": "レビュー",
+    "t_chat": "チャット",
+    "t_shop": "ショップ",
+    "c_see_review": "レビューを見る",
+    "c_info_general": "基本情報",
+    "t_product": "商品",
+    "c_all": "すべて",
+    "c_new": "新着",
+    "c_special": "注目",
+    "t_profile": "プロフィール"
+  },
+  "shop_product_page": {
+    "t_title_new": "新着商品",
+    "t_title_top": "ベストセラー",
+    "t_title_all": "全商品",
+    "pagination": {
+      "t_first_page": "最初のページ",
+      "t_lastest_page": "最後のページ"
     }
+  },
+  "shop_profile_page": {
+    "t_main_category": "メインカテゴリー",
+    "t_unknow": "不明",
+    "t_joined_time": "登録日",
+    "t_delivery": "発送目安",
+    "t_cancel_rate": "キャンセル率",
+    "t_chat": "チャット",
+    "t_response_rate": "返信率",
+    "t_time_response": "返信時間"
   },
   "admin_layout": {
     "admin_app_sidebar": {
