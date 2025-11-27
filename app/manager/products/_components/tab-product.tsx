@@ -18,6 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { fetchData } from '@/funcs/fetch';
+import { paths } from '@/lib/path';
 import {
   productDataResponse,
   productItemData,
@@ -122,7 +123,7 @@ const TabProduct = ({
 
   useEffect(() => {
     fetchData({
-      baseUrl: '/api/manager/product',
+      baseUrl: paths.manager.product.fetch_all,
       params: { page: 1, limit: rows, visibility: visibilityFilter },
       setData: setData,
     });
@@ -205,7 +206,7 @@ const TabProduct = ({
                 table.setPageSize(Number(value));
                 setRows(Number(value));
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: {
                     page: 1,
                     limit: Number(value),
@@ -240,7 +241,7 @@ const TabProduct = ({
               onClick={() => {
                 table.setPageIndex(0);
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: { page: 1, limit: rows, isActive: visibilityFilter },
                   setData: setData,
                 });
@@ -257,7 +258,7 @@ const TabProduct = ({
               onClick={() => {
                 table.previousPage();
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: {
                     page: data.pagination.page - 1,
                     limit: rows,
@@ -278,7 +279,7 @@ const TabProduct = ({
               onClick={() => {
                 table.nextPage();
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: {
                     page: data.pagination.page + 1,
                     limit: rows,
@@ -299,7 +300,7 @@ const TabProduct = ({
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: {
                     page: data.pagination.totalPages,
                     limit: rows,

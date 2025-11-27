@@ -36,6 +36,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { putData } from '@/funcs/put';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { paths } from '@/lib/path';
 import {
   categoryChildDetail,
   categoryDetail,
@@ -65,7 +66,7 @@ const formSchema = z.object({
   image: z
     .file()
     .min(1)
-    .max(200 * 200),
+    .max(200 * 1024),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -137,9 +138,11 @@ export function TableCellViewer({
 
   async function fetchDetail() {
     try {
-      const response = await fetch(`/api/manager/category/query?id=${item.id}`);
+      const response = await fetch(
+        paths.manager.category.fetch_detail(item.id)
+      );
       const detail = await response.json();
-      console.log(detail.data);
+      //console.log(detail.data);
       setDetail(detail.data);
     } catch (err) {
       console.error(err);
@@ -148,7 +151,19 @@ export function TableCellViewer({
 
   async function onSubmit(values: FormSchemaType) {
     try {
-      const data = await putData('/api/manager/category', values);
+      const formData = new FormData();
+      formData.append('id', values.id);
+      formData.append('name', values.name);
+      formData.append('slug', values.slug);
+      formData.append('isActive', values.isActive);
+      if (values.image && values.image instanceof File) {
+        formData.append('image', values.image);
+      }
+
+      const data = await putData({
+        url: paths.manager.category.update,
+        body: formData,
+      });
       if (data.status === 200) {
         toast(t('t_action_noti'), {
           description: t('t_update_desc_noti'),
@@ -160,8 +175,8 @@ export function TableCellViewer({
       }
     } catch (error) {
       console.error('Failed to create category:', error);
-      toast(t('t_action_noti'), {
-        description: t('t_update_desc_noti'),
+      toast(t('t_action_failed_noti'), {
+        description: t('t_update_failed_desc_noti'),
       });
     }
   }
@@ -508,11 +523,17 @@ export function TableCellViewer({
           </Form>
         </div>
         <DrawerFooter>
-          <Button type="submit" form={'form-edit-category'}>
+          <Button
+            type="submit"
+            form={'form-edit-category'}
+            className="hover:cursor-pointer"
+          >
             {t('t_submit_action')}
           </Button>
           <DrawerClose asChild>
-            <Button variant="outline">{t('t_cancel_action')}</Button>
+            <Button variant="outline" className="hover:cursor-pointer">
+              {t('t_cancel_action')}
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

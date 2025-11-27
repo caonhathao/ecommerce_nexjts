@@ -105,7 +105,7 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
   try {
     const formData = await request.formData();
 
-    console.log(formData);
+    // console.log(formData);
 
     const file = formData.get('image') as File | null;
 
@@ -212,23 +212,79 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
 
 export const PUT = withAuth(async (userId: string, request: NextRequest) => {
   try {
-    const body = await request.json();
-    const { id, name, slug, isActive, parentId } = body;
-    const updatedCategory = await prisma.category.update({
-      where: { id: id },
-      data: {
-        name: name,
-        slug: slug,
-        isActive: isActive === 'true' ? true : false,
-        parentId: parentId === '' ? null : parentId,
-      },
+    const formData = await request.formData();
+
+    // console.log(formData);
+
+    const file = formData.get('image') as File | null;
+
+    const category = await prisma.category.findFirst({
+      where: { id: formData.get('id') as string },
     });
-    if (!updatedCategory) {
-      return NextResponse.json(
-        { error: 'Failed to update category' },
-        { status: 500 }
-      );
+
+    if (!category)
+      return NextResponse.json({
+        success: 400,
+        data: {
+          message: 'Category not found!',
+        },
+      });
+
+    let update;
+    if (file) {
+      if (category.publicId)
+        await deleteFromCloudinary(category.publicId ?? '', {
+          invalidate: true,
+        });
+
+      const arrBuffter = await file.arrayBuffer();
+      const buffer = Buffer.from(arrBuffter);
+      const upload = await uploadToCloudinary(buffer, {
+        folder: 'category-images',
+        resource_type: 'image',
+        use_filename: true,
+        unique_filename: true,
+      });
+
+      //console.log('upload', upload);
+
+      if (upload) {
+        update = await prisma.category.update({
+          where: {
+            id: formData.get('id') as string,
+          },
+          data: {
+            name: formData.get('name') as string,
+            slug: formData.get('slug') as string,
+            publicId: upload.public_id,
+            imageUrl: upload.secure_url,
+            isActive:
+              (formData.get('isActive') as string) === 'true' ? true : false,
+          },
+        });
+      }
+    } else {
+      update = await prisma.category.update({
+        where: {
+          id: formData.get('id') as string,
+        },
+        data: {
+          name: formData.get('name') as string,
+          slug: formData.get('slug') as string,
+          isActive:
+            (formData.get('isActive') as string) === 'true' ? true : false,
+        },
+      });
     }
+
+    if (!update)
+      return NextResponse.json({
+        success: 400,
+        data: {
+          message: 'Update failed!',
+        },
+      });
+
     return NextResponse.json(
       { message: 'Category updated successfully' },
       { status: 200 }

@@ -70,7 +70,7 @@ const TopProduct = () => {
         cacheType: 'default',
       });
       if (res) {
-        console.log(res.data);
+        //console.log(res.data);
         setData(res.data);
       }
     };

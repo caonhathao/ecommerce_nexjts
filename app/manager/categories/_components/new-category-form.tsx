@@ -111,7 +111,7 @@ export const NewCategoryForm = ({
       }
 
       const data = await postData({
-        url: paths.cateogry.create,
+        url: paths.manager.category.create,
         body: formData,
         contentType: undefined,
       });
@@ -226,7 +226,7 @@ export const NewCategoryForm = ({
 
   useEffect(() => {
     fetchData({
-      baseUrl: paths.cateogry.fetch_form,
+      baseUrl: paths.manager.category.fetch_form,
       params: { id: form.watch('parentId') },
       setData: setData,
     });

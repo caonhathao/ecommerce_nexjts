@@ -38,6 +38,7 @@ import { Separator } from '@/components/ui/separator';
 import { fetchData } from '@/funcs/fetch';
 import { putData } from '@/funcs/put';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { paths } from '@/lib/path';
 import {
   productDetail,
   productItemData,
@@ -103,7 +104,7 @@ export function TableCellViewer({
   async function fetchDetail() {
     try {
       const res = await fetchData({
-        baseUrl: '/api/manager/product/query',
+        baseUrl: paths.manager.product.fetch_detail,
         params: { id: item.id },
         setData: undefined,
         cacheType: 'default',
@@ -122,8 +123,13 @@ export function TableCellViewer({
 
   const handleSubmit = async (value: string) => {
     try {
-      const response = await putData('/api/manager/product/query', {
-        Visibility: value,
+      const response = await putData({
+        url: paths.manager.product.update,
+        body: {
+          id: detail?.id || '',
+          visibility: value,
+        },
+        contentType: 'application/json',
       });
       if (response.status === 200) {
         toast(t('t_action_noti'), {
@@ -312,7 +318,7 @@ export function TableCellViewer({
             <div className="flex flex-col gap-3">
               <Label htmlFor="visibility">{t('t_visibility')}</Label>
               <Select
-                value={defaultVisibility}
+                defaultValue={defaultVisibility}
                 onValueChange={(value) => setValue(value)}
               >
                 <SelectTrigger id="visibility" className="w-full">

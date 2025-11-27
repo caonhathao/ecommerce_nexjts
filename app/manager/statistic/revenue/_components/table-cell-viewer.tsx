@@ -31,7 +31,9 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { paths } from '@/lib/path';
 import { productDetail, variantDetail } from '@/types/manager.data-types';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
@@ -48,6 +50,7 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
   const [detail, setDetail] = React.useState<productDetail | null>(null);
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const t = useTranslations('admin_statistic_page.product_drawer');
 
   // This effect runs when 'openIndex' changes
   useEffect(() => {
@@ -81,7 +84,7 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
     async function fetchDetail() {
       try {
         const response = await fetchData({
-          baseUrl: '/api/manager/product/query',
+          baseUrl: paths.manager.product.fetch_detail,
           params: { id: id },
           setData: undefined,
         });
@@ -119,25 +122,25 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
 
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="name">Tên sản phẩm</Label>
+            <Label htmlFor="name">{t('t_product_name')}</Label>
             <div className="w-full">{value.name}</div>
           </div>
         </div>
 
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="sku">Mã SKU</Label>
+            <Label htmlFor="sku">{t('t_sku_code')}</Label>
             <div className="w-full">{value.sku}</div>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="price">Giá</Label>
+            <Label htmlFor="price">{t('t_price')}</Label>
             <div>{formatPrice(Number(value.price))}</div>
           </div>
           <div className="flex flex-col gap-3">
-            <Label htmlFor="currency-variant">Đơn vị tiền tệ</Label>
+            <Label htmlFor="currency-variant">{t('t_currency')}</Label>
             <div>{value.currency}</div>
           </div>
         </div>
@@ -159,7 +162,7 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
       <DrawerContent>
         <DrawerHeader className="gap-1">
           <DrawerTitle>{detail?.title || 'unknown'}</DrawerTitle>
-          <DrawerDescription>Thông tin chi tiết sản phẩm</DrawerDescription>
+          <DrawerDescription>{t('t_product_desc')}</DrawerDescription>
         </DrawerHeader>
         <div
           className="flex flex-col gap-4 overflow-y-auto px-4 text-sm"
@@ -194,7 +197,7 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
             </div>
 
             <div className="flex flex-col gap-3">
-              <Label htmlFor="shop">Cửa hàng</Label>
+              <Label htmlFor="shop">{t('t_shop')}</Label>
               <div className="w-full flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-row justify-start items-center gap-2">
                   <Avatar>
@@ -210,8 +213,8 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem>Xem cửa hàng</DropdownMenuItem>
-                    <DropdownMenuItem>Sao chép ID</DropdownMenuItem>
+                    <DropdownMenuItem>{t('t_watch_shop')}</DropdownMenuItem>
+                    <DropdownMenuItem>{t('t_copy_action')}</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -219,7 +222,7 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
 
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="title">Tên sản phẩm</Label>
+                <Label htmlFor="title">{t('t_product_name')}</Label>
                 <div className="w-full">{detail?.title}</div>
               </div>
               <div className="flex flex-col gap-3">
@@ -232,33 +235,33 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="target">Xuất xứ</Label>
+                <Label htmlFor="target">{t('t_origin')}</Label>
                 <div>{detail?.origin}</div>
               </div>
               <div className="flex flex-col gap-3">
-                <Label htmlFor="limit">Đơn vị tiền tệ</Label>
+                <Label htmlFor="limit">{t('t_currency')}</Label>
                 <div>{detail?.currency}</div>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="target">Giá tối thiểu</Label>
+                <Label htmlFor="target">{t('t_min_price')}</Label>
                 <div>{formatPrice(Number(detail?.minPrice))}</div>
               </div>
               <div className="flex flex-col gap-3">
-                <Label htmlFor="limit">Giá tối đa</Label>
+                <Label htmlFor="limit">{t('t_max_price')}</Label>
                 <div>{formatPrice(Number(detail?.maxPrice))}</div>
               </div>
             </div>
 
             <div className="flex flex-col gap-3">
-              <Label htmlFor="type">Mô tả</Label>
+              <Label htmlFor="type">{t('t_desc')}</Label>
               <textarea defaultValue={detail?.description || ''} />
             </div>
 
             <div className="flex flex-col gap-3">
-              <Label htmlFor="variants-list">Phiên bản</Label>
+              <Label htmlFor="variants-list">{t('t_variant')}</Label>
               <div className="flex flex-col  gap-4">
                 <ul className="w-full flex flex-col gap-2 ">
                   {detail?.variants.map((value: variantDetail, index) => (
@@ -306,7 +309,7 @@ const TableCellViewer = ({ id, openDetail, SetOpenDetail }: props) => {
         </div>
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outline">Done</Button>
+            <Button variant="outline">{t('t_cancel_action')}</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
