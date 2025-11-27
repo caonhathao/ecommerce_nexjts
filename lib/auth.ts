@@ -23,6 +23,10 @@ export const auth = betterAuth({
       clientSecret: env.AUTH_GITHUB_SECRET,
     },
   },
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+  },
   session: {
     cookieCache: {
       enabled: true,

@@ -10,6 +10,7 @@ import {
   PrismaClient,
   ProductStatus,
   Role,
+  ShopMemberRole,
   Visibility,
   VoucherType,
 } from '@/lib/generated/prisma';
@@ -268,35 +269,66 @@ async function main() {
   // ------------------------
   // 2️⃣ SHOP MEMBERS
   // ------------------------
-  const SHOP_MEMBERS_TO_CREATE = 300;
+  const BATCH = 500;
+  const rows: Prisma.ShopMemberCreateManyInput[] = [];
   const usedPairs = new Set<string>();
-  const shopMembersPromises = [];
 
-  for (let i = 0; i < SHOP_MEMBERS_TO_CREATE; i++) {
-    // pick a shop
-    const shop = faker.helpers.arrayElement(shops);
-    // half the time pick a seller user as member, otherwise pick a random user
-    const isSellerMember = faker.datatype.boolean({ probability: 0.6 });
-    const user = isSellerMember ? faker.helpers.arrayElement(sellerUsers) : faker.helpers.arrayElement(users);
-    const key = `${shop.id}_${user.id}`;
-    if (usedPairs.has(key)) continue;
-    usedPairs.add(key);
-
-    shopMembersPromises.push(
-      prisma.shopMember.create({
-        data: {
-          id: faker.string.uuid(),
-          shopId: shop.id,
-          userId: user.id,
-          role: user.role === Role.seller ? Role.seller : Role.user,
-          createdAt: faker.date.past(),
-        },
-      })
-    );
+  // 1) Ensure every shop owner exists as OWNER
+  for (const s of shops) {
+    const key = `${s.id}_${s.ownerId}`;
+    if (!usedPairs.has(key)) {
+      usedPairs.add(key);
+      rows.push({
+        id: faker.string.uuid(),
+        shopId: s.id,
+        userId: s.ownerId,
+        role: ShopMemberRole.OWNER,
+        createdAt: faker.date.recent(),
+      });
+    }
   }
 
-  const shopMembers = await Promise.all(shopMembersPromises);
-  console.log(`✅ Created ${shopMembers.length} shop members (mix of sellers and users)`);
+  // 2) Add 2-6 additional members per shop with weighted roles
+  for (const s of shops) {
+    const memberCount = faker.number.int({ min: 2, max: 6 });
+    const sellerPool = sellerUsers.filter((u) => u.id !== s.ownerId);
+    const userPool = users.filter((u) => u.id !== s.ownerId);
+
+    const picked = new Set<string>();
+    let attempts = 0;
+    while (picked.size < memberCount && attempts < memberCount * 10) {
+      attempts++;
+      // bias: 60% pick from sellers, otherwise from all users
+      const pool = faker.datatype.boolean({ probability: 0.6 }) ? sellerPool : userPool;
+      if (pool.length === 0) break;
+      const u = faker.helpers.arrayElement(pool);
+      const key = `${s.id}_${u.id}`;
+      if (usedPairs.has(key) || picked.has(key)) continue;
+      picked.add(key);
+
+      // Weighted role selection
+      const roll = faker.number.int({ min: 1, max: 100 });
+      const role = roll <= 80 ? ShopMemberRole.STAFF : ShopMemberRole.MANAGER;
+
+
+      usedPairs.add(key);
+      rows.push({
+        id: faker.string.uuid(),
+        shopId: s.id,
+        userId: u.id,
+        role,
+        createdAt: faker.date.past(),
+      });
+    }
+  }
+
+  // 3) Insert in batches to avoid pool exhaustion and use skipDuplicates
+  for (let i = 0; i < rows.length; i += BATCH) {
+    const chunk = rows.slice(i, i + BATCH);
+    await prisma.shopMember.createMany({ data: chunk, skipDuplicates: true });
+  }
+
+  console.log(`✅ Created/ensured ${rows.length} shop members`);
 
   // Ensure every shop owner is also present at least once as a member (optional)
   const ownerMemberPromises = shops.map(async (s) => {
@@ -309,7 +341,7 @@ async function main() {
           id: faker.string.uuid(),
           shopId: s.id,
           userId: s.ownerId,
-          role: Role.seller,
+          role: ShopMemberRole.OWNER,
           createdAt: faker.date.recent(),
         },
       });

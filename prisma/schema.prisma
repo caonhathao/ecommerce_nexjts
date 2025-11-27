@@ -1,3 +1,4 @@
+
 generator client {
   provider      = "prisma-client-js"
   output        = "../lib/generated/prisma"
@@ -22,6 +23,12 @@ enum ShopStatus {
   ACTIVE
   SUSPENDED
   CLOSED
+}
+
+enum ShopMemberRole {
+  OWNER
+  STAFF
+  MANAGER
 }
 
 enum ProductStatus {
@@ -161,6 +168,7 @@ model Session {
   impersonatedBy String?
 
   @@map("session")
+  @@index([userId])
 }
 
 model Account {
@@ -180,6 +188,7 @@ model Account {
   updatedAt             DateTime  @updatedAt
 
   @@map("account")
+  @@index([userId])
 }
 
 model ShopFollower {
@@ -202,6 +211,7 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+  @@index([identifier])
 }
 
 model UserProfile {
@@ -295,11 +305,11 @@ model Shop {
 }
 
 model ShopMember {
-  id        String   @id @default(uuid()) @db.Uuid
-  shopId    String   @db.Uuid
-  userId    String   @db.Uuid
-  role      Role     @default(seller)
-  createdAt DateTime @default(now())
+  id        String         @id @default(uuid()) @db.Uuid
+  shopId    String         @db.Uuid
+  userId    String         @db.Uuid
+  role      ShopMemberRole @default(STAFF)
+  createdAt DateTime       @default(now())
 
   shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -309,13 +319,13 @@ model ShopMember {
 }
 
 model ShopInvitation {
-  id        String   @id @default(uuid())
+  id        String         @id @default(uuid())
   email     String
-  shopId    String   @db.Uuid
-  token     String   @unique
-  role      Role     @default(seller)
+  shopId    String         @db.Uuid
+  token     String         @unique
+  role      ShopMemberRole @default(STAFF)
   expiresAt DateTime
-  createdAt DateTime @default(now())
+  createdAt DateTime       @default(now())
 
   shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
 

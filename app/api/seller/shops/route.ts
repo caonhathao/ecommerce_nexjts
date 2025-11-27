@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
 import { requireSeller } from '@/lib/require-role';
+import { ShopMemberRole } from '@/lib/generated/prisma';
 
 const createShopSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -122,7 +123,7 @@ export async function POST(req: Request) {
       data: {
         shopId: shop.id,
         userId: ownerId,
-        role: 'seller',
+        role: ShopMemberRole.STAFF,
       },
     });
 

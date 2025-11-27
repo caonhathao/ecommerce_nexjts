@@ -1,7 +1,10 @@
 'use server';
 
 import nodemailer from 'nodemailer';
-import { renderEmailTemplate } from '@/components/email-template';
+import {
+  renderEmailTemplate,
+  renderShopInviteTemplate,
+} from '@/components/email-template';
 import { env } from './env';
 
 const webName = env.NEXT_PUBLIC_WEB_NAME;
@@ -46,5 +49,38 @@ export async function sendVerificationEmail(to: string, otp: string) {
   } catch (err) {
     console.error('Error sending email via SMTP:', err);
     throw new Error('Error sending email');
+  }
+}
+
+export async function sendShopInvitationEmail(
+  to: string,
+  shopName: string,
+  inviterName: string,
+  invitationLink: string
+) {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('----------------------------------------------');
+    console.log(`📧 MOCK SHOP INVITATION EMAIL TO: ${to}`);
+    console.log(`🏪 SHOP: ${shopName}`);
+    console.log(`👤 INVITER: ${inviterName}`);
+    console.log(`🔗 LINK: ${invitationLink}`);
+    console.log('----------------------------------------------');
+    return;
+  }
+
+  const transporter = createTransporter();
+  const fromAddress = `${webName} <no-reply@localhost>`;
+  const html = renderShopInviteTemplate(shopName, inviterName, invitationLink);
+
+  try {
+    await transporter.sendMail({
+      from: fromAddress,
+      to,
+      subject: `${webName} - You've been invited to join ${shopName}`,
+      html,
+    });
+  } catch (err) {
+    console.error('Error sending shop invitation email:', err);
+    throw new Error('Error sending shop invitation email');
   }
 }

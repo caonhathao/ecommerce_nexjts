@@ -1,5 +1,5 @@
 import { getSessionUser } from '@/lib/auth';
-import { LoginForm } from './_components/login-form';
+import { AuthForm } from './_components/auth-form';
 import { redirect } from 'next/navigation';
 
 type Props = {
@@ -15,5 +15,5 @@ export default async function LoginPage({ searchParams }: Props) {
     redirect(to);
   }
 
-  return <LoginForm />;
+  return <AuthForm />;
 }
