@@ -20,8 +20,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
-type LoginMethod = 'password' | 'otp';
-
 export function LoginFormTab() {
   const router = useRouter();
   const pathname = usePathname();
@@ -30,8 +28,8 @@ export function LoginFormTab() {
   const [githubPending, startGithubTransition] = useTransition();
   const [emailPending, startEmailTransition] = useTransition();
   const [passwordPending, startPasswordTransition] = useTransition();
+  const [resetPasswordPending, startResetPasswordTransition] = useTransition();
 
-  const [loginMethod, setLoginMethod] = useState<LoginMethod>('password');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const t = useTranslations('auth_login_page.login_form_tab');
@@ -46,7 +44,7 @@ export function LoginFormTab() {
             toast.success(t('t_github_success'));
           },
           onError: (error) => {
-            toast.error('Internal Server Error');
+            toast.error(t('t_server_error'));
             console.error('Error signing in with Github:', error);
           },
         },
@@ -61,25 +59,17 @@ export function LoginFormTab() {
     }
 
     startEmailTransition(async () => {
-      const { error } = await authClient.emailOtp.sendVerificationOtp({
-        email: email,
-        type: 'sign-in',
-        fetchOptions: {
-          onSuccess: () => {
-            toast.success(t('t_verify_otp'));
-            router.push(
-              `/auth/verify-request?email=${encodeURIComponent(email)}&type=sign-in&callbackUrl=${encodeURIComponent(pathname + '?' + searchParams.toString())}`
-            );
-          },
-          onError: (e) => {
-            console.error(e);
-            toast.error('Error sending verification code');
-          },
-        },
+      const { data, error } = await authClient.requestPasswordReset({
+        email,
+        redirectTo: '/auth/reset-password',
       });
 
       if (error) {
-        toast.error(error.message || 'Error sending verification code');
+        if (error.status === 429) {
+          toast.error(t('t_too_many_requests'));
+          return;
+        }
+        toast.error(error.message || t('t_verification_error'));
       }
     });
   }
@@ -118,6 +108,39 @@ export function LoginFormTab() {
     });
   }
 
+  async function sendPasswordResetEmail() {
+    if (!email) {
+      toast.error(t('t_reset_email_missing'));
+      return;
+    }
+
+    startResetPasswordTransition(async () => {
+      try {
+        const { error } = await authClient.requestPasswordReset({
+          email,
+          redirectTo: '/auth/reset-password',
+          fetchOptions: {
+            onError: (ctx) => {
+              console.error('Reset password error:', ctx?.error);
+            },
+          },
+        });
+
+        if (error) {
+          toast.error(error.message || t('t_reset_failed'));
+          return;
+        }
+
+        toast.success(t('t_reset_sent'), {
+          description: t('t_reset_sent_desc'),
+        });
+      } catch (err) {
+        console.error('Failed to send reset email:', err);
+        toast.error(t('t_reset_failed'));
+      }
+    });
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -151,11 +174,7 @@ export function LoginFormTab() {
         </div>
 
         {/* Email Login Methods */}
-        <Tabs
-          value={loginMethod}
-          onValueChange={(value) => setLoginMethod(value as LoginMethod)}
-          className="w-full"
-        >
+        <Tabs defaultValue="otp" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="otp">Email OTP</TabsTrigger>
             <TabsTrigger value="password">{t('t_password')}</TabsTrigger>
@@ -164,7 +183,7 @@ export function LoginFormTab() {
           {/* OTP Login */}
           <TabsContent value="otp" className="space-y-4 mt-4">
             <div className="space-y-2">
-              <Label htmlFor="email-otp">Email</Label>
+              <Label htmlFor="email-otp">{t('t_email_label')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -182,9 +201,7 @@ export function LoginFormTab() {
                   }}
                 />
               </div>
-              <p className="text-xs text-muted-foreground">
-                We&apos;ll send you a 6-digit code to sign in
-              </p>
+              <p className="text-xs text-muted-foreground">{t('t_otp_desc')}</p>
             </div>
 
             <Button
@@ -195,12 +212,12 @@ export function LoginFormTab() {
               {emailPending ? (
                 <>
                   <Loader className="w-4 h-4 animate-spin mr-2" />
-                  Sending code...
+                  {t('t_sending_code')}
                 </>
               ) : (
                 <>
                   <Send className="w-4 h-4 mr-2" />
-                  Send Verification Code
+                  {t('t_send_code')}
                 </>
               )}
             </Button>
@@ -209,7 +226,7 @@ export function LoginFormTab() {
           {/* Password Login */}
           <TabsContent value="password" className="space-y-4 mt-4">
             <div className="space-y-2">
-              <Label htmlFor="email-password">Email</Label>
+              <Label htmlFor="email-password">{t('t_email_label')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -217,7 +234,7 @@ export function LoginFormTab() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t('t_email_placeholder')}
                   className="pl-10"
                   disabled={passwordPending}
                   onKeyDown={(e) => {
@@ -235,9 +252,8 @@ export function LoginFormTab() {
                 <Button
                   variant="link"
                   className="px-0 text-xs text-muted-foreground hover:text-primary"
-                  onClick={() => {
-                    toast.info('Password reset feature coming soon!');
-                  }}
+                  disabled={resetPasswordPending}
+                  onClick={sendPasswordResetEmail}
                 >
                   {t('t_forgot_password')}
                 </Button>

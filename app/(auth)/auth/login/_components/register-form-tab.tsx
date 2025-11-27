@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -76,14 +78,14 @@ export function RegisterFormTab() {
         name: values.name,
         fetchOptions: {
           onError: (ctx) => {
-            toast.error('Error registering user');
+            toast.error(t('t_register_error'));
             console.error('Error registering user:', ctx);
           },
         },
       });
 
       if (signUpError) {
-        toast.error(signUpError.message || 'Error registering user');
+        toast.error(signUpError.message || t('t_register_error'));
         return;
       }
 
@@ -98,7 +100,7 @@ export function RegisterFormTab() {
               });
             },
             onError: (ctx) => {
-              toast.error('Error sending verification code');
+              toast.error(t('t_verification_error'));
               console.error('Error sending verification code:', ctx);
             },
           },
@@ -106,7 +108,7 @@ export function RegisterFormTab() {
       );
 
       if (otpError) {
-        toast.error(otpError.message || 'Error sending verification code');
+        toast.error(otpError.message || t('t_verification_error'));
         return;
       }
 
@@ -163,7 +165,7 @@ export function RegisterFormTab() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('t_email_label')}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />

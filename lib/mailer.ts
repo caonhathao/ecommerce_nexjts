@@ -2,7 +2,8 @@
 
 import nodemailer from 'nodemailer';
 import {
-  renderEmailTemplate,
+  renderOtpEmail,
+  renderPasswordResetEmail,
   renderShopInviteTemplate,
 } from '@/components/email-template';
 import { env } from './env';
@@ -37,7 +38,7 @@ export async function sendVerificationEmail(to: string, otp: string) {
   }
   const transporter = createTransporter();
   const fromAddress = `${webName} <no-reply@localhost>`;
-  const html = renderEmailTemplate(otp);
+  const html = renderOtpEmail(otp);
 
   try {
     await transporter.sendMail({
@@ -51,6 +52,38 @@ export async function sendVerificationEmail(to: string, otp: string) {
     throw new Error('Error sending email');
   }
 }
+
+export async function sendPasswordResetEmail(
+  to: string,
+  resetLink: string,
+  userName?: string
+) {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('----------------------------------------------');
+    console.log(`📧 MOCK PASSWORD RESET EMAIL TO: ${to}`);
+    console.log(`👤 USER: ${userName || 'Unknown'}`);
+    console.log(`🔗 RESET LINK: ${resetLink}`);
+    console.log('----------------------------------------------');
+    return;
+  }
+
+  const transporter = createTransporter();
+  const fromAddress = `${webName} <no-reply@localhost>`;
+  const html = renderPasswordResetEmail(resetLink, userName);
+
+  try {
+    await transporter.sendMail({
+      from: fromAddress,
+      to,
+      subject: `${webName} - Reset Your Password`,
+      html,
+    });
+  } catch (err) {
+    console.error('Error sending password reset email:', err);
+    throw new Error('Error sending password reset email');
+  }
+}
+
 
 export async function sendShopInvitationEmail(
   to: string,

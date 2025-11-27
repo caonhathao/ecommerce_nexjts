@@ -1,4 +1,4 @@
-export function renderEmailTemplate(otp: string): string {
+export function renderOtpEmail(otp: string): string {
   return `
     <!doctype html>
     <html lang="en">
@@ -12,10 +12,85 @@ export function renderEmailTemplate(otp: string): string {
         </style>
       </head>
       <body>
-        <h1>Verify your email</h1>
+        <h1>Verify your email or sign in</h1>
         <p>Your verification code:</p>
         <div class="code">${otp}</div>
         <p>If you didn't request this, you can ignore this email.</p>
+      </body>
+    </html>
+  `.trim();
+}
+
+
+export function renderPasswordResetEmail(
+  resetLink: string,
+  userName?: string
+): string {
+  return `
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Reset Your Password</title>
+        <style>
+          body { font-family: Inter, system-ui, -apple-system, sans-serif; color: #111827; padding: 24px; background: #f9fafb; }
+          .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+          .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); padding: 32px 24px; text-align: center; color: #ffffff; }
+          .content { padding: 32px 24px; }
+          .button { display: inline-block; background: #7c3aed; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 24px 0; }
+          .button:hover { background: #6d28d9; }
+          .footer { padding: 16px 24px; background: #f9fafb; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #e5e7eb; }
+          .icon { font-size: 48px; margin-bottom: 16px; }
+          .warning-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 6px; margin: 24px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <div class="icon">🔐</div>
+            <h1 style="margin: 0; font-size: 28px;">Reset Your Password</h1>
+            <p style="margin: 8px 0 0 0; opacity: 0.9;">We received a request to reset your password</p>
+          </div>
+          <div class="content">
+            <p style="font-size: 16px; line-height: 24px; margin-bottom: 16px;">
+              ${userName ? `Hello ${userName},` : 'Hello,'}
+            </p>
+            <p style="font-size: 16px; line-height: 24px;">
+              We received a request to reset the password for your account. Click the button below to create a new password.
+            </p>
+
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="${resetLink}" class="button">Reset Password</a>
+            </div>
+
+            <p style="color: #6b7280; font-size: 14px; margin-top: 24px;">
+              Or copy and paste this link into your browser:
+            </p>
+            <p style="font-size: 12px; word-break: break-all; background: #f9fafb; padding: 12px; border-radius: 4px; color: #6b7280;">
+              ${resetLink}
+            </p>
+
+            <div class="warning-box">
+              <p style="margin: 0; font-weight: 600; color: #92400e; font-size: 14px;">
+                ⚠️ Important Security Information
+              </p>
+              <ul style="margin: 8px 0 0 0; padding-left: 20px; color: #78350f; font-size: 13px; line-height: 20px;">
+                <li>This link will expire in 1 hour</li>
+                <li>For security reasons, this link can only be used once</li>
+                <li>If you didn't request this reset, please ignore this email</li>
+              </ul>
+            </div>
+            
+            <p style="margin-top: 24px; color: #6b7280; font-size: 14px;">
+              If you didn't request a password reset, please ignore this email or contact support if you have concerns about your account security.
+            </p>
+          </div>
+          <div class="footer">
+            <p style="margin: 0;">This is an automated email, please do not reply.</p>
+            <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} All rights reserved.</p>
+          </div>
+        </div>
       </body>
     </html>
   `.trim();

@@ -18,8 +18,10 @@ import { useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Loader, Mail, ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function VerifyRequest() {
+  const t = useTranslations('auth_login_page.verify_request_page');
   const router = useRouter();
   const params = useSearchParams();
   const emailParam = params.get('email');
@@ -45,8 +47,8 @@ export default function VerifyRequest() {
           type: isSignUp ? 'email-verification' : 'sign-in',
           fetchOptions: {
             onSuccess: () => {
-              toast.success('Verification code resent!', {
-                description: 'Please check your email.',
+              toast.success(t('t_resend_success'), {
+                description: t('t_resend_success_desc'),
               });
               setResendCooldown(60);
               const interval = setInterval(() => {
@@ -61,28 +63,28 @@ export default function VerifyRequest() {
             },
             onError: (err) => {
               console.error(err);
-              toast.error('Failed to resend code');
+              toast.error(t('t_resend_failed'));
             },
           },
         });
 
         if (error) {
-          toast.error(error.message || 'Failed to resend code');
+          toast.error(error.message || t('t_resend_failed'));
         }
       } catch (err) {
         console.error('Unexpected error during resend:', err);
-        toast.error('Unexpected error. Please try again.');
+        toast.error(t('t_unexpected_error'));
       }
     });
   };
 
   const verifyOtp = () => {
     if (!email) {
-      toast.error('Email is missing.');
+      toast.error(t('t_email_missing'));
       return;
     }
     if (!isOtpCompleted) {
-      toast.error('Please enter the complete 6-digit code.');
+      toast.error(t('t_code_incomplete'));
       return;
     }
 
@@ -95,19 +97,19 @@ export default function VerifyRequest() {
             otp,
             fetchOptions: {
               onSuccess: () => {
-                toast.success('Email verified successfully!', {
-                  description: 'You can now sign in.',
+                toast.success(t('t_verify_success'), {
+                  description: t('t_verify_success_desc'),
                 });
               },
               onError: (err) => {
                 console.error(err);
-                toast.error('Invalid or expired verification code');
+                toast.error(t('t_invalid_code'));
               },
             },
           });
 
           if (error) {
-            toast.error(error.message || 'Verification failed');
+            toast.error(error.message || t('t_verify_failed'));
             return;
           }
 
@@ -128,17 +130,17 @@ export default function VerifyRequest() {
             otp,
             fetchOptions: {
               onSuccess: () => {
-                toast.success('Signed in successfully!');
+                toast.success(t('t_signin_success'));
               },
               onError: (err) => {
                 console.error(err);
-                toast.error('Invalid or expired code');
+                toast.error(t('t_invalid_code'));
               },
             },
           });
 
           if (error) {
-            toast.error(error.message || 'Sign in failed');
+            toast.error(error.message || t('t_signin_failed'));
             return;
           }
 
@@ -149,7 +151,7 @@ export default function VerifyRequest() {
         }
       } catch (err) {
         console.error('Unexpected error during OTP verification:', err);
-        toast.error('Unexpected error. Please try again.');
+        toast.error(t('t_unexpected_error'));
       }
     });
   };
@@ -174,7 +176,7 @@ export default function VerifyRequest() {
 
           {/* Email Display */}
           <div className="p-3 bg-muted rounded-lg">
-            <p className="text-sm text-muted-foreground">Code sent to:</p>
+            <p className="text-sm text-muted-foreground">{t('t_code_sent')}</p>
             <p className="font-medium text-foreground">{email}</p>
           </div>
         </CardHeader>
@@ -201,7 +203,7 @@ export default function VerifyRequest() {
               </InputOTPGroup>
             </InputOTP>
             <p className="text-xs text-muted-foreground text-center">
-              Enter the 6-digit code from your email
+              {t('t_enter_code')}
             </p>
           </div>
 
@@ -214,18 +216,16 @@ export default function VerifyRequest() {
             {isPending ? (
               <>
                 <Loader className="w-4 h-4 animate-spin mr-2" />
-                Verifying...
+                {t('t_verifying')}
               </>
             ) : (
-              <>{isSignUp ? 'Verify Email' : 'Sign In'}</>
+              <>{isSignUp ? t('t_verify_email_btn') : t('t_sign_in_btn')}</>
             )}
           </Button>
 
           {/* Resend Code */}
           <div className="text-center space-y-2">
-            <p className="text-sm text-muted-foreground">
-              Didn&apos;t receive the code?
-            </p>
+            <p className="text-sm text-muted-foreground">{t('t_no_code')}</p>
             <Button
               variant="link"
               onClick={handleResendOtp}
@@ -233,8 +233,8 @@ export default function VerifyRequest() {
               className="text-primary hover:text-primary/80"
             >
               {resendCooldown > 0
-                ? `Resend in ${resendCooldown}s`
-                : 'Resend Code'}
+                ? `${t('t_resend_in')} ${resendCooldown}s`
+                : t('t_resend_code')}
             </Button>
           </div>
 
@@ -247,7 +247,7 @@ export default function VerifyRequest() {
               disabled={isPending}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Login
+              {t('t_back_to_login')}
             </Button>
           </div>
         </CardContent>
