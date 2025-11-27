@@ -45,7 +45,7 @@ const SearchingBar = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-row items-center gap-0 w-[85%] h-10 overflow-hidden shadow-none border-none rounded-lg pl-4 bg-card m-0"
+          className="flex flex-row items-center gap-0 w-[85%] h-10 overflow-hidden border border-secondary rounded-lg pl-4 bg-card m-0"
         >
           <FormField
             control={form.control}
@@ -70,12 +70,12 @@ const SearchingBar = () => {
             )}
           />
 
-          <Separator orientation="vertical" className="mx-0" />
+          <Separator orientation="vertical" className="mx-0 bg-secondary " />
 
           <Button
             variant="ghost"
             type="submit"
-            className="text-primary h-full rounded-none rounded-r-md px-6 hover:bg-muted hover:text-primary"
+            className="text-primary h-full rounded-none rounded-r-md px-6 hover:bg-muted hover:text-primary cursor-pointer"
           >
             {t('search_button')}
           </Button>

@@ -19,15 +19,19 @@ export const env = createEnv({
     EMAIL_SMTP_PORT: z.string().min(1),
     EMAIL_SMTP_USER: z.string().min(1),
     EMAIL_SMTP_PASS: z.string().min(1),
+    REDIS_URL: z.string().min(1),
+    CRON_SECRET: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_WEB_NAME: z.string().min(1),
+    NEXT_PUBLIC_BASE_URL: z.string().min(1),
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string().min(1),
     NEXT_PUBLIC_PUSHER_KEY: z.string().min(1),
     NEXT_PUBLIC_PUSHER_CLUSTER: z.string().min(1),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_WEB_NAME: process.env.NEXT_PUBLIC_WEB_NAME,
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,

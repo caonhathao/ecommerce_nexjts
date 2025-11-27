@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 import Logo from '@/public/logo.jpg';
+import { env } from '@/lib/env';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
@@ -30,7 +31,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             height={46}
             className="bg-background p-1 rounded-xl"
           />
-          LMS
+          {env.NEXT_PUBLIC_WEB_NAME}
         </Link>
         {children}
 
