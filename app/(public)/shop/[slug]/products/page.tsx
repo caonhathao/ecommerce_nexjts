@@ -2,10 +2,12 @@
 import { Loading } from '@/app/(public)/_components/loading';
 import { ProductItem } from '@/app/(public)/_components/product-item';
 import { fetchData } from '@/funcs/fetch';
+import { paths } from '@/lib/path';
 import {
   productDataResponse,
   productItemType,
 } from '@/types/public.data-types';
+import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import Pagination from '../../_components/pagination';
@@ -14,16 +16,15 @@ const ShopProduct = () => {
   const searchParams = useSearchParams();
   const [data, setData] = useState<productDataResponse | null>(null);
   const [nextPage, setNextPage] = useState<number>(1);
-
+  const t = useTranslations('shop_product_page');
   const filter = searchParams.get('filter');
   const id = searchParams.get('id');
-
   console.log('filter: ', filter);
   console.log('id: ', id);
 
   useEffect(() => {
     fetchData({
-      baseUrl: '/api/product/query',
+      baseUrl: paths.shop.fetch_all,
       params: {
         shopId: id,
         filter: filter,
@@ -35,9 +36,9 @@ const ShopProduct = () => {
   }, [nextPage]);
 
   const titlePage = useMemo(() => {
-    if (filter === 'new') return 'Sẩn phẩm mới';
-    if (filter === 'top') return 'Sản phẩm bán chạy';
-    return 'Tất cả sản phẩm';
+    if (filter === 'new') return 't_title_new';
+    if (filter === 'top') return 't_title_top';
+    return 't_title_all';
   }, [filter]);
 
   if (!data)
@@ -50,7 +51,7 @@ const ShopProduct = () => {
   return (
     <div className="h-fit flex flex-col justify-center items-center gap-3">
       <p className="w-fit text-nowrap font-semibold text-primary">
-        {titlePage}
+        {t(titlePage)}
       </p>
       <div className="w-full grid grid-cols-5 gap-3">
         {data.data.map((value: productItemType, index) => (

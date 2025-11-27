@@ -76,29 +76,29 @@ export function ReviewsClient({
       <div>
         <div className="py-2">
           <p>{t('t_filter_by')}</p>
-          <ul className="flex flex-row justify-start items-start gap-2 py-2">
-            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+          <ul className="flex flex-row justify-start items-start gap-2 py-2 flex-wrap">
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer text-nowrap">
               {t('c_newest')}
             </li>
-            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer text-nowrap">
               {t('c_have_img')}
             </li>
-            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer text-nowrap">
               {t('c_buy_again')}
             </li>
-            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer text-nowrap">
               {t('c_5_stars')}
             </li>
-            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
-              {t('c_5_stars')}
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer text-nowrap">
+              {t('c_4_stars')}
             </li>
-            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer text-nowrap">
               {t('c_3_stars')}
             </li>
-            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer text-nowrap">
               {t('c_2_stars')}
             </li>
-            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer">
+            <li className="p-2 border border-muted-foreground rounded-xl hover:cursor-pointer text-nowrap">
               {t('c_1_star')}
             </li>
           </ul>

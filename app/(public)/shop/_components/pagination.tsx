@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 import { Dispatch, SetStateAction } from 'react';
 import { FaAnglesLeft, FaAnglesRight } from 'react-icons/fa6';
 
@@ -11,6 +12,7 @@ const Pagination = ({
   total: number;
   setNext: Dispatch<SetStateAction<number>>;
 }) => {
+  const t = useTranslations('shop_product_page.pagination');
   return (
     <div className="flex flex-row justify-center items-center gap-3">
       {/* first page button */}
@@ -21,7 +23,7 @@ const Pagination = ({
         className="hover:cursor-pointer"
       >
         <FaAnglesLeft />
-        Trang đầu
+        {t('t_first_page')}
       </Button>
       {total <= 4 ? (
         Array.from({ length: total }).map((_, index) => (
@@ -68,7 +70,7 @@ const Pagination = ({
         className="hover:cursor-pointer"
       >
         <FaAnglesRight />
-        Trang cuối
+        {t('t_lastest_page')}
       </Button>
     </div>
   );

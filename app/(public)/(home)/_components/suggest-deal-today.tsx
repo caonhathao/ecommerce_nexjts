@@ -25,7 +25,7 @@ const sizeClasses = {
 };
 
 export const SuggestDealToday = ({ size }: TopDealItemsProps) => {
-  const t = useTranslations('suggest_deal_today');
+  const t = useTranslations('home_layout.suggest_deal_today');
   const [response, setResponse] = useState<productDataResponse | null>(null);
 
   const gridClass =

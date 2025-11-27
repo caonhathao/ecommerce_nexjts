@@ -1,4 +1,4 @@
 const ShopPage = () => {
-  return <div>shop</div>;
+  return <div className="h-screen">shop</div>;
 };
 export default ShopPage;

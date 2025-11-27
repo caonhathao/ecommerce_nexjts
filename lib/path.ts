@@ -48,6 +48,14 @@ export const paths = {
     },
   },
 
+  reviews: {
+    fetch_all: '/api/reviews',
+  },
+
+  shop: {
+    fetch_all: '/api/product/query',
+  },
+
   seller: {
     shops: {
       create: '/seller/shops/create',
