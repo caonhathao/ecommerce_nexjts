@@ -35,7 +35,7 @@ export const AppSidebar = ({
   const topCategories = categories.filter((cat) => cat.parentId === null);
 
   const t = useTranslations('home_layout.app_sidebar');
-  console.log('top category:', topCategories);
+  //console.log('top category:', topCategories);
 
   return (
     <div className="w-[25%]">

@@ -9,6 +9,59 @@
     "dark_mode": "Tối",
     "system_mode": "Hệ thống"
   },
+  "auth_layout": {
+    "t_back_action": "Quay lại",
+    "t_accepct_1": "Bằng việc click vào, bạn đồng ý với chúng tôi về",
+    "t_term_of_service": "Điều khoản dịch vụ",
+    "t_and": "và",
+    "t_policy": "Quyền riêng tư"
+  },
+  "auth_login_page": {
+    "auth_login_form": {
+      "t_sign_in_action": "Đăng nhập",
+      "t_sign_up_action": "Đăng kí"
+    },
+    "login_form_tab": {
+      "t_github_success": "Đăng nhập bằng Github, bạn sẽ được chuyển hướng...",
+      "t_email_failed_noti": "Vui lòng nhập email của bạn",
+      "t_verify_otp": "Mã OTP đã được gửi đến email của bạn",
+      "t_password_missing": "Vui lòng nhập email và mật khẩu",
+      "t_pasword_success": "Đăng nhập thành công",
+      "t_password_failed": "Email hoặc mật khẩu không khớp",
+      "t_welcome": "Mừng bạn quay lại!",
+      "t_desc": "Đăng nhập vào tài khoản của bạn để tiếp tục",
+      "t_with_github": "Đăng nhập với Github",
+      "t_or": "Hoặc tiếp tục với",
+      "t_password": "Mật khẩu",
+      "t_forgot_password": "Quên mật khẩu?",
+      "t_signing": "Đang đăng nhập...",
+      "t_sign_in_with_password": "Đăng nhập bằng mật khẩu"
+    },
+    "register_form_tab": {
+      "t_name_min_schema": "Tên phải có ít nhất 2 kí tự",
+      "t_name_max_schema": "Tên có tối đa 50 kí tự",
+      "t_name_regex_chema": "Tên chỉ bao gồm kí tự và khoảng cách",
+      "t_email_schema": "Địa chỉ email không hợp lệ",
+      "t_password_min_schema": "Mật khẩu phải có ít nhất 8 kí tự",
+      "t_password_max_schema": "Mật khẩu có tối đa 100 kí tự",
+      "t_password_regex_U_schema": "Mật khẩu phải có ít nhất 1 kí tự in hoa",
+      "t_password_regex_l_schema": "Mật khẩu  phải có ít nhất 1 kí tự in thường",
+      "t_password_regex_n_schema": "Mật khẩu phải có ít nhất 1 số",
+      "t_password_regex_spe_schema": "Mật khẩu phải có ít nhất 1 kí tự đặc biệt",
+      "t_password_match_failed": "Vui lòng xác nhận lại mật khẩu",
+      "t_verify_otp": "Mã OTP đã được gửi đến email của bạn",
+      "t_verify_otp_desc": "Vui lòng kiểm tra hộp thư của bạn",
+
+      "t_create": "Tạo một tài khoản",
+      "t_desc": "Nhập thông tin của bạn để bắt đầu",
+      "t_full_name": "Tên đầy đủ",
+      "t_password": "Mật khẩu",
+      "t_password_desc": "Phải bao gồm kí tự in hoa, kí tự in thường, số & kí tự đặc biệt",
+      "t_password_match": "Nhập lại mật khẩu",
+      "t_registering": "Đang đăng kí...",
+      "t_register_action": "Tạo tài khoản"
+    }
+  },
   "customer": {
     "address": {
       "title": "Địa chỉ của tôi",
@@ -157,7 +210,6 @@
       }
     }
   },
-
   "home_layout": {
     "slogan": "Tốt & Nhanh",
     "electronics": "điện gia dụng",
@@ -318,6 +370,25 @@
     "t_chat": "Trò chuyện",
     "t_response_rate": "Tỉ lệ phản hồi",
     "t_time_response": "Thời gian phản hồi"
+  },
+  "signup_business_page": {
+    "t_title": "Trở thành Đối tác bán hàng",
+    "t_desc": "Tiếp cận hàng triệu khách hàng và phát triển doanh nghiệp của bạn cùng chúng tôi.",
+    "t_slogan_1": "Thu nhập hấp dẫn",
+    "t_slogan_desc_1": "Phí sàn cạnh tranh, thanh toán minh bạch.",
+    "t_slogan_2": "Thanh toán an toàn",
+    "t_slogan_desc_2": "Bảo mật tuyệt đối qua nền tảng Stripe.",
+    "t_slogan_3": "Quản lý dễ dàng",
+    "t_slogan_desc_3": "Dashboard chuyên nghiệp để theo dõi đơn hàng.",
+    "t_invite_speech": "Bạn đã sẵn sàng để bắt đầu kinh doanh? Nhấn nút bên dưới để thiết lập tài khoản thanh toán ngay.",
+    "t_loading": "Đang xử lý...",
+    "t_signup_button": "Đăng ký để bán hàng ở đây",
+    "t_accept_policy": "Bằng việc đăng ký, bạn đồng ý với Điều khoản dịch vụ của chúng tôi."
+  },
+  "not_found_page": {
+    "t_not_found": "Trang không tồn tại",
+    "t_desc": "Trang mà bạn đang tìm kiếm không tồn tại nữa!.",
+    "t_return": "Quay lại"
   },
   "admin_layout": {
     "admin_app_sidebar": {

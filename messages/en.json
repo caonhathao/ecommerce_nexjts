@@ -9,6 +9,58 @@
     "dark_mode": "Dark",
     "system_mode": "System"
   },
+  "auth_layout": {
+    "t_back_action": "Back",
+    "t_accepct_1": "By clicking continue, you agree to our",
+    "t_term_of_service": "Term of service",
+    "t_and": "and",
+    "t_policy": "Privacy Policy"
+  },
+  "auth_login_page": {
+    "auth_login_form": {
+      "t_sign_in_action": "Sign In",
+      "t_sign_up_action": "Sign Up"
+    },
+    "login_form_tab": {
+      "t_github_success": "Logging in with GitHub, redirecting...",
+      "t_email_failed_noti": "Please enter your email",
+      "t_verify_otp": "OTP code has been sent to your email",
+      "t_password_missing": "Please enter email and password",
+      "t_pasword_success": "Login successful",
+      "t_password_failed": "Email or password incorrect",
+      "t_welcome": "Welcome back!",
+      "t_desc": "Login to your account to continue",
+      "t_with_github": "Sign in with GitHub",
+      "t_or": "Or continue with",
+      "t_password": "Password",
+      "t_forgot_password": "Forgot password?",
+      "t_signing": "Signing in...",
+      "t_sign_in_with_password": "Sign in with password"
+    },
+    "register_form_tab": {
+      "t_name_min_schema": "Name must be at least 2 characters",
+      "t_name_max_schema": "Name must be at most 50 characters",
+      "t_name_regex_chema": "Name must contain only letters and spaces",
+      "t_email_schema": "Invalid email address",
+      "t_password_min_schema": "Password must be at least 8 characters",
+      "t_password_max_schema": "Password must be at most 100 characters",
+      "t_password_regex_U_schema": "Password must contain at least 1 uppercase letter",
+      "t_password_regex_l_schema": "Password must contain at least 1 lowercase letter",
+      "t_password_regex_n_schema": "Password must contain at least 1 number",
+      "t_password_regex_spe_schema": "Password must contain at least 1 special character",
+      "t_password_match_failed": "Passwords do not match",
+      "t_verify_otp": "OTP code has been sent to your email",
+      "t_verify_otp_desc": "Please check your inbox",
+      "t_create": "Create an account",
+      "t_desc": "Enter your details to get started",
+      "t_full_name": "Full Name",
+      "t_password": "Password",
+      "t_password_desc": "Must include uppercase, lowercase, number & special char",
+      "t_password_match": "Confirm Password",
+      "t_registering": "Registering...",
+      "t_register_action": "Create Account"
+    }
+  },
   "customer": {
     "address": {
       "title": "My addresses",
@@ -157,7 +209,6 @@
       }
     }
   },
-
   "home_layout": {
     "slogan": "good & fast",
     "electronics": "home appliances",
@@ -319,6 +370,25 @@
     "t_chat": "Chat",
     "t_response_rate": "Response Rate",
     "t_time_response": "Response Time"
+  },
+  "signup_business_page": {
+    "t_title": "Become a Selling Partner",
+    "t_desc": "Reach millions of customers and grow your business with us.",
+    "t_slogan_1": "Attractive Earnings",
+    "t_slogan_desc_1": "Competitive platform fees, transparent payouts.",
+    "t_slogan_2": "Secure Payments",
+    "t_slogan_desc_2": "Absolute security via the Stripe platform.",
+    "t_slogan_3": "Easy Management",
+    "t_slogan_desc_3": "Professional dashboard to track your orders.",
+    "t_invite_speech": "Ready to start your business? Click the button below to set up your payment account now.",
+    "t_loading": "Processing...",
+    "t_signup_button": "Register to Sell Here",
+    "t_accept_policy": "By signing up, you agree to our Terms of Service."
+  },
+  "not_found_page": {
+    "t_not_found": "Page Not Found",
+    "t_desc": "The page you are looking for no longer exists.",
+    "t_return": "Go Back"
   },
   "admin_layout": {
     "admin_app_sidebar": {

@@ -9,6 +9,58 @@
     "dark_mode": "ダーク",
     "system_mode": "システム"
   },
+  "auth_layout": {
+    "t_back_action": "戻る",
+    "t_accepct_1": "クリックすることで、以下に同意したものとみなされます：",
+    "t_term_of_service": "利用規約",
+    "t_and": "および",
+    "t_policy": "プライバシーポリシー"
+  },
+  "auth_login_page": {
+    "auth_login_form": {
+      "t_sign_in_action": "ログイン",
+      "t_sign_up_action": "新規登録"
+    },
+    "login_form_tab": {
+      "t_github_success": "GitHubでログイン中、リダイレクトします...",
+      "t_email_failed_noti": "メールアドレスを入力してください",
+      "t_verify_otp": "OTPコードをメールに送信しました",
+      "t_password_missing": "メールアドレスとパスワードを入力してください",
+      "t_pasword_success": "ログインに成功しました",
+      "t_password_failed": "メールアドレスまたはパスワードが正しくありません",
+      "t_welcome": "おかえりなさい！",
+      "t_desc": "アカウントにログインして続行",
+      "t_with_github": "GitHubでログイン",
+      "t_or": "または",
+      "t_password": "パスワード",
+      "t_forgot_password": "パスワードをお忘れですか？",
+      "t_signing": "ログイン中...",
+      "t_sign_in_with_password": "パスワードでログイン"
+    },
+    "register_form_tab": {
+      "t_name_min_schema": "名前は2文字以上で入力してください",
+      "t_name_max_schema": "名前は50文字以内で入力してください",
+      "t_name_regex_chema": "名前は文字とスペースのみ使用できます",
+      "t_email_schema": "無効なメールアドレスです",
+      "t_password_min_schema": "パスワードは8文字以上必要です",
+      "t_password_max_schema": "パスワードは100文字以内で入力してください",
+      "t_password_regex_U_schema": "パスワードには大文字を1文字以上含める必要があります",
+      "t_password_regex_l_schema": "パスワードには小文字を1文字以上含める必要があります",
+      "t_password_regex_n_schema": "パスワードには数字を1文字以上含める必要があります",
+      "t_password_regex_spe_schema": "パスワードには特殊文字を1文字以上含める必要があります",
+      "t_password_match_failed": "パスワードが一致しません",
+      "t_verify_otp": "OTPコードをメールに送信しました",
+      "t_verify_otp_desc": "メールボックスを確認してください",
+      "t_create": "アカウントを作成",
+      "t_desc": "情報を入力して始めましょう",
+      "t_full_name": "氏名",
+      "t_password": "パスワード",
+      "t_password_desc": "大文字、小文字、数字、特殊文字を含める必要があります",
+      "t_password_match": "パスワード（確認用）",
+      "t_registering": "登録中...",
+      "t_register_action": "アカウント作成"
+    }
+  },
   "customer": {
     "address": {
       "title": "私の住所",
@@ -244,7 +296,6 @@
       "watch_more": "もっと見る"
     }
   },
-
   "product_detail": {
     "t_price_after": "割引適用後の価格",
     "t_sold": "販売済み",
@@ -318,6 +369,25 @@
     "t_chat": "チャット",
     "t_response_rate": "返信率",
     "t_time_response": "返信時間"
+  },
+  "signup_business_page": {
+    "t_title": "販売パートナーになる",
+    "t_desc": "数百万人の顧客にリーチし、私たちと共にビジネスを成長させましょう。",
+    "t_slogan_1": "魅力的な収益",
+    "t_slogan_desc_1": "競争力のある手数料、透明性の高い支払いシステム。",
+    "t_slogan_2": "安全な決済",
+    "t_slogan_desc_2": "Stripeプラットフォームによる万全のセキュリティ。",
+    "t_slogan_3": "簡単な管理",
+    "t_slogan_desc_3": "注文を追跡できるプロ仕様のダッシュボード。",
+    "t_invite_speech": "ビジネスを始める準備はできましたか？下のボタンをクリックして、今すぐ決済アカウントを設定してください。",
+    "t_loading": "処理中...",
+    "t_signup_button": "ここから販売登録する",
+    "t_accept_policy": "登録することで、当社の利用規約に同意したものとみなされます。"
+  },
+  "not_found_page": {
+    "t_not_found": "ページが見つかりません",
+    "t_desc": "お探しのページは存在しないようです。",
+    "t_return": "戻る"
   },
   "admin_layout": {
     "admin_app_sidebar": {
