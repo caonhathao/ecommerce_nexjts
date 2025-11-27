@@ -1,59 +1,58 @@
 import { Button } from '@/components/ui/button';
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from '@/components/ui/card';
 import {
+  Form,
+  FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
-  FormDescription,
-  Form,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User, Mail, Loader, Lock } from 'lucide-react';
+import { Loader, Lock, Mail, User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
 
-const registerSchema = z
-  .object({
-    name: z
-      .string()
-      .min(2, 'Name must be at least 2 characters')
-      .max(50, 'Name must be at most 50 characters')
-      .regex(/^[a-zA-Z\s]+$/, 'Name can only contain letters and spaces'),
-    email: z.email('Invalid email address'),
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters')
-      .max(100, 'Password must be at most 100 characters')
-      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-      .regex(/[0-9]/, 'Password must contain at least one number')
-      .regex(
-        /[^A-Za-z0-9]/,
-        'Password must contain at least one special character'
-      ),
-    confirmPassword: z.string().min(8, 'Please confirm your password'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  });
-
-type RegisterFormData = z.infer<typeof registerSchema>;
-
 export function RegisterFormTab() {
+  const t = useTranslations('auth_login_page.register_form_tab');
+  const registerSchema = z
+    .object({
+      name: z
+        .string()
+        .min(2, t('t_name_min_schema'))
+        .max(50, t('t_name_max_schema'))
+        .regex(/^[a-zA-Z\s]+$/, t('t_name_regex_chema')),
+      email: z.email(t('t_email_schema')),
+      password: z
+        .string()
+        .min(8, t('t_password_min_schema'))
+        .max(100, t('t_password_max_schema'))
+        .regex(/[A-Z]/, t('t_password_regex_U_schema'))
+        .regex(/[a-z]/, t('t_password_regex_l_schema'))
+        .regex(/[0-9]/, t('t_password_regex_n_schema'))
+        .regex(/[^A-Za-z0-9]/, t('t_password_regex_spe_schema')),
+      confirmPassword: z.string().min(8, t('t_password_match_failed')),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: 'Passwords do not match',
+      path: ['confirmPassword'],
+    });
+
+  type RegisterFormData = z.infer<typeof registerSchema>;
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -94,8 +93,8 @@ export function RegisterFormTab() {
           type: 'email-verification',
           fetchOptions: {
             onSuccess: () => {
-              toast.success('Verification code sent to your email!', {
-                description: 'Please check your inbox.',
+              toast.success(t('t_verify_otp'), {
+                description: t('t_verify_otp_desc'),
               });
             },
             onError: (ctx) => {
@@ -128,8 +127,8 @@ export function RegisterFormTab() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl">Create an Account</CardTitle>
-        <CardDescription>Enter your information to get started</CardDescription>
+        <CardTitle className="text-xl">{t('t_create')}</CardTitle>
+        <CardDescription>{t('t_desc')}</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -141,7 +140,7 @@ export function RegisterFormTab() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>{t('t_full_name')}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -188,7 +187,7 @@ export function RegisterFormTab() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t('t_password')}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -202,8 +201,7 @@ export function RegisterFormTab() {
                     </div>
                   </FormControl>
                   <FormDescription className="text-xs">
-                    Must include uppercase, lowercase, number & special
-                    character
+                    {t('t_password_desc')}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -216,7 +214,7 @@ export function RegisterFormTab() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>{t('t_password_match')}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -243,25 +241,14 @@ export function RegisterFormTab() {
               {isLoading ? (
                 <>
                   <Loader className="w-4 h-4 animate-spin mr-2" />
-                  Creating account...
+                  {t('t_registering')}
                 </>
               ) : (
-                'Create Account'
+                t('t_register_action')
               )}
             </Button>
           </form>
         </Form>
-
-        <p className="text-xs text-center text-muted-foreground mt-4">
-          By creating an account, you agree to our{' '}
-          <a href="/terms" className="underline hover:text-primary">
-            Terms of Service
-          </a>{' '}
-          and{' '}
-          <a href="/privacy" className="underline hover:text-primary">
-            Privacy Policy
-          </a>
-        </p>
       </CardContent>
     </Card>
   );

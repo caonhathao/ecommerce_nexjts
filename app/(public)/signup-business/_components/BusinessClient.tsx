@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { Loader2, Store, DollarSign, ShieldCheck } from 'lucide-react';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
-import { delay } from 'effect/Micro';
 import { UserProfileResponseDTO } from '@/types/dtos/user.dto';
+import { delay } from 'effect/Micro';
+import { DollarSign, Loader2, ShieldCheck, Store } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface BusinessClientProps {
   user: UserProfileResponseDTO | null;
@@ -51,7 +52,7 @@ export default function BusinessClient({ user }: BusinessClientProps) {
       setIsLoading(false);
     }
   };
-
+  const t = useTranslations('signup_business_page');
   return (
     <div className="min-h-screen bg-background-darker flex flex-col items-center justify-center p-4">
       <div className="max-w-3xl w-full bg-card rounded-2xl shadow-xl overflow-hidden">
@@ -59,13 +60,8 @@ export default function BusinessClient({ user }: BusinessClientProps) {
           <div className="mx-auto bg-primary/80 w-16 h-16 rounded-full flex items-center justify-center mb-4">
             <Store size={32} />
           </div>
-          <h1 className="text-3xl font-bold mb-2">
-            Trở thành Đối tác bán hàng
-          </h1>
-          <p className="text-primary-foreground/80">
-            Tiếp cận hàng triệu khách hàng và phát triển doanh nghiệp của bạn
-            cùng chúng tôi.
-          </p>
+          <h1 className="text-3xl font-bold mb-2">{t('t_title')}</h1>
+          <p className="text-primary-foreground/80">{t('t_desc')}</p>
         </div>
 
         <div className="p-8 grid md:grid-cols-3 gap-6 text-center border-b border-border">
@@ -73,37 +69,34 @@ export default function BusinessClient({ user }: BusinessClientProps) {
             <div className="mx-auto w-10 h-10 bg-success/20 text-success rounded-full flex items-center justify-center mb-3">
               <DollarSign size={20} />
             </div>
-            <h3 className="font-semibold text-foreground">Thu nhập hấp dẫn</h3>
+            <h3 className="font-semibold text-foreground">{t('t_slogan_1')}</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Phí sàn cạnh tranh, thanh toán minh bạch.
+              {t('t_slogan_desc_1')}
             </p>
           </div>
           <div className="p-4">
             <div className="mx-auto w-10 h-10 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-3">
               <ShieldCheck size={20} />
             </div>
-            <h3 className="font-semibold text-foreground">
-              Thanh toán an toàn
-            </h3>
+            <h3 className="font-semibold text-foreground">{t('t_slogan_2')}</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Bảo mật tuyệt đối qua nền tảng Stripe.
+              {t('t_slogan_desc_2')}
             </p>
           </div>
           <div className="p-4">
             <div className="mx-auto w-10 h-10 bg-warning/20 text-warning rounded-full flex items-center justify-center mb-3">
               <Store size={20} />
             </div>
-            <h3 className="font-semibold text-foreground">Quản lý dễ dàng</h3>
+            <h3 className="font-semibold text-foreground">{t('t_slogan_3')}</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Dashboard chuyên nghiệp để theo dõi đơn hàng.
+              {t('t_slogan_desc_3')}
             </p>
           </div>
         </div>
 
         <div className="p-8 flex flex-col items-center">
           <p className="text-muted-foreground mb-6 text-center">
-            Bạn đã sẵn sàng để bắt đầu kinh doanh? Nhấn nút bên dưới để thiết
-            lập tài khoản thanh toán ngay.
+            {t('t_invite_speech')}
           </p>
 
           <button
@@ -113,15 +106,15 @@ export default function BusinessClient({ user }: BusinessClientProps) {
           >
             {isLoading ? (
               <>
-                <Loader2 className="animate-spin" /> Đang xử lý...
+                <Loader2 className="animate-spin" /> {t('t_loading')}
               </>
             ) : (
-              'Đăng ký để bán hàng ở đây'
+              t('t_signup_button')
             )}
           </button>
 
           <p className="text-xs text-muted-foreground mt-4">
-            Bằng việc đăng ký, bạn đồng ý với Điều khoản dịch vụ của chúng tôi.
+            {t('t_accept_policy')}
           </p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -7,17 +8,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { AppLoader } from '@/components/ui/loader';
-import { SiGithub } from '@icons-pack/react-simple-icons';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Loader, Send, Lock, Mail } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { AppLoader } from '@/components/ui/loader';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { authClient } from '@/lib/auth-client';
+import { SiGithub } from '@icons-pack/react-simple-icons';
+import { Loader, Lock, Mail, Send } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type LoginMethod = 'password' | 'otp';
 
@@ -33,6 +34,7 @@ export function LoginFormTab() {
   const [loginMethod, setLoginMethod] = useState<LoginMethod>('password');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const t = useTranslations('auth_login_page.login_form_tab');
 
   async function signInWithGithub() {
     startGithubTransition(async () => {
@@ -41,7 +43,7 @@ export function LoginFormTab() {
         callbackURL: '/',
         fetchOptions: {
           onSuccess: () => {
-            toast.success('Signed in with Github, you will be redirected...');
+            toast.success(t('t_github_success'));
           },
           onError: (error) => {
             toast.error('Internal Server Error');
@@ -54,7 +56,7 @@ export function LoginFormTab() {
 
   function signInWithEmailOTP() {
     if (!email) {
-      toast.error('Please enter your email');
+      toast.error(t('t_email_failed_noti'));
       return;
     }
 
@@ -64,7 +66,7 @@ export function LoginFormTab() {
         type: 'sign-in',
         fetchOptions: {
           onSuccess: () => {
-            toast.success('Verification code sent to your email!');
+            toast.success(t('t_verify_otp'));
             router.push(
               `/auth/verify-request?email=${encodeURIComponent(email)}&type=sign-in&callbackUrl=${encodeURIComponent(pathname + '?' + searchParams.toString())}`
             );
@@ -84,7 +86,7 @@ export function LoginFormTab() {
 
   function signInWithPassword() {
     if (!email || !password) {
-      toast.error('Please enter your email and password');
+      toast.error(t('t_password_missing'));
       return;
     }
 
@@ -94,17 +96,17 @@ export function LoginFormTab() {
         password,
         fetchOptions: {
           onSuccess: () => {
-            toast.success('Signed in successfully!');
+            toast.success(t('t_pasword_success'));
           },
           onError: (ctx) => {
             console.error('Sign in error:', ctx);
-            toast.error('Invalid email or password');
+            toast.error(t('t_password_failed'));
           },
         },
       });
 
       if (error) {
-        toast.error(error.message || 'Invalid email or password');
+        toast.error(error.message || t('t_password_failed'));
         return;
       }
 
@@ -119,8 +121,8 @@ export function LoginFormTab() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl">Welcome back!</CardTitle>
-        <CardDescription>Sign in to your account to continue</CardDescription>
+        <CardTitle className="text-xl">{t('t_welcome')}</CardTitle>
+        <CardDescription>{t('t_desc')}</CardDescription>
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
@@ -136,7 +138,7 @@ export function LoginFormTab() {
           ) : (
             <>
               <SiGithub color="currentColor" className="mr-2 size-5" />
-              Sign in with Github
+              {t('t_with_github')}
             </>
           )}
         </Button>
@@ -144,7 +146,7 @@ export function LoginFormTab() {
         {/* Divider */}
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-card px-2 text-muted-foreground">
-            Or continue with
+            {t('t_or')}
           </span>
         </div>
 
@@ -156,7 +158,7 @@ export function LoginFormTab() {
         >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="otp">Email OTP</TabsTrigger>
-            <TabsTrigger value="password">Password</TabsTrigger>
+            <TabsTrigger value="password">{t('t_password')}</TabsTrigger>
           </TabsList>
 
           {/* OTP Login */}
@@ -229,7 +231,7 @@ export function LoginFormTab() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t('t_password')}</Label>
                 <Button
                   variant="link"
                   className="px-0 text-xs text-muted-foreground hover:text-primary"
@@ -237,7 +239,7 @@ export function LoginFormTab() {
                     toast.info('Password reset feature coming soon!');
                   }}
                 >
-                  Forgot password?
+                  {t('t_forgot_password')}
                 </Button>
               </div>
               <div className="relative">
@@ -267,12 +269,12 @@ export function LoginFormTab() {
               {passwordPending ? (
                 <>
                   <Loader className="w-4 h-4 animate-spin mr-2" />
-                  Signing in...
+                  {t('t_signing')}
                 </>
               ) : (
                 <>
                   <Lock className="w-4 h-4 mr-2" />
-                  Sign in with Password
+                  {t('t_sign_in_with_password')}
                 </>
               )}
             </Button>
