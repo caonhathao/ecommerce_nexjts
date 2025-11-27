@@ -1,5 +1,14 @@
+import { formatPrice } from '@/app/(public)/_components/global-function';
 import { getOrderDrafts } from '@/app/actions/order_draft';
-import { PaymentClient } from '@/app/(public)/checkout/component/payment_client';
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import {
   Item,
   ItemActions,
@@ -8,26 +17,19 @@ import {
   ItemMedia,
   ItemTitle,
 } from '@/components/ui/item';
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-  FieldDescription,
-} from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { formatPrice } from '@/app/(public)/_components/global-function';
+import { PaymentClient } from './_components/payment_client';
 
 export default async function CheckoutPage() {
   const { success, draft, error } = await getOrderDrafts();
+  const t = useTranslations('checkout_page');
 
   if (!success || !draft) {
     return (
       <div className="p-6 text-center text-destructive">
-        Lỗi: {error || 'Không tìm thấy đơn hàng'}
+        Lỗi: {error || t('t_not_found_order')}
       </div>
     );
   }
@@ -56,39 +58,41 @@ export default async function CheckoutPage() {
         <div className="col-span-1">
           <FieldGroup>
             <FieldSet>
-              <FieldLegend>Địa chỉ nhận hàng</FieldLegend>
-              <FieldDescription>
-                Vui lòng kiểm tra lại thông tin trước khi thanh toán.
-              </FieldDescription>
+              <FieldLegend>{t('t_address')}</FieldLegend>
+              <FieldDescription>{'t_check_info'}</FieldDescription>
 
               <div className="mt-4 space-y-3">
                 <Field orientation="horizontal">
-                  <FieldLabel className="w-1/4">Người nhận</FieldLabel>
+                  <FieldLabel className="w-1/4">{t('t_receiver')}</FieldLabel>
                   <Input disabled value={shipping.name} />
                 </Field>
 
                 <Field orientation="horizontal">
-                  <FieldLabel className="w-1/4">Số điện thoại</FieldLabel>
+                  <FieldLabel className="w-1/4">
+                    {t('t_number_phone')}
+                  </FieldLabel>
                   <Input disabled value={shipping.phone} />
                 </Field>
 
                 <Field orientation="horizontal">
-                  <FieldLabel className="w-1/4">Địa chỉ</FieldLabel>
+                  <FieldLabel className="w-1/4">
+                    {t('t_house_street')}
+                  </FieldLabel>
                   <Input disabled value={shipping.address} />
                 </Field>
 
                 <Field orientation="horizontal">
-                  <FieldLabel className="w-1/4">Phường/Xã</FieldLabel>
+                  <FieldLabel className="w-1/4">{t('t_ward')}</FieldLabel>
                   <Input disabled value={shipping.ward} />
                 </Field>
 
                 <Field orientation="horizontal">
-                  <FieldLabel className="w-1/4">Quận/Huyện</FieldLabel>
+                  <FieldLabel className="w-1/4">{t('t_district')}</FieldLabel>
                   <Input disabled value={shipping.district} />
                 </Field>
 
                 <Field orientation="horizontal">
-                  <FieldLabel className="w-1/4">Thành phố</FieldLabel>
+                  <FieldLabel className="w-1/4">{t('t_city')}</FieldLabel>
                   <Input disabled value={shipping.city} />
                 </Field>
               </div>
@@ -102,7 +106,7 @@ export default async function CheckoutPage() {
         <div className="col-span-1 flex flex-col gap-4">
           <div className="bg-card rounded-lg shadow-sm p-4">
             <Label className="text-lg font-semibold mb-2 block text-foreground">
-              Danh sách sản phẩm
+              {t('t_list_item')}
             </Label>
 
             <div className="divide-y divide-border max-h-[260px] overflow-y-auto pr-2">
@@ -131,7 +135,7 @@ export default async function CheckoutPage() {
                   <ItemActions>
                     <div className="flex flex-col items-end text-sm gap-2">
                       <p className="text-sm font-medium text-foreground">
-                        Số lượng: {item.quantity}
+                        {t('t_quantity')}: {item.quantity}
                       </p>
                       <p className="font-semibold text-primary">
                         {formatPrice(item.total)}
@@ -144,27 +148,31 @@ export default async function CheckoutPage() {
 
             <div className="pt-4 mt-4 border-t border-border text-right space-y-1">
               <p className="flex justify-between">
-                <span className="text-base text-foreground">Tạm tính:</span>{' '}
+                <span className="text-base text-foreground">
+                  {t('t_subtotal')}:
+                </span>{' '}
                 <span className="font-medium text-foreground">
                   {formatPrice(draft.itemsTotal.toNumber())}
                 </span>
               </p>
               <p className="flex justify-between">
                 <span className="text-base text-foreground">
-                  Phí vận chuyển:
+                  {t('t_delivery_fee')}:
                 </span>{' '}
                 <span className="font-medium text-foreground">
                   {formatPrice(draft.shippingFee.toNumber())}
                 </span>
               </p>
               <p className="flex justify-between">
-                <span className="text-base text-foreground">Giảm giá:</span>{' '}
+                <span className="text-base text-foreground">
+                  {t('t_discount')}:
+                </span>{' '}
                 <span className="font-medium text-destructive">
                   -{formatPrice(draft.discountTotal.toNumber())}
                 </span>
               </p>
               <p className="text-lg font-semibold flex justify-between text-foreground">
-                Tổng thanh toán:{' '}
+                {t('t_payment')}:{' '}
                 <span className="text-primary">
                   {formatPrice(draft.grandTotal.toNumber())}
                 </span>

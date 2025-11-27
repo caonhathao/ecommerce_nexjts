@@ -389,6 +389,50 @@
     "t_desc": "お探しのページは存在しないようです。",
     "t_return": "戻る"
   },
+  "cart_page": {
+    "t_remove_item_confirm": "この商品を削除してもよろしいですか？",
+    "t_remove_item_failed": "削除に失敗しました。もう一度お試しください。",
+    "t_failed": "エラーが発生しました。もう一度お試しください。",
+    "t_remove_all": "カートを空にしてもよろしいですか？",
+    "t_remove_all_failed": "カートの削除に失敗しました。",
+    "t_select_warning": "注文するには少なくとも1つの商品を選択してください。",
+    "t_pending_payment": "保留中の注文があります。支払いページへ移動します...",
+    "t_direct_payment": "レジへ移動中...",
+    "t_title": "ショッピングカート",
+    "t_select_all": "すべて選択",
+    "t_unit_price": "単価",
+    "t_quantity": "数量",
+    "t_total": "小計",
+    "t_empty_cart": "カートに商品がありません。",
+    "t_promotion": "プロモーション",
+    "t_discount": "直接割引",
+    "t_total_payment": "お支払い合計",
+    "t_by_action": "レジへ進む"
+  },
+  "checkout_page": {
+    "t_not_found_order": "注文が見つかりません",
+    "t_address": "お届け先住所",
+    "t_check_info": "お支払い前に情報を確認してください。",
+    "t_receiver": "受取人名",
+    "t_number_phone": "電話番号",
+    "t_house_street": "番地・建物名",
+    "t_ward": "地区・町村",
+    "t_district": "区・郡",
+    "t_city": "市・県",
+    "t_list_item": "注文商品",
+    "t_quantity": "数量",
+    "t_subtotal": "小計",
+    "t_delivery_fee": "配送料",
+    "t_discount": "割引",
+    "t_payment": "お支払い合計",
+    "payemnt_client": {
+      "t_payemnt_session_failed": "決済セッションを作成できません",
+      "t_payment_direct": "Stripe決済画面へ移動しています...",
+      "t_payment_create_session_failed": "決済セッション作成エラー",
+      "t_processing": "処理中...",
+      "t_payment": "支払う"
+    }
+  },
   "admin_layout": {
     "admin_app_sidebar": {
       "t_quick_access": "クイックアクセス",

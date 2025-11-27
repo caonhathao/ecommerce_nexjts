@@ -1,19 +1,22 @@
 'use client';
 
+import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
 import { Button } from '@/components/ui/button';
-import { useEffect, useRef, useState } from 'react';
-import { TicketIcon, TrashIcon } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useDebounce } from '@/hooks/debounce';
-import { CartType } from '@/types/cart.data-types';
-import Image from 'next/image';
-import { toast } from 'sonner';
-import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
-import { useRouter } from 'next/navigation';
 import { env } from '@/lib/env';
+import { CartType } from '@/types/cart.data-types';
 import { voucher } from '@/types/voucher';
+import { TicketIcon, TrashIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { CiShoppingBasket } from 'react-icons/ci';
+import { toast } from 'sonner';
+import { formatPrice } from '../../_components/global-function';
 
 const emptyCart: CartType = {
   id: '',
@@ -29,7 +32,7 @@ type itemType = {
 
 export default function Cart() {
   const router = useRouter();
-
+  const t = useTranslations('cart_page');
   const [cart, setCart] = useState<CartType>(emptyCart);
   const [loading, setLoading] = useState(true);
   let noItems = false;
@@ -119,7 +122,7 @@ export default function Cart() {
   }, [debouncedUpdates]);
 
   const removeItem = async (variantId: string) => {
-    if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
+    if (!confirm(t('t_remove_item_confirm'))) return;
 
     try {
       const res = await fetch(`/api/cart/${variantId}`, {
@@ -141,16 +144,16 @@ export default function Cart() {
           return newUpdates;
         });
       } else {
-        alert('Xóa thất bại. Vui lòng thử lại.');
+        alert(t('t_remove_item_failed'));
       }
     } catch (err) {
       console.error('Lỗi khi xóa sản phẩm:', err);
-      alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+      alert(t('t_failed'));
     }
   };
 
   const clearCart = async () => {
-    if (!confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')) return;
+    if (!confirm(t('t_remove_all'))) return;
 
     try {
       const res = await fetch('/api/cart', { method: 'DELETE' });
@@ -158,17 +161,17 @@ export default function Cart() {
         setCart((prev: any) => ({ ...prev, items: [] }));
         setPendingUpdates({});
       } else {
-        alert('Xóa giỏ hàng thất bại.');
+        alert(t('t_remove_all_failed'));
       }
     } catch (err) {
       console.error('Lỗi khi xóa giỏ hàng:', err);
-      alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+      alert(t('t_failed'));
     }
   };
 
   const handleCreateDraft = async () => {
     if (selectedItem.length == 0) {
-      toast.warning('Bạn phải chọn ít nhất một sản phẩm để đặt hàng', {
+      toast.warning(t('t_select_warning'), {
         duration: 4000,
         position: 'top-right',
       });
@@ -178,13 +181,10 @@ export default function Cart() {
     try {
       const existing = await getOrderDrafts();
       if (existing.success && existing.draft) {
-        toast.info(
-          'Bạn có đơn hàng đang chờ xử lý. Chuyển đến trang thanh toán...',
-          {
-            duration: 4000,
-            position: 'top-right',
-          }
-        );
+        toast.info(t('t_pending_payment'), {
+          duration: 4000,
+          position: 'top-right',
+        });
         router.push('/checkout');
         return;
       }
@@ -207,7 +207,7 @@ export default function Cart() {
       const res = await createOrderDraft(formData);
 
       if (res.success) {
-        toast.success('Đang chuyển đến trang thanh toán...');
+        toast.success(t('t_direct_payment'));
         router.push('/checkout');
       } else if (!res.success && res.redirectTo) {
         toast.error(res.message, {
@@ -232,8 +232,9 @@ export default function Cart() {
     <div className="min-h-screen w-full bg-background-darker">
       <div className="w-3/4 mx-auto py-6">
         {/* title */}
-        <h1 className="text-xl font-semibold mb-4 text-foreground">
-          🛒 Giỏ hàng
+        <h1 className="text-xl font-semibold mb-4 text-foreground flex flex-row gap-3 justify-start items-center">
+          <CiShoppingBasket size={40} />
+          {t('t_title')}
         </h1>
 
         {/* layout chính */}
@@ -262,17 +263,17 @@ export default function Cart() {
                     }}
                   />
                   <Label htmlFor="choose-all" className="text-foreground">
-                    Chọn tất cả
+                    {t('t_select_all')}
                   </Label>
                 </div>
                 <div className="text-center font-semibold text-foreground">
-                  Đơn giá
+                  {t('t_unit_price')}
                 </div>
                 <div className="text-center font-semibold text-foreground">
-                  Số lượng
+                  {t('t_quantity')}
                 </div>
                 <div className="text-center font-semibold text-foreground">
-                  Thành tiền
+                  {t('t_total')}
                 </div>
                 <div className="text-center">
                   <Button variant="ghost" size="sm" onClick={() => clearCart()}>
@@ -291,7 +292,7 @@ export default function Cart() {
               )}
               {noItems && (
                 <div className="p-4 text-center text-muted-foreground">
-                  Không có sản phẩm trong giỏ hàng.
+                  {t('t_empty_cart')}
                 </div>
               )}
               {cart.items.map((item: any) => (
@@ -346,7 +347,7 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className="text-center text-foreground">
-                    {item.variant.price} ₫
+                    {formatPrice(item.variant.price)}
                   </div>
                   <div className="flex gap-2 items-center justify-center">
                     <Button
@@ -374,7 +375,7 @@ export default function Cart() {
                     </Button>
                   </div>
                   <div className="text-center text-foreground">
-                    {item.quantity * item.variant.price} ₫
+                    {formatPrice(item.quantity * item.variant.price)}
                   </div>
                   <Button
                     variant="ghost"
@@ -395,7 +396,7 @@ export default function Cart() {
             <div className="flex flex-col bg-card rounded-2xl shadow-xs p-4 gap-3">
               <div className="flex items-center gap-3 justify-between">
                 <Label htmlFor="title" className="text-foreground">
-                  Khuyến mãi
+                  {t('t_promotion')}
                 </Label>
                 <Label
                   htmlFor="disable"
@@ -455,7 +456,7 @@ export default function Cart() {
             {/* Payment info */}
             <div className="flex flex-col justify-evenly bg-card rounded-2xl shadow-xs p-4 gap-3">
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-muted-foreground text-sm">Tổng tiền hàng</p>
+                <p className="text-muted-foreground text-sm">{t('t_total')}</p>
                 <p className="text-foreground">
                   {cart.items
                     .filter((item: any) =>
@@ -474,7 +475,7 @@ export default function Cart() {
               </div>
               <div className="flex items-center gap-3 justify-between">
                 <p className="text-muted-foreground text-sm">
-                  Giảm giá trực tiếp
+                  {t('t_discount')}
                 </p>
                 <p className="text-success">
                   -
@@ -496,7 +497,9 @@ export default function Cart() {
               </div>
               <Separator />
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-muted-foreground text-sm">Tổng thanh toán</p>
+                <p className="text-muted-foreground text-sm">
+                  {t('t_total_payment')}
+                </p>
                 <p className="text-destructive font-semibold">
                   {cart.items
                     .filter((item: any) =>
@@ -520,7 +523,7 @@ export default function Cart() {
                 variant="default"
                 className="w-full cursor-pointer"
               >
-                Mua hàng
+                {t('t_by_action')}
               </Button>
             </div>
           </div>
