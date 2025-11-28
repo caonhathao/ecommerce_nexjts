@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { paths } from '@/lib/path';
 import { shopDataResponse, shopItemData } from '@/types/manager.data-types';
 import {
   DragEndEvent,
@@ -333,7 +334,8 @@ const ShopsPage = () => {
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
-        baseUrl="/api/manager/shop/search"
+        baseUrl={paths.manager.shop.search}
+        placeholder={t('t_search_placeholder')}
         setData={setShopList}
         setIsReset={SetIsReset}
         isReset={isReset}

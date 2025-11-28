@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { paths } from '@/lib/path';
 import { userDataResponse, userItemData } from '@/types/manager.data-types';
 import {
   DragEndEvent,
@@ -315,7 +316,8 @@ const UsersPage = () => {
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
-        baseUrl="/api/manager/user/search"
+        baseUrl={paths.manager.user.search}
+        placeholder={t('t_search_placeholder')}
         setData={setUserList}
         setIsReset={SetIsReset}
         isReset={isReset}

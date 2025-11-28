@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ProductItem } from '../../../_components/product-item';
 
 export const SuggestDealToday = () => {
-  const t = useTranslations('suggest_deal_today');
+  const t = useTranslations('home_layout.suggest_deal_today');
   const [response, setResponse] = useState<productDataResponse | null>(null);
 
   useEffect(() => {

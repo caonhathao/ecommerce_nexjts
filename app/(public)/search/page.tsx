@@ -2,7 +2,6 @@
 
 import { ProductItem } from '@/app/(public)/_components/product-item';
 import { SearchFiltersPanel } from '@/app/(public)/search/_components/search-filters-panel';
-import { SearchSortBar } from '@/app/(public)/search/_components/search-sort-bar.tsxsearch-sort-bar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -16,6 +15,7 @@ import {
 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { SearchSortBar } from '@/app/(public)/search/_components/search-sort-bar';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -209,7 +209,7 @@ export default function SearchPage() {
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <span className="text-sm font-medium px-4">
+                    <span className="text-sm font-medium px-4 text-foreground">
                       {pagination.page} / {pagination.totalPages}
                     </span>
                     <Button

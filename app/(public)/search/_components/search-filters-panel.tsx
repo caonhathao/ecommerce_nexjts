@@ -55,7 +55,6 @@ export function SearchFiltersPanel({
 
       <Separator />
 
-      {/* Category List Style (Like Tiki Sidebar) */}
       <div className="space-y-3">
         <h4 className="text-sm font-semibold text-text">Category</h4>
         <div className="flex flex-col space-y-2">
@@ -125,7 +124,6 @@ export function SearchFiltersPanel({
 
       <Separator />
 
-      {/* Service / Supplier (Mockup for visual completeness) */}
       <div className="space-y-3 opacity-60 pointer-events-none">
         <h4 className="text-sm font-semibold text-text">Supplier</h4>
         <div className="space-y-2">

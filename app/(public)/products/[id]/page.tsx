@@ -26,9 +26,11 @@ import { RatingStars } from '../../_components/rating-starts';
 import SlideImg from './_components/slide-img';
 
 import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
+import { ChatButton } from '@/components/chat/chat-button';
 import { authClient } from '@/lib/auth-client';
 import { Prisma } from '@/lib/generated/prisma';
 import { AddToCartRequest } from '@/types/cart.data-types';
+import { voucher } from '@/types/voucher';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -37,9 +39,7 @@ import { TopDealItems } from '../../(home)/_components/top-deal-items';
 import Desc from './_components/desc';
 import { Reviews } from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
-import { ChatButton } from '@/components/chat/chat-button';
 import Decimal = Prisma.Decimal;
-import { voucher } from '@/types/voucher';
 
 interface selectedVariant {
   name: string;
@@ -505,7 +505,7 @@ const DetailPage = () => {
                   <div className="flex flex-row items-center gap-0.5">
                     {data.shop.ratingAvg} <FaStar color="orange" size={15} />
                     <div>
-                      {'('} {data.shop.ratingCount} đánh giá {')'}
+                      {'('} {data.shop.ratingCount} {t('t_review')} {')'}
                     </div>
                   </div>
                 </div>
@@ -513,7 +513,7 @@ const DetailPage = () => {
               <div className="flex flex-row items-center gap-3">
                 <Button variant={'outline'} className="hover:cursor-pointer">
                   <IoChatboxEllipsesOutline color="var(--primary)" />
-                  Chat
+                  {t('t_chat')}
                 </Button>
                 <Button
                   variant={'outline'}
@@ -521,7 +521,7 @@ const DetailPage = () => {
                   className="hover:cursor-pointer"
                 >
                   <MdOutlineStore color="var(--primary)" />
-                  Ghé xem cửa hàng
+                  {t('t_visit')}
                 </Button>
               </div>
             </div>
@@ -559,7 +559,10 @@ const DetailPage = () => {
                   <FaStar color="var(--warning)" size={15} />
                 </p>
                 <Separator orientation="vertical" />
-                <p>{'5.5tr+ đánh giá'}</p>
+                <p>
+                  {'5.5tr+ '}
+                  {t('t_review')}
+                </p>
               </div>
             </div>
             <Separator />

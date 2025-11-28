@@ -17,106 +17,241 @@ import { authClient } from '@/lib/auth-client';
 import { useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
-import { Loader } from 'lucide-react';
+import { Loader, Mail, ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function VerifyRequest() {
+  const t = useTranslations('auth_login_page.verify_request_page');
   const router = useRouter();
   const params = useSearchParams();
   const emailParam = params.get('email');
   const callbackParam = params.get('callbackUrl') || '/';
+  const typeParam = params.get('type'); // 'sign-in' or 'email-verification'
 
   const [otp, setOtp] = useState('');
-  const [emailPending, startEmailTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   const isOtpCompleted = otp.trim().length === 6;
   const email = emailParam || '';
+  const isSignUp = typeParam === 'email-verification';
 
-  function verifyOtp() {
-    if (!email) {
-      toast.error('Email is missing.');
-      return;
-    }
-    if (!isOtpCompleted) {
-      toast.error('Please enter the 6-digit code.');
-      return;
-    }
+  // Resend OTP with cooldown
+  const handleResendOtp = () => {
+    if (resendCooldown > 0) return;
 
-    startEmailTransition(async () => {
+    startTransition(async () => {
       try {
-        const { data, error } = await authClient.signIn.emailOtp({
+        const { error } = await authClient.emailOtp.sendVerificationOtp({
           email,
-          otp,
+          type: isSignUp ? 'email-verification' : 'sign-in',
           fetchOptions: {
             onSuccess: () => {
-              toast.success('Email verified');
+              toast.success(t('t_resend_success'), {
+                description: t('t_resend_success_desc'),
+              });
+              setResendCooldown(60);
+              const interval = setInterval(() => {
+                setResendCooldown((prev) => {
+                  if (prev <= 1) {
+                    clearInterval(interval);
+                    return 0;
+                  }
+                  return prev - 1;
+                });
+              }, 1000);
             },
             onError: (err) => {
               console.error(err);
-              toast.error('Error verifying email/OTP');
+              toast.error(t('t_resend_failed'));
             },
           },
         });
 
-        if (!error) {
-          router.replace(callbackParam);
+        if (error) {
+          toast.error(error.message || t('t_resend_failed'));
+        }
+      } catch (err) {
+        console.error('Unexpected error during resend:', err);
+        toast.error(t('t_unexpected_error'));
+      }
+    });
+  };
+
+  const verifyOtp = () => {
+    if (!email) {
+      toast.error(t('t_email_missing'));
+      return;
+    }
+    if (!isOtpCompleted) {
+      toast.error(t('t_code_incomplete'));
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        if (isSignUp) {
+          // Email verification for sign-up
+          const { data, error } = await authClient.emailOtp.verifyEmail({
+            email,
+            otp,
+            fetchOptions: {
+              onSuccess: () => {
+                toast.success(t('t_verify_success'), {
+                  description: t('t_verify_success_desc'),
+                });
+              },
+              onError: (err) => {
+                console.error(err);
+                toast.error(t('t_invalid_code'));
+              },
+            },
+          });
+
+          if (error) {
+            toast.error(error.message || t('t_verify_failed'));
+            return;
+          }
+
+          // After email verification, sign in the user
+          const signInResult = await authClient.signIn.emailOtp({
+            email,
+            otp,
+          });
+
+          if (!signInResult.error) {
+            router.replace(callbackParam);
+            router.refresh();
+          }
+        } else {
+          // Sign-in with OTP
+          const { data, error } = await authClient.signIn.emailOtp({
+            email,
+            otp,
+            fetchOptions: {
+              onSuccess: () => {
+                toast.success(t('t_signin_success'));
+              },
+              onError: (err) => {
+                console.error(err);
+                toast.error(t('t_invalid_code'));
+              },
+            },
+          });
+
+          if (error) {
+            toast.error(error.message || t('t_signin_failed'));
+            return;
+          }
+
+          if (!error && data) {
+            router.replace(callbackParam);
+            router.refresh();
+          }
         }
       } catch (err) {
         console.error('Unexpected error during OTP verification:', err);
-        toast.error('Unexpected error. Please try again.');
+        toast.error(t('t_unexpected_error'));
       }
     });
-  }
+  };
 
   return (
-    <Card className="w-full mx-auto">
-      <CardHeader className="text-center">
-        <CardTitle className="text-xl">Please check your email</CardTitle>
-        <CardDescription>
-          We have sent a verification email code to your email adress. Please
-          open the email and paste the code below.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="flex flex-col items-center space-y-2">
-          <InputOTP
-            value={otp}
-            onChange={(value) => setOtp(value)}
-            maxLength={6}
-            className="gap-2 flex"
-          >
-            <InputOTPGroup>
-              <InputOTPSlot index={0} />
-              <InputOTPSlot index={1} />
-              <InputOTPSlot index={2} />
-            </InputOTPGroup>
-            <InputOTPGroup>
-              <InputOTPSlot index={3} />
-              <InputOTPSlot index={4} />
-              <InputOTPSlot index={5} />
-            </InputOTPGroup>
-          </InputOTP>
-          <p className="text-sm text-muted-foreground">
-            Enter the 6-digit code sent to your email
-          </p>
-        </div>
+    <div className="w-full max-w-md mx-auto">
+      <Card>
+        <CardHeader className="text-center space-y-4">
+          <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+            <Mail className="w-6 h-6 text-primary" />
+          </div>
+          <div>
+            <CardTitle className="text-xl">
+              {isSignUp ? 'Verify Your Email' : 'Check Your Email'}
+            </CardTitle>
+            <CardDescription className="mt-2">
+              {isSignUp
+                ? 'We sent a verification code to verify your email address.'
+                : 'We sent you a login code to sign in to your account.'}
+            </CardDescription>
+          </div>
 
-        <Button
-          onClick={verifyOtp}
-          disabled={emailPending || !isOtpCompleted}
-          className="w-full"
-        >
-          {emailPending ? (
-            <>
-              <Loader className="size-4 animate-spin" />
-              <span>Loading...</span>
-            </>
-          ) : (
-            <>
-              <p>Verify Request</p>
-            </>
-          )}
-        </Button>
-      </CardContent>
-    </Card>
+          {/* Email Display */}
+          <div className="p-3 bg-muted rounded-lg">
+            <p className="text-sm text-muted-foreground">{t('t_code_sent')}</p>
+            <p className="font-medium text-foreground">{email}</p>
+          </div>
+        </CardHeader>
+
+        <CardContent className="space-y-6">
+          {/* OTP Input */}
+          <div className="flex flex-col items-center space-y-3">
+            <InputOTP
+              value={otp}
+              onChange={(value) => setOtp(value)}
+              maxLength={6}
+              className="gap-2 flex"
+              disabled={isPending}
+            >
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+              </InputOTPGroup>
+              <InputOTPGroup>
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
+            <p className="text-xs text-muted-foreground text-center">
+              {t('t_enter_code')}
+            </p>
+          </div>
+
+          {/* Verify Button */}
+          <Button
+            onClick={verifyOtp}
+            disabled={isPending || !isOtpCompleted}
+            className="w-full"
+          >
+            {isPending ? (
+              <>
+                <Loader className="w-4 h-4 animate-spin mr-2" />
+                {t('t_verifying')}
+              </>
+            ) : (
+              <>{isSignUp ? t('t_verify_email_btn') : t('t_sign_in_btn')}</>
+            )}
+          </Button>
+
+          {/* Resend Code */}
+          <div className="text-center space-y-2">
+            <p className="text-sm text-muted-foreground">{t('t_no_code')}</p>
+            <Button
+              variant="link"
+              onClick={handleResendOtp}
+              disabled={isPending || resendCooldown > 0}
+              className="text-primary hover:text-primary/80"
+            >
+              {resendCooldown > 0
+                ? `${t('t_resend_in')} ${resendCooldown}s`
+                : t('t_resend_code')}
+            </Button>
+          </div>
+
+          {/* Back to Login */}
+          <div className="pt-4 border-t border-border">
+            <Button
+              variant="ghost"
+              className="w-full"
+              onClick={() => router.push('/auth/login')}
+              disabled={isPending}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              {t('t_back_to_login')}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

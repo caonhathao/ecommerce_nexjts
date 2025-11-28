@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { shopData } from '@/types/public.data-types';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
@@ -25,7 +26,7 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
   const params = useParams();
   const [shopData, setShopData] = useState<shopData | null>(null);
   const isMobile = useIsMobile();
-
+  const t = useTranslations('shop_layout');
   const decodedSlug = useMemo(() => {
     return decodeURIComponent(params.slug as string);
   }, [params]);
@@ -78,24 +79,26 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
             {/* show name and rating */}
             <div className="flex flex-col justify-center items-start h-fit">
               <p>{shopData.name}</p>
-              <div className="flex flex-row justify-start items-center gap-2">
+              <div className="flex flex-row justify-start items-center gap-2 text-sm italic">
                 <p className="flex flex-row gap-2 justify-start items-center">
                   {shopData.ratingAvg}{' '}
                   <FaStar size={15} color="var(--warning)" />
                 </p>
                 <Separator orientation="vertical" />
-                <p>{shopData.ratingCount} đánh giá</p>
+                <p>
+                  {shopData.ratingCount} {t('t_review')}
+                </p>
               </div>
             </div>
             {/* buttons action */}
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2">
               <Button variant={'outline'} className="hover:cursor-pointer">
                 <MdOutlineRateReview color="var(--primary)" />
-                Đánh giá
+                {t('t_review')}
               </Button>
               <Button variant={'outline'} className="hover:cursor-pointer">
                 <IoChatboxEllipsesOutline color="var(--primary)" />
-                Chat
+                {t('t_chat')}
               </Button>
             </div>
           </div>
@@ -106,45 +109,45 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
         <NavigationMenu viewport={isMobile}>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Cửa hàng</NavigationMenuTrigger>
+              <NavigationMenuTrigger>{t('t_shop')}</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="w-full">
                   <li className="text-nowrap">
                     <NavigationMenuLink href="#">
-                      Xem đánh giá
+                      {t('c_see_review')}
                     </NavigationMenuLink>
                   </li>
                   <li className="text-nowrap">
                     <NavigationMenuLink href={`/shop/${decodedSlug}`}>
-                      Thông tin chung
+                      {t('c_info_general')}
                     </NavigationMenuLink>
                   </li>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Sản phẩm</NavigationMenuTrigger>
+              <NavigationMenuTrigger>{t('t_product')}</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="w-full">
                   <li className="text-nowrap">
                     <NavigationMenuLink
                       href={`/shop/${decodedSlug}/products?id=${shopData.id}&filter=`}
                     >
-                      Tất cả
+                      {t('c_all')}
                     </NavigationMenuLink>
                   </li>
                   <li className="text-nowrap">
                     <NavigationMenuLink
                       href={`/shop/${decodedSlug}/products?id=${shopData.id}&filter=new`}
                     >
-                      Sản phẩm mới
+                      {t('c_new')}
                     </NavigationMenuLink>
                   </li>
                   <li className="text-nowrap">
                     <NavigationMenuLink
                       href={`/shop/${decodedSlug}/products?id=${shopData.id}&filter=top`}
                     >
-                      Nổi bật
+                      {t('c_special')}
                     </NavigationMenuLink>
                   </li>
                 </ul>
@@ -152,7 +155,7 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink href={`/shop/${decodedSlug}/profile`}>
-                Hô sơ
+                {t('t_profile')}
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>

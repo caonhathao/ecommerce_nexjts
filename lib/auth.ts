@@ -6,7 +6,8 @@ import { admin, emailOTP } from 'better-auth/plugins';
 import { prisma } from '@/lib/db';
 import { headers } from 'next/headers';
 import { nextCookies } from 'better-auth/next-js';
-import { sendVerificationEmail } from '@/lib/mailer';
+import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/mailer';
+import { getUserNameOrEmailPrefix } from '@/lib/utils';
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -21,6 +22,19 @@ export const auth = betterAuth({
     github: {
       clientId: env.AUTH_GITHUB_CLIENT_ID,
       clientSecret: env.AUTH_GITHUB_SECRET,
+    },
+  },
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+    minPasswordLength: 8,
+    requireEmailVerification: true,
+    sendResetPassword: async ({ user, url, token }, request) => {
+      await sendPasswordResetEmail(
+        user.email,
+        url,
+        getUserNameOrEmailPrefix(user)
+      );
     },
   },
   session: {
@@ -59,6 +73,8 @@ export const auth = betterAuth({
       async sendVerificationOTP({ email, otp }) {
         await sendVerificationEmail(email, otp);
       },
+      allowedAttempts: 5,
+      expiresIn: 300, // 5 minutes
     }),
     admin(),
     nextCookies(),

@@ -45,18 +45,18 @@ const SearchingBar = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-row items-center gap-2 w-full border border-gray-300 rounded-2xl p-1 bg-white"
+          className="flex flex-row items-center gap-0 w-[85%] h-10 overflow-hidden border border-secondary rounded-lg pl-4 bg-card m-0"
         >
           <FormField
             control={form.control}
             name="query"
             render={({ field }) => (
-              <FormItem className="flex-1 mb-0">
+              <FormItem className="flex-1 mb-0 bg-card border-none shadow-none">
                 <FormControl>
                   <Input
                     placeholder={t('search_placeholder')}
                     {...field}
-                    className="w-full border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none bg-transparent"
+                    className="w-full border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none !bg-transparent transition-colors file:bg-transparent focus:bg-transparent placeholder:text-muted-foreground [transition:background-color_9999s_ease-in-out_0s]"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
@@ -70,12 +70,12 @@ const SearchingBar = () => {
             )}
           />
 
-          <Separator orientation="vertical" className="h-6" />
+          <Separator orientation="vertical" className="mx-0 bg-secondary " />
 
           <Button
             variant="ghost"
             type="submit"
-            className="text-primary hover:bg-transparent hover:text-blue-600"
+            className="text-primary h-full rounded-none rounded-r-md px-6 hover:bg-muted hover:text-primary cursor-pointer"
           >
             {t('search_button')}
           </Button>

@@ -18,6 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { fetchData } from '@/funcs/fetch';
+import { paths } from '@/lib/path';
 import {
   productDataResponse,
   productItemData,
@@ -46,7 +47,8 @@ import {
   Row,
   Table as TanstackTable,
 } from '@tanstack/react-table';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 /**
  * @interface tabProductProps
@@ -111,21 +113,26 @@ const TabProduct = ({
   DraggableRow,
   handleDragEnd,
 }: tabProductProps) => {
+  const [rows, setRows] = useState<number>(10);
+
+  const t = useTranslations('admin_statistic_page.product_tab');
+
   useEffect(() => {
     const f = async () => {
       const res = await fetchData({
-        baseUrl: '/api/manager/product',
-        params: { page: 1, limit: 10, status: visibilityFilter },
+        baseUrl: paths.manager.product.fetch_all,
+        params: { page: 1, limit: rows, status: visibilityFilter },
         setData: setData,
       });
       if (res) setProductList(res.data);
     };
     f();
-  }, [setData, setProductList, visibilityFilter]);
+  }, [setData, setProductList, rows, visibilityFilter]);
 
-  // useEffect(() => {
-  //   console.log(productList);
-  // }, [productList]);
+  useEffect(() => {
+    //console.log(productList);
+    if (data) setProductList(data.data);
+  }, [productList, data]);
 
   if (!data || !productList) return <Loading />;
 
@@ -174,7 +181,7 @@ const TabProduct = ({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    {t('t_no_product_found')}
                   </TableCell>
                 </TableRow>
               )}
@@ -184,20 +191,21 @@ const TabProduct = ({
       </div>
       <div className="flex items-center justify-between px-4">
         <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} {t('t_of')}{' '}
+          {table.getFilteredRowModel().rows.length} {t('t_rows_selected')}
         </div>
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="hidden items-center gap-2 lg:flex">
             <Label htmlFor="rows-per-page" className="text-sm font-medium">
-              Rows per page
+              {t('t_rows_per_page')}
             </Label>
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
+                setRows(Number(value));
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: {
                     page: 1,
                     limit: Number(value),
@@ -222,7 +230,8 @@ const TabProduct = ({
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center text-sm font-medium">
-            Page {data.pagination.page} of {data.pagination.totalPages}
+            {t('t_page')} {data.pagination.page} {t('t_of')}{' '}
+            {data.pagination.totalPages}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button
@@ -231,10 +240,10 @@ const TabProduct = ({
               onClick={() => {
                 table.setPageIndex(0);
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: {
                     page: 1,
-                    limit: 10,
+                    limit: rows,
                     status: visibilityFilter,
                   },
                   setData,
@@ -252,10 +261,10 @@ const TabProduct = ({
               onClick={() => {
                 table.previousPage();
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: {
                     page: data.pagination.page - 1,
-                    limit: 10,
+                    limit: rows,
                     status: visibilityFilter,
                   },
                   setData,
@@ -273,10 +282,10 @@ const TabProduct = ({
               onClick={() => {
                 table.nextPage();
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: {
                     page: data.pagination.page + 1,
-                    limit: 10,
+                    limit: rows,
                     status: visibilityFilter,
                   },
                   setData,
@@ -294,10 +303,10 @@ const TabProduct = ({
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
                 fetchData({
-                  baseUrl: '/api/manager/product',
+                  baseUrl: paths.manager.product.fetch_all,
                   params: {
                     page: data.pagination.totalPages,
-                    limit: 10,
+                    limit: rows,
                     status: visibilityFilter,
                   },
                   setData,

@@ -1,3 +1,4 @@
+import { deleteFromCloudinary, uploadToCloudinary } from '@/lib/cloudinary';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
@@ -102,37 +103,65 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
 
 export const POST = withAuth(async (userId: string, request: NextRequest) => {
   try {
-    const body = await request.json();
+    const formData = await request.formData();
 
-    const { name, slug, isActive, parentId } = body;
+    // console.log(formData);
 
-    console.log(body);
+    const file = formData.get('image') as File | null;
 
-    if (parentId === '') {
+    if (!file) {
+      return NextResponse.json({
+        success: 400,
+        data: {
+          message: 'Missing file',
+        },
+      });
+    }
+
+    const arrBuffter = await file.arrayBuffer();
+    const buffer = Buffer.from(arrBuffter);
+    const upload = await uploadToCloudinary(buffer, {
+      folder: 'category-images',
+      resource_type: 'image',
+      use_filename: true,
+      unique_filename: true,
+    });
+
+    if (upload.secure_url.length === 0)
+      return NextResponse.json({
+        success: 403,
+        data: {
+          message: 'Upload failed!',
+        },
+      });
+
+    if (formData.get('parentId') === '') {
       const current = await prisma.category.count({
         where: { parentId: null },
       });
 
       const newCategory = await prisma.category.create({
         data: {
-          name: name,
-          slug: slug,
-          isActive: isActive === 'true' ? true : false,
+          name: formData.get('name') as string,
+          slug: formData.get('slug') as string,
+          isActive: formData.get('isActive') === 'true' ? true : false,
           parentId: null,
           position: current - 1,
+          imageUrl: upload.secure_url,
+          publicId: upload.public_id,
         },
       });
 
       if (!newCategory) {
         return NextResponse.json(
           { error: 'Failed to create category' },
-          { status: 500 }
+          { status: 403 }
         );
       }
     } else {
       const parent = await prisma.category.findFirst({
         where: {
-          id: body.parentId,
+          id: formData.get('parentId') as string,
         },
         select: {
           position: true,
@@ -148,17 +177,19 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
 
       const newCategory = await prisma.category.create({
         data: {
-          name: name,
-          slug: slug,
-          isActive: isActive === 'true' ? true : false,
-          parentId: parentId,
+          name: formData.get('name') as string,
+          slug: formData.get('slug') as string,
+          isActive: formData.get('isActive') === 'true' ? true : false,
+          parentId: formData.get('parentId') as string,
           position: parent.position,
+          imageUrl: upload.secure_url,
+          publicId: upload.public_id,
         },
       });
       if (!newCategory) {
         return NextResponse.json(
           { error: 'Failed to create category' },
-          { status: 500 }
+          { status: 403 }
         );
       }
     }
@@ -181,23 +212,79 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
 
 export const PUT = withAuth(async (userId: string, request: NextRequest) => {
   try {
-    const body = await request.json();
-    const { id, name, slug, isActive, parentId } = body;
-    const updatedCategory = await prisma.category.update({
-      where: { id: id },
-      data: {
-        name: name,
-        slug: slug,
-        isActive: isActive === 'true' ? true : false,
-        parentId: parentId === '' ? null : parentId,
-      },
+    const formData = await request.formData();
+
+    // console.log(formData);
+
+    const file = formData.get('image') as File | null;
+
+    const category = await prisma.category.findFirst({
+      where: { id: formData.get('id') as string },
     });
-    if (!updatedCategory) {
-      return NextResponse.json(
-        { error: 'Failed to update category' },
-        { status: 500 }
-      );
+
+    if (!category)
+      return NextResponse.json({
+        success: 400,
+        data: {
+          message: 'Category not found!',
+        },
+      });
+
+    let update;
+    if (file) {
+      if (category.publicId)
+        await deleteFromCloudinary(category.publicId ?? '', {
+          invalidate: true,
+        });
+
+      const arrBuffter = await file.arrayBuffer();
+      const buffer = Buffer.from(arrBuffter);
+      const upload = await uploadToCloudinary(buffer, {
+        folder: 'category-images',
+        resource_type: 'image',
+        use_filename: true,
+        unique_filename: true,
+      });
+
+      //console.log('upload', upload);
+
+      if (upload) {
+        update = await prisma.category.update({
+          where: {
+            id: formData.get('id') as string,
+          },
+          data: {
+            name: formData.get('name') as string,
+            slug: formData.get('slug') as string,
+            publicId: upload.public_id,
+            imageUrl: upload.secure_url,
+            isActive:
+              (formData.get('isActive') as string) === 'true' ? true : false,
+          },
+        });
+      }
+    } else {
+      update = await prisma.category.update({
+        where: {
+          id: formData.get('id') as string,
+        },
+        data: {
+          name: formData.get('name') as string,
+          slug: formData.get('slug') as string,
+          isActive:
+            (formData.get('isActive') as string) === 'true' ? true : false,
+        },
+      });
     }
+
+    if (!update)
+      return NextResponse.json({
+        success: 400,
+        data: {
+          message: 'Update failed!',
+        },
+      });
+
     return NextResponse.json(
       { message: 'Category updated successfully' },
       { status: 200 }
@@ -231,6 +318,10 @@ export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
         { status: 404 }
       );
     }
+    //delete from cloudinary first
+    await deleteFromCloudinary(category.publicId ?? '', {
+      invalidate: true,
+    });
     // Delete the category
     await prisma.category.delete({
       where: { id: categoryId },

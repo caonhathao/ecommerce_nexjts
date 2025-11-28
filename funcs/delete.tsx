@@ -1,22 +1,5 @@
-type QueryParams = Record<string, string | number | boolean | null | undefined>;
-
-export const deleteData = async (baseUrl: string, params: QueryParams) => {
+export const deleteData = async ({ url }: { url: string }) => {
   try {
-    // 1. Build the URL with query parameters
-    const searchParams = new URLSearchParams();
-
-    // Iterate over the params object and append them to the URL
-    Object.entries(params).forEach(([key, value]) => {
-      // Only append if the value is not null or undefined
-      if (value !== null && value !== undefined) {
-        searchParams.append(key, String(value));
-      }
-    });
-
-    // Only add '?' if there are actually parameters
-    const queryString = searchParams.toString();
-    const url = queryString ? `${baseUrl}?${queryString}` : baseUrl;
-
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {

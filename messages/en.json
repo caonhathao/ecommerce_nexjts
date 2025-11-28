@@ -9,6 +9,117 @@
     "dark_mode": "Dark",
     "system_mode": "System"
   },
+  "auth_layout": {
+    "t_back_action": "Back",
+    "t_accepct_1": "By clicking continue, you agree to our",
+    "t_term_of_service": "Term of service",
+    "t_and": "and",
+    "t_policy": "Privacy Policy"
+  },
+  "auth_login_page": {
+    "auth_login_form": {
+      "t_sign_in_action": "Sign In",
+      "t_sign_up_action": "Sign Up"
+    },
+    "login_form_tab": {
+      "t_github_success": "Logging in with GitHub, redirecting...",
+      "t_email_failed_noti": "Please enter your email",
+      "t_verify_otp": "OTP code has been sent to your email",
+      "t_password_missing": "Please enter email and password",
+      "t_pasword_success": "Login successful",
+      "t_password_failed": "Email or password incorrect",
+      "t_welcome": "Welcome back!",
+      "t_desc": "Login to your account to continue",
+      "t_with_github": "Sign in with GitHub",
+      "t_or": "Or continue with",
+      "t_password": "Password",
+      "t_forgot_password": "Forgot password?",
+      "t_signing": "Signing in...",
+      "t_sign_in_with_password": "Sign in with password",
+      "t_email_label": "Email",
+      "t_email_placeholder": "you@example.com",
+      "t_password_placeholder": "••••••••",
+      "t_otp_desc": "We'll send you a 6-digit code to sign in",
+      "t_sending_code": "Sending code...",
+      "t_send_code": "Send Verification Code",
+      "t_reset_email_missing": "Please enter your email first",
+      "t_reset_sent": "Password reset email sent!",
+      "t_reset_sent_desc": "Check your inbox for the reset link.",
+      "t_reset_failed": "Failed to send reset email",
+      "t_server_error": "Internal Server Error",
+      "t_too_many_requests": "Too many requests. Please try again later.",
+      "t_sending_verification": "Sending verification code..."
+    },
+    "register_form_tab": {
+      "t_name_min_schema": "Name must be at least 2 characters",
+      "t_name_max_schema": "Name must be at most 50 characters",
+      "t_name_regex_chema": "Name must contain only letters and spaces",
+      "t_email_schema": "Invalid email address",
+      "t_password_min_schema": "Password must be at least 8 characters",
+      "t_password_max_schema": "Password must be at most 100 characters",
+      "t_password_regex_U_schema": "Password must contain at least 1 uppercase letter",
+      "t_password_regex_l_schema": "Password must contain at least 1 lowercase letter",
+      "t_password_regex_n_schema": "Password must contain at least 1 number",
+      "t_password_regex_spe_schema": "Password must contain at least 1 special character",
+      "t_password_match_failed": "Passwords do not match",
+      "t_verify_otp": "OTP code has been sent to your email",
+      "t_verify_otp_desc": "Please check your inbox",
+      "t_create": "Create an account",
+      "t_desc": "Enter your details to get started",
+      "t_full_name": "Full Name",
+      "t_full_name_placeholder": "John Doe",
+      "t_email_label": "Email",
+      "t_email_placeholder": "you@example.com",
+      "t_password": "Password",
+      "t_password_desc": "Must include uppercase, lowercase, number & special char",
+      "t_password_match": "Confirm Password",
+      "t_password_placeholder": "••••••••",
+      "t_registering": "Registering...",
+      "t_register_action": "Create Account",
+      "t_register_error": "Error registering user",
+      "t_verification_error": "Error sending verification code"
+    },
+    "verify_request_page": {
+      "t_verify_email": "Verify Your Email",
+      "t_check_email": "Check Your Email",
+      "t_verify_desc": "We sent a verification code to verify your email address.",
+      "t_signin_desc": "We sent you a login code to sign in to your account.",
+      "t_code_sent": "Code sent to:",
+      "t_enter_code": "Enter the 6-digit code from your email",
+      "t_verifying": "Verifying...",
+      "t_verify_email_btn": "Verify Email",
+      "t_sign_in_btn": "Sign In",
+      "t_no_code": "Didn't receive the code?",
+      "t_resend_code": "Resend Code",
+      "t_resend_in": "Resend in",
+      "t_back_to_login": "Back to Login",
+      "t_email_missing": "Email is missing.",
+      "t_code_incomplete": "Please enter the complete 6-digit code.",
+      "t_verify_success": "Email verified successfully!",
+      "t_verify_success_desc": "You can now sign in.",
+      "t_signin_success": "Signed in successfully!",
+      "t_invalid_code": "Invalid or expired verification code",
+      "t_verify_failed": "Verification failed",
+      "t_signin_failed": "Sign in failed",
+      "t_resend_success": "Verification code resent!",
+      "t_resend_success_desc": "Please check your email.",
+      "t_resend_failed": "Failed to resend code",
+      "t_unexpected_error": "Unexpected error. Please try again."
+    },
+    "reset_password_page": {
+      "t_title": "Reset Password",
+      "t_desc": "Enter your new password below.",
+      "t_new_password": "New Password",
+      "t_confirm_password": "Confirm Password",
+      "t_password_placeholder": "••••••••",
+      "t_resetting": "Resetting Password...",
+      "t_reset_action": "Reset Password",
+      "t_invalid_token": "Invalid or missing reset token.",
+      "t_reset_failed": "Failed to reset password.",
+      "t_reset_success": "Password reset successfully!",
+      "t_reset_success_desc": "You can now log in with your new password."
+    }
+  },
   "customer": {
     "address": {
       "title": "My addresses",
@@ -63,39 +174,39 @@
       "help": "Customer support",
       "member_badge": "Member"
     },
-      "profile_page": {
-        "title": "Personal information",
-        "fullName": "Full name",
-        "nickname": "Nickname",
-        "birthday": "Birthday",
-        "day": "Day",
-        "month": "Month",
-        "year": "Year",
-        "gender": "Gender",
-        "male": "Male",
-        "female": "Female",
-        "other": "Other",
-        "nationality": "Nationality",
-        "phoneEmailSectionTitle": "Phone number & Email",
-        "phone": "Phone number",
-        "emailForBill": "Email address",
-        "save": "Save changes",
-        "placeholders": {
-          "fullName": "Your full name",
-          "nickname": "Add a nickname",
-          "phone": "Enter phone number",
-          "emailForBill": "Enter Email for Billing",
-          "nationality": "Choose nationality"
-        },
-        "errors": {
-          "fullNameRequired": "Full name is required",
-          "emailInvalid": "Invalid email address",
-          "phoneInvalid": "Invalid phone number"
-        },
-        "toasts": {
-          "saved": "Profile updated successfully",
-          "failed": "Failed to update profile"
-        }
+    "profile_page": {
+      "title": "Personal information",
+      "fullName": "Full name",
+      "nickname": "Nickname",
+      "birthday": "Birthday",
+      "day": "Day",
+      "month": "Month",
+      "year": "Year",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "nationality": "Nationality",
+      "phoneEmailSectionTitle": "Phone number & Email",
+      "phone": "Phone number",
+      "emailForBill": "Email address",
+      "save": "Save changes",
+      "placeholders": {
+        "fullName": "Your full name",
+        "nickname": "Add a nickname",
+        "phone": "Enter phone number",
+        "emailForBill": "Enter Email for Billing",
+        "nationality": "Choose nationality"
+      },
+      "errors": {
+        "fullNameRequired": "Full name is required",
+        "emailInvalid": "Invalid email address",
+        "phoneInvalid": "Invalid phone number"
+      },
+      "toasts": {
+        "saved": "Profile updated successfully",
+        "failed": "Failed to update profile"
+      }
     },
     "orders": {
       "title": "My Orders",
@@ -157,7 +268,6 @@
       }
     }
   },
-
   "home_layout": {
     "slogan": "good & fast",
     "electronics": "home appliances",
@@ -174,7 +284,6 @@
     "return_30_days": "30-day return policy",
     "fast_delivery_2h": "2-hour fast delivery",
     "super_cheap_price": "super cheap price",
-    "category": "Category",
     "book_store": "2T3H Bookstore",
     "house_life": "Home & Living",
     "smartphone": "Smartphones & Tablets",
@@ -198,34 +307,55 @@
     "clock_jewelry": "Watches & Jewelry",
     "balo_vali": "Backpacks & Suitcases",
     "vouchers_services": "Vouchers & Services",
-    "extensions": "Utilities",
-    "promotion": "Card & E-Wallet Offers",
-    "pay_top_up": "Bill Payment & Top-up",
-    "pay_later": "Buy Now, Pay Later"
+
+    "app_sidebar": {
+      "category": "Category",
+      "electronics": "Electronics",
+      "fashion-apparel": "Fashion & Apparel",
+      "home-living": "Home & Living",
+      "beauty-personal-care": "Beauty & Personal Care",
+      "food-beverages": "Food & Beverages",
+      "sports-outdoors": "Sports & Outdoors",
+      "health-wellness": "Health & Wellness",
+      "baby-kids-toys": "Baby, Kids & Toys",
+      "books-movies-games": "Books, Movies & Games",
+      "pet-supplies": "Pet Supplies",
+      "bags-luggage-accessories": "Bags, Luggage & Accessories",
+      "automotive-industrial": "Automotive & Industrial",
+      "office-supplies-stationery": "Office Supplies & Stationery",
+      "diy-tools-hardware": "DIY, Tools & Hardware",
+      "gifts-special-occasions": "Gifts & Special Occasions",
+      "extensions": "Utilities",
+
+      "promotion": "Card & E-Wallet Offers",
+      "pay_top_up": "Bill Payment & Top-up",
+      "pay_later": "Buy Now, Pay Later"
+    },
+    "category_promotion_panel": {
+      "deal_vip": "Exclusive VIP 50% Deal",
+      "super_sale": "Mega Sale — Super Deal 10K",
+      "cheap_morning": "2T3H Morning Cheap Deals",
+      "combo_super_sale": "Super Saving Combo",
+      "trading": "2T3H Trading",
+      "hot_coupon": "Hot Coupons",
+      "holiday": "Holiday Mega Sale",
+      "half_price": "Warehouse Clearance — Half Price",
+      "top_book": "Top Bestselling Books"
+    },
+    "top_deal_items": {
+      "title": "TOP DEAL + SUPER CHEAP",
+      "watch_more": "See More"
+    },
+    "hot_foreign": {
+      "title": "Hot Priced Imported Goods",
+      "watch_more": "See More"
+    },
+    "suggest_deal_today": {
+      "title": "Today's Recommendations",
+      "watch_more": "See More"
+    }
   },
-  "category_promotion_panel": {
-    "deal_vip": "Exclusive VIP 50% Deal",
-    "super_sale": "Mega Sale — Super Deal 10K",
-    "cheap_morning": "2T3H Morning Cheap Deals",
-    "combo_super_sale": "Super Saving Combo",
-    "trading": "2T3H Trading",
-    "hot_coupon": "Hot Coupons",
-    "holiday": "Holiday Mega Sale",
-    "half_price": "Warehouse Clearance — Half Price",
-    "top_book": "Top Bestselling Books"
-  },
-  "top_deal_items": {
-    "title": "TOP DEAL + SUPER CHEAP",
-    "watch_more": "See More"
-  },
-  "hot_foreign": {
-    "title": "Hot Priced Imported Goods",
-    "watch_more": "See More"
-  },
-  "suggest_deal_today": {
-    "title": "Today's Recommendations",
-    "watch_more": "See More"
-  },
+
   "product_detail": {
     "t_price_after": "Price after discount",
     "t_sold": "Sold",
@@ -241,6 +371,9 @@
     "t_slogan_2": "Inspect goods upon delivery",
     "t_slogan_3": "200% refund if proven fake",
     "t_slogan_4": "Free returns up to 365 days. Change of mind allowed.",
+    "t_review": "reivews",
+    "t_chat": "Chat",
+    "t_visit": "Visit store",
     "t_quantity": "Quantity",
     "t_total": "Subtotal",
     "t_buy_action": "Buy Now",
@@ -263,6 +396,101 @@
       "c_2_stars": "2 stars",
       "c_1_star": "1 star",
       "t_more_action": "View More"
+    },
+    "t_chat_will_sellter": "Chat will seller"
+  },
+  "shop_layout": {
+    "t_review": "Reviews",
+    "t_chat": "Chat",
+    "t_shop": "Shop",
+    "c_see_review": "See Reviews",
+    "c_info_general": "General Info",
+    "t_product": "Products",
+    "c_all": "All",
+    "c_new": "New Arrivals",
+    "c_special": "Featured",
+    "t_profile": "Profile"
+  },
+  "shop_product_page": {
+    "t_title_new": "New Arrivals",
+    "t_title_top": "Best Sellers",
+    "t_title_all": "All Products",
+    "pagination": {
+      "t_first_page": "First page",
+      "t_lastest_page": "Last page"
+    }
+  },
+  "shop_profile_page": {
+    "t_main_category": "Main Category",
+    "t_unknow": "Unknown",
+    "t_joined_time": "Joined",
+    "t_delivery": "Ships within",
+    "t_cancel_rate": "Cancellation Rate",
+    "t_chat": "Chat",
+    "t_response_rate": "Response Rate",
+    "t_time_response": "Response Time"
+  },
+  "signup_business_page": {
+    "t_title": "Become a Selling Partner",
+    "t_desc": "Reach millions of customers and grow your business with us.",
+    "t_slogan_1": "Attractive Earnings",
+    "t_slogan_desc_1": "Competitive platform fees, transparent payouts.",
+    "t_slogan_2": "Secure Payments",
+    "t_slogan_desc_2": "Absolute security via the Stripe platform.",
+    "t_slogan_3": "Easy Management",
+    "t_slogan_desc_3": "Professional dashboard to track your orders.",
+    "t_invite_speech": "Ready to start your business? Click the button below to set up your payment account now.",
+    "t_loading": "Processing...",
+    "t_signup_button": "Register to Sell Here",
+    "t_accept_policy": "By signing up, you agree to our Terms of Service."
+  },
+  "not_found_page": {
+    "t_not_found": "Page Not Found",
+    "t_desc": "The page you are looking for no longer exists.",
+    "t_return": "Go Back"
+  },
+  "cart_page": {
+    "t_remove_item_confirm": "Are you sure you want to remove this item?",
+    "t_remove_item_failed": "Failed to remove item. Please try again.",
+    "t_failed": "An error occurred. Please try again.",
+    "t_remove_all": "Are you sure you want to clear your cart?",
+    "t_remove_all_failed": "Failed to clear cart.",
+    "t_select_warning": "You must select at least one item to checkout.",
+    "t_pending_payment": "You have a pending order. Redirecting to payment...",
+    "t_direct_payment": "Redirecting to checkout...",
+    "t_title": "Shopping Cart",
+    "t_select_all": "Select All",
+    "t_unit_price": "Unit Price",
+    "t_quantity": "Quantity",
+    "t_total": "Subtotal",
+    "t_empty_cart": "Your cart is empty.",
+    "t_promotion": "Promotion",
+    "t_discount": "Direct Discount",
+    "t_total_payment": "Total Payment",
+    "t_by_action": "Checkout"
+  },
+  "checkout_page": {
+    "t_not_found_order": "Order not found",
+    "t_address": "Shipping Address",
+    "t_check_info": "Please review your information before payment.",
+    "t_receiver": "Recipient Name",
+    "t_number_phone": "Phone Number",
+    "t_house_street": "House No. / Street",
+    "t_ward": "Ward / Commune",
+    "t_district": "District",
+    "t_city": "City / Province",
+    "t_list_item": "Product List",
+    "t_quantity": "Quantity",
+    "t_subtotal": "Subtotal",
+    "t_delivery_fee": "Shipping Fee",
+    "t_discount": "Discount",
+    "t_payment": "Total Payment",
+    "payemnt_client": {
+      "t_payemnt_session_failed": "Unable to create payment session",
+      "t_payment_direct": "Redirecting to Stripe payment gateway...",
+      "t_payment_create_session_failed": "Error creating payment session",
+      "t_processing": "Processing...",
+      "t_payment": "Pay Now"
     }
   },
   "admin_layout": {
@@ -298,25 +526,27 @@
     "t_search_action": "Search"
   },
   "admin_category_page": {
+    "t_search_placeholder": "Enter search keywords...",
+
     "t_action_noti": "Action",
-    "t_copy_desc_noti": "Copied information successfully!",
-    "t_del_desc_noti": "Deleted product category successfully!",
+    "t_copy_desc_noti": "Information copied successfully!",
+    "t_del_desc_noti": "Product category deleted successfully!",
     "t_action_failed_noti": "Action failed",
     "t_copy_failed_desc_noti": "Failed to copy information!",
     "t_del_failed_desc_noti": "Failed to delete product category!",
     "t_category_name": "Category Name",
     "t_serial": "Order",
-    "t_is_active": "Active",
-    "t_children_count": "Subcategories",
-    "t_created_at": "Created At",
-    "t_updated_at": "Updated At",
+    "t_is_active": "Visibility",
+    "t_children_count": "Subcategories Count",
+    "t_created_at": "Created Date",
+    "t_updated_at": "Updated Date",
     "t_copy_action": "Copy ID",
     "t_del_action": "Delete",
     "t_tab_all": "All",
     "t_tab_active": "Active",
     "t_tab_inactive": "Inactive",
     "t_showing": "Showing",
-    "t_column": "Column",
+    "t_column": "Columns",
     "category_tab": {
       "t_no_category_found": "No categories found",
       "t_of": "of",
@@ -348,6 +578,31 @@
       "t_no_child": "No child categories",
       "t_submit_action": "Save Changes",
       "t_cancel_action": "Cancel"
+    },
+    "category_new_form": {
+      "t_action_noti": "Action",
+      "t_create_desc_noti": "Product category created successfully.",
+      "t_del_desc_noti": "Product category deleted successfully!",
+
+      "t_action_failed_noti": "Action failed",
+      "t_create_failed_desc_noti": "Failed to create category.",
+
+      "t_name_schema": "Name is required",
+      "t_slug_schema": "Slug is required",
+      "t_file_schema": "File size must be less than 200KB",
+
+      "t_new_button": "Create New",
+      "t_new_category": "New Category",
+      "t_desc": "Create a new product category.",
+      "t_name": "Category Name",
+      "t_photo": "Thumbnail",
+      "t_status": "Status",
+      "c_active": "Visible",
+      "c_inactive": "Hidden",
+      "t_parent_category": "Parent Category",
+      "t_belong_category": "Belongs to category",
+      "t_cancel_action": "Cancel",
+      "t_submit_action": "Confirm"
     }
   },
   "admin_product_page": {
@@ -507,21 +762,21 @@
       "t_page": "Page"
     },
     "user_drawer": {
-      "t_process_failed_noti": "Process failed",
-      "t_conn_failed_desc_noti": "Cannot connect to server!",
+      "t_process_failed_noti": "Process Failed",
+      "t_conn_failed_desc_noti": "Could not connect to the server!",
       "t_action_noti": "Action",
       "t_update_desc_noti": "Shop information updated successfully!",
       "t_copy_desc_noti": "Information copied successfully!",
       "t_del_desc_noti": "Shop deleted successfully!",
-      "t_action_failed_noti": "Action failed",
+      "t_action_failed_noti": "Action Failed",
       "t_update_failed_desc_noti": "Failed to update information!",
       "t_copy_failed_desc_noti": "Failed to copy information!",
       "t_del_failed_desc_noti": "Failed to delete shop!",
-      "t_user_name": "Username",
+      "t_user_name": "User Name",
       "t_user_desc": "User Details",
-      "t_shop_owned": "Shop Owner",
+      "t_shop_owned": "Owned Shops",
       "t_no_shop_owned": "None",
-      "t_shop_membership": "Shop Member",
+      "t_shop_membership": "Shop Membership",
       "t_no_shop_membership": "None",
       "t_email": "Email",
       "t_no_verified": "Unverified",
@@ -536,8 +791,8 @@
       "c_male": "Male",
       "c_female": "Female",
       "c_other": "Other",
-      "t_created_at": "Created At",
-      "t_updated_at": "Updated At",
+      "t_created_at": "Created Date",
+      "t_updated_at": "Updated Date",
       "t_banned_status": "Status",
       "t_status_placeholder": "Select status",
       "c_no_banned": "Normal",
@@ -546,6 +801,82 @@
       "t_ban_expired": "Ban Expiration",
       "t_submit_action": "Save Changes",
       "t_cancel_action": "Cancel"
+    }
+  },
+  "admin_statistic_page": {
+    "chart_area_revenue": {
+      "t_title": "Total Revenue",
+      "t_week": "7 days",
+      "t_month": "30 days",
+      "t_3months": "90 days",
+      "t_months": "12 months",
+      "t_data_from": "Data from",
+      "t_most_recent": "most recent"
+    },
+    "chart_order_state_rate": {
+      "t_title": "Order Status Rate",
+      "t_week": "7 days",
+      "t_month": "30 days",
+      "t_3months": "90 days",
+      "t_months": "12 months",
+      "t_data_from": "Data from",
+      "t_most_recent": "most recent",
+      "t_label_1": "Status",
+      "t_label_2": "Pending",
+      "t_label_3": "Paid",
+      "t_label_4": "Processing",
+      "t_label_5": "Cancelled",
+      "t_label_6": "Refunded"
+    },
+    "chart_top_products": {
+      "t_title": "Top Products",
+      "t_week": "7 days",
+      "t_month": "30 days",
+      "t_3months": "90 days",
+      "t_months": "12 months",
+      "t_data_from": "Data from",
+      "t_most_recent": "most recent",
+      "t_label_1": "Quantity"
+    },
+    "product_tab": {
+      "t_no_product_found": "No products found",
+      "t_of": "of",
+      "t_rows_selected": "row(s) selected.",
+      "t_rows_per_page": "Rows per page",
+      "t_page": "Page"
+    },
+    "product_drawer": {
+      "t_process_failed_noti": "Process Failed",
+      "t_conn_failed_desc_noti": "Cannot connect to server!",
+      "t_action_noti": "Action",
+      "t_update_desc_noti": "Category information updated successfully!",
+      "t_copy_desc_noti": "Information copied successfully!",
+      "t_del_desc_noti": "Product deleted successfully!",
+      "t_action_failed_noti": "Action Failed",
+      "t_update_failed_desc_noti": "Failed to update information!",
+      "t_copy_failed_desc_noti": "Failed to copy information!",
+      "t_del_failed_desc_noti": "Failed to delete product!",
+
+      "t_product_desc": "Product Details",
+      "t_shop": "Shop",
+      "t_watch_shop": "View Shop",
+      "t_product_name": "Product Name",
+      "t_copy_action": "Copy ID",
+      "t_del_action": "Delete",
+      "t_origin": "Origin",
+      "t_currency": "Currency",
+      "t_min_price": "Min Price",
+      "t_max_price": "Max Price",
+      "t_visibility": "Visibility",
+      "t_visibility_placeholder": "Select status",
+      "c_public": "Allowed",
+      "c_private": "Pending Approval",
+      "c_unlisted": "Not Allowed",
+      "t_desc": "Description",
+      "t_sku_code": "SKU Code",
+      "t_price": "Price",
+      "t_variant": "Variants",
+      "t_cancel_action": "Close"
     }
   }
 }

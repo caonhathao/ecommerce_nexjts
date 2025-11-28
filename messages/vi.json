@@ -9,6 +9,117 @@
     "dark_mode": "Tối",
     "system_mode": "Hệ thống"
   },
+  "auth_layout": {
+    "t_back_action": "Quay lại",
+    "t_accepct_1": "Bằng việc click vào, bạn đồng ý với chúng tôi về",
+    "t_term_of_service": "Điều khoản dịch vụ",
+    "t_and": "và",
+    "t_policy": "Quyền riêng tư"
+  },
+  "auth_login_page": {
+    "auth_login_form": {
+      "t_sign_in_action": "Đăng nhập",
+      "t_sign_up_action": "Đăng ký"
+    },
+    "login_form_tab": {
+      "t_github_success": "Đăng nhập bằng Github, bạn sẽ được chuyển hướng...",
+      "t_email_failed_noti": "Vui lòng nhập email của bạn",
+      "t_verify_otp": "Mã OTP đã được gửi đến email của bạn",
+      "t_password_missing": "Vui lòng nhập email và mật khẩu",
+      "t_pasword_success": "Đăng nhập thành công",
+      "t_password_failed": "Email hoặc mật khẩu không khớp",
+      "t_welcome": "Mừng bạn quay lại!",
+      "t_desc": "Đăng nhập vào tài khoản của bạn để tiếp tục",
+      "t_with_github": "Đăng nhập với Github",
+      "t_or": "Hoặc tiếp tục với",
+      "t_password": "Mật khẩu",
+      "t_forgot_password": "Quên mật khẩu?",
+      "t_signing": "Đang đăng nhập...",
+      "t_sign_in_with_password": "Đăng nhập bằng mật khẩu",
+      "t_email_label": "Email",
+      "t_email_placeholder": "you@example.com",
+      "t_password_placeholder": "••••••••",
+      "t_otp_desc": "Chúng tôi sẽ gửi mã 6 chữ số để bạn đăng nhập",
+      "t_sending_code": "Đang gửi mã...",
+      "t_send_code": "Gửi mã xác thực",
+      "t_reset_email_missing": "Vui lòng nhập email trước",
+      "t_reset_sent": "Email đặt lại mật khẩu đã được gửi!",
+      "t_reset_sent_desc": "Kiểm tra hộp thư của bạn để lấy liên kết đặt lại.",
+      "t_reset_failed": "Gửi email đặt lại thất bại",
+      "t_server_error": "Lỗi máy chủ nội bộ",
+      "t_too_many_requests": "Quá nhiều yêu cầu. Vui lòng thử lại sau.",
+      "t_sending_verification": "Đang gửi mã xác thực..."
+    },
+    "register_form_tab": {
+      "t_name_min_schema": "Tên phải có ít nhất 2 ký tự",
+      "t_name_max_schema": "Tên có tối đa 50 ký tự",
+      "t_name_regex_chema": "Tên chỉ bao gồm ký tự và khoảng cách",
+      "t_email_schema": "Địa chỉ email không hợp lệ",
+      "t_password_min_schema": "Mật khẩu phải có ít nhất 8 ký tự",
+      "t_password_max_schema": "Mật khẩu có tối đa 100 ký tự",
+      "t_password_regex_U_schema": "Mật khẩu phải có ít nhất 1 ký tự in hoa",
+      "t_password_regex_l_schema": "Mật khẩu phải có ít nhất 1 ký tự in thường",
+      "t_password_regex_n_schema": "Mật khẩu phải có ít nhất 1 số",
+      "t_password_regex_spe_schema": "Mật khẩu phải có ít nhất 1 ký tự đặc biệt",
+      "t_password_match_failed": "Mật khẩu không khớp",
+      "t_verify_otp": "Mã OTP đã được gửi đến email của bạn",
+      "t_verify_otp_desc": "Vui lòng kiểm tra hộp thư của bạn",
+      "t_create": "Tạo một tài khoản",
+      "t_desc": "Nhập thông tin của bạn để bắt đầu",
+      "t_full_name": "Tên đầy đủ",
+      "t_full_name_placeholder": "Nguyễn Văn A",
+      "t_email_label": "Email",
+      "t_email_placeholder": "you@example.com",
+      "t_password": "Mật khẩu",
+      "t_password_desc": "Phải bao gồm ký tự in hoa, ký tự in thường, số & ký tự đặc biệt",
+      "t_password_match": "Nhập lại mật khẩu",
+      "t_password_placeholder": "••••••••",
+      "t_registering": "Đang đăng ký...",
+      "t_register_action": "Tạo tài khoản",
+      "t_register_error": "Lỗi khi đăng ký người dùng",
+      "t_verification_error": "Lỗi khi gửi mã xác thực"
+    },
+    "verify_request_page": {
+      "t_verify_email": "Xác thực Email của bạn",
+      "t_check_email": "Kiểm tra Email của bạn",
+      "t_verify_desc": "Chúng tôi đã gửi mã xác thực để xác minh địa chỉ email của bạn.",
+      "t_signin_desc": "Chúng tôi đã gửi cho bạn mã đăng nhập để truy cập tài khoản.",
+      "t_code_sent": "Mã đã được gửi đến:",
+      "t_enter_code": "Nhập mã 6 chữ số từ email của bạn",
+      "t_verifying": "Đang xác thực...",
+      "t_verify_email_btn": "Xác thực Email",
+      "t_sign_in_btn": "Đăng nhập",
+      "t_no_code": "Không nhận được mã?",
+      "t_resend_code": "Gửi lại mã",
+      "t_resend_in": "Gửi lại sau",
+      "t_back_to_login": "Quay lại Đăng nhập",
+      "t_email_missing": "Thiếu email.",
+      "t_code_incomplete": "Vui lòng nhập đầy đủ mã 6 chữ số.",
+      "t_verify_success": "Email đã được xác thực thành công!",
+      "t_verify_success_desc": "Bạn có thể đăng nhập ngay bây giờ.",
+      "t_signin_success": "Đăng nhập thành công!",
+      "t_invalid_code": "Mã xác thực không hợp lệ hoặc đã hết hạn",
+      "t_verify_failed": "Xác thực thất bại",
+      "t_signin_failed": "Đăng nhập thất bại",
+      "t_resend_success": "Mã xác thực mới đã được gửi!",
+      "t_resend_success_desc": "Vui lòng kiểm tra email của bạn.",
+      "t_resend_failed": "Gửi lại mã thất bại",
+      "t_unexpected_error": "Lỗi không mong đợi. Vui lòng thử lại."
+    },
+    "reset_password_page": {
+      "t_title": "Đặt lại mật khẩu",
+      "t_desc": "Nhập mật khẩu mới của bạn bên dưới.",
+      "t_new_password": "Mật khẩu mới",
+      "t_confirm_password": "Xác nhận mật khẩu",
+      "t_password_placeholder": "••••••••",
+      "t_resetting": "Đang đặt lại mật khẩu...",
+      "t_reset_action": "Đặt lại mật khẩu",
+      "t_invalid_token": "Token đặt lại không hợp lệ hoặc bị thiếu.",
+      "t_reset_failed": "Đặt lại mật khẩu thất bại.",
+      "t_reset_success": "Đặt lại mật khẩu thành công!",
+      "t_reset_success_desc": "Bạn có thể đăng nhập bằng mật khẩu mới ngay bây giờ."
+    }
+  },
   "customer": {
     "address": {
       "title": "Địa chỉ của tôi",
@@ -63,101 +174,100 @@
       "help": "Hỗ trợ khách hàng",
       "member_badge": "Thành viên"
     },
-      "profile_page": {
-        "title": "Thông tin cá nhân",
-        "fullName": "Họ & Tên",
-        "nickname": "Nickname",
-        "birthday": "Ngày sinh",
-        "day": "Ngày",
-        "month": "Tháng",
-        "year": "Năm",
-        "gender": "Giới tính",
-        "male": "Nam",
-        "female": "Nữ",
-        "other": "Khác",
-        "nationality": "Quốc tịch",
-        "phoneEmailSectionTitle": "Số điện thoại & Email",
-        "phone": "Số điện thoại",
-        "emailForBill": "Địa chỉ email cho hóa đơn",
-        "save": "Lưu thay đổi",
-        "placeholders": {
-          "fullName": "Nhập họ & tên",
-          "nickname": "Thêm nickname",
-          "phone": "Nhập số điện thoại",
-          "emailForBill": "Nhập email của bạn",
-          "nationality": "Chọn quốc tịch"
-        },
-        "errors": {
-          "fullNameRequired": "Vui lòng nhập họ & tên",
-          "emailInvalid": "Email không hợp lệ",
-          "phoneInvalid": "Số điện thoại không hợp lệ"
-        },
-        "toasts": {
-          "saved": "Cập nhật hồ sơ thành công",
-          "failed": "Cập nhật hồ sơ thất bại"
-        }
+    "profile_page": {
+      "title": "Thông tin cá nhân",
+      "fullName": "Họ & Tên",
+      "nickname": "Nickname",
+      "birthday": "Ngày sinh",
+      "day": "Ngày",
+      "month": "Tháng",
+      "year": "Năm",
+      "gender": "Giới tính",
+      "male": "Nam",
+      "female": "Nữ",
+      "other": "Khác",
+      "nationality": "Quốc tịch",
+      "phoneEmailSectionTitle": "Số điện thoại & Email",
+      "phone": "Số điện thoại",
+      "emailForBill": "Địa chỉ email cho hóa đơn",
+      "save": "Lưu thay đổi",
+      "placeholders": {
+        "fullName": "Nhập họ & tên",
+        "nickname": "Thêm nickname",
+        "phone": "Nhập số điện thoại",
+        "emailForBill": "Nhập email của bạn",
+        "nationality": "Chọn quốc tịch"
       },
-      "orders": {
-        "title": "Đơn hàng của tôi",
-        "back_to_orders": "Quay lại đơn hàng",
-        "detail_title": "Chi tiết đơn hàng",
-        "placed_on": "Đặt lúc:",
-        "shipping_address": "Địa chỉ giao hàng",
-        "phone": "Số điện thoại",
-        "delivery_method": "Phương thức giao hàng",
-        "delivery_fast": "Nhanh",
-        "delivery_economy": "Giao tiết kiệm",
-        "fulfilled_by": "Đơn vị vận chuyển:",
-        "smart_logistics": "Smart Logistics",
-        "shipping_fee": "Phí vận chuyển",
-        "payment_method": "Phương thức thanh toán",
-        "status_paid": "Trạng thái: Đã thanh toán",
-        "status_cod": "Trạng thái: Thanh toán khi nhận hàng",
-        "variation": "Phân loại",
-        "sold_by": "Bán bởi",
-        "status": {
-          "pending": "Chờ xử lý",
-          "paid": "Đã thanh toán",
-          "processing": "Đang xử lý",
-          "shipped": "Đang vận chuyển",
-          "delivered": "Đã giao",
-          "canceled": "Đã hủy",
-          "refunded": "Đã hoàn tiền"
-        },
-        "tabs": {
-          "all": "Tất cả đơn",
-          "awaiting_payment": "Chờ thanh toán",
-          "processing": "Đang xử lý",
-          "shipped": "Đang vận chuyển",
-          "delivered": "Đã giao",
-          "canceled": "Đã hủy"
-        },
-        "loading": "Đang tải đơn hàng...",
-        "empty_title": "Không tìm thấy đơn hàng",
-        "card": {
-          "order": "Đơn hàng",
-          "status": "Trạng thái",
-          "items": "Số lượng"
-        },
-        "buttons": {
-          "view_detail": "Xem chi tiết",
-          "buy_again": "Mua lại",
-          "write_review": "Viết đánh giá",
-          "return_refund": "Trả hàng / Hoàn tiền",
-          "track_order": "Theo dõi đơn hàng",
-          "chat_with_shop": "Chat với cửa hàng"
-        },
-        "summary": {
-          "subtotal": "Tạm tính",
-          "shipping_fee": "Phí vận chuyển",
-          "shipping_discount": "Giảm phí vận chuyển",
-          "discount": "Giảm giá",
-          "grand_total": "Tổng cộng",
-          "vat_included": "(Đã gồm VAT)"
-        }
+      "errors": {
+        "fullNameRequired": "Vui lòng nhập họ & tên",
+        "emailInvalid": "Email không hợp lệ",
+        "phoneInvalid": "Số điện thoại không hợp lệ"
+      },
+      "toasts": {
+        "saved": "Cập nhật hồ sơ thành công",
+        "failed": "Cập nhật hồ sơ thất bại"
       }
+    },
+    "orders": {
+      "title": "Đơn hàng của tôi",
+      "back_to_orders": "Quay lại đơn hàng",
+      "detail_title": "Chi tiết đơn hàng",
+      "placed_on": "Đặt lúc:",
+      "shipping_address": "Địa chỉ giao hàng",
+      "phone": "Số điện thoại",
+      "delivery_method": "Phương thức giao hàng",
+      "delivery_fast": "Nhanh",
+      "delivery_economy": "Giao tiết kiệm",
+      "fulfilled_by": "Đơn vị vận chuyển:",
+      "smart_logistics": "Smart Logistics",
+      "shipping_fee": "Phí vận chuyển",
+      "payment_method": "Phương thức thanh toán",
+      "status_paid": "Trạng thái: Đã thanh toán",
+      "status_cod": "Trạng thái: Thanh toán khi nhận hàng",
+      "variation": "Phân loại",
+      "sold_by": "Bán bởi",
+      "status": {
+        "pending": "Chờ xử lý",
+        "paid": "Đã thanh toán",
+        "processing": "Đang xử lý",
+        "shipped": "Đang vận chuyển",
+        "delivered": "Đã giao",
+        "canceled": "Đã hủy",
+        "refunded": "Đã hoàn tiền"
+      },
+      "tabs": {
+        "all": "Tất cả đơn",
+        "awaiting_payment": "Chờ thanh toán",
+        "processing": "Đang xử lý",
+        "shipped": "Đang vận chuyển",
+        "delivered": "Đã giao",
+        "canceled": "Đã hủy"
+      },
+      "loading": "Đang tải đơn hàng...",
+      "empty_title": "Không tìm thấy đơn hàng",
+      "card": {
+        "order": "Đơn hàng",
+        "status": "Trạng thái",
+        "items": "Số lượng"
+      },
+      "buttons": {
+        "view_detail": "Xem chi tiết",
+        "buy_again": "Mua lại",
+        "write_review": "Viết đánh giá",
+        "return_refund": "Trả hàng / Hoàn tiền",
+        "track_order": "Theo dõi đơn hàng",
+        "chat_with_shop": "Chat với cửa hàng"
+      },
+      "summary": {
+        "subtotal": "Tạm tính",
+        "shipping_fee": "Phí vận chuyển",
+        "shipping_discount": "Giảm phí vận chuyển",
+        "discount": "Giảm giá",
+        "grand_total": "Tổng cộng",
+        "vat_included": "(Đã gồm VAT)"
+      }
+    }
   },
-
   "home_layout": {
     "slogan": "Tốt & Nhanh",
     "electronics": "điện gia dụng",
@@ -174,7 +284,6 @@
     "return_30_days": "30 ngày đổi trả",
     "fast_delivery_2h": "Giao nhanh 2h",
     "super_cheap_price": "Giá siêu rẻ",
-    "category": "Danh mục",
     "book_store": "Nhà sách 2T3H",
     "house_life": "Nhà Cửa - Đời Sống",
     "smartphone": "Điện Thoại - Máy TÍnh Bảng",
@@ -198,33 +307,53 @@
     "clock_jewelry": "Đồng Hồ và Trang Sức",
     "balo_vali": "Balo và Vali",
     "vouchers_services": "Vouchers - Dịch vụ",
-    "extensions": "Tiện ích",
-    "promotion": "Ưu đãi thẻ, ví",
-    "pay_top_up": " Đóng tiền, nạp thẻ",
-    "pay_later": "Mua trước trả sau"
-  },
-  "category_promotion_panel": {
-    "deal_vip": "Deal riêng 50% VIP",
-    "super_sale": "Sale sập sàn Siêu deal 10k",
-    "cheap_morning": "2T3H sáng nay rẻ",
-    "combo_super_sale": "Combo siêu tiết kiệm",
-    "trading": "2T3H Trading",
-    "hot_coupon": "Coupon siêu hot",
-    "holiday": "Ngày lễ siêu sale",
-    "half_price": "Xả kho giảm nửa giá",
-    "top_book": "Top sách bán chạy"
-  },
-  "top_deal_items": {
-    "title": "TOP DEAL + SIÊU RẺ",
-    "watch_more": "Xem thêm"
-  },
-  "hot_foreign": {
-    "title": "Hàng ngoại giá hot",
-    "watch_more": "Xem thêm"
-  },
-  "suggest_deal_today": {
-    "title": "Gợi ý hôm nay",
-    "watch_more": "Xem thêm"
+
+    "app_sidebar": {
+      "category": "Danh mục",
+      "electronics": "Điện tử",
+      "fashion-apparel": "Thời trang & May mặc",
+      "home-living": "Nhà cửa & Đời sống",
+      "beauty-personal-care": "Làm đẹp & Chăm sóc cá nhân",
+      "food-beverages": "Thực phẩm & Đồ uống",
+      "sports-outdoors": "Thể thao & Dã ngoại",
+      "health-wellness": "Sức khỏe",
+      "baby-kids-toys": "Mẹ & bé, đồ chơi",
+      "books-movies-games": "Sách, Phim & Trò chơi",
+      "pet-supplies": "Chăm sôc thú cưng",
+      "bags-luggage-accessories": "Túi ví & Hành lý",
+      "automotive-industrial": "Ô tô, Xe máy và Thiết bị công nghiệp",
+      "office-supplies-stationery": "Văn phòng phẩm",
+      "diy-tools-hardware": "Công cụ & Sửa chữa nhà cửa",
+      "gifts-special-occasions": "Quà tặng & Tiệc tùng",
+
+      "extensions": "Tiện ích",
+      "promotion": "Ưu đãi thẻ, ví",
+      "pay_top_up": " Đóng tiền, nạp thẻ",
+      "pay_later": "Mua trước trả sau"
+    },
+    "category_promotion_panel": {
+      "deal_vip": "Deal riêng 50% VIP",
+      "super_sale": "Sale sập sàn Siêu deal 10k",
+      "cheap_morning": "2T3H sáng nay rẻ",
+      "combo_super_sale": "Combo siêu tiết kiệm",
+      "trading": "2T3H Trading",
+      "hot_coupon": "Coupon siêu hot",
+      "holiday": "Ngày lễ siêu sale",
+      "half_price": "Xả kho giảm nửa giá",
+      "top_book": "Top sách bán chạy"
+    },
+    "top_deal_items": {
+      "title": "TOP DEAL + SIÊU RẺ",
+      "watch_more": "Xem thêm"
+    },
+    "hot_foreign": {
+      "title": "Hàng ngoại giá hot",
+      "watch_more": "Xem thêm"
+    },
+    "suggest_deal_today": {
+      "title": "Gợi ý hôm nay",
+      "watch_more": "Xem thêm"
+    }
   },
   "product_detail": {
     "t_price_after": "Giá sau áp dụng khuyến mãi",
@@ -240,7 +369,10 @@
     "t_slogan_1": "An tâm mua sắm",
     "t_slogan_2": "Được đồng kiểm khi nhận hàng",
     "t_slogan_3": "Được hoàn tiền 200% nếu là hàng giả",
-    "t_slogan_4": "Đổi trả miển phí lên đén 365 ngày. Được đổi ý.",
+    "t_slogan_4": "Đổi trả miển phí lên đến 365 ngày. Được đổi ý.",
+    "t_review": "đánh giá",
+    "t_chat": "Trò chuyện",
+    "t_visit": "Ghé xem cửa hàng",
     "t_quantity": "Số lượng",
     "t_total": "Tạm tính",
     "t_buy_action": "Mua ngay",
@@ -263,6 +395,101 @@
       "c_2_stars": "2 sao",
       "c_1_star": "1 sao",
       "t_more_action": "Xem Thêm"
+    },
+    "t_chat_will_sellter": "Liên hệ nhà bán hàng"
+  },
+  "shop_layout": {
+    "t_review": "Đánh giá",
+    "t_chat": "Trò chuyện",
+    "t_shop": "Cửa hàng",
+    "c_see_review": "Xem đánh giá",
+    "c_info_general": "Thông tin chung",
+    "t_product": "Sản phẩm",
+    "c_all": "Tất cả",
+    "c_new": "Sản phẩm mới",
+    "c_special": "Nổi bật",
+    "t_profile": "Hô sơ"
+  },
+  "shop_product_page": {
+    "t_title_new": "Sẩn phẩm mới",
+    "t_title_top": "Sản phẩm bán chạy",
+    "t_title_all": "Tất cả sản phẩm",
+    "pagination": {
+      "t_first_page": "Trang đầu",
+      "t_lastest_page": "Trang cuối"
+    }
+  },
+  "shop_profile_page": {
+    "t_main_category": "Danh mục chính",
+    "t_unknow": "Không rõ",
+    "t_joined_time": "Đã tham gia",
+    "t_delivery": "Vận chuyển trong giờ",
+    "t_cancel_rate": "Tỉ lệ hủy hàng",
+    "t_chat": "Trò chuyện",
+    "t_response_rate": "Tỉ lệ phản hồi",
+    "t_time_response": "Thời gian phản hồi"
+  },
+  "signup_business_page": {
+    "t_title": "Trở thành Đối tác bán hàng",
+    "t_desc": "Tiếp cận hàng triệu khách hàng và phát triển doanh nghiệp của bạn cùng chúng tôi.",
+    "t_slogan_1": "Thu nhập hấp dẫn",
+    "t_slogan_desc_1": "Phí sàn cạnh tranh, thanh toán minh bạch.",
+    "t_slogan_2": "Thanh toán an toàn",
+    "t_slogan_desc_2": "Bảo mật tuyệt đối qua nền tảng Stripe.",
+    "t_slogan_3": "Quản lý dễ dàng",
+    "t_slogan_desc_3": "Dashboard chuyên nghiệp để theo dõi đơn hàng.",
+    "t_invite_speech": "Bạn đã sẵn sàng để bắt đầu kinh doanh? Nhấn nút bên dưới để thiết lập tài khoản thanh toán ngay.",
+    "t_loading": "Đang xử lý...",
+    "t_signup_button": "Đăng ký để bán hàng ở đây",
+    "t_accept_policy": "Bằng việc đăng ký, bạn đồng ý với Điều khoản dịch vụ của chúng tôi."
+  },
+  "not_found_page": {
+    "t_not_found": "Trang không tồn tại",
+    "t_desc": "Trang mà bạn đang tìm kiếm không tồn tại nữa!.",
+    "t_return": "Quay lại"
+  },
+  "cart_page": {
+    "t_remove_item_confirm": "Bạn có chắc muốn xóa sản phẩm này?",
+    "t_remove_item_failed": "Xóa thất bại. Vui lòng thử lại.",
+    "t_failed": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "t_remove_all": "Bạn có chắc muốn xóa toàn bộ giỏ hàng?",
+    "t_remove_all_failed": "Xóa giỏ hàng thất bại.",
+    "t_select_warning": "Bạn phải chọn ít nhất một sản phẩm để đặt hàng",
+    "t_pending_payment": "Bạn có đơn hàng đang chờ xử lý. Chuyển đến trang thanh toán...",
+    "t_direct_payment": "Đang chuyển đến trang thanh toán...",
+    "t_title": "Giỏ hàng",
+    "t_select_all": "Chọn tất cả",
+    "t_unit_price": "Đơn giá",
+    "t_quantity": "Số lượng",
+    "t_total": "Thành tiền",
+    "t_empty_cart": "Không có sản phẩm trong giỏ hàng.",
+    "t_promotion": "Khuyến mãi",
+    "t_discount": "Giảm giá trực tiếp",
+    "t_total_payment": "Tổng thanh toán",
+    "t_by_action": "Mua hàng"
+  },
+  "checkout_page": {
+    "t_not_found_order": "Không tìm thấy đơn hàng",
+    "t_address": "Địa chỉ nhận hàng",
+    "t_check_info": "Vui lòng kiểm tra lại thông tin trước khi thanh toán.",
+    "t_receiver": "Người nhận",
+    "t_number_phone": "Số điện thoại",
+    "t_house_street": "Số nhà/đường",
+    "t_ward": "Phường/Xã",
+    "t_district": "Quận/Huyện",
+    "t_city": "Thành phố",
+    "t_list_item": "Danh sách sản phẩm",
+    "t_quantity": "Số lượng",
+    "t_subtotal": "Tạm tính",
+    "t_delivery_fee": "Phí vận chuyển",
+    "t_discount": "Giảm giá",
+    "t_payment": " Tổng thanh toán",
+    "payment_client": {
+      "t_payemnt_session_failed": "Không thể tạo phiên thanh toán",
+      "t_payment_direct": "Đang chuyển đến cổng thanh toán Stripe...",
+      "t_payment_create_session_failed": "Lỗi khi tạo phiên thanh toán",
+      "t_processing": "Đang xử lý...",
+      "t_payment": " Thanh toán"
     }
   },
   "admin_layout": {
@@ -294,10 +521,11 @@
     }
   },
   "admin_search_bar": {
-    "t_search_placeholder": "Nhập ID...",
     "t_search_action": "Tìm kiếm"
   },
   "admin_category_page": {
+    "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
+
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa danh mục sản phẩm thành công!",
@@ -333,6 +561,7 @@
       "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
       "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
       "t_del_failed_desc_noti": "Xóa danh mục sản phẩm không thành công!",
+
       "t_category_desc": "Thông tin chi tiết danh mục",
       "t_category_name": "Tên danh mục",
       "t_copy_action": "Sao chép ID",
@@ -348,9 +577,36 @@
       "t_no_child": "Không có danh mục con",
       "t_submit_action": "Lưu thay đổi",
       "t_cancel_action": "Hủy"
+    },
+    "category_new_form": {
+      "t_action_noti": "Hành động",
+      "t_create_desc_noti": "Đã tạo mới danh mục sản phẩm.",
+      "t_del_desc_noti": "Xóa danh mục sản phẩm thành công!",
+
+      "t_action_failed_noti": "Hành động thất bại",
+      "t_create_failed_desc_noti": "'Không thể tạo mới danh mục.'",
+
+      "t_name_schema": "Tên không được để trống",
+      "t_slug_schema": "Slug không được để trống",
+      "t_file_schema": "Kích thước nhỏ hơn 200KB",
+
+      "t_new_button": "Tạo mới",
+      "t_new_category": "Danh mục mới",
+      "t_desc": "Tạo mới danh mục sản phẩm của bạn.",
+      "t_name": "Tên danh mục",
+      "t_photo": "Ảnh đại diện",
+      "t_status": "Trạng thái",
+      "c_active": "Hiển thị",
+      "c_inactive": "Ẩn",
+      "t_parent_category": "Danh mục cha",
+      "t_belong_category": "Thuộc danh mục",
+      "t_cancel_action": "Hủy",
+      "t_submit_action": "Đồng ý"
     }
   },
   "admin_product_page": {
+    "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
+
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
@@ -412,6 +668,8 @@
     }
   },
   "admin_shop_page": {
+    "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
+
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
@@ -478,6 +736,8 @@
     }
   },
   "admin_user_page": {
+    "t_search_placeholder": "Nhập ID người dùng...",
+
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
@@ -499,6 +759,7 @@
     "t_tab_banned": "Bị khóa",
     "t_showing": "Hiển thị",
     "t_column": "Cột",
+
     "user_tab": {
       "t_no_shop_found": "Không có kết quả",
       "t_of": "của",
@@ -582,6 +843,46 @@
       "t_data_from": "Số liệu từ",
       "t_most_recent": "gần nhất",
       "t_label_1": "Số lượng"
+    },
+    "product_tab": {
+      "t_no_product_found": "Không có sản phẩm nào",
+      "t_of": "của",
+      "t_rows_selected": "số dòng đã chọn.",
+      "t_rows_per_page": "Dòng mỗi trang",
+      "t_page": "Trang"
+    },
+    "product_drawer": {
+      "t_process_failed_noti": "Tiến trình thất bại",
+      "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
+      "t_action_noti": "Hành động",
+      "t_update_desc_noti": "Cập nhật thông tin danh mục thành công!",
+      "t_copy_desc_noti": "Sao chép thông tin thành công!",
+      "t_del_desc_noti": "Xóa sản phẩm thành công!",
+      "t_action_failed_noti": "Hành động thất bại",
+      "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
+      "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
+      "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
+
+      "t_product_desc": "Thông tin chi tiết sản phẩm",
+      "t_shop": "Cửa hàng",
+      "t_watch_shop": "Xem cửa hàng",
+      "t_product_name": "Tên sản phẩm",
+      "t_copy_action": "Sao chép ID",
+      "t_del_action": "Xóa",
+      "t_origin": "Xuất xứ",
+      "t_currency": "Đơn vị tiền tệ",
+      "t_min_price": "Giá tối thiểu",
+      "t_max_price": "Giá tối đa",
+      "t_visibility": "Hiển thị",
+      "t_visibility_placeholder": "Chọn trạng thái",
+      "c_public": "Cho phép",
+      "c_private": "Đang xin phép",
+      "c_unlisted": "Không cho phép",
+      "t_desc": "Mô tả",
+      "t_sku_code": "Mã SKU",
+      "t_price": "Giá",
+      "t_variant": "Sản phẩm con",
+      "t_cancel_action": "Thoát"
     }
   }
 }

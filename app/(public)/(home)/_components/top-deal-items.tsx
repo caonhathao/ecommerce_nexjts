@@ -29,7 +29,7 @@ export const TopDealItems = ({
   size,
   renderSaleValue = true,
 }: TopDealItemsProps) => {
-  const t = useTranslations('top_deal_items');
+  const t = useTranslations('home_layout.top_deal_items');
   const [response, setResponse] = useState<productDataResponse | null>(null);
 
   const gridClass =

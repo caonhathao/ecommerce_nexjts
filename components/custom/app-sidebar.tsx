@@ -31,9 +31,11 @@ const extensions = [
 export const AppSidebar = ({
   ...props
 }: React.ComponentProps<typeof Sidebar>) => {
-  const t = useTranslations('home_layout');
   const { categories, loading, error } = useCategories();
   const topCategories = categories.filter((cat) => cat.parentId === null);
+
+  const t = useTranslations('home_layout.app_sidebar');
+  //console.log('top category:', topCategories);
 
   return (
     <div className="w-[25%]">
@@ -70,7 +72,7 @@ export const AppSidebar = ({
                         color="var(--primary)"
                       />
                     )}
-                    <p className="text-sm">{item.name}</p>
+                    <p className="text-sm">{t(item.slug)}</p>
                   </a>
                 </div>
               ))}

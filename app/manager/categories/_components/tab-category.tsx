@@ -18,6 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { fetchData } from '@/funcs/fetch';
+import { paths } from '@/lib/path';
 import {
   categoryDataResponse,
   categoryItemData,
@@ -122,7 +123,7 @@ const TabCategory = ({
 
   useEffect(() => {
     fetchData({
-      baseUrl: '/api/manager/category',
+      baseUrl: paths.manager.category.fetch_all,
       params: { page: 1, limit: rows, isActive: activeFilter },
       setData: setData,
     });
@@ -206,7 +207,7 @@ const TabCategory = ({
                 setRows(Number(value));
                 table.setPageSize(Number(value));
                 fetchData({
-                  baseUrl: '/api/manager/category',
+                  baseUrl: paths.manager.category.fetch_all,
                   params: {
                     page: 1,
                     limit: Number(value),
@@ -240,7 +241,7 @@ const TabCategory = ({
               onClick={() => {
                 table.setPageIndex(0);
                 fetchData({
-                  baseUrl: '/api/manager/category',
+                  baseUrl: paths.manager.category.fetch_all,
                   params: { page: 1, limit: rows, isActive: activeFilter },
                   setData: setData,
                 });
@@ -257,7 +258,7 @@ const TabCategory = ({
               onClick={() => {
                 table.previousPage();
                 fetchData({
-                  baseUrl: '/api/manager/category',
+                  baseUrl: paths.manager.category.fetch_all,
                   params: {
                     page: data.meta.page - 1,
                     limit: rows,
@@ -278,7 +279,7 @@ const TabCategory = ({
               onClick={() => {
                 table.nextPage();
                 fetchData({
-                  baseUrl: '/api/manager/category',
+                  baseUrl: paths.manager.category.fetch_all,
                   params: {
                     page: data.meta.page + 1,
                     limit: rows,
@@ -299,7 +300,7 @@ const TabCategory = ({
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
                 fetchData({
-                  baseUrl: '/api/manager/category',
+                  baseUrl: paths.manager.category.fetch_all,
                   params: {
                     page: data.meta.totalPages,
                     limit: rows,

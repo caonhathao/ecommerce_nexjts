@@ -66,9 +66,9 @@ export function ConversationList({
               <Link
                 href={chatUrl}
                 key={chat.id}
-                className={`flex items-center gap-3 p-4 hover:bg-gray-100 transition cursor-pointer ${
+                className={`flex items-center gap-3 p-4 hover:bg-muted/10 transition cursor-pointer ${
                   activeId === chat.id
-                    ? 'bg-blue-50 border-r-4 border-blue-500'
+                    ? 'bg-muted border-r-4 border-primary'
                     : ''
                 }`}
               >

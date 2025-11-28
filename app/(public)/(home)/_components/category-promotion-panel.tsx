@@ -39,7 +39,7 @@ const data = [
   },
 ];
 export const CategoryPromotionPanel = () => {
-  const t = useTranslations('category_promotion_panel');
+  const t = useTranslations('home_layout.category_promotion_panel');
   return (
     <div className="w-full flex flex-row justify-evenly items-center bg-background-secondary rounded-lg py-3 overflow-x-auto">
       {data.map((item, index) => (

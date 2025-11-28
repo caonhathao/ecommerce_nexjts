@@ -18,6 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { fetchData } from '@/funcs/fetch';
+import { paths } from '@/lib/path';
 import { userDataResponse, userItemData } from '@/types/manager.data-types';
 import {
   closestCenter,
@@ -118,7 +119,7 @@ const TabUser = ({
   const t = useTranslations('admin_user_page.user_tab');
   useEffect(() => {
     fetchData({
-      baseUrl: '/api/manager/user',
+      baseUrl: paths.manager.user.fetch_all,
       params: { page: 1, limit: rows, lock: statusFilter },
       setData: setData,
     });
@@ -202,7 +203,7 @@ const TabUser = ({
                 table.setPageSize(Number(value));
                 setRows(Number(value));
                 fetchData({
-                  baseUrl: '/api/manager/user',
+                  baseUrl: paths.manager.user.fetch_all,
                   params: {
                     page: 1,
                     limit: Number(value),
@@ -227,7 +228,8 @@ const TabUser = ({
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center text-sm font-medium">
-            Page {data.pagination.page} of {data.pagination.totalPages}
+            {t('t_page')} {data.pagination.page} {t('t_of')}{' '}
+            {data.pagination.totalPages}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button
@@ -236,7 +238,7 @@ const TabUser = ({
               onClick={() => {
                 table.setPageIndex(0);
                 fetchData({
-                  baseUrl: '/api/manager/user',
+                  baseUrl: paths.manager.user.fetch_all,
                   params: { page: 1, limit: rows, isActive: statusFilter },
                   setData: setData,
                 });
@@ -253,7 +255,7 @@ const TabUser = ({
               onClick={() => {
                 table.previousPage();
                 fetchData({
-                  baseUrl: '/api/manager/user',
+                  baseUrl: paths.manager.user.fetch_all,
                   params: {
                     page: data.pagination.page - 1,
                     limit: rows,
@@ -274,7 +276,7 @@ const TabUser = ({
               onClick={() => {
                 table.nextPage();
                 fetchData({
-                  baseUrl: '/api/manager/user',
+                  baseUrl: paths.manager.user.fetch_all,
                   params: {
                     page: data.pagination.page + 1,
                     limit: rows,

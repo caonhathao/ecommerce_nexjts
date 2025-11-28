@@ -1,14 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { createOrder } from '@/app/actions/order';
-import { Button } from '@/components/ui/button';
 
 export const PaymentClient = ({ draftId }: { draftId: string }) => {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const t = useTranslations('checkout_page.payment_client');
 
   const handlePayment = async () => {
     try {
@@ -22,21 +21,18 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || 'Không thể tạo phiên thanh toán');
+        throw new Error(data.error || t('t_payemnt_session_failed'));
       }
 
       if (data.url) {
-        toast.success('Đang chuyển đến cổng thanh toán Stripe...', {
+        toast.success(t('t_payment_direct'), {
           position: 'top-right',
           duration: 3000,
         });
         window.location.href = data.url; // 👉 Redirect sang Stripe Checkout
       }
     } catch (err: any) {
-      toast.error(err.message || 'Lỗi khi tạo phiên thanh toán', {
-        position: 'top-right',
-        duration: 3000,
-      });
+      toast.error(err.message || t('t_payment_create_session_failed'));
     } finally {
       setIsLoading(false);
     }
@@ -48,7 +44,7 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
       disabled={isLoading}
       className="bg-primary text-primary-foreground cursor-pointer px-4 py-2 rounded-lg w-full"
     >
-      {isLoading ? 'Đang xử lý...' : 'Thanh toán '}
+      {isLoading ? t('t_processing') : t('t_payment')}
     </Button>
   );
 };
