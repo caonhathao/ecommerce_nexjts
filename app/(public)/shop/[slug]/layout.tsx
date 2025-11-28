@@ -54,9 +54,9 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
     );
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-3 bg-background my-3">
+    <div className="w-full flex flex-col justify-center items-center gap-3 bg-background-secondary my-3">
       {/* show shop info */}
-      <div className="w-full h-fit bg-linear-to-r from-primary to-secondary flex justify-center items-center">
+      <div className="w-full h-fit bg-background flex justify-center items-center">
         <div className="relative w-fit h-fit">
           {/* show cover phto */}
           <Image
@@ -66,7 +66,7 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
             alt="cover-photo"
           />
           {/* show a box with logo and others info */}
-          <div className=" rounded-lg bg-background absolute left-5 bottom-5 p-3 flex flex-row justify-between items-center gap-5 drop-shadow-md drop-shadow-primary border-2 broder-primary">
+          <div className=" rounded-lg bg-background-secondary absolute left-5 bottom-5 p-3 flex flex-row justify-between items-center gap-5 drop-shadow-md drop-shadow-primary border-2 broder-primary">
             {/* logo */}
             <Image
               src={shopData.logoUrl}
@@ -81,7 +81,7 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
               <div className="flex flex-row justify-start items-center gap-2">
                 <p className="flex flex-row gap-2 justify-start items-center">
                   {shopData.ratingAvg}{' '}
-                  <FaStar size={15} color="var(--primary)" />
+                  <FaStar size={15} color="var(--warning)" />
                 </p>
                 <Separator orientation="vertical" />
                 <p>{shopData.ratingCount} đánh giá</p>
@@ -102,7 +102,7 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
         </div>
       </div>
       {/* navigator bar: will navigate to store page (home page), products, to-sale and one search bar */}
-      <div className="w-[70%] flex flex-row justify-between items-center bg-background">
+      <div className="w-[70%] flex flex-row justify-between items-center bg-background-secondary">
         <NavigationMenu viewport={isMobile}>
           <NavigationMenuList>
             <NavigationMenuItem>

@@ -29,7 +29,7 @@ export const SuggestDealToday = () => {
 
   if (!data) return <Loading />;
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-2 bg-background rounded-lg mt-5 p-6">
+    <div className="w-full flex flex-col justify-center items-center gap-2 bg-background-secondary rounded-lg mt-5 p-6">
       {/* top-title */}
       <p className="w-full text-left font-bold">{t('title')}</p>
       {/* content here */}

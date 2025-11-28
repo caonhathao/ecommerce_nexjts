@@ -26,11 +26,17 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
       }
 
       if (data.url) {
-        toast.success('Đang chuyển đến cổng thanh toán Stripe...');
+        toast.success('Đang chuyển đến cổng thanh toán Stripe...', {
+          position: 'top-right',
+          duration: 3000,
+        });
         window.location.href = data.url; // 👉 Redirect sang Stripe Checkout
       }
     } catch (err: any) {
-      toast.error(err.message || 'Lỗi khi tạo phiên thanh toán');
+      toast.error(err.message || 'Lỗi khi tạo phiên thanh toán', {
+        position: 'top-right',
+        duration: 3000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -40,7 +46,7 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
     <Button
       onClick={handlePayment}
       disabled={isLoading}
-      className="bg-blue-600 text-white px-4 py-2 rounded-lg w-full"
+      className="bg-primary text-primary-foreground cursor-pointer px-4 py-2 rounded-lg w-full"
     >
       {isLoading ? 'Đang xử lý...' : 'Thanh toán '}
     </Button>

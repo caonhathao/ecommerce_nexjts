@@ -83,10 +83,10 @@ const DetailPage = () => {
     if (typeVoucher === 'FIXED') {
       const finalPrice = Math.max(0, numericPrice - numericValue);
       return (
-        <div className="flex flex-col justify-start items-start gap-2">
-          <div className="flex flex-row justify-start items-center gap-2">
+        <div className="flex flex-col justify-start items-start gap-3">
+          <div className="flex flex-row justify-start items-center gap-3">
             {/* price-after-sale */}
-            <p className="text-red-500 text-3xl font-bold">
+            <p className="text-error text-3xl font-bold">
               {formatPrice(finalPrice)}
             </p>
             {/* sale discount (show fixed amount) */}
@@ -94,20 +94,20 @@ const DetailPage = () => {
               {'-'} {formatPrice(numericValue)}
             </p>
             {/* origin price */}
-            <p className="text-muted-foreground line-through">
+            <p className="text-text-secondary line-through">
               {formatPrice(numericPrice)}
             </p>
           </div>
-          <p className="text-muted-foreground italic">{t('t_price_after')}</p>
+          <p className="text-text-secondary italic">{t('t_price_after')}</p>
         </div>
       );
     }
     if (typeVoucher === 'PERCENT') {
       return (
-        <div className="flex flex-col justify-start items-start gap-2">
-          <div className="flex flex-row justify-start items-center gap-2">
+        <div className="flex flex-col justify-start items-start gap-3">
+          <div className="flex flex-row justify-start items-center gap-3">
             {/* price-after-sale */}
-            <p className="text-red-500 text-3xl font-bold">
+            <p className="text-error text-3xl font-bold">
               {formatPrice(
                 Number(
                   Number(price) - (Number(price) * Number(valueVoucher)) / 100
@@ -119,11 +119,11 @@ const DetailPage = () => {
               {'-'} {valueVoucher} {'%'}
             </p>
             {/* origin price */}
-            <p className="text-muted-foreground line-through">
+            <p className="text-text-secondary line-through">
               {formatPrice(Number(price))}
             </p>
           </div>
-          <p className="text-muted-foreground italic">{t('t_price_after')}</p>
+          <p className="text-text-secondary italic">{t('t_price_after')}</p>
         </div>
       );
     }
@@ -310,7 +310,7 @@ const DetailPage = () => {
         <section className="w-[70%] flex flex-col justify-start items-start gap-2">
           <div className="w-full flex flex-row gap-2">
             {/* product's image */}
-            <div className="w-[40%] h-fit bg-background rounded-lg flex flex-col p-2 sticky top-3">
+            <div className="w-[40%] h-fit bg-background-secondary rounded-lg flex flex-col p-2 sticky top-3">
               {/* slider */}
               <div className="w-full p-2">
                 <SlideImg data={data.images} />
@@ -326,7 +326,7 @@ const DetailPage = () => {
                 </div>
                 <div className="flex flex-row justify-start items-center gap-1">
                   <FaCheckCircle color="var(--priamry)" size={15} />
-                  Dù là 1 coder nhưng t thích là 1 wibu hơn
+                  Dù là 1 coder nhưng t thích là 1 wibu
                 </div>
                 <div className="flex flex-row justify-start items-center gap-1">
                   <FaCheckCircle color="var(--priamry)" size={15} />
@@ -337,7 +337,7 @@ const DetailPage = () => {
             {/* name and variants, shipping info, suggestions and description  */}
             <div className="w-[60%] flex flex-col gap-4">
               {/* name and variants*/}
-              <div className="relative bg-background rounded-lg p-3 flex flex-col justify-start items-start">
+              <div className="relative bg-background-secondary rounded-lg p-3 flex flex-col justify-start items-start">
                 {/* badges */}
                 <div className="absolute top-0 left-3 flex gap-2">
                   {[
@@ -357,17 +357,19 @@ const DetailPage = () => {
                 </div>
 
                 {/* title */}
-                <div className="text-xl font-medium mt-5">{data.title}</div>
+                <div className="text-xl font-medium mt-5 text-text">
+                  {data.title}
+                </div>
                 {/* ratingAvg, ratingCount, sold */}
-                <div className="flex flex-row justify-start items-center gap-2 text-(--muted-background) text-sm mt-2">
+                <div className="flex flex-row justify-start items-center gap-2 text-text text-sm mt-2">
                   {data.ratingAvg} <RatingStars value={data.ratingAvg} />
                   {'(' + data.ratingCount + ')'} |
-                  <p className="text-secondary">
+                  <p className="text-text">
                     {t('t_sold')} {data.soldCount}
                   </p>
                 </div>
                 {/* price-after-sale, sale-value, origin-price */}
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-row">
                   {renderPriceSale(
                     // VoucherProduct is an array; use the first item's voucher (if present)
                     data.VoucherProduct?.[0]?.voucher?.type ?? null,
@@ -376,34 +378,38 @@ const DetailPage = () => {
                   )}
                 </div>
                 <div className="mt-2">
-                  <p className="font-semibold">{t('t_variant_type')}</p>
-                  <div className="flex flex-row flex-wrap justify-start items-start gap-2 mt-2">
-                    {data.variants.map((value, index) => (
-                      <div
-                        key={index}
-                        className="p-1 rounded-sm bg-border cursor-pointer border-2 hover:border-secondary hover:bg-transparent border-border transition duration-700"
-                        onClick={() =>
-                          handleSelectVariant(
-                            value.id,
-                            value.name,
-                            value.price,
-                            1
-                          )
-                        }
-                      >
-                        {value.name}
-                      </div>
-                    ))}
+                  <p className="font-semibold text-text">
+                    {t('t_variant_type')}
+                  </p>
+                  <div className="flex">
+                    <div className="flex flex-row flex-wrap justify-start items-start gap-2 mt-2">
+                      {data.variants.map((value, index) => (
+                        <div
+                          key={index}
+                          className="p-1 rounded-sm bg-border cursor-pointer border-2 hover:border-secondary hover:bg-transparent border-border transition duration-700"
+                          onClick={() =>
+                            handleSelectVariant(
+                              value.id,
+                              value.name,
+                              value.price,
+                              1
+                            )
+                          }
+                        >
+                          {value.name}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
               {/* shipping info */}
-              <div className="bg-background p-3 rounded-lg flex flex-col justify-start items-start gap-1">
+              <div className="bg-background-secondary p-3 rounded-lg flex flex-col justify-start items-start gap-1">
                 <p className="font-semibold text-xl">{t('t_delivery_info')}</p>
                 <p>Giao đến thị trấn Teyvalt</p>
                 <Separator />
                 <div className="flex flex-row justify-start items-center gap-1">
-                  <PiTruckLight color="var(--chart-2)" size={15} />
+                  <PiTruckLight className="text-success" size={15} />
                   Giao Thứ Sáu
                 </div>
                 <p>
@@ -412,13 +418,13 @@ const DetailPage = () => {
                 </p>
                 <Separator />
                 <div className="flex flex-row justify-start items-center gap-1">
-                  <PiTruckLight color="var(--chart-2)" size={15} /> Freeship 10k
-                  đơn 45k, Freeship 25k đơn từ 100k
+                  <PiTruckLight className="text-success" size={15} /> Freeship
+                  10k đơn 45k, Freeship 25k đơn từ 100k
                 </div>
               </div>
               {/* vouchers (if has) */}
               {data.VoucherProduct.length !== 0 ? (
-                <div className="flex flex-col p-2 gap-2 bg-background rounded-lg">
+                <div className="flex flex-col p-2 gap-2 bg-background-secondary rounded-lg">
                   <p className="text-xl font-semibold">
                     {t('t_other_promotion')}
                   </p>
@@ -437,7 +443,7 @@ const DetailPage = () => {
               ) : null}
 
               {/* others services */}
-              <div className="bg-background p-2 rounded-lg">
+              <div className="bg-background-secondary p-2 rounded-lg">
                 <p className="font-semibold text-xl mb-2">
                   {t('t_more_services')}
                 </p>
@@ -455,7 +461,7 @@ const DetailPage = () => {
               {/* top deals */}
               <TopDealItems size="4" renderSaleValue={false} />
               {/* slo-gan */}
-              <div className="bg-background p-3 rounded-lg">
+              <div className="bg-background-secondary p-3 rounded-lg">
                 <p className="font-semibold text-xl">{t('t_slogan_1')}</p>
                 <div className="flex flex-row justify-start items-center gap-2 py-1">
                   <FaBoxOpen color="var(--primary)" size={15} />
@@ -483,7 +489,7 @@ const DetailPage = () => {
             </div>
           </div>
           {/* show shop info */}
-          <div className="w-full bg-background p-3 rounded-lg mt-2 border border-border">
+          <div className="w-full bg-background-secondary p-3 rounded-lg mt-2 border border-border">
             {/* logo and name */}
             <div className="flex flex-row items-center justify-between gap-3">
               <div className="flex flex-row items-center gap-3">
@@ -532,35 +538,30 @@ const DetailPage = () => {
 
         {/* payment methods */}
         <section className="w-[30%] sticky top-3">
-          <div className="w-full bg-background rounded-lg p-2 flex flex-col gap-3">
+          <div className="w-full bg-background-secondary rounded-lg p-2 flex flex-col gap-3">
             {/* title */}
-            <div className="flex flex-row justify-start items-center gap-2 h-15 w-full">
+            <div className="flex flex-row justify-start items-center gap-4 h-15 w-full">
               <Image src={logo} width={40} height={40} alt="logo" />
               <div className="flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-col justify-center items-start gap-2">
                   <p className="font-semibold text-sm whitespace-nowrap text-primary">
                     2T3H Trading
                   </p>
-                  <Badge className="flex flex-row gap-2 justify-start items-center bg-blue-200 text-primary font-semibold">
+                  <Badge className="flex flex-row gap-2 justify-start items-center bg-primary/20 text-primary font-semibold">
                     <HiMiniCheckBadge color="var(--primary)" size={20} />
                     OFFICAL
                   </Badge>
                 </div>
               </div>
-              <div className="flex flex-row gap-2 justify-end items-center h-15 w-full">
+              <div className="flex flex-row gap-2 justify-start items-center h-15 w-full">
                 <p className="flex flex-row justify-center items-center gap-0.5">
                   {'4.7'}
-                  <FaStar color="var(--chart-4)" size={15} />
+                  <FaStar color="var(--warning)" size={15} />
                 </p>
                 <Separator orientation="vertical" />
                 <p>{'5.5tr+ đánh giá'}</p>
               </div>
             </div>
-
-            {isLoggedIn && (
-              <ChatButton shopId={data.shop.id} product={{ id: data.id }} />
-            )}
-
             <Separator />
             {/* payment info */}
             <div className="flex flex-col justify-start items-start gap-2">
@@ -593,7 +594,7 @@ const DetailPage = () => {
               </div>
               <div className="w-full flex flex-row justify-between items-center">
                 <p className="font-semibold">{t('t_total')}</p>
-                <p className="text-lg font-medium text-gray-700">
+                <p className="text-lg font-medium text-text">
                   {formatPrice(
                     Number(selVariant.amount * Number(selVariant.price))
                   )}
@@ -641,6 +642,9 @@ const DetailPage = () => {
               >
                 {t('t_pay_later')}
               </Button>
+              {isLoggedIn && (
+                <ChatButton shopId={data.shop.id} product={{ id: data.id }} />
+              )}
             </div>
           </div>
         </section>

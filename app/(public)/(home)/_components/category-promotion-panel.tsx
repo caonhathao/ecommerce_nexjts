@@ -41,7 +41,7 @@ const data = [
 export const CategoryPromotionPanel = () => {
   const t = useTranslations('category_promotion_panel');
   return (
-    <div className="w-full flex flex-row justify-evenly items-center bg-background rounded-lg py-3 overflow-x-auto">
+    <div className="w-full flex flex-row justify-evenly items-center bg-background-secondary rounded-lg py-3 overflow-x-auto">
       {data.map((item, index) => (
         <div
           key={index}

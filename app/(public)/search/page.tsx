@@ -111,17 +111,17 @@ export default function SearchPage() {
 
   return (
     // Tiki Background Color: #F5F5FA
-    <div className="min-h-screen bg-[#F5F5FA]">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6">
         {/* Breadcrumb / Header Area */}
         <div className="mb-4">
           <div className="flex items-baseline gap-2">
-            <h1 className="text-xl font-medium text-gray-900">
+            <h1 className="text-xl font-medium text-text">
               {filters.query
                 ? `Results for "${filters.query}"`
                 : `All Products`}
             </h1>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-text-secondary">
               ({pagination.total} products)
             </span>
           </div>
@@ -148,19 +148,22 @@ export default function SearchPage() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <Skeleton key={i} className="h-[300px] rounded-lg bg-white" />
+                  <Skeleton
+                    key={i}
+                    className="h-[300px] rounded-lg bg-background-secondary"
+                  />
                 ))}
               </div>
             ) : !products || products.length === 0 ? (
               <Card className="border-none shadow-sm">
                 <CardContent className="py-16 text-center">
-                  <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                  <div className="mx-auto w-24 h-24 bg-secondary rounded-full flex items-center justify-center mb-4">
                     <span className="text-3xl">🔍</span>
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900">
+                  <h3 className="text-lg font-medium text-text">
                     No products found
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-text-secondary">
                     Try adjusting your search or filters.
                   </p>
                 </CardContent>
@@ -191,7 +194,7 @@ export default function SearchPage() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="bg-white hover:bg-gray-50"
+                      className="bg-background-secondary hover:bg-secondary"
                       onClick={() => handlePageChange(1)}
                       disabled={pagination.page === 1}
                     >
@@ -200,7 +203,7 @@ export default function SearchPage() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="bg-white hover:bg-gray-50"
+                      className="bg-background-secondary hover:bg-secondary"
                       onClick={() => handlePageChange(pagination.page - 1)}
                       disabled={pagination.page === 1}
                     >
@@ -212,7 +215,7 @@ export default function SearchPage() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="bg-white hover:bg-gray-50"
+                      className="bg-background-secondary hover:bg-secondary"
                       onClick={() => handlePageChange(pagination.page + 1)}
                       disabled={pagination.page === pagination.totalPages}
                     >
@@ -221,7 +224,7 @@ export default function SearchPage() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="bg-white hover:bg-gray-50"
+                      className="bg-background-secondary hover:bg-secondary"
                       onClick={() => handlePageChange(pagination.totalPages)}
                       disabled={pagination.page === pagination.totalPages}
                     >

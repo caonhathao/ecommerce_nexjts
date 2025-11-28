@@ -59,7 +59,7 @@ export function ReviewsClient({
   };
 
   return (
-    <div className="w-full bg-background rounded-lg mt-3 p-3 flex flex-col justify-start items-start">
+    <div className="w-full bg-background-secondary rounded-lg mt-3 p-3 flex flex-col justify-start items-start">
       {/* summary */}
       <div className="flex flex-col justify-start items-start py-2 gap-2">
         <p className="font-medium text-lg">{t('t_custome_review')}</p>

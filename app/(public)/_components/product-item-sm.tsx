@@ -50,11 +50,11 @@ export const ProductItemSm = ({
 
       const promotionBadge =
         voucher.type === 'PERCENT' ? (
-          <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-0.5 rounded-md">
+          <span className="bg-success/10 text-success text-xs font-medium px-2 py-0.5 rounded-md">
             -{voucher.value}%
           </span>
         ) : (
-          <span className="bg-green-100 text-green-600 text-xs font-medium px-2 py-0.5 rounded-md">
+          <span className="bg-success/10 text-success text-xs font-medium px-2 py-0.5 rounded-md">
             -{formatPrice(Number(voucher.value))}
           </span>
         );
@@ -62,7 +62,7 @@ export const ProductItemSm = ({
       return (
         <div className="w-full flex flex-col justify-center items-end gap-1">
           <div className="flex flex-row justify-end items-center gap-2">
-            <div className="text-red-600 font-medium text-sm">
+            <div className="text-error font-medium text-sm">
               {Number(discountedPrice) <= 0 ? (
                 <div className="flex flex-row  gap-1">
                   0<div className="underline">{'đ'}</div>
@@ -82,7 +82,7 @@ export const ProductItemSm = ({
   return (
     <div
       key={item.id}
-      className={`flex flex-col justify-start items-start flex-1 border border-gray-200 rounded-lg hover:cursor-pointer`}
+      className={`flex flex-col justify-start items-start flex-1 border border-border border-2 rounded-lg hover:cursor-pointer`}
       onClick={() => handleOpenDetail(item.id)}
     >
       <div className="relative w-full flex-shrink-0 aspect-square overflow-hidden rounded-t-lg">
@@ -101,8 +101,9 @@ export const ProductItemSm = ({
           <CardDescription>
             <div className="w-full">
               <p className="line-clamp-2 text-sm mb-1">
-                Mô tả sản phẩm là 1 con vịt xòe ra 2 cái cánh nó kêu là quắc
-                quắc quắc quặc qucặ
+                {item.description
+                  ? item.description
+                  : 'Sản phẩm này là độc nhất chỉ có 1 không 2  mà giá lại rẻ hãy mua ngay hôm nay'}
               </p>
             </div>
             <RatingStars value={item.ratingAvg} size={10} />

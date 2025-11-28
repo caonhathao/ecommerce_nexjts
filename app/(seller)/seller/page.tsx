@@ -7,7 +7,7 @@ export default function AdminIndexPagee() {
   return (
     <>
       <SectionCardsSeller />
-      <div className="px-4 lg:px-6">
+      <div className="px-4 lg:px-6 bg-background-secondary">
         <ChartAreaInteractiveSeller />
       </div>
       <DataTableSeller data={data} />

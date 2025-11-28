@@ -28,7 +28,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             alt="Logo"
             width={46}
             height={46}
-            className="bg-white p-1 rounded-xl"
+            className="bg-background p-1 rounded-xl"
           />
           LMS
         </Link>

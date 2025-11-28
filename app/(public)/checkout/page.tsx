@@ -48,8 +48,8 @@ export default async function CheckoutPage() {
   const shipping = draft.shippingInfor as Record<string, any>;
 
   return (
-    <div className="w-full min-h-screen py-8 bg-gray-100">
-      <div className="p-6 w-5/6 mx-auto bg-background grid grid-cols-2 gap-6 rounded-lg shadow-lg">
+    <div className="w-full min-h-screen py-8 bg-background">
+      <div className="p-6 w-5/6 mx-auto bg-background-secondary grid grid-cols-2 gap-6 rounded-lg shadow-lg">
         {/* ---------------------------- */}
         {/* CỘT TRÁI: Thông tin giao hàng */}
         {/* ---------------------------- */}
@@ -100,7 +100,7 @@ export default async function CheckoutPage() {
         {/* CỘT PHẢI: Danh sách sản phẩm + thanh toán */}
         {/* ---------------------------- */}
         <div className="col-span-1 flex flex-col gap-4">
-          <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="bg-background-secondary rounded-lg shadow-sm p-4">
             <Label className="text-lg font-semibold mb-2 block">
               Danh sách sản phẩm
             </Label>
@@ -124,13 +124,13 @@ export default async function CheckoutPage() {
                     <ItemTitle className="font-semibold text-base">
                       {item.title}
                     </ItemTitle>
-                    <ItemDescription className="text-sm text-foreground font-medium">
+                    <ItemDescription className="text-sm text-text font-medium">
                       {formatPrice(item.unitPrice)}
                     </ItemDescription>
                   </ItemContent>
                   <ItemActions>
                     <div className="flex flex-col items-end text-sm gap-2">
-                      <p className="text-sm font-medium text-foreground">
+                      <p className="text-sm font-medium text-text">
                         Số lượng: {item.quantity}
                       </p>
                       <p className="font-semibold text-primary">
@@ -144,21 +144,19 @@ export default async function CheckoutPage() {
 
             <div className="pt-4 mt-4 border-t text-right space-y-1">
               <p className="flex justify-between">
-                <span className="text-base text-foreground">Tạm tính:</span>{' '}
+                <span className="text-base text-text">Tạm tính:</span>{' '}
                 <span className="font-medium">
                   {formatPrice(draft.itemsTotal.toNumber())}
                 </span>
               </p>
               <p className="flex justify-between">
-                <span className="text-base text-foreground">
-                  Phí vận chuyển:
-                </span>{' '}
+                <span className="text-base text-text">Phí vận chuyển:</span>{' '}
                 <span className="font-medium">
                   {formatPrice(draft.shippingFee.toNumber())}
                 </span>
               </p>
               <p className="flex justify-between">
-                <span className="text-base text-foreground">Giảm giá:</span>{' '}
+                <span className="text-base text-text">Giảm giá:</span>{' '}
                 <span className="font-medium text-destructive">
                   -{formatPrice(draft.discountTotal.toNumber())}
                 </span>
@@ -172,7 +170,7 @@ export default async function CheckoutPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="bg-background-secondary rounded-lg shadow-sm p-4">
             <PaymentClient draftId={draft.id} />
           </div>
         </div>

@@ -42,7 +42,7 @@ export const HotForeign = ({ size }: TopDealItemsProps) => {
 
   if (!data) return <Loading />;
   return (
-    <div className="w-full flex flex-col justify-start items-start gap-1 p-2 mt-5 bg-background rounded-lg">
+    <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-background-secondary rounded-lg">
       {/* top title */}
       <div className="w-full flex flex-row justify-between items-center p-2 text-base">
         <p className="w-fit flex flex-row gap-2 text-lg font-bold select-none">

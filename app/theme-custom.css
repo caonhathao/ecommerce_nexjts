@@ -1,15 +1,36 @@
 :root {
-    --brand: oklch(0.705 0.2 355.467);
-    --brand-foreground: oklch(1 0 0);
+    --background-secondary:  oklch(1 0 0);
+    --text: oklch(0.25 0.08 286);
+    --text-secondary: oklch(0.5 0.08 286);
+    --accent-hover: oklch(0.85 0.07 286);
+    --success: oklch(0.5 0.18 140);
+    --error: oklch(0.6 0.18 25);
+    --warning: oklch(0.8 0.15 85);
+    --info: oklch(0.55 0.15 250);
+    --confirm: oklch(0.55 0.22 286);
 }
 
 /* Custom Dark Values */
 .dark {
-    --brand: oklch(0.705 0.2 355.467);
-    --brand-foreground: oklch(1 0 0);
+    --background-secondary: oklch(0.2 0.06 286);
+    --text: oklch(0.98 0.02 286);
+    --text-secondary: oklch(0.7 0.05 286);
+    --accent-hover: oklch(0.35 0.12 286);
+    --success: oklch(0.7 0.2 140);
+    --error: oklch(0.7 0.2 25);
+    --warning: oklch(0.85 0.18 85);
+    --info: oklch(0.7 0.2 250);
+    --confirm: oklch(0.65 0.22 286);
 }
 
 @theme inline {
-    --color-brand: var(--brand);
-    --color-brand-foreground: var(--brand-foreground);
+    --color-background-secondary: var(--background-secondary);
+    --color-text: var(--text);
+    --color-text-secondary: var(--text-secondary);
+    --color-accent-hover: var(--accent-hover);
+    --color-success: var(--success);
+    --color-error: var(--error);
+    --color-warning: var(--warning);
+    --color-info: var(--info);
+    --color-confirm: var(--confirm);
 }
