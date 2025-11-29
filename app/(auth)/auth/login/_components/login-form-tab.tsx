@@ -16,13 +16,13 @@ import { authClient } from '@/lib/auth-client';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { Loader, Lock, Mail, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 export function LoginFormTab() {
   const router = useRouter();
-  const pathname = usePathname();
+  //const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [githubPending, startGithubTransition] = useTransition();
@@ -59,7 +59,7 @@ export function LoginFormTab() {
     }
 
     startEmailTransition(async () => {
-      const { data, error } = await authClient.requestPasswordReset({
+      const { error } = await authClient.requestPasswordReset({
         email,
         redirectTo: '/auth/reset-password',
       });

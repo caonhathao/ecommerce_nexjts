@@ -54,7 +54,8 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     });
 
     return NextResponse.json({ data });
-  } catch (e) {
+  } catch (err) {
+    console.error(err);
     return NextResponse.json({
       success: false,
       data: {

@@ -1,14 +1,20 @@
 'use client';
 
+import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { cn } from '@/lib/utils';
 
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Tooltip,
@@ -16,33 +22,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 
 import {
-  User2,
   Bell,
+  BookOpenCheck,
+  Coins,
+  CreditCard,
+  Crown,
+  Eye,
+  Gift,
+  Heart,
+  Landmark,
+  LifeBuoy,
+  LucideIcon,
+  MapPin,
+  MessageSquareText,
   Package,
   RefreshCcw,
-  MapPin,
-  CreditCard,
-  Star,
-  Eye,
-  Heart,
-  MessageSquareText,
-  Crown,
-  Gift,
-  Landmark,
-  TicketPercent,
   Sparkles,
-  Coins,
-  BookOpenCheck,
-  LifeBuoy,
+  Star,
   Store,
+  TicketPercent,
+  User2,
 } from 'lucide-react';
 
 type Messages =
@@ -72,7 +73,7 @@ type Messages =
 type Item = {
   href: string;
   i18nKey: Messages;
-  Icon: React.ComponentType<any>;
+  Icon: LucideIcon;
   rightEl?: React.ReactNode;
   disabled?: boolean;
 };

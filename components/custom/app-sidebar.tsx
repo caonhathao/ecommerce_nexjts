@@ -31,7 +31,7 @@ const extensions = [
 export const AppSidebar = ({
   ...props
 }: React.ComponentProps<typeof Sidebar>) => {
-  const { categories, loading, error } = useCategories();
+  const { categories } = useCategories();
   const topCategories = categories.filter((cat) => cat.parentId === null);
 
   const t = useTranslations('home_layout.app_sidebar');
