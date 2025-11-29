@@ -60,7 +60,9 @@ export const NewCategoryForm = ({
   setIsReset: Dispatch<SetStateAction<boolean>>;
 }) => {
   const t = useTranslations('admin_category_page.category_new_form');
-  const [data, setData] = React.useState<categoryDataFormResponse | null>(null);
+  const [apiData, setApiData] = React.useState<categoryDataFormResponse | null>(
+    null
+  );
   const [open, setOpen] = React.useState<boolean>(false);
   const [selected, setSelected] = useState<string>('');
 
@@ -228,11 +230,11 @@ export const NewCategoryForm = ({
     fetchData({
       baseUrl: paths.manager.category.fetch_form,
       params: { id: form.watch('parentId') },
-      setData: setData,
+      setData: setApiData,
     });
   }, [open]);
 
-  const list: categoryDataFormItem[] = data?.data || [];
+  const list: categoryDataFormItem[] = apiData?.data || [];
   //console.log(list);
 
   return (

@@ -1,6 +1,6 @@
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { UpdateCartRequest } from '@/types/cart.data-types';
+//import { UpdateCartRequest } from '@/types/cart.data-types';
 import { prisma } from '@/lib/db';
 
 export const DELETE = withAuth(async (userId: string, request: NextRequest) => {

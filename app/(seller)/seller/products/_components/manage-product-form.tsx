@@ -17,7 +17,6 @@ import { cn } from '@/lib/utils';
 import { CheckCircle2 } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Currency, ProductStatus, Visibility } from '@/lib/generated/prisma';
-import { useEffect } from 'react';
 import { toast } from 'sonner';
 
 type Props = {
