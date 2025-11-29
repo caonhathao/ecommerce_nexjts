@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { fetchProductById } from '@/funcs/fetch';
 import logo from '@/public/logo.jpg';
 import { productDetailType } from '@/types/public.data-types';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
 import {
@@ -56,6 +56,7 @@ type itemType = {
 const DetailPage = () => {
   const route = useRouter();
   const params = useParams();
+  const pathname = usePathname();
   const [data, setData] = useState<productDetailType | null>(null);
   const [selVariant, setSelVariant] = useState<selectedVariant | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -190,8 +191,10 @@ const DetailPage = () => {
 
   const buyNow = async (params: itemType) => {
     const session = await authClient.getSession();
-    if (session.data == null) {
-      route.push('/auth/login');
+    if (session.data == null || !session.data.user.emailVerified || !session) {
+      const callback = encodeURIComponent(pathname ?? '/');
+      route.push(`/auth/login?callbackUrl=${callback}`);
+      return;
     }
 
     try {
@@ -246,8 +249,10 @@ const DetailPage = () => {
 
   const addProductToCart = async (params: AddToCartRequest) => {
     const session = await authClient.getSession();
-    if (session.data == null) {
-      route.push('/auth/login');
+    if (session.data == null || !session.data.user.emailVerified || !session) {
+      const callback = encodeURIComponent(pathname ?? '/');
+      route.push(`/auth/login?callbackUrl=${callback}`);
+      return;
     }
 
     try {

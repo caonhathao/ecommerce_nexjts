@@ -6,7 +6,7 @@ import { getUserProfile } from '@/app/data/user.data';
 export default async function SignupBusinessPage() {
   const session = await getSessionUser();
   if (!session || !session.user) {
-    redirect('/auth/login?next=/signup-business');
+    redirect('/auth/login?callbackUrl=/signup-business');
   }
 
   if (session.user.role === 'seller') {

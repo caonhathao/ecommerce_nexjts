@@ -40,6 +40,7 @@
       "t_email_placeholder": "you@example.com",
       "t_password_placeholder": "••••••••",
       "t_otp_desc": "Chúng tôi sẽ gửi mã 6 chữ số để bạn đăng nhập",
+      "t_no_register_note": "Không cần đăng ký. Chỉ cần nhập email để nhận mã một lần. Tài khoản sẽ được tạo khi bạn đăng nhập lần đầu.",
       "t_sending_code": "Đang gửi mã...",
       "t_send_code": "Gửi mã xác thực",
       "t_reset_email_missing": "Vui lòng nhập email trước",
@@ -307,7 +308,6 @@
     "clock_jewelry": "Đồng Hồ và Trang Sức",
     "balo_vali": "Balo và Vali",
     "vouchers_services": "Vouchers - Dịch vụ",
-
     "app_sidebar": {
       "category": "Danh mục",
       "electronics": "Điện tử",
@@ -325,7 +325,6 @@
       "office-supplies-stationery": "Văn phòng phẩm",
       "diy-tools-hardware": "Công cụ & Sửa chữa nhà cửa",
       "gifts-special-occasions": "Quà tặng & Tiệc tùng",
-
       "extensions": "Tiện ích",
       "promotion": "Ưu đãi thẻ, ví",
       "pay_top_up": " Đóng tiền, nạp thẻ",
@@ -525,7 +524,6 @@
   },
   "admin_category_page": {
     "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
-
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa danh mục sản phẩm thành công!",
@@ -561,7 +559,6 @@
       "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
       "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
       "t_del_failed_desc_noti": "Xóa danh mục sản phẩm không thành công!",
-
       "t_category_desc": "Thông tin chi tiết danh mục",
       "t_category_name": "Tên danh mục",
       "t_copy_action": "Sao chép ID",
@@ -582,14 +579,11 @@
       "t_action_noti": "Hành động",
       "t_create_desc_noti": "Đã tạo mới danh mục sản phẩm.",
       "t_del_desc_noti": "Xóa danh mục sản phẩm thành công!",
-
       "t_action_failed_noti": "Hành động thất bại",
       "t_create_failed_desc_noti": "'Không thể tạo mới danh mục.'",
-
       "t_name_schema": "Tên không được để trống",
       "t_slug_schema": "Slug không được để trống",
       "t_file_schema": "Kích thước nhỏ hơn 200KB",
-
       "t_new_button": "Tạo mới",
       "t_new_category": "Danh mục mới",
       "t_desc": "Tạo mới danh mục sản phẩm của bạn.",
@@ -606,7 +600,6 @@
   },
   "admin_product_page": {
     "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
-
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
@@ -669,7 +662,6 @@
   },
   "admin_shop_page": {
     "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
-
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
@@ -737,7 +729,6 @@
   },
   "admin_user_page": {
     "t_search_placeholder": "Nhập ID người dùng...",
-
     "t_action_noti": "Hành động",
     "t_copy_desc_noti": "Sao chép thông tin thành công!",
     "t_del_desc_noti": "Xóa sản phẩm thành công!",
@@ -759,7 +750,6 @@
     "t_tab_banned": "Bị khóa",
     "t_showing": "Hiển thị",
     "t_column": "Cột",
-
     "user_tab": {
       "t_no_shop_found": "Không có kết quả",
       "t_of": "của",
@@ -862,7 +852,6 @@
       "t_update_failed_desc_noti": "Cập nhật thông tin không thành công!",
       "t_copy_failed_desc_noti": "Sao chép thông tin không thành công!",
       "t_del_failed_desc_noti": "Xóa sản phẩm không thành công!",
-
       "t_product_desc": "Thông tin chi tiết sản phẩm",
       "t_shop": "Cửa hàng",
       "t_watch_shop": "Xem cửa hàng",

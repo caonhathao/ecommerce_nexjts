@@ -100,6 +100,8 @@ export default function VerifyRequest() {
                 toast.success(t('t_verify_success'), {
                   description: t('t_verify_success_desc'),
                 });
+                router.replace(callbackParam);
+                router.refresh();
               },
               onError: (err) => {
                 console.error(err);
@@ -109,19 +111,7 @@ export default function VerifyRequest() {
           });
 
           if (error) {
-            toast.error(error.message || t('t_verify_failed'));
             return;
-          }
-
-          // After email verification, sign in the user
-          const signInResult = await authClient.signIn.emailOtp({
-            email,
-            otp,
-          });
-
-          if (!signInResult.error) {
-            router.replace(callbackParam);
-            router.refresh();
           }
         } else {
           // Sign-in with OTP
@@ -165,12 +155,10 @@ export default function VerifyRequest() {
           </div>
           <div>
             <CardTitle className="text-xl">
-              {isSignUp ? 'Verify Your Email' : 'Check Your Email'}
+              {isSignUp ? t('t_verify_email') : t('t_check_email')}
             </CardTitle>
             <CardDescription className="mt-2">
-              {isSignUp
-                ? 'We sent a verification code to verify your email address.'
-                : 'We sent you a login code to sign in to your account.'}
+              {isSignUp ? t('t_verify_desc') : t('t_signin_desc')}
             </CardDescription>
           </div>
 
