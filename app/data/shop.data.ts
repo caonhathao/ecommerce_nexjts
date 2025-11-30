@@ -15,3 +15,36 @@ export async function getShopIdByUserId(
 
   return shop?.id ?? undefined;
 }
+
+export async function getShopMembers(shopId: string) {
+  await requireSeller();
+
+  const shop = await prisma.shop.findUnique({
+    where: { id: shopId },
+    select: {
+      id: true,
+      name: true,
+      ownerId: true,
+      members: {
+        select: {
+          id: true,
+          role: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      },
+    },
+  });
+
+  return shop;
+}

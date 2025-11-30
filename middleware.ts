@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionUser } from '@/lib/auth';
+import { paths } from '@/lib/path';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const publicPaths = [
-    '/auth/login',
-    '/auth/verify-request',
+    paths.login,
+    paths.verify_request,
     '/api/auth',
     '/products',
     '/api/products',
@@ -26,8 +27,8 @@ export async function middleware(request: NextRequest) {
 
   const session = await getSessionUser();
   if (!session) {
-    const url = new URL('/auth/login', request.url);
-    url.searchParams.set('next', pathname);
+    const url = new URL(paths.login, request.url);
+    url.searchParams.set('callbackUrl', pathname);
     return NextResponse.redirect(url);
   }
 

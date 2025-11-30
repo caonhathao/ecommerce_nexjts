@@ -1,6 +1,7 @@
 export const paths = {
   home: '/',
-  login: '/login',
+  login: '/auth/login',
+  verify_request: '/auth/verify-request',
 
   products: {
     detail_id: (id: string) => `/products/${id}`,
@@ -13,7 +14,6 @@ export const paths = {
 
   messages: {
     message_detail: (id: string) => `/messages/${id}`,
-    message_shop: (shopId: string) => `/seller/shops/${shopId}/messages`,
     message_detail_shop: (shopId: string, conversationId: string) =>
       `/seller/shops/${shopId}/messages/${conversationId}`,
   },
@@ -54,12 +54,16 @@ export const paths = {
 
   shop: {
     fetch_all: '/api/product/query',
+    accept_invite: (token: string) => '/shop/accept-invite/' + token,
   },
 
   seller: {
     shops: {
+      dashboard: '/seller/shops',
       create: '/seller/shops/create',
       edit: (shopId: string) => `/seller/shops/${shopId}/edit`,
+      message_shop: (shopId: string) => `/seller/shops/${shopId}/messages`,
+      members: (shopId: string) => `/seller/shops/${shopId}/members`,
     },
   },
 };

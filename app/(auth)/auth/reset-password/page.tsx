@@ -26,6 +26,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { useTranslations } from 'next-intl';
+import { paths } from '@/lib/path';
 
 export default function ResetPassword() {
   const t = useTranslations('auth_login_page.reset_password_page');
@@ -85,7 +86,7 @@ export default function ResetPassword() {
         description: t('t_reset_success_desc'),
       });
 
-      router.push('/auth/login');
+      router.push(paths.login);
     });
   }
 
