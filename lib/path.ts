@@ -54,11 +54,12 @@ export const paths = {
 
   shop: {
     fetch_all: '/api/product/query',
-    accept_invite: (token: string) => '/app/shops/accept-invite/' + token,
+    accept_invite: (token: string) => '/shop/accept-invite/' + token,
   },
 
   seller: {
     shops: {
+      dashboard: '/seller/shops',
       create: '/seller/shops/create',
       edit: (shopId: string) => `/seller/shops/${shopId}/edit`,
       message_shop: (shopId: string) => `/seller/shops/${shopId}/messages`,

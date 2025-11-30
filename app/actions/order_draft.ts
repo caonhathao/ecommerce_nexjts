@@ -271,5 +271,21 @@ export async function getOrderDrafts() {
     },
   });
   if (!draft) return { success: false, error: 'No draft found' };
-  return { success: true, draft };
+
+  const draftPlain = {
+    ...draft,
+    itemsTotal: draft.itemsTotal.toNumber(),
+    shippingFee: draft.shippingFee.toNumber(),
+    discountTotal: draft.discountTotal.toNumber(),
+    grandTotal: draft.grandTotal.toNumber(),
+    items: draft.items.map((item) => ({
+      ...item,
+      unitPrice: item.unitPrice.toNumber(),
+      total: item.total.toNumber(),
+    })),
+  };
+
+  return { success: true, draft: draftPlain };
 }
+
+export type OrderDraftResult = Awaited<ReturnType<typeof getOrderDrafts>>;

@@ -1,3 +1,5 @@
+'use server';
+
 import { requireSeller } from '@/lib/require-role';
 import { prisma } from '@/lib/db';
 import { randomBytes } from 'node:crypto';
@@ -6,24 +8,37 @@ import { env } from '@/lib/env';
 import { paths } from '@/lib/path';
 import { sendShopInvitationEmail } from '@/lib/mailer';
 import { InviteMemberSchema } from '@/app/(seller)/seller/shops/[shopId]/members/schema';
+import { ActionResponse } from '@/lib/service-response';
+import { revalidatePath } from 'next/cache';
 
-export async function inviteMember(
-  email: string,
-  shopId: string,
-  role?: string
-) {
-  const result = InviteMemberSchema.safeParse({ email, shopId, role });
+export async function inviteMember({
+  email,
+  shopId,
+  role = ShopMemberRole.STAFF,
+}: {
+  email: string;
+  shopId: string;
+  role?: ShopMemberRole;
+}) {
+  // Validate input with Zod and return structured validation errors when invalid
+  const parsed = InviteMemberSchema.safeParse({ email, shopId, role });
+  if (!parsed.success) {
+    const errors = parsed.error.flatten().fieldErrors;
+    return ActionResponse.error('Validation failed', 400, errors);
+  }
 
   const session = await requireSeller();
   if (!session) {
-    throw new Error('Unauthorized');
+    return ActionResponse.error('Unauthorized', 401);
   }
 
   const shop = await prisma.shop.findFirst({
     where: { id: shopId, ownerId: session.user.id },
   });
 
-  if (!shop) throw new Error('Shop not found or permission denied');
+  if (!shop) {
+    return ActionResponse.error('Shop not found or permission denied', 403);
+  }
 
   const existingMember = await prisma.shopMember.findFirst({
     where: {
@@ -31,32 +46,64 @@ export async function inviteMember(
       user: { email },
     },
   });
-  if (existingMember) throw new Error('User is already a member of this shop');
+  if (existingMember) {
+    return ActionResponse.error('User is already a member of this shop', 400);
+  }
 
-  const token = randomBytes(32).toString('hex');
-  const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3); // 3 days
+  try {
+    const token = randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3); // 3 days
 
-  await prisma.shopInvitation.upsert({
-    where: {
-      shopId_email: { shopId, email },
-    },
-    update: { token, expiresAt },
-    create: {
+    await prisma.shopInvitation.upsert({
+      where: {
+        shopId_email: { shopId, email },
+      },
+      update: { token, expiresAt },
+      create: {
+        email,
+        shopId,
+        token,
+        expiresAt,
+        role: ShopMemberRole.STAFF,
+      },
+    });
+
+    const invitationLink = `${env.NEXT_PUBLIC_BASE_URL}${paths.shop.accept_invite(
+      token
+    )}?email=${encodeURIComponent(email)}`;
+    await sendShopInvitationEmail(
       email,
-      shopId,
-      token,
-      expiresAt,
-      role: ShopMemberRole.STAFF,
-    },
+      shop.name,
+      session.user.name || session.user.email || 'Shop Owner',
+      invitationLink
+    );
+
+    revalidatePath(`/seller/shops/${shopId}/members`);
+
+    return ActionResponse.success(null, 'Invitation sent successfully', 200);
+  } catch (err) {
+    console.error('inviteMember error', err);
+    return ActionResponse.error('Failed to send invitation', 500);
+  }
+}
+
+export async function removeMember(shopId: string, memberId: string) {
+  const session = await requireSeller();
+  if (!session) return ActionResponse.error('Unauthorized', 401);
+
+  const shop = await prisma.shop.findFirst({
+    where: { id: shopId, ownerId: session.user.id },
   });
+  if (!shop) return ActionResponse.error('Permission denied', 403);
 
-  const invitationLink = `${env.NEXT_PUBLIC_BASE_URL}/${paths.shop.accept_invite(token)}?email=${encodeURIComponent(email)}`;
-  await sendShopInvitationEmail(
-    email,
-    shop.name,
-    session.user.name || session.user.email || 'Shop Owner',
-    invitationLink
-  );
+  try {
+    await prisma.shopMember.delete({
+      where: { id: memberId, shopId },
+    });
 
-  return { success: true, message: 'Invitation sent successfully' };
+    revalidatePath(`/seller/shops/${shopId}/members`);
+    return ActionResponse.success(null, 'Member removed successfully');
+  } catch (error) {
+    return ActionResponse.error('Failed to remove member', 500);
+  }
 }

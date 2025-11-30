@@ -42,7 +42,7 @@ export const AppSidebar = ({
     <div className="w-[25%]">
       <div className="w-full overflow-y-auto max-h-[calc(100vh-120px)] scrollbar-hide ">
         <div className="flex flex-col jus-end items-end">
-          <div className="w-[70%] p-2 bg-background rounded-lg border border-primary flex flex-col justify-start items-start">
+          <div className="w-[70%] p-2 bg-background-secondary rounded-lg border border-primary flex flex-col justify-start items-start">
             {/* title */}
             <p className="font-bold text-base px-5 py-1 text-primary">
               {t('category')}
@@ -100,7 +100,7 @@ export const AppSidebar = ({
             </div>
           </div>
 
-          <div className="w-[70%] p-2 bg-background rounded-lg border border-primary flex flex-col justify-start items-start mt-4">
+          <div className="w-[70%] p-2 bg-background-secondary rounded-lg border border-primary flex flex-col justify-start items-start mt-4">
             {/* title */}
             <p className="font-bold text-base px-5 py-1 text-primary">
               {t('extensions')}

@@ -2,7 +2,6 @@ import { getSessionUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { getShopMembers } from '@/app/data/shop.data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -21,6 +20,8 @@ import {
 } from '@/components/ui/table';
 import { IconUserPlus } from '@tabler/icons-react';
 import Link from 'next/link';
+import { InviteMemberDialog } from '@/app/(seller)/seller/shops/[shopId]/members/_components/invite-member-dialog';
+import { RemoveMemberButton } from '@/app/(seller)/seller/shops/[shopId]/members/_components/remove-member-button';
 
 interface MemberPageProps {
   params: Promise<{ shopId: string }>;
@@ -41,7 +42,8 @@ export default async function ShopMemberPage({ params }: MemberPageProps) {
       <div className="flex flex-col items-center justify-center min-h-screen">
         <h1 className="text-2xl font-bold text-red-600 mb-2">Shop not found</h1>
         <p>
-          The shop you&apos;re looking for doesn&apos;t exist or you don&apos;t have access.
+          The shop you&apos;re looking for doesn&apos;t exist or you don&apos;t
+          have access.
         </p>
       </div>
     );
@@ -61,14 +63,7 @@ export default async function ShopMemberPage({ params }: MemberPageProps) {
               Manage your shop team members and their roles
             </CardDescription>
           </div>
-          {isOwner && (
-            <Button asChild>
-              <Link href={`/seller/shops/${shopId}/member/invite`}>
-                <IconUserPlus className="mr-2 h-4 w-4" />
-                Invite Member
-              </Link>
-            </Button>
-          )}
+          {isOwner && <InviteMemberDialog shopId={shopId} />}
         </CardHeader>
         <CardContent>
           <Table>
@@ -100,11 +95,13 @@ export default async function ShopMemberPage({ params }: MemberPageProps) {
                       <div className="flex items-center gap-3">
                         <Avatar>
                           <AvatarImage
-                            src={member.user.image || ''}
+                            src={member.user.image ?? undefined}
                             alt={member.user.name}
                           />
                           <AvatarFallback>
-                            {member.user.name[0]?.toUpperCase()}
+                            {member.user.name[0]?.toUpperCase() ?? (
+                              <IconUserPlus />
+                            )}
                           </AvatarFallback>
                         </Avatar>
                         <span className="font-medium">{member.user.name}</span>
@@ -128,9 +125,11 @@ export default async function ShopMemberPage({ params }: MemberPageProps) {
                     {isOwner && (
                       <TableCell className="text-right">
                         {member.role !== 'OWNER' && (
-                          <Button variant="ghost" size="sm">
-                            Remove
-                          </Button>
+                          <RemoveMemberButton
+                            shopId={shopId}
+                            memberId={member.id}
+                            memberName={member.user.name || member.user.email}
+                          />
                         )}
                       </TableCell>
                     )}
