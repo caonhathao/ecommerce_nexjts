@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { AiFillLike } from 'react-icons/ai';
-import { Loading } from '../../_components/loading';
+import { Loading } from '../../../../components/loading';
 
 type TopDealItemsProps = {
   size: string;

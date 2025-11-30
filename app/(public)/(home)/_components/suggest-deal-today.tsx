@@ -8,7 +8,7 @@ import {
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { Loading } from '../../_components/loading';
+import { Loading } from '../../../../components/loading';
 import { ProductItem } from '../../_components/product-item';
 
 type TopDealItemsProps = {

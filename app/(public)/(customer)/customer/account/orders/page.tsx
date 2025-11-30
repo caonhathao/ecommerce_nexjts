@@ -7,7 +7,7 @@ import { useActionState, useEffect, useState, useTransition } from 'react';
 import { getOrder } from '@/app/actions/order';
 import { $Enums } from '@/lib/generated/prisma';
 import OrderStatus = $Enums.OrderStatus;
-import { Loading } from '@/app/(public)/_components/loading';
+import { Loading } from '@/components/loading';
 import {
   Card,
   CardContent,

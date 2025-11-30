@@ -39,8 +39,8 @@ export const AppSidebar = ({
   //console.log('top category:', topCategories);
 
   return (
-    <div className="w-[25%]">
-      <div className="w-full overflow-y-auto max-h-[calc(100vh-120px)] scrollbar-hide ">
+    <div className="w-[25%] sticky top-0">
+      <div className="w-full overflow-y-auto max-h-[calc(100vh-60px)] scrollbar-hide ">
         <div className="flex flex-col jus-end items-end">
           <div className="w-[70%] p-2 bg-background-secondary rounded-lg border border-primary flex flex-col justify-start items-start">
             {/* title */}
