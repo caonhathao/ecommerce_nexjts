@@ -12,7 +12,7 @@
     --success: oklch(0.5 0.18 140);
     --error: oklch(0.6 0.18 25);
     --warning: oklch(0.8 0.15 85);
-    --info: oklch(0.55 0.15 250);
+    --info: oklch(0.50 0.20 245);
     --confirm: oklch(0.55 0.22 286);
 }
 

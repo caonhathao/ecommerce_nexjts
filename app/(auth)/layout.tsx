@@ -39,9 +39,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             width={100}
             height={100}
           />
-
         </Link>
-          {env.NEXT_PUBLIC_WEB_NAME}
         {children}
 
         <div className="text-balance text-center text-xs text-muted-foreground">

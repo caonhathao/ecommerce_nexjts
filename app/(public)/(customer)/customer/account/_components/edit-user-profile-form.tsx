@@ -29,12 +29,17 @@ import {
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Separator } from '@/components/ui/separator';
+import { useRouter, useSearchParams } from 'next/navigation';
 type Props = {
   defaultValues: UserProfileResponseDTO;
 };
 
 export default function EditUserProfileForm({ defaultValues }: Props) {
   const t = useTranslations('customer.profile_page');
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const callbackUrl = searchParams.get('callbackUrl');
 
   const schema = useMemo(
     () =>
@@ -75,6 +80,11 @@ export default function EditUserProfileForm({ defaultValues }: Props) {
       toast.success(
         t('toasts.saved', { defaultValue: 'Profile updated successfully!' })
       );
+      if (callbackUrl) {
+        router.push(decodeURIComponent(callbackUrl));
+      } else {
+        router.refresh();
+      }
     } catch (err) {
       console.error(err);
       toast.error(

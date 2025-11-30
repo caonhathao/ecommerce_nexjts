@@ -20,23 +20,51 @@ import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 
+type FormState = {
+  success: boolean;
+  message?: string;
+  newAddress?: AddressDTO;
+};
+
+const initialState: FormState = {
+  success: false,
+  message: '',
+};
+
 export default function AddressPage() {
   const t = useTranslations('customer.address');
   const [address, setAddress] = useState<AddressDTO[]>([]);
   const [isPendingTransition, startTransition] = useTransition();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [state, formAction, isPending] = useActionState(
-    async (_: any, formData: FormData) => {
+
+  const [state, formAction, isPending] = useActionState<FormState, FormData>(
+    async (prevState, formData) => {
+      const rawData = {
+        phone: formData.get('phone'),
+        line1: formData.get('line1'),
+        ward: formData.get('ward'),
+        district: formData.get('district'),
+        city: formData.get('city'),
+        country: formData.get('country'),
+      };
+      formData.set('data', JSON.stringify(rawData));
+
       try {
-        const addr = await createAddress(formData);
-        toast.success(t('toast_create_success'));
-        return { success: true, address: addr };
+        const res = await createAddress(formData);
+
+        if (res.success) {
+          toast.success(t('toast_create_success'));
+          return { success: true, newAddress: res.data };
+        } else {
+          toast.error(res.message || t('toast_create_failed'));
+          return { success: false, message: res.message };
+        }
       } catch (err: any) {
         toast.error(t('toast_create_failed'));
-        return { success: false, error: err.message };
+        return { success: false, message: err.message };
       }
     },
-    { success: false, error: '' }
+    initialState
   );
 
   useEffect(() => {
@@ -44,36 +72,35 @@ export default function AddressPage() {
       const data = await getAddress();
       if (data.success) setAddress(data.addresses);
     });
-    setDialogOpen(false);
   }, []);
-
-  const handleSubmit = (formData: FormData) => {
-    const data = {
-      phone: formData.get('phone'),
-      line1: formData.get('line1'),
-      ward: formData.get('ward'),
-      district: formData.get('district'),
-      city: formData.get('city'),
-      country: formData.get('country'),
-    };
-    formData.append('data', JSON.stringify(data));
-    return formAction(formData);
-  };
 
   useEffect(() => {
     if (state.success) {
-      startTransition(async () => {
-        const data = await getAddress();
-        if (data.success) setAddress(data.addresses);
-      });
       setDialogOpen(false);
+      if (state.newAddress) {
+        setAddress((prev) => [state.newAddress!, ...prev]);
+      } else {
+        startTransition(async () => {
+          const data = await getAddress();
+          if (data?.success) setAddress(data.addresses);
+        });
+      }
     }
-  }, [state.success]);
+  }, [state.success, state.newAddress]);
+
+  const handleDefaultChanged = (newDefaultId: string) => {
+    setAddress((prevAddresses) =>
+      prevAddresses.map((addr) => ({
+        ...addr,
+        isDefault: addr.id === newDefaultId,
+      }))
+    );
+  };
 
   return (
     <div className="p-4 w-full min-h-fit">
       <div className="w-full flex justify-between items-center gap-6">
-        <div className="flex items-center gap-3 px-5 py-2.5 bg-linear-to-r from-primary/90 to-chart-3/90 rounded-xl shadow-lg w-fit">
+        <div className="flex items-center gap-3 px-5 py-2 bg-linear-90 from-primary/90 to-chart-3/90 rounded-xl shadow-lg w-fit">
           <MapPin className="w-6 h-6 text-background" />
           <h2 className="text-xl md:text-2xl font-medium text-background">
             {t('title')}
@@ -87,7 +114,7 @@ export default function AddressPage() {
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
-            <form action={handleSubmit}>
+            <form action={formAction}>
               <DialogHeader>
                 <DialogTitle>{t('modal_title')}</DialogTitle>
               </DialogHeader>
@@ -118,13 +145,14 @@ export default function AddressPage() {
                     id="country"
                     name="country"
                     defaultValue={t('country_default')}
-                    disabled
+                    readOnly
                   />
                 </div>
               </div>
               <DialogFooter className="mt-2">
                 <DialogClose asChild>
                   <Button
+                    type="button"
                     variant="outline"
                     onClick={() => setDialogOpen(false)}
                   >
@@ -144,13 +172,17 @@ export default function AddressPage() {
       ) : address.length > 0 ? (
         <div className="mt-6 grid gap-4">
           {address.map((addr) => (
-            <AddressCard key={addr.id} {...addr} />
+            <AddressCard
+              key={addr.id}
+              address={addr}
+              onSuccess={() => handleDefaultChanged(addr.id)}
+            />
           ))}
         </div>
       ) : (
-        <div className="mt-12 flex gap-6 text-2xl justify-center text-center text-muted-foreground">
-          <MapPinX className="w-6 h-6 mb-2" />
-          {t('empty')}
+        <div className="mt-12 flex flex-col items-center gap-4 text-muted-foreground">
+          <MapPinX className="w-12 h-12 opacity-50" />
+          <p className="text-xl font-medium">{t('empty')}</p>
         </div>
       )}
     </div>
