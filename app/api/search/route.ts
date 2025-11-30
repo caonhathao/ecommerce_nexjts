@@ -1,6 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { Prisma } from '@/lib/generated/prisma';
 import { prisma } from '@/lib/db';
+import { Prisma } from '@/lib/generated/prisma';
+import { ActionResponse } from '@/lib/service-response';
+import { ServiceResponse } from '@/types/api-response';
+import { NextRequest, NextResponse } from 'next/server';
 import ProductWhereInput = Prisma.ProductWhereInput;
 import ProductOrderByWithRelationInput = Prisma.ProductOrderByWithRelationInput;
 
@@ -48,7 +50,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
 
     const query = searchParams.get('q') || '';
-    const categoryId = searchParams.get('categoryId');
+    const category = searchParams.get('category');
     const shopId = searchParams.get('shopId');
     const minPrice = searchParams.get('minPrice');
     const maxPrice = searchParams.get('maxPrice');
@@ -73,8 +75,24 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    if (categoryId) {
-      const categoryIds = await getCategoryWithChildren(categoryId);
+    if (category) {
+      const data = await prisma.category.findFirst({
+        where: {
+          slug: category,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!data)
+        return ActionResponse.toNextResponse({
+          success: false,
+          message: 't_category_not_found',
+          code: 403,
+        } as ServiceResponse);
+
+      const categoryIds = await getCategoryWithChildren(data.id);
       whereClause.categoryId = { in: categoryIds };
     }
 

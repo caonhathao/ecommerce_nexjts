@@ -354,6 +354,35 @@
       "watch_more": "See More"
     }
   },
+  "search_page": {
+    "t_search_failed": "Search failed",
+    "t_search_failed_desc": "No matching products found",
+    "t_connect_failed": "Connection failed",
+    "t_connect_failed_desc": "Cannot connect to the server",
+
+    "t_result_for": "Results for",
+    "t_all_product": "All Products",
+    "t_pagi_prod": "products",
+
+    "t_not_found": "No products found",
+    "t_not_found_desc": "Try searching again or changing the filters",
+    "search_filter_panel": {
+      "t_filter": "Filters",
+      "t_reset": "Reset",
+      "t_all_cate": "All Categories",
+      "t_price": "Price",
+      "t_price_range": "Enter price range",
+      "t_apply": "Apply",
+      "t_supplier": "Supplier"
+    },
+    "search_sort_bar": {
+      "t_sort_by": "Sort by",
+      "t_newest": "Newest",
+      "t_top_rate": "Top Rated",
+      "t_asc": "Price: Low to High",
+      "t_des": "Price: High to Low"
+    }
+  },
   "product_detail": {
     "t_price_after": "Price after discount",
     "t_sold": "Sold",

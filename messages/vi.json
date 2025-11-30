@@ -354,6 +354,35 @@
       "watch_more": "Xem thêm"
     }
   },
+  "search_page": {
+    "t_search_failed": "Hành động thất bại",
+    "t_search_failed_desc": "Không có sản phẩm cần tìm",
+    "t_connect_failed": "Kết nối thất bại",
+    "t_connect_failed_desc": "Không thể kết nối đến máy chủ",
+
+    "t_result_for": "Kết quả cho",
+    "t_all_product": "Tât cả sản phẩm",
+    "t_pagi_prod": "sản phẩm",
+
+    "t_not_found": "Không tìm thấy sản phẩm",
+    "t_not_found_desc": "Hãy thử tìm lại hoặc thay đổi bộ lọc",
+    "search_filter_panel": {
+      "t_filter": "Bộ lọc",
+      "t_reset": "Đặt lại",
+      "t_all_cate": "Tất cả danh mục",
+      "t_price": "Giá bán",
+      "t_price_range": "Nhập khoảng giá trị",
+      "t_apply": "Áp dụng",
+      "t_supplier": "Nhà cung cấp"
+    },
+    "search_sort_bar": {
+      "t_sort_by": "Sắp xếp theo",
+      "t_newest": "Mới nhất",
+      "t_top_rate": "Đánh giá cao",
+      "t_asc": "Giá tăng dần",
+      "t_des": "Giá giảm dần"
+    }
+  },
   "product_detail": {
     "t_price_after": "Giá sau áp dụng khuyến mãi",
     "t_sold": "Đã bán",

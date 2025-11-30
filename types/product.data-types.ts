@@ -47,7 +47,7 @@ export interface SearchProduct {
 
 export interface SearchFilters {
   query: string;
-  categoryId?: string;
+  category?: string;
   shopId?: string;
   minPrice?: string;
   maxPrice?: string;

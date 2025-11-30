@@ -2,6 +2,7 @@
 
 import { ProductItem } from '@/app/(public)/_components/product-item';
 import { SearchFiltersPanel } from '@/app/(public)/search/_components/search-filters-panel';
+import { SearchSortBar } from '@/app/(public)/search/_components/search-sort-bar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -13,9 +14,11 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { SearchSortBar } from '@/app/(public)/search/_components/search-sort-bar';
+import { FaX } from 'react-icons/fa6';
+import { toast } from 'sonner';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -31,6 +34,7 @@ export default function SearchPage() {
     totalPages: 0,
   });
 
+  const t = useTranslations('search_page');
   const { categories } = useCategories();
 
   type sortByType = 'createdAt' | 'price' | 'rating' | 'name';
@@ -38,7 +42,7 @@ export default function SearchPage() {
 
   const [filters, setFilters] = useState<SearchFilters>({
     query: searchParams.get('q') || '',
-    categoryId: searchParams.get('categoryId') || undefined,
+    category: searchParams.get('category') || undefined,
     shopId: searchParams.get('shopId') || undefined,
     minPrice: searchParams.get('minPrice') || undefined,
     maxPrice: searchParams.get('maxPrice') || undefined,
@@ -51,7 +55,7 @@ export default function SearchPage() {
   const buildSearchParams = (filters: SearchFilters) => {
     const params = new URLSearchParams();
     if (filters.query) params.set('q', filters.query);
-    if (filters.categoryId) params.set('categoryId', filters.categoryId);
+    if (filters.category) params.set('category', filters.category);
     if (filters.shopId) params.set('shopId', filters.shopId);
     if (filters.minPrice) params.set('minPrice', filters.minPrice);
     if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
@@ -68,13 +72,32 @@ export default function SearchPage() {
       try {
         const params = buildSearchParams(filters);
         const res = await fetch(`/api/search?${params.toString()}`);
-        if (!res.ok) throw new Error('Failed to fetch products');
+
+        //if !res.ok, show toast with failed desc
+        if (!res.ok) {
+          toast.error(t('t_search_failed'), {
+            description: t('t_search_failed_desc'),
+            action: {
+              label: <FaX />,
+              onClick: () => console.log('close'),
+            },
+          });
+          throw new Error('Failed to fetch products');
+        }
         const data = await res.json();
-        console.log('Fetched products:', data);
+        //console.log('Fetched products:', data);
         setProducts(data.products);
         setPagination(data.pagination);
       } catch (error) {
         console.error('Error fetching products:', error);
+        //when connecton failed
+        toast.error(t('t_connect_failed'), {
+          description: t('t_connect_failed_desc'),
+          action: {
+            label: <FaX />,
+            onClick: () => console.log('close'),
+          },
+        });
       } finally {
         setLoading(false);
       }
@@ -88,7 +111,7 @@ export default function SearchPage() {
 
     setFilters({
       query: searchParams.get('q') || '',
-      categoryId: searchParams.get('categoryId') || undefined,
+      category: searchParams.get('category') || undefined,
       shopId: searchParams.get('shopId') || undefined,
       minPrice: searchParams.get('minPrice') || undefined,
       maxPrice: searchParams.get('maxPrice') || undefined,
@@ -121,11 +144,11 @@ export default function SearchPage() {
           <div className="flex items-baseline gap-2">
             <h1 className="text-xl font-medium text-text">
               {filters.query
-                ? `Results for "${filters.query}"`
-                : `All Products`}
+                ? `${t('t_result_for')} "${filters.query}"`
+                : t('t_all_product')}
             </h1>
             <span className="text-sm text-text-secondary">
-              ({pagination.total} products)
+              ({pagination.total} {t('t_pagi_prod')})
             </span>
           </div>
         </div>
@@ -164,11 +187,9 @@ export default function SearchPage() {
                     <span className="text-3xl">🔍</span>
                   </div>
                   <h3 className="text-lg font-medium text-text">
-                    No products found
+                    {t('t_not_found')}
                   </h3>
-                  <p className="text-text-secondary">
-                    Try adjusting your search or filters.
-                  </p>
+                  <p className="text-text-secondary">{t('t_not_found_desc')}</p>
                 </CardContent>
               </Card>
             ) : (

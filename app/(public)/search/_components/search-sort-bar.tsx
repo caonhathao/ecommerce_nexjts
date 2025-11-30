@@ -1,5 +1,6 @@
-import { SearchFilters } from '@/types/product.data-types';
 import { cn } from '@/lib/utils';
+import { SearchFilters } from '@/types/product.data-types';
+import { useTranslations } from 'next-intl';
 
 interface SearchSortBarProps {
   filters: SearchFilters;
@@ -10,7 +11,7 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
   const isSortActive = (key: string, order: string = 'desc') => {
     return filters.sortBy === key && filters.sortOrder === order;
   };
-
+  const t = useTranslations('search_page.search_sort_bar');
   const handleSort = (
     key: 'createdAt' | 'price' | 'rating',
     order: 'asc' | 'desc'
@@ -20,7 +21,7 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
 
   return (
     <div className="flex flex-wrap items-center gap-4 border-b border-border bg-background-secondary p-4 mb-4 rounded-lg">
-      <span className="text-sm text-text mr-2">Sort by:</span>
+      <span className="text-sm text-text mr-2">{t('t_sort_by')}:</span>
 
       {/* Popular / Newest Tabs */}
       <button
@@ -32,7 +33,7 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
             : 'text-text hover:bg-secondary/50'
         )}
       >
-        Newest
+        {t('t_newest')}
       </button>
 
       <button
@@ -44,7 +45,7 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
             : 'text-text hover:bg-secondary/50'
         )}
       >
-        Top Rated
+        {t('t_top_rate')}
       </button>
 
       <button
@@ -56,7 +57,7 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
             : 'text-text hover:bg-secondary/50'
         )}
       >
-        Price: Low to High
+        {t('t_asc')}
       </button>
 
       <button
@@ -68,7 +69,7 @@ export function SearchSortBar({ filters, onFilterChange }: SearchSortBarProps) {
             : 'text-text hover:bg-secondary/50'
         )}
       >
-        Price: High to Low
+        {t('t_des')}
       </button>
     </div>
   );
