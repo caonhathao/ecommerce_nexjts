@@ -10,7 +10,7 @@ import Image from 'next/image';
 
 export const CarouselPanel = () => {
   return (
-    <div className="w-full flex justify-center items-center bg-background rounded-lg p-2">
+    <div className="w-full flex justify-center items-center bg-background-secondary rounded-lg p-2">
       <Carousel
         opts={{
           align: 'center',

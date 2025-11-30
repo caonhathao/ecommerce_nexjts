@@ -13,9 +13,9 @@ export const RatingStars = ({ value, max = 5, size }: RatingProps) => {
   const stars = Array.from({ length: max }, (_, i) => {
     const starValue = i + 1;
     if (starValue <= rounded)
-      return <FaStar key={i} className="text-yellow-400" size={size} />;
+      return <FaStar key={i} className="text-warning" size={size} />;
     if (starValue - 0.5 === rounded)
-      return <FaStarHalfAlt key={i} className="text-yellow-400" size={size} />;
+      return <FaStarHalfAlt key={i} className="text-warning" size={size} />;
     return <FaRegStar key={i} className="text-gray-300" size={size} />;
   });
 

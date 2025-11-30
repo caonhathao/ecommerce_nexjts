@@ -176,7 +176,7 @@ export default function UserNav({ user }: { user: UserMini }) {
 
   return (
     <TooltipProvider>
-      <Card className="overflow-hidden rounded-none border-0 bg-transparent shadow-none">
+      <Card className="overflow-hidden rounded-none border-0 bg-background-secondary shadow-none">
         {/* HeaderClient */}
         <CardHeader className="flex flex-row items-center space-y-0 ">
           <Avatar className="h-12 w-12">
@@ -186,7 +186,7 @@ export default function UserNav({ user }: { user: UserMini }) {
           <div className="min-w-0">
             <div className="truncate text-sm font-medium">{user.name}</div>
             {user.email ? (
-              <div className="truncate text-xs text-muted-foreground">
+              <div className="truncate text-xs text-text-secondary">
                 {user.email}
               </div>
             ) : null}
@@ -221,7 +221,7 @@ export default function UserNav({ user }: { user: UserMini }) {
                 className="w-full"
               >
                 <AccordionItem value="membership" className="border-b-0">
-                  <AccordionTrigger className="px-2 text-left text-xs font-semibold text-muted-foreground hover:no-underline">
+                  <AccordionTrigger className="px-2 text-left text-xs font-semibold text-text-secondary hover:no-underline">
                     {t(SECTIONS[1].headingKey!)}
                   </AccordionTrigger>
                   <AccordionContent className="px-0 pt-1">
@@ -288,8 +288,8 @@ function NavItem({
             'w-full justify-between px-3 py-2 text-sm',
             'rounded-md transition-colors',
             active
-              ? 'bg-primary text-secondary-foreground hover:bg-primary hover:text-secondary-foreground'
-              : 'hover:bg-secondary hover:text-secondary-foreground'
+              ? 'bg-primary/20 text-text hover:bg-primary hover:text-primary-foreground'
+              : 'hover:bg-secondary hover:text-text-secondary'
           )}
         >
           <Link

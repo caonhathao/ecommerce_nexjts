@@ -242,8 +242,8 @@ export default function Cart() {
           {/* giỏ hàng */}
           <div className="col-span-3 flex flex-col gap-4">
             {/* header */}
-            <div className="bg-card rounded-2xl shadow-xs">
-              <div className="grid grid-cols-[45%_15%_15%_15%_10%] px-4 gap-2 items-center h-full">
+            <div className="bg-background-secondary rounded-lg shadow-xs">
+              <div className="grid grid-cols-[45%_15%_15%_15%_10%] px-4 py-2 gap-2 items-center h-full text-text">
                 <div className="flex items-center gap-3">
                   <Checkbox
                     id="choose-all"
@@ -284,21 +284,21 @@ export default function Cart() {
             </div>
 
             {/* danh sách sản phẩm */}
-            <div className="bg-card rounded-2xl shadow-xs divide-y divide-border">
+            <div className="bg-background-secondary rounded-2xl shadow-xs divide-y">
               {loading && (
                 <div className="flex items-center justify-center p-8">
-                  <div className="animate-spin rounded-full h-10 w-10 border-4 border-muted border-t-primary" />
+                  <div className="animate-spin rounded-full h-10 w-10 border-4 border-border border-t-primary" />
                 </div>
               )}
               {noItems && (
-                <div className="p-4 text-center text-muted-foreground">
+                <div className="p-4 text-center text-text-secondary">
                   {t('t_empty_cart')}
                 </div>
               )}
               {cart.items.map((item: any) => (
                 <div
                   key={item.id}
-                  className="grid grid-cols-[45%_15%_15%_15%_10%] p-4 gap-2 items-center"
+                  className="grid grid-cols-[45%_15%_15%_15%_10%] text-text p-4 gap-2 items-center"
                 >
                   <div className="flex items-center gap-3">
                     <Checkbox
@@ -393,14 +393,14 @@ export default function Cart() {
           {/* cột phải: khuyến mãi + thanh toán */}
           <div className="col-span-1 flex flex-col gap-4">
             {/* Voucher */}
-            <div className="flex flex-col bg-card rounded-2xl shadow-xs p-4 gap-3">
+            <div className="flex flex-col bg-background-secondary rounded-2xl shadow-xs p-4 gap-3">
               <div className="flex items-center gap-3 justify-between">
                 <Label htmlFor="title" className="text-foreground">
                   {t('t_promotion')}
                 </Label>
                 <Label
                   htmlFor="disable"
-                  className="text-muted-foreground cursor-not-allowed select-none"
+                  className="text-text-secondary cursor-not-allowed select-none"
                 >
                   Có thể áp dụng 2
                 </Label>
@@ -408,21 +408,21 @@ export default function Cart() {
               {/* voucher items */}
               <div className="space-y-3">
                 {/* voucher 1 */}
-                <div className="flex items-center justify-between bg-primary/10 border border-primary/30 rounded-xl p-3 shadow-sm">
-                  <div className="shrink-0 w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-xl">
+                <div className="flex items-center justify-between bg-primary/10 border border-primary/50 rounded-xl p-3 shadow-sm">
+                  <div className="shrink-0 w-12 h-12 bg-info/80 rounded-lg flex overflow-hidden items-center justify-center text-primary-foreground font-bold text-xl">
                     {env.NEXT_PUBLIC_WEB_NAME}
                   </div>
-                  <div className="mx-3 w-px h-8 border-r border-dashed border-primary/40"></div>
+                  <div className="mx-3 w-px h-8 border-r border-dashed border-primary"></div>
                   <div className="flex-1 flex items-center gap-2 text-primary text-sm">
                     <span>Giảm 6% tối đa...</span>
                   </div>
-                  <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 py-1 rounded-md text-sm font-medium transition">
+                  <button className="bg-info/60 hover:bg-info text-primary-foreground px-2 py-1 rounded-md text-sm font-medium transition">
                     Bỏ Chọn
                   </button>
                 </div>
                 {/* voucher 2 */}
-                <div className="flex items-center justify-between bg-success/10 border border-success/30 rounded-xl p-3 shadow-sm">
-                  <div className="shrink-0 w-12 h-12 bg-success rounded-lg flex items-center justify-center">
+                <div className="flex items-center justify-between bg-primary/5 border border-primary/50 rounded-xl p-3 shadow-sm">
+                  <div className="shrink-0 w-12 h-12 bg-success/70 rounded-lg flex items-center justify-center">
                     <Image
                       width={8}
                       height={8}
@@ -431,11 +431,11 @@ export default function Cart() {
                       className="w-8 h-8 object-contain"
                     />
                   </div>
-                  <div className="mx-3 w-px h-8 border-r border-dashed border-success/40"></div>
-                  <div className="flex-1 flex items-center gap-2 text-success text-sm">
+                  <div className="mx-3 w-px h-8 border-r border-dashed border-primary"></div>
+                  <div className="flex-1 flex items-center gap-2 text-primary text-sm">
                     <span>Giảm 6% tối đa...</span>
                   </div>
-                  <button className="bg-success hover:bg-success/90 text-success-foreground px-3 py-1 rounded-md text-sm font-medium transition">
+                  <button className="bg-success/60 hover:bg-success text-primary-foreground px-2 py-1 rounded-md text-sm font-medium transition">
                     Bỏ Chọn
                   </button>
                 </div>
@@ -454,10 +454,10 @@ export default function Cart() {
             </div>
 
             {/* Payment info */}
-            <div className="flex flex-col justify-evenly bg-card rounded-2xl shadow-xs p-4 gap-3">
+            <div className="flex flex-col justify-evenly bg-background-secondary rounded-2xl shadow-xs p-4 gap-3">
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-muted-foreground text-sm">{t('t_total')}</p>
-                <p className="text-foreground">
+                <p className="text-text-secondary text-sm">{t('t_total')}</p>
+                <p>
                   {cart.items
                     .filter((item: any) =>
                       selectedItem.some(
@@ -474,7 +474,7 @@ export default function Cart() {
                 </p>
               </div>
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-muted-foreground text-sm">
+                <p className="text-text-secondary text-sm">
                   {t('t_discount')}
                 </p>
                 <p className="text-success">
@@ -497,10 +497,8 @@ export default function Cart() {
               </div>
               <Separator />
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-muted-foreground text-sm">
-                  {t('t_total_payment')}
-                </p>
-                <p className="text-destructive font-semibold">
+                <p className="text-text-secondary text-sm">{t('t_total_payment')}</p>
+                <p className="text-error">
                   {cart.items
                     .filter((item: any) =>
                       selectedItem.some(

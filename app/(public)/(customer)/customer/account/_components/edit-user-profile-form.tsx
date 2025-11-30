@@ -87,7 +87,7 @@ export default function EditUserProfileForm({ defaultValues }: Props) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-[59%_1%_40%] gap-6 "
+        className="grid grid-cols-[59%_1%_40%] gap-6"
       >
         {/* Left */}
         <div className=" space-y-6">

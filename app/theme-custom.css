@@ -1,38 +1,54 @@
 :root {
     --brand: oklch(0.705 0.2 355.467);
     --brand-foreground: oklch(1 0 0);
-
     --background-darker: oklch(0.958 0 89.876);
-    --success: oklch(0.627 0.194 149.214);
     --success-foreground: oklch(0.985 0 0);
-    --warning: oklch(0.795 0.184 86.047);
     --warning-foreground: oklch(0.233 0.076 82.553);
-    --info: oklch(0.546 0.245 262.88);
     --info-foreground: oklch(1 0 0);
+    --background-secondary:  oklch(1 0 0);
+    --text: oklch(0.25 0.08 286);
+    --text-secondary: oklch(0.5 0.08 286);
+    --accent-hover: oklch(0.85 0.07 286);
+    --success: oklch(0.5 0.18 140);
+    --error: oklch(0.6 0.18 25);
+    --warning: oklch(0.8 0.15 85);
+    --info: oklch(0.55 0.15 250);
+    --confirm: oklch(0.55 0.22 286);
 }
 
 .dark {
     --brand: oklch(0.705 0.2 355.467);
     --brand-foreground: oklch(1 0 0);
-
     --background-darker: oklch(0.097 0.041 295.123);
-    --success: oklch(0.627 0.194 149.214);
     --success-foreground: oklch(0.985 0 0);
-    --warning: oklch(0.795 0.184 86.047);
     --warning-foreground: oklch(0.233 0.076 82.553);
-    --info: oklch(0.546 0.245 262.88);
     --info-foreground: oklch(1 0 0);
+    --background-secondary: oklch(0.2 0.06 286);
+    --text: oklch(0.98 0.02 286);
+    --text-secondary: oklch(0.7 0.05 286);
+    --accent-hover: oklch(0.35 0.12 286);
+    --success: oklch(0.7 0.2 140);
+    --error: oklch(0.7 0.2 25);
+    --warning: oklch(0.85 0.18 85);
+    --info: oklch(0.7 0.2 250);
+    --confirm: oklch(0.65 0.22 286);
 }
 
 @theme inline {
     --color-brand: var(--brand);
     --color-brand-foreground: var(--brand-foreground);
-
     --color-background-darker: var(--background-darker);
-    --color-success: var(--success);
     --color-success-foreground: var(--success-foreground);
-    --color-warning: var(--warning);
     --color-warning-foreground: var(--warning-foreground);
-    --color-info: var(--info);
     --color-info-foreground: var(--info-foreground);
+
+    --color-background-secondary: var(--background-secondary);
+    --color-text: var(--text);
+    --color-text-secondary: var(--text-secondary);
+    --color-accent-hover: var(--accent-hover);
+    --color-success: var(--success);
+    --color-error: var(--error);
+    --color-warning: var(--warning);
+    --color-info: var(--info);
+    --color-confirm: var(--confirm);
 }

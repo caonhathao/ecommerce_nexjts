@@ -8,11 +8,9 @@ import { TopDealItems } from './_components/top-deal-items';
 
 export default function Home() {
   return (
-    <div className="w-full h-full flex flex-col justify-start items-center">
+    <div className="w-full h-full flex flex-col justify-start items-center gap-4">
       <CarouselPanel />
-      <div className="w-full bg-transparent p-1.5"></div>
       <CategoryPromotionPanel />
-      <div className="w-full bg-transparent p-1.5"></div>
       <TopDealItems size={'5'} />
       <HotForeign size={'5'} />
       <SuggestDealToday size="5" />

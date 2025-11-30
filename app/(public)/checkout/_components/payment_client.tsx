@@ -25,8 +25,11 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
       }
 
       if (data.url) {
-        toast.success(t('t_payment_direct'));
-        window.location.href = data.url; // Redirect to Stripe Checkout
+        toast.success(t('t_payment_direct'), {
+          position: 'top-right',
+          duration: 3000,
+        });
+        window.location.href = data.url; // 👉 Redirect sang Stripe Checkout
       }
     } catch (err) {
       toast.error(t('t_payment_create_session_failed'));
@@ -40,7 +43,7 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
     <Button
       onClick={handlePayment}
       disabled={isLoading}
-      className="bg-blue-600 text-white px-4 py-2 rounded-lg w-full"
+      className="bg-primary text-primary-foreground cursor-pointer px-4 py-2 rounded-lg w-full"
     >
       {isLoading ? t('t_processing') : t('t_payment')}
     </Button>

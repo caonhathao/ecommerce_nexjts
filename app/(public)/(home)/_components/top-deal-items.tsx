@@ -50,10 +50,10 @@ export const TopDealItems = ({
   if (!data) return <Loading />;
 
   return (
-    <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-background rounded-lg">
+    <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-background-secondary rounded-lg">
       {/* top title */}
       <div className="w-full flex flex-row justify-between items-center p-2">
-        <p className="w-fit flex flex-row gap-2 text-red-600 font-bold select-none">
+        <p className="w-fit flex flex-row gap-2 text-error font-bold select-none">
           <AiFillLike color="red" size={20} />
           {t('title')}
         </p>

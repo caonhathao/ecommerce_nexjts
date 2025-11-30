@@ -3,18 +3,19 @@
 @import './theme-custom.css';
 
 @layer utilities {
-  .text-tiny {
-    font-size: 0.625rem;
-  }
-  .text-s-tiny {
-    font-size: 0.5rem;
-  }
+    .text-tiny {
+        font-size: 0.625rem;
+    }
+
+    .text-s-tiny {
+        font-size: 0.5rem;
+    }
 }
 
 @custom-variant dark (&:is(.dark *));
 :root {
     /* LIGHT MODE - Tím Đậm & Sạch */
-    --background: oklch(1 0 0); /* Trắng tinh khôi */
+    --background: oklch(0.97 0.02 286);
     --foreground: oklch(0.25 0.08 286); /* Chữ màu tím than rất đậm (thay vì đen) */
 
     --card: oklch(1 0 0);
@@ -40,27 +41,10 @@
     --destructive: oklch(0.6 0.18 25);
     --destructive-foreground: oklch(1 0 0);
 
-    --border: oklch(0.85 0.05 286); /* Viền tím nhạt */
+    --border: oklch(0.9 0.04 286); /* Viền tím nhạt */
     --input: oklch(0.85 0.05 286);
     --ring: oklch(0.55 0.22 286);
 
-    /* Chart colors (Tông tím -> Hồng -> Xanh) */
-    --chart-1: oklch(0.55 0.22 286);
-    --chart-2: oklch(0.6 0.18 310);
-    --chart-3: oklch(0.5 0.15 260);
-    --chart-4: oklch(0.65 0.2 330);
-    --chart-5: oklch(0.7 0.15 240);
-
-    --sidebar: oklch(0.97 0.02 286);
-    --sidebar-foreground: oklch(0.35 0.08 286);
-    --sidebar-primary: oklch(0.55 0.22 286);
-    --sidebar-primary-foreground: oklch(1 0 0);
-    --sidebar-accent: oklch(0.92 0.05 286);
-    --sidebar-accent-foreground: oklch(0.35 0.08 286);
-    --sidebar-border: oklch(0.88 0.04 286);
-    --sidebar-ring: oklch(0.55 0.22 286);
-
-    /* Giữ nguyên các thông số kỹ thuật */
     --font-sans: Inter, ui-sans-serif, sans-serif, system-ui;
     --font-serif: Source Serif 4, serif;
     --font-mono: IBM Plex Mono, monospace;
@@ -86,26 +70,42 @@
     --shadow-2xl: 0px 8px 16px -4px hsl(0 0% 0% / 0.2);
     --tracking-normal: 0em;
     --spacing: 0.25rem;
+
+    /* Chart colors (Tông tím -> Hồng -> Xanh) */
+    --chart-1: oklch(0.55 0.22 286);
+    --chart-2: oklch(0.6 0.18 310);
+    --chart-3: oklch(0.5 0.15 260);
+    --chart-4: oklch(0.65 0.2 330);
+    --chart-5: oklch(0.7 0.15 240);
+
+    --sidebar: oklch(0.97 0.02 286);
+    --sidebar-foreground: oklch(0.35 0.08 286);
+    --sidebar-primary: oklch(0.55 0.22 286);
+    --sidebar-primary-foreground: oklch(1 0 0);
+    --sidebar-accent: oklch(0.92 0.05 286);
+    --sidebar-accent-foreground: oklch(0.35 0.08 286);
+    --sidebar-border: oklch(0.88 0.04 286);
+    --sidebar-ring: oklch(0.55 0.22 286);
 }
 
 .dark {
     /* DARK MODE - Tím Sâu & Rực Rỡ */
     /* Nền tím than cực đậm (Deep Violet) thay vì màu xám đen */
-    --background: oklch(0.14 0.05 286);
+    --background: oklch(0.08 0.03 286);
     --foreground: oklch(0.98 0.02 286); /* Trắng ánh tím nhẹ */
 
     /* Card nổi bật hơn nền một chút */
-    --card: oklch(0.18 0.06 286);
+    --card: oklch(0.20 0.06 286);
     --card-foreground: oklch(0.98 0.02 286);
 
-    --popover: oklch(0.18 0.06 286);
+    --popover: oklch(0.2 0.06 286);
     --popover-foreground: oklch(0.98 0.02 286);
 
     /* Primary: Tím Neon rực rỡ để tương phản trên nền tối */
     --primary: oklch(0.65 0.22 286);
     --primary-foreground: oklch(1 0 0);
 
-    --secondary: oklch(0.25 0.08 286);
+    --secondary: oklch(0.22 0.07 286);
     --secondary-foreground: oklch(0.9 0.05 286);
 
     --muted: oklch(0.25 0.06 286);
@@ -127,7 +127,7 @@
     --chart-4: oklch(0.65 0.2 330);
     --chart-5: oklch(0.7 0.15 240);
 
-    --sidebar: oklch(0.12 0.05 286);
+    --sidebar: oklch(0.10 0.04 286);
     --sidebar-foreground: oklch(0.96 0.02 286);
     --sidebar-primary: oklch(0.65 0.22 286);
     --sidebar-primary-foreground: oklch(1 0 0);
@@ -192,16 +192,16 @@
 }
 
 body {
-  letter-spacing: var(--tracking-normal);
+    letter-spacing: var(--tracking-normal);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
+    * {
+        @apply border-border outline-ring/50;
+    }
 
-  body {
-    @apply bg-background text-foreground;
-  }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
 

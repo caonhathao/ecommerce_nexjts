@@ -19,7 +19,7 @@ export default function ForbiddenPage() {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-text">
             You don&apos;t have permission to view this page. If you think this
             is a mistake, please contact support or try logging in with another
             account.

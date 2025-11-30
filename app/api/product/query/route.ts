@@ -37,6 +37,7 @@ export async function GET(req: Request) {
         title: true,
         minPrice: true,
         ratingAvg: true,
+        description: true,
         images: {
           take: 1,
           select: { url: true },
