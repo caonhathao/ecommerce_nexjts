@@ -576,7 +576,7 @@ const DetailPage = () => {
                 <div className="flex flex-row gap-2 justify-start items-start">
                   <button
                     className={`w-10 h-10 border border-muted-foreground rounded-lg font-bold flex justify-center items-center ${
-                      amount === 1
+                      selVariant.amount == 1
                         ? 'opacity-50 cursor-not-allowed'
                         : 'cursor-pointer '
                     }`}

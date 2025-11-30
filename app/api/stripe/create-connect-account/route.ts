@@ -10,6 +10,23 @@ export async function POST() {
   if (!session) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
+
+  const user = await prisma.userProfile.findUnique({
+    where: { userId: session.user.id },
+  });
+  if (!user)
+    return NextResponse.json({ message: 'User not found' }, { status: 404 });
+
+  if (!user.emailForBill || !user.phone || !session.user.name) {
+    return NextResponse.json(
+      {
+        error: 'MISSING_PROFILE',
+        message: 'Please update your profile information first.',
+      },
+      { status: 403 }
+    );
+  }
+
   try {
     const account = await stripe.accounts.create({
       type: 'express',

@@ -4,7 +4,7 @@ import { UserProfileResponseDTO } from '@/types/dtos/user.dto';
 import { delay } from 'effect/Micro';
 import { DollarSign, Loader2, ShieldCheck, Store } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -15,22 +15,10 @@ interface BusinessClientProps {
 export default function BusinessClient({ user }: BusinessClientProps) {
   const [isLoading, setIsLoading] = useState(false);
   const route = useRouter();
-  console.log(user);
+  const pathname = usePathname();
   const handleSellerRegister = async () => {
     setIsLoading(true);
     try {
-      if (user == null) return;
-      if (!user.emailForBill || !user.phone || !user.name) {
-        toast.warning('Please fill in your user information to continue.', {
-          duration: 3000,
-          position: 'top-right',
-        });
-        await delay(3000);
-        route.push('/customer/account/edit');
-        setIsLoading(false);
-        return;
-      }
-
       const response = await fetch('/api/stripe/create-connect-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -38,17 +26,21 @@ export default function BusinessClient({ user }: BusinessClientProps) {
 
       const data = await response.json();
 
+      if (response.status === 403 && data.error === 'MISSING_PROFILE') {
+        toast.warning(data.message, { duration: 3000 });
+        const currentUrl = encodeURIComponent(pathname);
+        route.push(`/customer/account/edit?callbackUrl=${currentUrl}`);
+        return;
+      }
+
+      if (!response.ok) throw new Error(data.message);
+
       if (data.url) {
         window.location.href = data.url;
-      } else {
-        toast.error(`Có lỗi xảy ra, vui lòng thử lại. ${data.error}`, {
-          duration: 3000,
-          position: 'top-right',
-        });
       }
     } catch (error) {
       console.error(error);
-      alert('Lỗi kết nối server.');
+      alert('Something went wrong');
     } finally {
       setIsLoading(false);
     }
@@ -62,10 +54,9 @@ export default function BusinessClient({ user }: BusinessClientProps) {
             <Store size={32} />
           </div>
           <h1 className="text-3xl font-bold mb-2 text-primary-foreground">
-            {t('t_title')}          </h1>
-          <p className="text-primary-foreground">
-            {t('t_desc')}
-          </p>
+            {t('t_title')}{' '}
+          </h1>
+          <p className="text-primary-foreground">{t('t_desc')}</p>
         </div>
 
         <div className="p-8 grid md:grid-cols-3 gap-6 text-center border-b border-border">
