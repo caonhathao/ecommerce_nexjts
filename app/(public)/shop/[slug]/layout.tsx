@@ -19,8 +19,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { IoChatboxEllipsesOutline } from 'react-icons/io5';
 import { MdOutlineRateReview } from 'react-icons/md';
-import { Loading } from '../../_components/loading';
-import SearchingBar from '../_components/searching-bar';
+import { Loading } from '@/components/loading';
+import SearchingBar from '@/app/(public)/_components/searching-bar';
 
 const ShopPage = ({ children }: { children: React.ReactNode }) => {
   const params = useParams();
@@ -161,7 +161,7 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="w-[40%]">
-          <SearchingBar id={shopData.id} />
+          <SearchingBar />
         </div>
       </div>
       <div className="w-[70%]">{children}</div>

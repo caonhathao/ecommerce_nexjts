@@ -23,6 +23,7 @@
     },
     "login_form_tab": {
       "t_github_success": "Đăng nhập bằng Github, bạn sẽ được chuyển hướng...",
+      "t_google_success": "Đăng nhập bằng Google, bạn sẽ được chuyển hướng...",
       "t_email_failed_noti": "Vui lòng nhập email của bạn",
       "t_verify_otp": "Mã OTP đã được gửi đến email của bạn",
       "t_password_missing": "Vui lòng nhập email và mật khẩu",
@@ -31,6 +32,7 @@
       "t_welcome": "Mừng bạn quay lại!",
       "t_desc": "Đăng nhập vào tài khoản của bạn để tiếp tục",
       "t_with_github": "Đăng nhập với Github",
+      "t_with_google": "Đăng nhập với Google",
       "t_or": "Hoặc tiếp tục với",
       "t_password": "Mật khẩu",
       "t_forgot_password": "Quên mật khẩu?",

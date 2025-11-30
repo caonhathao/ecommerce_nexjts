@@ -14,14 +14,16 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/app/(public)/(customer)/customer/account/orders/_components/no-order-found';
 import { formatPrice } from '@/app/(public)/_components/global-function';
-
-enum OrderStatus {
-  AWAITING_PAYMENT = 'AWAITING_PAYMENT',
-  PROCESSING = 'PROCESSING',
-  SHIPPED = 'SHIPPED',
-  DELIVERED = 'DELIVERED',
-  CANCELED = 'CANCELED',
-}
+import { $Enums } from '@/lib/generated/prisma';
+import OrderStatus = $Enums.OrderStatus;
+//
+// enum OrderStatus {
+//   AWAITING_PAYMENT = 'AWAITING_PAYMENT',
+//   PROCESSING = 'PROCESSING',
+//   SHIPPED = 'SHIPPED',
+//   DELIVERED = 'DELIVERED',
+//   CANCELED = 'CANCELED',
+// }
 
 interface OrderItem {
   id: string;

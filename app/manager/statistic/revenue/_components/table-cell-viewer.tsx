@@ -1,7 +1,7 @@
 'use client';
 
 import { formatPrice } from '@/app/(public)/_components/global-function';
-import { Loading } from '@/app/(public)/_components/loading';
+import { Loading } from '@/components/loading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';

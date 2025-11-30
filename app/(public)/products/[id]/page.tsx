@@ -21,7 +21,7 @@ import { MdAttachMoney, MdOutlineStore } from 'react-icons/md';
 import { PiTruckLight } from 'react-icons/pi';
 import { toast } from 'sonner';
 import { formatPrice } from '../../_components/global-function';
-import { Loading, LoadingComponent } from '../../_components/loading';
+import { Loading } from '../../../../components/loading';
 import { RatingStars } from '../../_components/rating-starts';
 import SlideImg from './_components/slide-img';
 
@@ -305,7 +305,12 @@ const DetailPage = () => {
     }
   };
 
-  if (!data) return <Loading />;
+  if (!data)
+    return (
+      <div className="w-full h-screen max-h-2/3 flex justify-center items-center">
+        <Loading size={100} color="var(--primary)" />
+      </div>
+    );
   if (selVariant === null) {
     return <Loading />;
   }
@@ -532,7 +537,7 @@ const DetailPage = () => {
               </div>
             </div>
           </div>
-          <Suspense fallback={<LoadingComponent />}>
+          <Suspense fallback={<Loading size={40} />}>
             <Reviews
               key={data.id}
               id={data.id}

@@ -5,5 +5,5 @@ export interface ServiceResponse<T = null> {
   message: string;
   code: StatusCode;
   data?: T;
-  errors?: Record<string, string[]>; // For Zod validation errors
+  errors?: Record<string, string[]>;
 }

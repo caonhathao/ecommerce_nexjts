@@ -1,4 +1,4 @@
-import { Loading } from '@/app/(public)/_components/loading';
+import { Loading } from '@/components/loading';
 import {
   Card,
   CardAction,
