@@ -40,6 +40,7 @@
       "t_email_placeholder": "you@example.com",
       "t_password_placeholder": "••••••••",
       "t_otp_desc": "We'll send you a 6-digit code to sign in",
+      "t_no_register_note": "No registration required. Enter your email to get a one-time code. We'll create your account on first sign-in.",
       "t_sending_code": "Sending code...",
       "t_send_code": "Send Verification Code",
       "t_reset_email_missing": "Please enter your email first",
@@ -307,7 +308,6 @@
     "clock_jewelry": "Watches & Jewelry",
     "balo_vali": "Backpacks & Suitcases",
     "vouchers_services": "Vouchers & Services",
-
     "app_sidebar": {
       "category": "Category",
       "electronics": "Electronics",
@@ -326,7 +326,6 @@
       "diy-tools-hardware": "DIY, Tools & Hardware",
       "gifts-special-occasions": "Gifts & Special Occasions",
       "extensions": "Utilities",
-
       "promotion": "Card & E-Wallet Offers",
       "pay_top_up": "Bill Payment & Top-up",
       "pay_later": "Buy Now, Pay Later"
@@ -355,7 +354,6 @@
       "watch_more": "See More"
     }
   },
-
   "product_detail": {
     "t_price_after": "Price after discount",
     "t_sold": "Sold",
@@ -527,7 +525,6 @@
   },
   "admin_category_page": {
     "t_search_placeholder": "Enter search keywords...",
-
     "t_action_noti": "Action",
     "t_copy_desc_noti": "Information copied successfully!",
     "t_del_desc_noti": "Product category deleted successfully!",
@@ -583,14 +580,11 @@
       "t_action_noti": "Action",
       "t_create_desc_noti": "Product category created successfully.",
       "t_del_desc_noti": "Product category deleted successfully!",
-
       "t_action_failed_noti": "Action failed",
       "t_create_failed_desc_noti": "Failed to create category.",
-
       "t_name_schema": "Name is required",
       "t_slug_schema": "Slug is required",
       "t_file_schema": "File size must be less than 200KB",
-
       "t_new_button": "Create New",
       "t_new_category": "New Category",
       "t_desc": "Create a new product category.",
@@ -856,7 +850,6 @@
       "t_update_failed_desc_noti": "Failed to update information!",
       "t_copy_failed_desc_noti": "Failed to copy information!",
       "t_del_failed_desc_noti": "Failed to delete product!",
-
       "t_product_desc": "Product Details",
       "t_shop": "Shop",
       "t_watch_shop": "View Shop",

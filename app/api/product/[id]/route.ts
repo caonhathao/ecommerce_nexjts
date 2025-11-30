@@ -83,6 +83,7 @@ export async function GET(
       status: 200,
     });
   } catch (error) {
+    console.error(error);
     return new Response(JSON.stringify({ message: 'Internal Server Error' }), {
       status: 500,
     });

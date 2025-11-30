@@ -33,14 +33,17 @@ export default function SearchPage() {
 
   const { categories } = useCategories();
 
+  type sortByType = 'createdAt' | 'price' | 'rating' | 'name';
+  type sortOrderType = 'asc' | 'desc';
+
   const [filters, setFilters] = useState<SearchFilters>({
     query: searchParams.get('q') || '',
     categoryId: searchParams.get('categoryId') || undefined,
     shopId: searchParams.get('shopId') || undefined,
     minPrice: searchParams.get('minPrice') || undefined,
     maxPrice: searchParams.get('maxPrice') || undefined,
-    sortBy: (searchParams.get('sortBy') as any) || 'createdAt',
-    sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
+    sortBy: (searchParams.get('sortBy') as sortByType) || 'createdAt',
+    sortOrder: (searchParams.get('sortOrder') as sortOrderType) || 'desc',
     page: Number(searchParams.get('page')) || 1,
     limit: Number(searchParams.get('limit')) || 20,
   });

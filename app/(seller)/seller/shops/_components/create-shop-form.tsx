@@ -1,6 +1,6 @@
 'use client';
 
-import {  useTransition } from 'react';
+import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/form';
 import { CreateShopInput, createShopSchema } from './shopSchema';
 import { generateClientSlug } from '@/helpers/slug-helper';
+import { paths } from '@/lib/path';
 
 function slugify(input: string) {
   return input
@@ -103,7 +104,7 @@ export default function CreateShopForm() {
         } else if (res.status === 401) {
           toast.error('You must be signed in to create a shop');
           router.push(
-            `/auth/login?callbackUrl=${encodeURIComponent('/seller/shops/create')}`
+            `${paths.login}?callbackUrl=${encodeURIComponent('/seller/shops/create')}`
           );
         } else if (res.status === 400) {
           const body = await res.json().catch(() => ({}));

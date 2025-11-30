@@ -31,8 +31,9 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
         });
         window.location.href = data.url; // 👉 Redirect sang Stripe Checkout
       }
-    } catch (err: any) {
-      toast.error(err.message || t('t_payment_create_session_failed'));
+    } catch (err) {
+      toast.error(t('t_payment_create_session_failed'));
+      console.error(err);
     } finally {
       setIsLoading(false);
     }

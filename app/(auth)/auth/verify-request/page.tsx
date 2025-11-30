@@ -19,6 +19,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Loader, Mail, ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { paths } from '@/lib/path';
 
 export default function VerifyRequest() {
   const t = useTranslations('auth_login_page.verify_request_page');
@@ -92,7 +93,7 @@ export default function VerifyRequest() {
       try {
         if (isSignUp) {
           // Email verification for sign-up
-          const { data, error } = await authClient.emailOtp.verifyEmail({
+          const { error } = await authClient.emailOtp.verifyEmail({
             email,
             otp,
             fetchOptions: {
@@ -100,6 +101,8 @@ export default function VerifyRequest() {
                 toast.success(t('t_verify_success'), {
                   description: t('t_verify_success_desc'),
                 });
+                router.replace(callbackParam);
+                router.refresh();
               },
               onError: (err) => {
                 console.error(err);
@@ -109,19 +112,7 @@ export default function VerifyRequest() {
           });
 
           if (error) {
-            toast.error(error.message || t('t_verify_failed'));
             return;
-          }
-
-          // After email verification, sign in the user
-          const signInResult = await authClient.signIn.emailOtp({
-            email,
-            otp,
-          });
-
-          if (!signInResult.error) {
-            router.replace(callbackParam);
-            router.refresh();
           }
         } else {
           // Sign-in with OTP
@@ -165,12 +156,10 @@ export default function VerifyRequest() {
           </div>
           <div>
             <CardTitle className="text-xl">
-              {isSignUp ? 'Verify Your Email' : 'Check Your Email'}
+              {isSignUp ? t('t_verify_email') : t('t_check_email')}
             </CardTitle>
             <CardDescription className="mt-2">
-              {isSignUp
-                ? 'We sent a verification code to verify your email address.'
-                : 'We sent you a login code to sign in to your account.'}
+              {isSignUp ? t('t_verify_desc') : t('t_signin_desc')}
             </CardDescription>
           </div>
 
@@ -243,7 +232,7 @@ export default function VerifyRequest() {
             <Button
               variant="ghost"
               className="w-full"
-              onClick={() => router.push('/auth/login')}
+              onClick={() => router.push(paths.login)}
               disabled={isPending}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />

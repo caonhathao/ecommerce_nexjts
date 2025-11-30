@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
@@ -13,7 +14,7 @@ interface ImgData {
 }
 
 const SlideImg = ({ data }: { data: ImgData[] }) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   return (
     <div className="w-full flex flex-col gap-2">

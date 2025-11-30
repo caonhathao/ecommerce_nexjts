@@ -4,6 +4,7 @@ import { Sidebar } from '../ui/sidebar';
 
 import { BsTicketPerforated } from 'react-icons/bs';
 import { FaCcAmazonPay, FaCreditCard } from 'react-icons/fa';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import { categoryIconMap } from '@/constants/category-icon-map';
 import { useCategories } from '@/hooks/use-categories';
@@ -41,65 +42,101 @@ export const AppSidebar = ({
     <div className="w-[25%]">
       <div className="w-full overflow-y-auto max-h-[calc(100vh-120px)] scrollbar-hide ">
         <div className="flex flex-col jus-end items-end">
-          <div className="w-[70%] p-2 bg-background-secondary rounded-lg border border-gray-200 flex flex-col justify-start items-start">
+          <div className="w-[70%] p-2 bg-background-secondary rounded-lg border border-primary flex flex-col justify-start items-start">
             {/* title */}
             <p className="font-bold text-base px-5 py-1 text-primary">
               {t('category')}
             </p>
 
             <div className="flex flex-col justify-start items-start pl-2">
-              {topCategories.map((item, key) => (
-                <div
-                  key={key}
-                  className="w-full hover:bg-primary-foreground px-3 py-4 rounded-lg transition-all"
-                >
-                  <a
-                    href={item.slug}
-                    className="flex flex-row gap-1.5 justify-start items-center"
-                  >
-                    {item.imageUrl ? (
-                      <Image
-                        src={item.imageUrl}
-                        alt={item.name}
-                        width={20}
-                        height={20}
-                        className="rounded-2xl"
-                      />
-                    ) : (
-                      <IconComponent
-                        slug={item.slug}
-                        size={20}
-                        color="var(--primary)"
-                      />
-                    )}
-                    <p className="text-sm">{t(item.slug)}</p>
-                  </a>
+              {loading ? (
+                <div className="w-full space-y-2">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-full px-3 py-4 rounded-lg transition-all"
+                    >
+                      <div className="flex flex-row gap-1.5 items-center">
+                        <Skeleton className="h-5 w-5 rounded-full" />
+                        <Skeleton className="h-4 w-36" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              ) : error ? (
+                <div className="px-3 py-4 text-sm text-destructive">
+                  {t('load_failed')}
+                </div>
+              ) : (
+                topCategories.map((item, key) => (
+                  <div
+                    key={key}
+                    className="w-full hover:bg-secondary hover:text-primary px-3 py-4 rounded-lg transition-all"
+                  >
+                    <a
+                      href={item.slug}
+                      className="flex flex-row gap-1.5 justify-start items-center"
+                    >
+                      {item.imageUrl ? (
+                        <Image
+                          src={item.imageUrl}
+                          alt={item.name}
+                          width={20}
+                          height={20}
+                          className="rounded-2xl"
+                        />
+                      ) : (
+                        <IconComponent
+                          slug={item.slug}
+                          size={20}
+                          color="var(--primary)"
+                        />
+                      )}
+                      <p className="text-sm">{t(item.slug)}</p>
+                    </a>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
-          <div className="w-[70%] p-2 bg-background-secondary rounded-lg border border-gray-200 flex flex-col justify-start items-start mt-4">
+          <div className="w-[70%] p-2 bg-background-secondary rounded-lg border border-primary flex flex-col justify-start items-start mt-4">
             {/* title */}
             <p className="font-bold text-base px-5 py-1 text-primary">
               {t('extensions')}
             </p>
 
             <div className="flex flex-col justify-start items-start pl-2 gap-2 w-full">
-              {extensions.map((item, key) => (
-                <div
-                  key={key}
-                  className="w-full hover:bg-primary-foreground px-3 py-4 rounded-lg transition-all"
-                >
-                  <a
-                    href={item.url}
-                    className="flex flex-row gap-1.5 justify-start items-center"
-                  >
-                    <item.icon size={20} color="var(--primary)" />
-                    <p className="text-sm">{t(item.title)}</p>
-                  </a>
+              {loading ? (
+                <div className="w-full space-y-2">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-full px-3 py-4 rounded-lg transition-all"
+                    >
+                      <div className="flex flex-row gap-1.5 items-center">
+                        <Skeleton className="h-5 w-5 rounded-md" />
+                        <Skeleton className="h-4 w-28" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              ) : (
+                extensions.map((item, key) => (
+                  <div
+                    key={key}
+                    className="w-full hover:bg-secondary hover:text-primary px-3 py-4 rounded-lg transition-all"
+                  >
+                    <a
+                      href={item.url}
+                      className="flex flex-row gap-1.5 justify-start items-center"
+                    >
+                      <item.icon size={20} color="var(--primary)" />
+                      <p className="text-sm">{t(item.title)}</p>
+                    </a>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

@@ -14,6 +14,7 @@ export const GET = withAuth(async (userId: string) => {
     });
     return NextResponse.json({ data: data });
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { message: 'Internal Server Error' },
       { status: 500 }

@@ -258,10 +258,17 @@ export default function SellerShopsDashboard() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
-                router.push(paths.messages.message_shop(row.original.id))
+                router.push(paths.seller.shops.message_shop(row.original.id))
               }
             >
               Messages
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(paths.seller.shops.members(row.original.id))
+              }
+            >
+              Members
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>

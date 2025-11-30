@@ -37,6 +37,9 @@ export const auth = betterAuth({
       );
     },
   },
+  emailVerification: {
+    autoSignInAfterVerification: true,
+  },
   session: {
     cookieCache: {
       enabled: true,
@@ -79,6 +82,7 @@ export const auth = betterAuth({
     admin(),
     nextCookies(),
   ],
+  trustedOrigins: [env.NEXT_PUBLIC_BASE_URL],
 });
 
 export async function getSessionUser() {
