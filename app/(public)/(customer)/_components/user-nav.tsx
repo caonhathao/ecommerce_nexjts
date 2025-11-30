@@ -1,14 +1,20 @@
 'use client';
 
+import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { cn } from '@/lib/utils';
 
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Tooltip,
@@ -16,33 +22,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 
 import {
-  User2,
   Bell,
+  BookOpenCheck,
+  Coins,
+  CreditCard,
+  Crown,
+  Eye,
+  Gift,
+  Heart,
+  Landmark,
+  LifeBuoy,
+  LucideIcon,
+  MapPin,
+  MessageSquareText,
   Package,
   RefreshCcw,
-  MapPin,
-  CreditCard,
-  Star,
-  Eye,
-  Heart,
-  MessageSquareText,
-  Crown,
-  Gift,
-  Landmark,
-  TicketPercent,
   Sparkles,
-  Coins,
-  BookOpenCheck,
-  LifeBuoy,
+  Star,
   Store,
+  TicketPercent,
+  User2,
 } from 'lucide-react';
 
 type Messages =
@@ -72,7 +73,7 @@ type Messages =
 type Item = {
   href: string;
   i18nKey: Messages;
-  Icon: React.ComponentType<any>;
+  Icon: LucideIcon;
   rightEl?: React.ReactNode;
   disabled?: boolean;
 };
@@ -175,7 +176,7 @@ export default function UserNav({ user }: { user: UserMini }) {
 
   return (
     <TooltipProvider>
-      <Card className="overflow-hidden rounded-none border-0 bg-transparent shadow-none">
+      <Card className="overflow-hidden rounded-none border-0 bg-background-secondary shadow-none">
         {/* HeaderClient */}
         <CardHeader className="flex flex-row items-center space-y-0 ">
           <Avatar className="h-12 w-12">
@@ -185,7 +186,7 @@ export default function UserNav({ user }: { user: UserMini }) {
           <div className="min-w-0">
             <div className="truncate text-sm font-medium">{user.name}</div>
             {user.email ? (
-              <div className="truncate text-xs text-muted-foreground">
+              <div className="truncate text-xs text-text-secondary">
                 {user.email}
               </div>
             ) : null}
@@ -220,7 +221,7 @@ export default function UserNav({ user }: { user: UserMini }) {
                 className="w-full"
               >
                 <AccordionItem value="membership" className="border-b-0">
-                  <AccordionTrigger className="px-2 text-left text-xs font-semibold text-muted-foreground hover:no-underline">
+                  <AccordionTrigger className="px-2 text-left text-xs font-semibold text-text-secondary hover:no-underline">
                     {t(SECTIONS[1].headingKey!)}
                   </AccordionTrigger>
                   <AccordionContent className="px-0 pt-1">
@@ -287,8 +288,8 @@ function NavItem({
             'w-full justify-between px-3 py-2 text-sm',
             'rounded-md transition-colors',
             active
-              ? 'bg-primary text-secondary-foreground hover:bg-primary hover:text-secondary-foreground'
-              : 'hover:bg-secondary hover:text-secondary-foreground'
+              ? 'bg-primary/20 text-text hover:bg-primary hover:text-primary-foreground'
+              : 'hover:bg-secondary hover:text-text-secondary'
           )}
         >
           <Link

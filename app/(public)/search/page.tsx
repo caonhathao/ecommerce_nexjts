@@ -2,7 +2,6 @@
 
 import { ProductItem } from '@/app/(public)/_components/product-item';
 import { SearchFiltersPanel } from '@/app/(public)/search/_components/search-filters-panel';
-import { SearchSortBar } from '@/app/(public)/search/_components/search-sort-bar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -16,6 +15,7 @@ import {
 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { SearchSortBar } from '@/app/(public)/search/_components/search-sort-bar';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -33,14 +33,17 @@ export default function SearchPage() {
 
   const { categories } = useCategories();
 
+  type sortByType = 'createdAt' | 'price' | 'rating' | 'name';
+  type sortOrderType = 'asc' | 'desc';
+
   const [filters, setFilters] = useState<SearchFilters>({
     query: searchParams.get('q') || '',
     categoryId: searchParams.get('categoryId') || undefined,
     shopId: searchParams.get('shopId') || undefined,
     minPrice: searchParams.get('minPrice') || undefined,
     maxPrice: searchParams.get('maxPrice') || undefined,
-    sortBy: (searchParams.get('sortBy') as any) || 'createdAt',
-    sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
+    sortBy: (searchParams.get('sortBy') as sortByType) || 'createdAt',
+    sortOrder: (searchParams.get('sortOrder') as sortOrderType) || 'desc',
     page: Number(searchParams.get('page')) || 1,
     limit: Number(searchParams.get('limit')) || 20,
   });
@@ -110,17 +113,18 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background-darker">
+    // Tiki Background Color: #F5F5FA
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6">
         {/* Breadcrumb / Header Area */}
         <div className="mb-4">
           <div className="flex items-baseline gap-2">
-            <h1 className="text-xl font-medium text-foreground">
+            <h1 className="text-xl font-medium text-text">
               {filters.query
                 ? `Results for "${filters.query}"`
                 : `All Products`}
             </h1>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-text-secondary">
               ({pagination.total} products)
             </span>
           </div>
@@ -147,19 +151,22 @@ export default function SearchPage() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <Skeleton key={i} className="h-[300px] rounded-lg bg-card" />
+                  <Skeleton
+                    key={i}
+                    className="h-[300px] rounded-lg bg-background-secondary"
+                  />
                 ))}
               </div>
             ) : !products || products.length === 0 ? (
               <Card className="border-none shadow-sm">
                 <CardContent className="py-16 text-center">
-                  <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-4">
+                  <div className="mx-auto w-24 h-24 bg-secondary rounded-full flex items-center justify-center mb-4">
                     <span className="text-3xl">🔍</span>
                   </div>
-                  <h3 className="text-lg font-medium text-foreground">
+                  <h3 className="text-lg font-medium text-text">
                     No products found
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-text-secondary">
                     Try adjusting your search or filters.
                   </p>
                 </CardContent>
@@ -190,7 +197,7 @@ export default function SearchPage() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="bg-card hover:bg-accent"
+                      className="bg-background-secondary hover:bg-secondary"
                       onClick={() => handlePageChange(1)}
                       disabled={pagination.page === 1}
                     >
@@ -199,7 +206,7 @@ export default function SearchPage() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="bg-card hover:bg-accent"
+                      className="bg-background-secondary hover:bg-secondary"
                       onClick={() => handlePageChange(pagination.page - 1)}
                       disabled={pagination.page === 1}
                     >
@@ -211,7 +218,7 @@ export default function SearchPage() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="bg-card hover:bg-accent"
+                      className="bg-background-secondary hover:bg-secondary"
                       onClick={() => handlePageChange(pagination.page + 1)}
                       disabled={pagination.page === pagination.totalPages}
                     >
@@ -220,7 +227,7 @@ export default function SearchPage() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="bg-card hover:bg-accent"
+                      className="bg-background-secondary hover:bg-secondary"
                       onClick={() => handlePageChange(pagination.totalPages)}
                       disabled={pagination.page === pagination.totalPages}
                     >

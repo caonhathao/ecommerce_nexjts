@@ -26,7 +26,7 @@ export default async function UserLayout({
             }}
           />
         </aside>
-        <main className="col-span-12 md:col-span-9 h-fit rounded-2xl bg-background">
+        <main className="col-span-12 md:col-span-9 h-fit rounded-2xl bg-background-secondary">
           {children}
         </main>
       </div>

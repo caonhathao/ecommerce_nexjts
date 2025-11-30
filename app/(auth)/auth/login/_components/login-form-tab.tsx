@@ -16,7 +16,7 @@ import { authClient } from '@/lib/auth-client';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { Info, Loader, Lock, Mail, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -33,10 +33,9 @@ export function LoginFormTab() {
   const [passwordPending, startPasswordTransition] = useTransition();
   const [resetPasswordPending, startResetPasswordTransition] = useTransition();
 
-  const [email, setEmail] = useState(emailParam);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const t = useTranslations('auth_login_page.login_form_tab');
-  const tApi = useTranslations('api.auth_login_page.login_form_tab');
 
   async function signInWithGithub() {
     startGithubTransition(async () => {
@@ -57,7 +56,6 @@ export function LoginFormTab() {
   }
 
   function signInWithEmailOTP() {
-    console.log(`sending OTP to ${email}...`);
     if (!email) {
       toast.error(t('t_email_failed_noti'));
       return;

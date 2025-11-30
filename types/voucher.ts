@@ -1,4 +1,4 @@
 export const voucher = {
-  voucher1: 'VC-UEDMCLTF',
-  voucher2: 'VC-FJB4XRB0',
+  voucher1: 'VC-UKDU3TYE',
+  voucher2: 'VC-8USKDRR3',
 };

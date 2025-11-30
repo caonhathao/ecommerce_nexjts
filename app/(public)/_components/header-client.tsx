@@ -59,7 +59,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
       {/* logo, searching zone and tags  */}
       <div
         className={
-          'w-full flex justify-center items-center transition-all duration-300  bg-background '
+          'w-full flex justify-center items-center transition-all duration-300 bg-background-secondary '
         }
       >
         <div className="w-[80%] h-fit p-2 flex flex-row justify-center items-center gap-4">
@@ -178,12 +178,11 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
       </div>
       <Separator />
       {/* slogans */}
-      <div className="w-4/5 h-10 pt-2 pr-2 pl-2 flex flex-row justify-center items-center gap-4 text-foreground font-medium text-xs">
+      <div className="w-full h-10 pt-2 pr-2 pl-2 flex flex-row justify-center items-center gap-4 text-text font-medium text-xs bg-background-secondary">
         <Link href="" className="flex gap-1">
           <Handshake className="w-4 h-4 text-primary" />
           {t('commitment')}
         </Link>
-        <Separator orientation="vertical" />
         <Link href="" className="flex gap-1">
           <BadgeCheck className="w-4 h-4 text-primary" />
           {t('genuine_goods')}

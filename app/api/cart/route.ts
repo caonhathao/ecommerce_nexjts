@@ -1,7 +1,7 @@
 import { PrismaClient } from '@/lib/generated/prisma';
-import { NextRequest, NextResponse } from 'next/server';
-import { AddToCartRequest, UpdateCartRequest } from '@/types/cart.data-types';
 import { withAuth } from '@/lib/with-auth';
+import { AddToCartRequest, UpdateCartRequest } from '@/types/cart.data-types';
+import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
@@ -181,7 +181,8 @@ export const DELETE = withAuth(async (userId: string) => {
       { message: 'cart deleted successfully' },
       { status: 200 }
     );
-  } catch (e) {
+  } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
   }
 });

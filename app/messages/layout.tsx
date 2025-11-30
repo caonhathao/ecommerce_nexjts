@@ -12,7 +12,7 @@ export default async function MessagesLayout({children}: {children: React.ReactN
   const conversations = await getUserOrShopConversations(session.user.id)
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-screen overflow-hidden bg-background-secondary">
 
       <div className="w-80 border-r h-full">
         <ConversationList conversations={conversations} />

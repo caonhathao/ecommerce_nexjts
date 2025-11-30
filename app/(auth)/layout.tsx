@@ -35,12 +35,13 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           <Image
             src={Logo}
             alt="Logo"
+            className="bg-background p-1 rounded-xl"
             width={100}
             height={100}
-            className="bg-background p-1 rounded-xl"
           />
-          {env.NEXT_PUBLIC_WEB_NAME}
+
         </Link>
+          {env.NEXT_PUBLIC_WEB_NAME}
         {children}
 
         <div className="text-balance text-center text-xs text-muted-foreground">

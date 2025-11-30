@@ -93,7 +93,7 @@ export default function VerifyRequest() {
       try {
         if (isSignUp) {
           // Email verification for sign-up
-          const { data, error } = await authClient.emailOtp.verifyEmail({
+          const { error } = await authClient.emailOtp.verifyEmail({
             email,
             otp,
             fetchOptions: {
