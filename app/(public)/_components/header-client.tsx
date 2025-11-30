@@ -34,6 +34,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { paths } from '@/lib/path';
 
 type Role = 'USER' | 'SELLER' | 'ADMIN';
 type HeaderUser = {
@@ -153,7 +154,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
               ) : (
                 <Button asChild>
                   <Link
-                    href="/auth/login"
+                    href={paths.login}
                     className="inline-flex items-center gap-2"
                   >
                     <LogIn className="h-4 w-4" />

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { paths } from '@/lib/path';
 
 export const metadata: Metadata = {
   title: '403 – Forbidden',
@@ -27,11 +28,11 @@ export default function ForbiddenPage() {
 
           <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
             <Button asChild>
-              <Link href="/">Back to home</Link>
+              <Link href={paths.home}>Back to home</Link>
             </Button>
 
             <Button asChild variant="outline">
-              <Link href="/auth/login">Go to login</Link>
+              <Link href={paths.login}>Go to login</Link>
             </Button>
           </div>
         </CardContent>

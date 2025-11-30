@@ -19,6 +19,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Loader, Mail, ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { paths } from '@/lib/path';
 
 export default function VerifyRequest() {
   const t = useTranslations('auth_login_page.verify_request_page');
@@ -231,7 +232,7 @@ export default function VerifyRequest() {
             <Button
               variant="ghost"
               className="w-full"
-              onClick={() => router.push('/auth/login')}
+              onClick={() => router.push(paths.login)}
               disabled={isPending}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />

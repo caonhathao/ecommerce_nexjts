@@ -36,6 +36,7 @@ export function LoginFormTab() {
   const [email, setEmail] = useState(emailParam);
   const [password, setPassword] = useState('');
   const t = useTranslations('auth_login_page.login_form_tab');
+  const tApi = useTranslations('api.auth_login_page.login_form_tab');
 
   async function signInWithGithub() {
     startGithubTransition(async () => {

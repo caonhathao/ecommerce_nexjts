@@ -40,6 +40,7 @@ import Desc from './_components/desc';
 import { Reviews } from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 import Decimal = Prisma.Decimal;
+import { paths } from '@/lib/path';
 
 interface selectedVariant {
   name: string;
@@ -193,7 +194,7 @@ const DetailPage = () => {
     const session = await authClient.getSession();
     if (session.data == null || !session.data.user.emailVerified || !session) {
       const callback = encodeURIComponent(pathname ?? '/');
-      route.push(`/auth/login?callbackUrl=${callback}`);
+      route.push(`${paths.login}?callbackUrl=${callback}`);
       return;
     }
 
@@ -251,7 +252,7 @@ const DetailPage = () => {
     const session = await authClient.getSession();
     if (session.data == null || !session.data.user.emailVerified || !session) {
       const callback = encodeURIComponent(pathname ?? '/');
-      route.push(`/auth/login?callbackUrl=${callback}`);
+      route.push(`${paths.login}?callbackUrl=${callback}`);
       return;
     }
 
