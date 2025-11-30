@@ -251,7 +251,7 @@
 
     "app_sidebar": {
       "category": "カテゴリー",
-
+      "electronics": "エレクトロニクス",
       "fashion-apparel": "ファッション・アパレル",
       "home-living": "ホーム・生活用品",
       "beauty-personal-care": "ビューティー・パーソナルケア",
@@ -294,6 +294,35 @@
     "suggest_deal_today": {
       "title": "今日のおすすめ",
       "watch_more": "もっと見る"
+    }
+  },
+  "search_page": {
+    "t_search_failed": "検索に失敗しました",
+    "t_search_failed_desc": "該当する商品がありません",
+    "t_connect_failed": "接続に失敗しました",
+    "t_connect_failed_desc": "サーバーに接続できません",
+
+    "t_result_for": "検索結果:",
+    "t_all_product": "すべての商品",
+    "t_pagi_prod": "商品",
+
+    "t_not_found": "商品が見つかりません",
+    "t_not_found_desc": "別のキーワードや条件で再検索してください",
+    "search_filter_panel": {
+      "t_filter": "絞り込み",
+      "t_reset": "リセット",
+      "t_all_cate": "すべてのカテゴリ",
+      "t_price": "価格",
+      "t_price_range": "価格帯を入力",
+      "t_apply": "適用",
+      "t_supplier": "サプライヤー"
+    },
+    "search_sort_bar": {
+      "t_sort_by": "並び替え",
+      "t_newest": "新着順",
+      "t_top_rate": "評価が高い順",
+      "t_asc": "価格が安い順",
+      "t_des": "価格が高い順"
     }
   },
   "product_detail": {

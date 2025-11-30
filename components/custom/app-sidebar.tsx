@@ -2,9 +2,9 @@
 import React from 'react';
 import { Sidebar } from '../ui/sidebar';
 
+import { Skeleton } from '@/components/ui/skeleton';
 import { BsTicketPerforated } from 'react-icons/bs';
 import { FaCcAmazonPay, FaCreditCard } from 'react-icons/fa';
-import { Skeleton } from '@/components/ui/skeleton';
 
 import { categoryIconMap } from '@/constants/category-icon-map';
 import { useCategories } from '@/hooks/use-categories';
@@ -39,8 +39,8 @@ export const AppSidebar = ({
   //console.log('top category:', topCategories);
 
   return (
-    <div className="w-[25%] sticky top-0">
-      <div className="w-full overflow-y-auto max-h-[calc(100vh-60px)] scrollbar-hide ">
+    <div className={`${props}`}>
+      <div className="w-full overflow-y-auto max-h-[calc(100vh-120px)] scrollbar-hide ">
         <div className="flex flex-col jus-end items-end">
           <div className="w-[70%] p-2 bg-background-secondary rounded-lg border border-primary flex flex-col justify-start items-start">
             {/* title */}
@@ -71,10 +71,10 @@ export const AppSidebar = ({
                 topCategories.map((item, key) => (
                   <div
                     key={key}
-                    className="w-full hover:bg-secondary hover:text-primary px-3 py-4 rounded-lg transition-all"
+                    className="w-full hover:bg-secondary hover:text-primary hover:cursor-pointer px-3 py-4 rounded-lg transition-all"
                   >
                     <a
-                      href={item.slug}
+                      href={`/search?category=${item.slug}&page=1&limit=20`}
                       className="flex flex-row gap-1.5 justify-start items-center"
                     >
                       {item.imageUrl ? (
@@ -125,7 +125,7 @@ export const AppSidebar = ({
                 extensions.map((item, key) => (
                   <div
                     key={key}
-                    className="w-full hover:bg-secondary hover:text-primary px-3 py-4 rounded-lg transition-all"
+                    className="w-full hover:bg-secondary hover:text-primary hover:cursor-pointer px-3 py-4 rounded-lg transition-all"
                   >
                     <a
                       href={item.url}

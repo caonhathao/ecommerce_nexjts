@@ -1,13 +1,14 @@
-import { SearchFilters } from '@/types/product.data-types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { SearchFilters } from '@/types/product.data-types';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 interface SearchFiltersProps {
   filters: SearchFilters;
   onFilterChange: (filters: Partial<SearchFilters>) => void;
-  categories?: Array<{ id: string; name: string }>;
+  categories?: Array<{ id: string; name: string; slug: string }>;
 }
 
 export function SearchFiltersPanel({
@@ -20,6 +21,8 @@ export function SearchFiltersPanel({
     min: filters.minPrice || '',
     max: filters.maxPrice || '',
   });
+  const t = useTranslations('search_page.search_filter_panel');
+  const c = useTranslations('home_layout.app_sidebar');
 
   const handlePriceApply = () => {
     onFilterChange({
@@ -31,7 +34,7 @@ export function SearchFiltersPanel({
   const handleClearFilters = () => {
     setPriceRange({ min: '', max: '' });
     onFilterChange({
-      categoryId: undefined,
+      category: undefined,
       shopId: undefined,
       minPrice: undefined,
       maxPrice: undefined,
@@ -42,43 +45,45 @@ export function SearchFiltersPanel({
     <div className="space-y-6 bg-background-secondary p-4 rounded-lg">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="font-bold text-sm uppercase text-text">Filters</h3>
+        <h3 className="font-bold text-sm uppercase text-text">
+          {t('t_filter')}
+        </h3>
         <Button
           variant="ghost"
           size="sm"
           onClick={handleClearFilters}
           className="h-8 text-xs text-primary/70 hover:text-primary hover:bg-primary/10"
         >
-          Reset
+          {t('t_reset')}
         </Button>
       </div>
 
       <Separator />
 
       <div className="space-y-3">
-        <h4 className="text-sm font-semibold text-text">Category</h4>
+        <h4 className="text-sm font-semibold text-text">{c('category')}</h4>
         <div className="flex flex-col space-y-2">
           <button
-            onClick={() => onFilterChange({ categoryId: undefined })}
+            onClick={() => onFilterChange({ category: undefined })}
             className={`text-sm text-left px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
-              !filters.categoryId
+              !filters.category
                 ? 'bg-secondary font-medium text-primary'
                 : 'text-text hover:bg-secondary/50'
             }`}
           >
-            All Categories
+            {t('t_all_cate')}
           </button>
           {categories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => onFilterChange({ categoryId: cat.id })}
+              onClick={() => onFilterChange({ query: '', category: cat.slug })}
               className={`text-sm text-left px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
-                filters.categoryId === cat.id
+                filters.category === cat.slug
                   ? 'bg-secondary font-medium text-primary'
                   : 'text-text hover:bg-secondary/50'
               }`}
             >
-              {cat.name}
+              {c(cat.slug)}
             </button>
           ))}
         </div>
@@ -88,9 +93,9 @@ export function SearchFiltersPanel({
 
       {/* Price Range */}
       <div className="space-y-3">
-        <h4 className="text-sm font-semibold text-text">Price</h4>
+        <h4 className="text-sm font-semibold text-text">{t('t_price')}</h4>
         <div className="text-xs text-text-secondary mb-2">
-          Enter price range
+          {t('t_price_range')}
         </div>
         <div className="flex items-center gap-2">
           <Input
@@ -118,18 +123,18 @@ export function SearchFiltersPanel({
           className="w-full mt-2 h-8 text-xs border-primary text-text/60 cursor-pointer hover:bg-secondary hover:text-primary"
           onClick={handlePriceApply}
         >
-          Apply
+          {t('t_apply')}
         </Button>
       </div>
 
       <Separator />
 
       <div className="space-y-3 opacity-60 pointer-events-none">
-        <h4 className="text-sm font-semibold text-text">Supplier</h4>
+        <h4 className="text-sm font-semibold text-text">{t('t_supplier')}</h4>
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm text-text-secondary">
-            <div className="w-4 h-4 border rounded bg-secondary/20"></div> Tiki
-            Trading
+            <div className="w-4 h-4 border rounded bg-secondary/20"></div>
+            2T3H Trading
           </div>
           <div className="flex items-center gap-2 text-sm text-text-secondary">
             <div className="w-4 h-4 border rounded bg-secondary/20"></div>{' '}

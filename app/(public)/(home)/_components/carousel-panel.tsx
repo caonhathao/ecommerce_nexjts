@@ -25,7 +25,7 @@ export const CarouselPanel = () => {
         ]}
         className="w-full"
       >
-        <CarouselContent className="w-full">
+        <CarouselContent>
           {Array.from({ length: 6 }).map((_, index) => (
             <CarouselItem key={index} className="basis-full sm:basis-1/2">
               <div className="p-1 w-full h-full">
@@ -34,8 +34,8 @@ export const CarouselPanel = () => {
                     <Image
                       src={logo.src}
                       alt="logo"
-                      width={0}
-                      height={0}
+                      width={500}
+                      height={200}
                       className="w-full object-cover rounded-lg"
                     />
                   </CardContent>
