@@ -1,5 +1,5 @@
 'use client';
-import { Loading } from '@/app/(public)/_components/loading';
+import { Loading } from '@/components/loading';
 import { buttonVariants } from '@/components/ui/button';
 import { fetchData } from '@/funcs/fetch';
 import {

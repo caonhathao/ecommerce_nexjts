@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label';
 import { AppLoader } from '@/components/ui/loader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { authClient } from '@/lib/auth-client';
-import { SiGithub } from '@icons-pack/react-simple-icons';
+import { SiGithub, SiGoogle } from '@icons-pack/react-simple-icons';
 import { Info, Loader, Lock, Mail, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -29,6 +29,7 @@ export function LoginFormTab() {
   const emailParam = searchParams.get('email') || '';
 
   const [githubPending, startGithubTransition] = useTransition();
+  const [googlePending, startGoogleTransition] = useTransition();
   const [emailPending, startEmailTransition] = useTransition();
   const [passwordPending, startPasswordTransition] = useTransition();
   const [resetPasswordPending, startResetPasswordTransition] = useTransition();
@@ -49,6 +50,24 @@ export function LoginFormTab() {
           onError: (error) => {
             toast.error(t('t_server_error'));
             console.error('Error signing in with Github:', error);
+          },
+        },
+      });
+    });
+  }
+
+  async function signInWithGoogle() {
+    startGoogleTransition(async () => {
+      await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: callbackUrl,
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success(t('t_google_success'));
+          },
+          onError: (error) => {
+            toast.error(t('t_server_error'));
+            console.error('Error signing in with Google:', error);
           },
         },
       });
@@ -165,23 +184,37 @@ export function LoginFormTab() {
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
-        {/* GitHub Sign In */}
-        <Button
-          disabled={githubPending}
-          onClick={signInWithGithub}
-          className="w-full cursor-pointer"
-          variant="outline"
-        >
-          {githubPending ? (
-            <AppLoader />
-          ) : (
-            <>
-              <SiGithub color="currentColor" className="mr-2 size-5" />
-              {t('t_with_github')}
-            </>
-          )}
-        </Button>
+        <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+          <Button
+            disabled={githubPending}
+            onClick={signInWithGithub}
+            className="w-full h-10 cursor-pointer"
+            variant="outline"
+          >
+            {githubPending ? (
+              <AppLoader />
+            ) : (
+              <>
+                <SiGithub color="currentColor" className="mr-2 size-5" />
+              </>
+            )}
+          </Button>
 
+          <Button
+            disabled={githubPending}
+            onClick={signInWithGoogle}
+            className="w-full h-10 cursor-pointer"
+            variant="outline"
+          >
+            {googlePending ? (
+              <AppLoader />
+            ) : (
+              <>
+                <SiGoogle color="currentColor" className="mr-2 size-5" />
+              </>
+            )}
+          </Button>
+        </div>
         {/* Divider */}
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-card px-2 text-muted-foreground">

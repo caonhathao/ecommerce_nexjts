@@ -68,7 +68,9 @@ export default function VariantStep() {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium">Variants</h3>
         <div className="flex items-center gap-2">
-          <Button onClick={addEmptyVariant}>Add variant</Button>
+          <Button type="button" onClick={addEmptyVariant}>
+            Add variant
+          </Button>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { LoadingComponent } from '@/app/(public)/_components/loading';
+import { Loading } from '@/components/loading';
 import { fetchData } from '@/funcs/fetch';
 import { paths } from '@/lib/path';
 import { reviewResponse } from '@/types/public.data-types';
@@ -40,7 +40,7 @@ export function Reviews({ id, ratingAvg, ratingCount }: props) {
   }, [id]);
 
   if (loading || !initialResponse) {
-    return <LoadingComponent />;
+    return <Loading />;
   }
 
   return (

@@ -23,6 +23,7 @@
     },
     "login_form_tab": {
       "t_github_success": "Logging in with GitHub, redirecting...",
+      "t_google_success": "Logging in with Google, redirecting...",
       "t_email_failed_noti": "Please enter your email",
       "t_verify_otp": "OTP code has been sent to your email",
       "t_password_missing": "Please enter email and password",
@@ -31,6 +32,7 @@
       "t_welcome": "Welcome back!",
       "t_desc": "Login to your account to continue",
       "t_with_github": "Sign in with GitHub",
+      "t_with_google": "Sign in with Google",
       "t_or": "Or continue with",
       "t_password": "Password",
       "t_forgot_password": "Forgot password?",

@@ -2,6 +2,7 @@ import { PrismaClient } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
 import { AddToCartRequest, UpdateCartRequest } from '@/types/cart.data-types';
 import { NextRequest, NextResponse } from 'next/server';
+import { ActionResponse } from '@/lib/service-response';
 
 const prisma = new PrismaClient();
 
@@ -110,10 +111,7 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
     );
   } catch (e) {
     console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', e);
-    return NextResponse.json(
-      { error: 'Lỗi server', details: (e as Error).message },
-      { status: 500 }
-    );
+    return ActionResponse.toNextResponse(ActionResponse.error());
   }
 });
 
