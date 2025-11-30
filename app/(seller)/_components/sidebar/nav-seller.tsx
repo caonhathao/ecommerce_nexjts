@@ -112,7 +112,7 @@ export function NavSeller({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut}>
+            <DropdownMenuItem onClick={() => handleSignOut()}>
               <IconLogout />
               Log out
             </DropdownMenuItem>

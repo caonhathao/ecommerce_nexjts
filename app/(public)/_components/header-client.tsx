@@ -143,7 +143,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={handleSingout}
+                      onClick={() => handleSingout()}
                       className="text-destructive focus:text-destructive"
                     >
                       <LogOut className="h-4 w-4 mr-2" />
