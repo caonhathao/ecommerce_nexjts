@@ -1,6 +1,7 @@
 'use client';
 
-import { MapPin, MapPinX, MapPlus } from 'lucide-react';
+import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/_components/table-address';
+import { createAddress, getAddress } from '@/app/actions/address';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -13,12 +14,11 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useActionState, useEffect, useState, useTransition } from 'react';
 import { AddressDTO } from '@/types/dtos/address.dto';
-import { createAddress, getAddress } from '@/app/actions/address';
-import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/_components/table-address';
-import { toast } from 'sonner';
+import { MapPin, MapPinX, MapPlus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useActionState, useEffect, useState, useTransition } from 'react';
+import { toast } from 'sonner';
 
 type FormState = {
   success: boolean;
@@ -128,17 +128,19 @@ export default function AddressPage() {
                   <Input id="line1" name="line1" required />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="ward">{t('ward')}</Label>
-                  <Input id="ward" name="ward" required />
+                  <Label htmlFor="city">{t('city')}</Label>
+                  <Input id="city" name="city" required />
                 </div>
                 <div className="grid gap-3">
                   <Label htmlFor="district">{t('district')}</Label>
                   <Input id="district" name="district" required />
                 </div>
+
                 <div className="grid gap-3">
-                  <Label htmlFor="city">{t('city')}</Label>
-                  <Input id="city" name="city" required />
+                  <Label htmlFor="ward">{t('ward')}</Label>
+                  <Input id="ward" name="ward" required />
                 </div>
+
                 <div className="grid gap-3">
                   <Label htmlFor="country">{t('country')}</Label>
                   <Input
