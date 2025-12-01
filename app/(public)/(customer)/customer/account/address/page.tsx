@@ -96,7 +96,7 @@ export default function AddressPage() {
     });
 
     fetchData({
-      baseUrl: `${env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION}/api/v1/provinces`,
+      baseUrl: `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces`,
       params: { limit: 63 },
       setData: setCityResponse,
     });
@@ -108,7 +108,7 @@ export default function AddressPage() {
     );
     if (provinceCode)
       fetchData({
-        baseUrl: `${env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION}/api/v1/provinces/${provinceCode?.code}/districts`,
+        baseUrl: `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces/${provinceCode?.code}/districts`,
         params: { limit: 100 },
         setData: setDistrictResponse,
       });
@@ -120,7 +120,7 @@ export default function AddressPage() {
     );
     if (districtCode)
       fetchData({
-        baseUrl: `${env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION}/api/v1/districts/${districtCode?.code}/wards`,
+        baseUrl: `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/districts/${districtCode?.code}/wards`,
         params: { limit: 100 },
         setData: setWardResponse,
       });

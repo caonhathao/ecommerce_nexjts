@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
 import { requireSeller } from '@/lib/require-role';
 import { ShopMemberRole } from '@/lib/generated/prisma';
+import { ActionResponse } from '@/lib/service-response';
 
 const createShopSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -33,7 +34,9 @@ export async function GET() {
   try {
     const session = await requireSeller();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 });
+      return ActionResponse.toNextResponse(
+        ActionResponse.error('Unauthenticated', 401)
+      );
     }
     const ownerId = session.user.id;
 
@@ -62,11 +65,10 @@ export async function GET() {
       ratingAvg: Number(s.ratingAvg),
     }));
 
-    return NextResponse.json(normalized, { status: 200 });
+    return ActionResponse.toNextResponse(ActionResponse.success(normalized));
   } catch (err: any) {
-    return NextResponse.json(
-      { error: err?.message ?? 'Server error' },
-      { status: 500 }
+    return ActionResponse.toNextResponse(
+      ActionResponse.error(err?.message ?? 'Server error', 500)
     );
   }
 }
@@ -80,9 +82,8 @@ export async function POST(req: Request) {
 
     const parse = createShopSchema.safeParse(body);
     if (!parse.success) {
-      return NextResponse.json(
-        { error: parse.error.flatten() },
-        { status: 400 }
+      return ActionResponse.toNextResponse(
+        ActionResponse.error('Validation failed: ' + parse.error.flatten(), 400)
       );
     }
     const payload = parse.data;
@@ -97,9 +98,8 @@ export async function POST(req: Request) {
       where: { slug: payload.slug },
     });
     if (existing) {
-      return NextResponse.json(
-        { error: 'Slug already taken' },
-        { status: 409 }
+      return ActionResponse.toNextResponse(
+        ActionResponse.error('Slug already taken', 409)
       );
     }
 
@@ -123,22 +123,21 @@ export async function POST(req: Request) {
       data: {
         shopId: shop.id,
         userId: ownerId,
-        role: ShopMemberRole.STAFF,
+        role: ShopMemberRole.OWNER,
       },
     });
 
-    return NextResponse.json({ shop }, { status: 201 });
+    return ActionResponse.toNextResponse(
+      ActionResponse.success(
+        shop,
+        `Shop ${shop.name} created successfully`,
+        201
+      )
+    );
   } catch (err: any) {
     console.error('create shop error', err);
-    if (err?.code === 'P2002' && err?.meta?.target?.includes('slug')) {
-      return NextResponse.json(
-        { error: 'Slug already taken' },
-        { status: 409 }
-      );
-    }
-    return NextResponse.json(
-      { error: err?.message ?? 'Server error' },
-      { status: 500 }
+    return ActionResponse.toNextResponse(
+      ActionResponse.error(err?.message ?? 'Server error', 500)
     );
   }
 }

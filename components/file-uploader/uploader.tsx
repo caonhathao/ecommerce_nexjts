@@ -7,6 +7,7 @@ import {
   RenderErrorState,
   RenderUploadingState,
 } from '@/components/file-uploader/render-state';
+import Image from 'next/image';
 
 export type SingleFile = {
   url: string;
@@ -146,8 +147,14 @@ export function Uploader({ value = null, onChange }: UploaderProps) {
               <div className="p-2 text-red-500 text-center text-sm">Error</div>
             ) : (
               <>
-                <img src={file.url} className="object-cover w-full h-full" />
+                <Image
+                  src={file.url}
+                  fill
+                  className="object-cover"
+                  alt={file.publicId}
+                />
                 <button
+                  type="button"
                   onClick={removeFile}
                   className="absolute top-1 right-1 bg-red-600 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition"
                 >

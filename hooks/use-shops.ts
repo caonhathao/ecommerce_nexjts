@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { fetchApi } from '@/lib/client-fetch';
 
 export type Shop = {
   id: string;
@@ -13,10 +14,10 @@ export function useShops() {
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/seller/shops')
+    fetchApi('/api/seller/shops')
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch shops');
-        return res.json();
+        if (!res.success) throw new Error('Failed to fetch shops');
+        return res.data as Shop[];
       })
       .then((data) => {
         setShops(data);

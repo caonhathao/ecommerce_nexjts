@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'sonner';
 import ManageProductForm from '@/app/(seller)/seller/products/_components/manage-product-form';
 import { ManageProductFormInput } from '@/app/(seller)/seller/products/_components/productSchema';
+import { fetchApi } from '@/lib/client-fetch';
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -15,32 +16,47 @@ export default function EditProductPage() {
 
   useEffect(() => {
     if (!productId) return;
+    let mounted = true;
     setIsLoading(true);
-    fetch(`/api/seller/products/${productId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProduct(data.data);
+
+    fetchApi(`/api/seller/products/${productId}`)
+      .then((res) => {
+        if (!res?.success) {
+          toast.error('Failed to fetch product');
+          return null;
+        }
+        return res.data;
       })
-      .catch(() => {
+      .then((data) => {
+        if (!mounted) return;
+        if (data) setProduct(data as ManageProductFormInput);
+      })
+      .catch((err) => {
+        console.error(err);
         toast.error('Failed to fetch product');
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        if (mounted) setIsLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
   }, [productId]);
 
   const handleSubmit = async (data: ManageProductFormInput) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/seller/products/${productId}`, {
+      const res = await fetchApi(`/api/seller/products/${productId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      const result = await res.json();
-      if (result.success) {
+      if (res.success) {
         toast.success('Product updated successfully!');
         router.push('/seller/products');
       } else {
-        toast.error(result.error || 'Failed to update product');
+        toast.error(res.message || 'Failed to update product');
       }
     } catch (error: any) {
       toast.error(error.message || 'Failed to update product');

@@ -27,7 +27,7 @@
       "t_email_failed_noti": "Vui lòng nhập email của bạn",
       "t_verify_otp": "Mã OTP đã được gửi đến email của bạn",
       "t_password_missing": "Vui lòng nhập email và mật khẩu",
-      "t_pasword_success": "Đăng nhập thành công",
+      "t_password_success": "Đăng nhập thành công",
       "t_password_failed": "Email hoặc mật khẩu không khớp",
       "t_welcome": "Mừng bạn quay lại!",
       "t_desc": "Đăng nhập vào tài khoản của bạn để tiếp tục",
@@ -56,7 +56,7 @@
     "register_form_tab": {
       "t_name_min_schema": "Tên phải có ít nhất 2 ký tự",
       "t_name_max_schema": "Tên có tối đa 50 ký tự",
-      "t_name_regex_chema": "Tên chỉ bao gồm ký tự và khoảng cách",
+      "t_name_regex_schema": "Tên chỉ bao gồm ký tự và khoảng cách",
       "t_email_schema": "Địa chỉ email không hợp lệ",
       "t_password_min_schema": "Mật khẩu phải có ít nhất 8 ký tự",
       "t_password_max_schema": "Mật khẩu có tối đa 100 ký tự",
@@ -519,7 +519,7 @@
     "t_discount": "Giảm giá",
     "t_payment": " Tổng thanh toán",
     "payment_client": {
-      "t_payemnt_session_failed": "Không thể tạo phiên thanh toán",
+      "t_payment_session_failed": "Không thể tạo phiên thanh toán",
       "t_payment_direct": "Đang chuyển đến cổng thanh toán Stripe...",
       "t_payment_create_session_failed": "Lỗi khi tạo phiên thanh toán",
       "t_processing": "Đang xử lý...",
