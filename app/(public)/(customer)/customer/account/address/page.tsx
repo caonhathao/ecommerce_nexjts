@@ -1,6 +1,7 @@
 'use client';
 
-import { MapPin, MapPinX, MapPlus } from 'lucide-react';
+import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/_components/table-address';
+import { createAddress, getAddress } from '@/app/actions/address';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -13,10 +14,24 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useActionState, useEffect, useState, useTransition } from 'react';
+import {
+  Select,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { fetchData } from '@/funcs/fetch';
+import { env } from '@/lib/env';
+import {
+  districtResponse,
+  provinceResponse,
+  wardResponse,
+} from '@/types/customer.data-types';
 import { AddressDTO } from '@/types/dtos/address.dto';
-import { createAddress, getAddress } from '@/app/actions/address';
-import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/_components/table-address';
+import { SelectContent, SelectGroup } from '@radix-ui/react-select';
+import { MapPin, MapPinX, MapPlus } from 'lucide-react';
+import { useActionState, useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -40,6 +55,13 @@ export default function AddressPage() {
   const searchParams = useSearchParams();
   const callBackUrl = searchParams.get('callbackUrl');
   const route = useRouter();
+
+  const [cityResponse, setCityResponse] = useState<provinceResponse | null>(
+    null
+  );
+  const [districtResponse, setDistrictResponse] =
+    useState<districtResponse | null>(null);
+  const [wardResponse, setWardResponse] = useState<wardResponse | null>(null);
 
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     async (prevState, formData) => {
@@ -79,7 +101,41 @@ export default function AddressPage() {
       const data = await getAddress();
       if (data.success) setAddress(data.addresses);
     });
+
+    fetchData({
+      baseUrl: `${env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION}/api/v1/provinces`,
+      params: { limit: 63 },
+      setData: setCityResponse,
+    });
   }, []);
+
+  const handleSelectCity = ({ province }: { province: string }) => {
+    const provinceCode = cityResponse?.data.find(
+      (item) => item.name === province
+    );
+    if (provinceCode)
+      fetchData({
+        baseUrl: `${env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION}/api/v1/provinces/${provinceCode?.code}/districts`,
+        params: { limit: 100 },
+        setData: setDistrictResponse,
+      });
+  };
+
+  const handleSelectDistrict = ({ district }: { district: string }) => {
+    const districtCode = districtResponse?.data.find(
+      (item) => item.name === district
+    );
+    if (districtCode)
+      fetchData({
+        baseUrl: `${env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION}/api/v1/districts/${districtCode?.code}/wards`,
+        params: { limit: 100 },
+        setData: setWardResponse,
+      });
+  };
+
+  useEffect(() => {
+    console.log(cityResponse);
+  }, [cityResponse]);
 
   useEffect(() => {
     if (state.success) {
@@ -135,17 +191,101 @@ export default function AddressPage() {
                   <Input id="line1" name="line1" required />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="ward">{t('ward')}</Label>
-                  <Input id="ward" name="ward" required />
+                  <Label htmlFor="city">{t('city')}</Label>
+                  {/* <Input id="city" name="city" required /> */}
+                  <Select
+                    name="city"
+                    required={true}
+                    onValueChange={(value) => {
+                      handleSelectCity({ province: value });
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('t_city_palceholder')} />
+                    </SelectTrigger>
+                    <SelectContent className="shadow shadow-primary rounded-lg bg-background">
+                      <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                        {cityResponse ? (
+                          cityResponse?.data.map((value, index) => (
+                            <SelectItem
+                              key={value.code + index}
+                              value={value.name}
+                              className="text-nowrap w-full"
+                            >
+                              {value.name}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectLabel>{t('t_empty')}</SelectLabel>
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="grid gap-3">
                   <Label htmlFor="district">{t('district')}</Label>
-                  <Input id="district" name="district" required />
+                  {/* <Input id="district" name="district" required /> */}
+                  <Select
+                    name="district"
+                    required={true}
+                    onValueChange={(value) => {
+                      handleSelectDistrict({ district: value });
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('t_district_palceholder')} />
+                    </SelectTrigger>
+                    <SelectContent className="shadow shadow-primary rounded-lg bg-background">
+                      <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                        {districtResponse ? (
+                          districtResponse?.data.map((value, index) => (
+                            <SelectItem
+                              key={value.code + index}
+                              value={value.name}
+                            >
+                              {value.name}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectLabel>{t('t_empty')}</SelectLabel>
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
+
                 <div className="grid gap-3">
-                  <Label htmlFor="city">{t('city')}</Label>
-                  <Input id="city" name="city" required />
+                  <Label htmlFor="ward">{t('ward')}</Label>
+                  {/* <Input id="ward" name="ward" required /> */}
+                  <Select
+                    name="ward"
+                    required={true}
+                    onValueChange={(value) => {
+                      handleSelectDistrict({ district: value });
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('t_ward_palceholder')} />
+                    </SelectTrigger>
+                    <SelectContent className="shadow shadow-primary rounded-lg bg-background">
+                      <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                        {wardResponse ? (
+                          wardResponse?.data.map((value, index) => (
+                            <SelectItem
+                              key={value.code + index}
+                              value={value.name}
+                            >
+                              {value.name}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectLabel>{t('t_empty')}</SelectLabel>
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
+
                 <div className="grid gap-3">
                   <Label htmlFor="country">{t('country')}</Label>
                   <Input

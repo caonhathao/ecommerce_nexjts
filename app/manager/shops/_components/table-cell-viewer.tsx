@@ -127,8 +127,8 @@ export function TableCellViewer({
                   <Image
                     src={detail.coverUrl}
                     alt="shop cover image"
-                    width={0}
-                    height={0}
+                    width={1200}
+                    height={600}
                     className="w-full"
                   />
                 ) : null}

@@ -10,7 +10,7 @@ export default function HomeLayout({
     <SidebarProvider className={'flex flex-col'}>
       <div className={'flex flex-1 relative gap-2 mt-5 p-2'}>
         <div className="flex flex-row justify-center items-start w-[90%] h-full gap-6 relative">
-          <AppSidebar className="w-[25%]" />
+          <AppSidebar className="w-[25%] sticky top-0" />
           <div className="w-[75%]">{children}</div>
         </div>
       </div>
