@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { useSignOut } from '@/hooks/use-signout';
+import { paths } from '@/lib/path';
 import {
   BadgeCheck,
   Handshake,
@@ -34,7 +35,6 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { paths } from '@/lib/path';
 
 type Role = 'USER' | 'SELLER' | 'ADMIN';
 type HeaderUser = {
@@ -93,7 +93,10 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="p-0 rounded-full">
+                    <Button
+                      variant="ghost"
+                      className="p-0 rounded-full hover:cursor-pointer"
+                    >
                       <Avatar className="w-9 h-9">
                         <AvatarImage src={user.avatar_url} alt={user.name} />
                         <AvatarFallback>
@@ -114,7 +117,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
                     <DropdownMenuSeparator />
 
                     {/*  User shortcuts*/}
-                    <DropdownMenuItem asChild>
+                    <DropdownMenuItem asChild className="hover:cursor-pointer">
                       <Link
                         href="/customer/account/edit"
                         className="flex items-center gap-2"
@@ -123,7 +126,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
                         {n('profile')}
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
+                    <DropdownMenuItem asChild className="hover:cursor-pointer">
                       <Link
                         href="/customer/account/orders"
                         className="flex items-center gap-2"
@@ -132,7 +135,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
                         {n('orders')}
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
+                    <DropdownMenuItem asChild className="hover:cursor-pointer">
                       <Link
                         href="/customer/account/address"
                         className="flex items-center gap-2"
@@ -144,7 +147,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={() => handleSingout()}
-                      className="text-destructive focus:text-destructive"
+                      className="text-destructive focus:text-destructive hover:cursor-pointer"
                     >
                       <LogOut className="h-4 w-4 mr-2" />
                       {n('logout')}

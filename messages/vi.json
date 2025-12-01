@@ -140,6 +140,10 @@
       "saving": "Đang lưu...",
       "loading": "Đang tải...",
       "empty": "Bạn chưa có địa chỉ nào. Vui lòng thêm địa chỉ mới.",
+      "t_city_palceholder": "Chọn tỉnh thành",
+      "t_district_palceholder": "Chọn quận/huyện",
+      "t_ward_palceholder": "Chọn phường/xã",
+      "t_empty": "Trống",
       "toast_create_success": "Thêm địa chỉ thành công!",
       "toast_create_failed": "Thêm địa chỉ thất bại!"
     },
