@@ -6,9 +6,9 @@ import { NextRequest, NextResponse } from 'next/server';
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
-  const id = String(searchParams.get('id'));
+  const keyword = String(searchParams.get('keyword'));
 
-  if (!id) {
+  if (!keyword) {
     return NextResponse.json({
       success: false,
       data: {
@@ -19,7 +19,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   try {
     const data = await prisma.user.findFirst({
       where: {
-        id: id,
+        id: keyword,
       },
       select: {
         id: true,

@@ -44,7 +44,6 @@ import {
   IconGripVertical,
   IconLayoutColumns,
   IconLoader,
-  IconPlus,
 } from '@tabler/icons-react';
 import {
   ColumnDef,
@@ -378,10 +377,6 @@ const ProductsPage = () => {
                   })}
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="outline" size="sm">
-              <IconPlus />
-              <span className="hidden lg:inline">Add section</span>
-            </Button>
           </div>
         </div>
         <TabsContent
