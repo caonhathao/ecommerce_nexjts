@@ -140,6 +140,10 @@
       "saving": "Đang lưu...",
       "loading": "Đang tải...",
       "empty": "Bạn chưa có địa chỉ nào. Vui lòng thêm địa chỉ mới.",
+      "t_city_palceholder": "Chọn tỉnh thành",
+      "t_district_palceholder": "Chọn quận/huyện",
+      "t_ward_palceholder": "Chọn phường/xã",
+      "t_empty": "Trống",
       "toast_create_success": "Thêm địa chỉ thành công!",
       "toast_create_failed": "Thêm địa chỉ thất bại!"
     },
@@ -550,6 +554,34 @@
       "t_logout": " Đăng xuất"
     }
   },
+  "admin_dashboard": {
+    "section_card": {
+      "t_total_revenue": "Tổng doanh thu",
+      "t_currency": "VND",
+      "t_rate": "1",
+      "t_revenue_desc_1": "Tăng trưởng trong tháng này",
+      "t_revenue_desc_2": "Lượt khách ghé thăm trong 6 tháng qua",
+      "t_new_customers": "Khách hàng mới",
+      "t_customers_desc_1": "Giảm",
+      "t_customers_desc_1_1": "cùng kì",
+      "t_customeres_desc_2": "Cần chú ý tăng trưởng",
+      "t_active_customers": "Tài khoản đang hoạt động",
+      "t_active_customer_desc_1": "Lượng người dùng lâu dài",
+      "t_active_customer_desc_2": "Cam kết vượt mục tiêu",
+      "t_grouwth_rate": "Tốc độ phát triển",
+      "t_growth_rate_desc_1": "Hiệu suất tăng trưởng ổn định",
+      "t_growth_rate_desc_2": "Đạt mục tiêu tăng trưởng"
+    },
+    "chart_area_interactive": {
+      "t_total_customer": "Tổng lượng khách ghé thăm",
+      "t_3m": "Số liệu 3 tháng gần nhất",
+      "t_30d": "Số liệu 30 ngày gần nhất",
+      "t_7d": "Số liệu 7 ngày gần nhất",
+      "t_3m_toggle": "3 tháng trước",
+      "t_30d_toggle": "30 ngày trước",
+      "t_7d_toggle": "7 ngày trước"
+    }
+  },
   "admin_search_bar": {
     "t_search_action": "Tìm kiếm"
   },
@@ -903,6 +935,34 @@
       "t_price": "Giá",
       "t_variant": "Sản phẩm con",
       "t_cancel_action": "Thoát"
+    },
+    "table_top_product": {
+      "t_action_noti": "Hành động",
+      "t_copy_action": "Sao chép ID",
+      "t_copy_desc_noti": "Sao chép thông tin thành công!",
+      "t_product_name": "Tên sản phẩm",
+      "t_shop": "Cửa hàng",
+      "t_sold": "Đã bán",
+      "t_created_at": "Ngày tạo",
+      "t_updated_at": "Ngày cập nhật",
+
+      "t_sku_code": "Mã SKU",
+      "t_price": "Giá",
+      "t_currency": "Đơn vị tiền tệ",
+      "t_product_desc": "Thông tin chi tiết sản phẩm",
+      "t_watch_shop": "Xem cửa hàng",
+      "t_origin": "Xuất xứ",
+      "t_min_price": "Giá tối thiểu",
+      "t_max_price": "Giá tối đa",
+      "t_visibility": "Hiển thị",
+      "c_public": "Cho phép",
+      "c_private": "Đang xin phép",
+      "c_unlisted": "Không cho phép",
+
+      "t_desc": "Mô tả sản phẩm",
+      "t_variant": "Sản phẩm con",
+      "t_showing": "Hiển thị",
+      "t_column": "Cột"
     }
   }
 }
