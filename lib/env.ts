@@ -30,6 +30,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string().min(1),
     NEXT_PUBLIC_PUSHER_KEY: z.string().min(1),
     NEXT_PUBLIC_PUSHER_CLUSTER: z.string().min(1),
+    NEXT_PUBLIC_BASE_URL_ADMINISTRATION: z.string().min(1),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_WEB_NAME: process.env.NEXT_PUBLIC_WEB_NAME,
@@ -38,5 +39,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
     NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+    NEXT_PUBLIC_BASE_URL_ADMINISTRATION:
+      process.env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION,
   },
 });

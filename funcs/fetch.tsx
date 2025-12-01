@@ -55,6 +55,8 @@ export const fetchData = async <T,>({
     }
     const data = await response.json();
 
+    //console.log(data);
+
     // Method 1: Internal State Update
     if (setData) setData(data);
 

@@ -78,6 +78,10 @@
       "saving": "保存中...",
       "loading": "読み込み中...",
       "empty": "登録された住所はありません。新しい住所を追加してください。",
+      "t_city_palceholder": "省・市を選択",
+      "t_district_palceholder": "区・郡を選択",
+      "t_ward_palceholder": "坊・社を選択",
+      "t_empty": "データなし",
       "toast_create_success": "住所が正常に追加されました！",
       "toast_create_failed": "住所の追加に失敗しました！"
     },
@@ -490,6 +494,34 @@
       "t_logout": "ログアウト"
     }
   },
+  "admin_dashboard": {
+    "section_card": {
+      "t_total_revenue": "総売上",
+      "t_currency": "JPY",
+      "t_rate": "165",
+      "t_revenue_desc_1": "今月の成長率",
+      "t_revenue_desc_2": "過去6ヶ月の訪問者数",
+      "t_new_customers": "新規顧客",
+      "t_customers_desc_1": "減少",
+      "t_customers_desc_1_1": "前期比",
+      "t_customeres_desc_2": "成長施策が必要",
+      "t_active_customers": "アクティブアカウント",
+      "t_active_customer_desc_1": "長期ユーザー数",
+      "t_active_customer_desc_2": "目標達成",
+      "t_grouwth_rate": "成長率",
+      "t_growth_rate_desc_1": "安定した成長実績",
+      "t_growth_rate_desc_2": "成長目標達成"
+    },
+    "chart_area_interactive": {
+      "t_total_customer": "総訪問者数",
+      "t_3m": "過去3ヶ月のデータ",
+      "t_30d": "過去30日のデータ",
+      "t_7d": "過去7日のデータ",
+      "t_3m_toggle": "過去3ヶ月",
+      "t_30d_toggle": "過去30日",
+      "t_7d_toggle": "過去7日"
+    }
+  },
   "admin_search_bar": {
     "t_search_action": "検索"
   },
@@ -843,6 +875,34 @@
       "t_price": "価格",
       "t_variant": "バリエーション",
       "t_cancel_action": "閉じる"
+    },
+    "table_top_product": {
+      "t_action_noti": "操作",
+      "t_copy_action": "IDをコピー",
+      "t_copy_desc_noti": "コピーしました！",
+      "t_product_name": "商品名",
+      "t_shop": "ショップ",
+      "t_sold": "販売数",
+      "t_created_at": "作成日",
+      "t_updated_at": "更新日",
+
+      "t_sku_code": "SKUコード",
+      "t_price": "価格",
+      "t_currency": "通貨",
+      "t_product_desc": "商品詳細",
+      "t_watch_shop": "ショップを見る",
+      "t_origin": "原産国",
+      "t_min_price": "最低価格",
+      "t_max_price": "最高価格",
+      "t_visibility": "表示設定",
+      "c_public": "公開",
+      "c_private": "申請中",
+      "c_unlisted": "非公開",
+
+      "t_desc": "商品説明",
+      "t_variant": "バリエーション",
+      "t_showing": "表示件数",
+      "t_column": "列表示"
     }
   }
 }
