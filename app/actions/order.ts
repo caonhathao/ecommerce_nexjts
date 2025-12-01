@@ -6,6 +6,7 @@ import { prisma } from '@/lib/db';
 import { OrderStatus, Prisma } from '@/lib/generated/prisma';
 import { revalidatePath } from 'next/cache';
 import { OrderWithRelations } from '@/types/order.data-types';
+import { OrderDTO } from '@/types/dtos/order.dto';
 
 type CreateOrderResult =
   | { success: true; order: OrderWithRelations[] }
@@ -141,7 +142,7 @@ interface GetOrdersParams {
 export async function getOrder(
   _prevState: any,
   formData: GetOrdersParams = {}
-): Promise<{ orders: any[]; nextCursor: string | undefined }> {
+): Promise<{ orders: OrderDTO[]; nextCursor: string | undefined }> {
   const { cursor, status, orderId, limit = 10 } = formData;
 
   try {

@@ -102,8 +102,9 @@ export const ProductItem = ({ item }: ProductItemProps) => {
             <CardDescription className="px-2 py-1">
               <div className="w-full">
                 <p className="line-clamp-2 text-sm mb-1">
-                  Đây là sản phẩm có 1 không 2 giá cả ưu đãi phải chăng hãy mua
-                  ngay hôm nay
+                  {item.description
+                    ? item.description
+                    : 'Đây là 1 sản phẩm cực tốt tốt ở đâu thì mua đi r biết'}
                 </p>
               </div>
               <RatingStars value={item.ratingAvg} size={15} />

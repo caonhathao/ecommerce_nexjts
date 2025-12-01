@@ -129,6 +129,7 @@ export async function GET(req: NextRequest) {
         select: {
           id: true,
           title: true,
+          description: true,
           minPrice: true,
           maxPrice: true,
           currency: true,
@@ -174,6 +175,7 @@ export async function GET(req: NextRequest) {
     const formatted = products.map((p) => ({
       id: p.id,
       title: p.title,
+      description: p.description,
       minPrice: p.minPrice,
       maxPrice: p.maxPrice,
       currency: p.currency,

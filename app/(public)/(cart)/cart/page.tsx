@@ -8,7 +8,6 @@ import { Separator } from '@/components/ui/separator';
 import { useDebounce } from '@/hooks/debounce';
 import { env } from '@/lib/env';
 import { CartType } from '@/types/cart.data-types';
-import { voucher } from '@/types/voucher';
 import { TicketIcon, TrashIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -17,6 +16,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CiShoppingBasket } from 'react-icons/ci';
 import { toast } from 'sonner';
 import { formatPrice } from '../../_components/global-function';
+import { getTwoRandomVoucherCodes } from '@/helpers/voucher-helper';
 
 const emptyCart: CartType = {
   id: '',
@@ -178,6 +178,8 @@ export default function Cart() {
       return;
     }
 
+    const vouchers = await getTwoRandomVoucherCodes();
+
     try {
       const existing = await getOrderDrafts();
       if (existing.success && existing.draft) {
@@ -194,10 +196,10 @@ export default function Cart() {
         items: selectedItem,
         voucher: [
           {
-            code: voucher.voucher1,
+            code: vouchers.voucher1,
           },
           {
-            code: voucher.voucher2,
+            code: vouchers.voucher2,
           },
         ],
       };
@@ -474,9 +476,7 @@ export default function Cart() {
                 </p>
               </div>
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-text-secondary text-sm">
-                  {t('t_discount')}
-                </p>
+                <p className="text-text-secondary text-sm">{t('t_discount')}</p>
                 <p className="text-success">
                   -
                   {cart.items
@@ -497,7 +497,9 @@ export default function Cart() {
               </div>
               <Separator />
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-text-secondary text-sm">{t('t_total_payment')}</p>
+                <p className="text-text-secondary text-sm">
+                  {t('t_total_payment')}
+                </p>
                 <p className="text-error">
                   {cart.items
                     .filter((item: any) =>

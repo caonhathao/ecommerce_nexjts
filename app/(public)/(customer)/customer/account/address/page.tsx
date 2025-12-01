@@ -31,9 +31,10 @@ import {
 import { AddressDTO } from '@/types/dtos/address.dto';
 import { SelectContent, SelectGroup } from '@radix-ui/react-select';
 import { MapPin, MapPinX, MapPlus } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type FormState = {
   success: boolean;
@@ -51,6 +52,9 @@ export default function AddressPage() {
   const [address, setAddress] = useState<AddressDTO[]>([]);
   const [isPendingTransition, startTransition] = useTransition();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const callBackUrl = searchParams.get('callbackUrl');
+  const route = useRouter();
 
   const [cityResponse, setCityResponse] = useState<provinceResponse | null>(
     null
@@ -76,6 +80,9 @@ export default function AddressPage() {
 
         if (res.success) {
           toast.success(t('toast_create_success'));
+          if (callBackUrl) {
+            route.push(decodeURIComponent(callBackUrl));
+          }
           return { success: true, newAddress: res.data };
         } else {
           toast.error(res.message || t('toast_create_failed'));
@@ -96,7 +103,7 @@ export default function AddressPage() {
     });
 
     fetchData({
-      baseUrl: `${env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION}/api/v1/provinces`,
+      baseUrl: `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces`,
       params: { limit: 63 },
       setData: setCityResponse,
     });
@@ -108,7 +115,7 @@ export default function AddressPage() {
     );
     if (provinceCode)
       fetchData({
-        baseUrl: `${env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION}/api/v1/provinces/${provinceCode?.code}/districts`,
+        baseUrl: `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces/${provinceCode?.code}/districts`,
         params: { limit: 100 },
         setData: setDistrictResponse,
       });
@@ -120,7 +127,7 @@ export default function AddressPage() {
     );
     if (districtCode)
       fetchData({
-        baseUrl: `${env.NEXT_PUBLIC_BASE_URL_ADMINISTRATION}/api/v1/districts/${districtCode?.code}/wards`,
+        baseUrl: `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/districts/${districtCode?.code}/wards`,
         params: { limit: 100 },
         setData: setWardResponse,
       });

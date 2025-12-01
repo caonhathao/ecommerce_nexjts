@@ -30,7 +30,6 @@ import { ChatButton } from '@/components/chat/chat-button';
 import { authClient } from '@/lib/auth-client';
 import { Prisma } from '@/lib/generated/prisma';
 import { AddToCartRequest } from '@/types/cart.data-types';
-import { voucher } from '@/types/voucher';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -41,6 +40,7 @@ import { Reviews } from './_components/reviews';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 import Decimal = Prisma.Decimal;
 import { paths } from '@/lib/path';
+import { getTwoRandomVoucherCodes } from '@/helpers/voucher-helper';
 
 interface selectedVariant {
   name: string;
@@ -198,6 +198,10 @@ const DetailPage = () => {
       return;
     }
 
+    const vouchers = await getTwoRandomVoucherCodes();
+
+    console.log('vouchers:', vouchers);
+
     try {
       const existing = await getOrderDrafts();
       if (existing.success && existing.draft) {
@@ -217,10 +221,10 @@ const DetailPage = () => {
         items: [params],
         voucher: [
           {
-            code: voucher.voucher1,
+            code: vouchers.voucher1,
           },
           {
-            code: voucher.voucher2,
+            code: vouchers.voucher2,
           },
         ],
       };
