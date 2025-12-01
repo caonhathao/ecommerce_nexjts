@@ -14,7 +14,7 @@ export interface productItemType {
   title: string;
   minPrice: number;
   ratingAvg: number;
-  description?: string;
+  description: string;
   voucher: {
     maxDiscount: number;
     type: string;

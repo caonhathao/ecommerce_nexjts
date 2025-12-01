@@ -19,6 +19,7 @@ import { createAddress, getAddress } from '@/app/actions/address';
 import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/_components/table-address';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type FormState = {
   success: boolean;
@@ -36,6 +37,9 @@ export default function AddressPage() {
   const [address, setAddress] = useState<AddressDTO[]>([]);
   const [isPendingTransition, startTransition] = useTransition();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const callBackUrl = searchParams.get('callbackUrl');
+  const route = useRouter();
 
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     async (prevState, formData) => {
@@ -54,6 +58,9 @@ export default function AddressPage() {
 
         if (res.success) {
           toast.success(t('toast_create_success'));
+          if (callBackUrl) {
+            route.push(decodeURIComponent(callBackUrl));
+          }
           return { success: true, newAddress: res.data };
         } else {
           toast.error(res.message || t('toast_create_failed'));

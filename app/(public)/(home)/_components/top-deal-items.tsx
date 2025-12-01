@@ -47,6 +47,8 @@ export const TopDealItems = ({
     return response?.data || [];
   }, [response]);
 
+  console.log(data);
+
   if (!data) return <Loading />;
 
   return (
@@ -57,7 +59,7 @@ export const TopDealItems = ({
           <AiFillLike color="red" size={20} />
           {t('title')}
         </p>
-        <Link href="#" className="text-primary hover:cursor-pointer">
+        <Link href="/search" className="text-primary hover:cursor-pointer">
           {t('watch_more')}
         </Link>
       </div>
