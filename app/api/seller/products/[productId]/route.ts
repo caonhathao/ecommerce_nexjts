@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireSeller } from '@/lib/require-role';
 import { manageProductSchema } from '@/app/(seller)/seller/products/_components/productSchema';
+import { ActionResponse } from '@/lib/service-response';
 
 export async function GET(req: NextRequest) {
   const sellerSession = await requireSeller();
@@ -16,9 +17,8 @@ export async function GET(req: NextRequest) {
     : { productId: req.url.split('/').pop() };
 
   if (!productId) {
-    return NextResponse.json(
-      { success: false, error: 'Missing productId' },
-      { status: 400 }
+    return ActionResponse.toNextResponse(
+      ActionResponse.error('Missing productId', 400)
     );
   }
 
@@ -30,16 +30,12 @@ export async function GET(req: NextRequest) {
     include: {
       images: true,
       variants: true,
-      tags: {
-        select: { tagId: true, tag: { select: { name: true, slug: true } } },
-      },
     },
   });
 
   if (!product) {
-    return NextResponse.json(
-      { success: false, error: 'Product not found' },
-      { status: 404 }
+    return ActionResponse.toNextResponse(
+      ActionResponse.error('Product not found', 404)
     );
   }
 
@@ -52,13 +48,10 @@ export async function GET(req: NextRequest) {
       price: Number(v.price),
       compareAt: v.compareAt != null ? Number(v.compareAt) : null,
     })),
-    tags: product.tags.map((t) => ({
-      tagId: t.tagId,
-      name: (t as any).tag?.name,
-    })),
+    keywords: product.keywords ?? [],
   };
 
-  return NextResponse.json({ success: true, data: normalized });
+  return ActionResponse.toNextResponse(ActionResponse.success(normalized));
 }
 
 export async function PUT(
@@ -69,27 +62,6 @@ export async function PUT(
   try {
     const body = await req.json();
     const parsed = manageProductSchema.parse(body);
-
-    const tagCreates =
-      parsed.tags
-        ?.map((t) => {
-          if (t.tagId) {
-            return { tag: { connect: { id: t.tagId } } };
-          }
-          if (t.name) {
-            const slug = slugify(t.name);
-            return {
-              tag: {
-                connectOrCreate: {
-                  where: { slug },
-                  create: { name: t.name, slug },
-                },
-              },
-            };
-          }
-          return undefined as any;
-        })
-        .filter(Boolean) ?? [];
 
     const updateData: any = {
       title: parsed.title,
@@ -132,10 +104,7 @@ export async function PUT(
             isActive: variant.isActive,
           })) ?? [],
       },
-      tags: {
-        deleteMany: {},
-        create: tagCreates,
-      },
+      keywords: parsed.keywords ?? [],
     };
 
     if (parsed.shopId) {
@@ -147,18 +116,10 @@ export async function PUT(
       data: updateData,
     });
 
-    return NextResponse.json({ success: true, data: product });
+    return ActionResponse.toNextResponse(ActionResponse.success(product));
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 400 }
+    return ActionResponse.toNextResponse(
+      ActionResponse.error(error.message, 400)
     );
   }
 }
-
-const slugify = (s: string) =>
-  s
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)+/g, '');

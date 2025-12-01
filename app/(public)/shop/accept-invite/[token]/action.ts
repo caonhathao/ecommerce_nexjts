@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db';
 import { ActionResponse } from '@/lib/service-response';
 import { paths } from '@/lib/path';
 import { redirect } from 'next/navigation';
+import { upgradeToSeller } from '@/app/actions/role';
 
 export async function acceptShopInvitation(token: string) {
   const session = await getSessionUser();
@@ -55,11 +56,9 @@ export async function acceptShopInvitation(token: string) {
       prisma.shopInvitation.delete({
         where: { token },
       }),
-      prisma.user.update({
-        where: { id: session.user.id },
-        data: { role: 'seller' },
-      }),
     ]);
+
+    await upgradeToSeller();
   } catch (error) {
     console.error('Accept Invite Error:', error);
     return ActionResponse.error('Failed to process invitation', 500);

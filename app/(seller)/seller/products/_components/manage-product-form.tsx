@@ -58,7 +58,7 @@ export default function ManageProductForm({
           shopId: product.shopId,
           images: product.images ?? [],
           variants: product.variants ?? [],
-          tags: product.tags ?? [],
+          keywords: product.keywords ?? [],
         }
       : {
           title: '',
@@ -74,7 +74,7 @@ export default function ManageProductForm({
           shopId: undefined,
           images: [],
           variants: [],
-          tags: [],
+          keywords: [],
         },
   });
 
@@ -93,7 +93,7 @@ export default function ManageProductForm({
     ],
     ['images'],
     ['variants'],
-    ['tags'],
+    ['keywords'],
   ];
 
   // centralized navigation that validates before moving forward

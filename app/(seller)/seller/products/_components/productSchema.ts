@@ -34,22 +34,22 @@ export const productVariantSchema = z.object({
 });
 
 // Product Tag Schema
-export const productTagSchema = z
-  .object({
-    tagId: z
-      .preprocess(emptyToUndefined, z.string().uuid('Invalid UUID'))
-      .optional(),
-    name: z
-      .preprocess(
-        emptyToUndefined,
-        z.string().min(1, 'Tag name is required').max(50)
-      )
-      .optional(),
-  })
-  .refine((d) => !!d.tagId || !!d.name, {
-    message: 'Provide a tag id or a tag name',
-    path: ['tagId'],
-  });
+// export const productTagSchema = z
+//   .object({
+//     tagId: z
+//       .preprocess(emptyToUndefined, z.string().uuid('Invalid UUID'))
+//       .optional(),
+//     name: z
+//       .preprocess(
+//         emptyToUndefined,
+//         z.string().min(1, 'Tag name is required').max(50)
+//       )
+//       .optional(),
+//   })
+//   .refine((d) => !!d.tagId || !!d.name, {
+//     message: 'Provide a tag id or a tag name',
+//     path: ['tagId'],
+//   });
 
 // Base Product Schema
 const baseProductSchema = z.object({
@@ -68,24 +68,23 @@ const baseProductSchema = z.object({
   currency: z.enum(Currency).default(Currency.VND),
 });
 
-// Manage Product Schema (for both create and edit forms)
 export const manageProductSchema = baseProductSchema
   .extend({
-    id: z.uuid().optional(), // Optional for create, required for update
-    shopId: z.uuid('Invalid shop ID').optional(), // Optional for edit
+    id: z.uuid().optional(),
+    shopId: z.uuid('Invalid shop ID').optional(),
     images: z
       .array(productImageSchema)
       .min(1, 'At least one image is required')
       .max(10, 'Maximum 10 images allowed')
-      .optional(), // Optional for edit
+      .optional(),
     variants: z
       .array(productVariantSchema)
       .min(1, 'At least one variant is required')
       .max(50, 'Maximum 50 variants allowed')
-      .optional(), // Optional for edit
-    tags: z
-      .array(productTagSchema)
-      .max(20, 'Maximum 20 tags allowed')
+      .optional(),
+    keywords: z
+      .array(z.string().min(1, 'Keyword is required').max(100))
+      .max(50, 'Maximum 50 keywords allowed')
       .optional()
       .default([]),
   })
@@ -103,7 +102,6 @@ export const manageProductSchema = baseProductSchema
     }
   );
 
-// Type export for manage product form
 export type ManageProductFormInput = z.infer<typeof manageProductSchema>;
 export type ProductImageInput = z.infer<typeof productImageSchema>;
 export type ProductVariantInput = z.infer<typeof productVariantSchema>;

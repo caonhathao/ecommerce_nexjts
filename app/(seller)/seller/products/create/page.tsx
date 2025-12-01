@@ -6,36 +6,35 @@ import { toast } from 'sonner';
 import { ManageProductFormInput } from '../_components/productSchema';
 import ManageProductForm from '@/app/(seller)/seller/products/_components/manage-product-form';
 import { Button } from '@/components/ui/button';
+import { fetchApi } from '@/lib/client-fetch';
+import { useShops } from '@/hooks/use-shops';
 
 export default function CreateProductPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [hasShop, setHasShop] = useState<boolean | null>(null);
   const [checkingShops, setCheckingShops] = useState(true);
+  const { shops, loading: shopsLoading, error: shopsError } = useShops();
 
   useEffect(() => {
     let mounted = true;
-    (async () => {
-      try {
-        const res = await fetch('/api/seller/shops');
-        const data = await res.json().catch(() => ({}));
-        // endpoint returns an array of shops on success
-        const shopsArray = Array.isArray(data)
-          ? data
-          : Array.isArray(data?.data)
-            ? data.data
-            : [];
-        if (mounted) setHasShop((shopsArray?.length || 0) > 0);
-      } catch {
-        if (mounted) setHasShop(false);
-      } finally {
-        if (mounted) setCheckingShops(false);
+    setCheckingShops(shopsLoading);
+
+    if (!shopsLoading) {
+      if (shopsError) {
+        if (mounted) {
+          setHasShop(false);
+          toast.error('Failed to fetch shops');
+        }
+      } else {
+        if (mounted) setHasShop((shops?.length ?? 0) > 0);
       }
-    })();
+    }
+
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [shops, shopsLoading, shopsError]);
 
   const handleSubmit = async (data: ManageProductFormInput) => {
     if (hasShop === false) {

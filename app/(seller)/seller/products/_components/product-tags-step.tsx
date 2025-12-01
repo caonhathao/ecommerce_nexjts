@@ -1,115 +1,110 @@
-// ProductTagsStep.tsx
 'use client';
 
-import React, { useState } from 'react';
-import { useFormContext, useFieldArray } from 'react-hook-form';
-import type { ManageProductFormInput } from './productSchema';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
+import { ManageProductFormInput } from './productSchema';
 import {
+  FormField,
   FormItem,
   FormLabel,
   FormControl,
   FormMessage,
-  FormDescription,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 
 export default function ProductTagsStep() {
-  const { control, register } = useFormContext<ManageProductFormInput>();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'tags',
-  });
+  const form = useFormContext<ManageProductFormInput>();
+  const [query, setQuery] = React.useState('');
 
-  const [newTagText, setNewTagText] = useState('');
+  const normalize = (s: string) => s.trim().toLowerCase();
+  const currentKeywords: string[] = form.getValues('keywords') ?? [];
 
-  const handleAddFreeTag = () => {
-    const trimmed = newTagText.trim();
-    if (!trimmed) return;
-    append({ name: trimmed });
-    setNewTagText('');
+  const addKeyword = (kw: string) => {
+    const name = kw.trim();
+    if (!name) return;
+    const exists = currentKeywords.some(
+      (c) => normalize(c) === normalize(name)
+    );
+    if (exists) return;
+    form.setValue('keywords', [...currentKeywords, name], {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  };
+
+  const removeKeyword = (index: number) => {
+    const cur = [...(form.getValues('keywords') ?? [])];
+    cur.splice(index, 1);
+    form.setValue('keywords', cur, { shouldDirty: true, shouldValidate: true });
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (!query.trim()) return;
+      addKeyword(query);
+      setQuery('');
+    }
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold mb-2">Product Tags</h3>
-        <p className="text-sm text-muted-foreground">
-          Add keywords that help your customers find this product.
-        </p>
+        <h3 className="text-lg font-semibold mb-4">Tags / Keywords</h3>
       </div>
 
-      <FormItem>
-        <FormLabel>Current tags</FormLabel>
-        <FormControl>
-          <div className="flex flex-wrap gap-2">
-            {fields.length === 0 ? (
-              <span className="text-sm text-muted-foreground">
-                No tags added yet
-              </span>
-            ) : (
-              fields.map((f, idx) => (
-                <div
-                  key={f.id}
-                  className="flex items-center gap-2 bg-muted px-2 py-1 rounded-md text-sm"
-                >
-                  <span>{(f as any).name ?? (f as any).tagId}</span>
-                  <button
+      <FormField
+        control={form.control}
+        name="keywords"
+        render={() => (
+          <FormItem>
+            <FormLabel>Product Keywords</FormLabel>
+            <FormControl>
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <Input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={onKeyDown}
+                    placeholder="Type a keyword and press Enter"
+                  />
+                  <Button
                     type="button"
-                    onClick={() => remove(idx)}
-                    className="text-xs text-destructive hover:underline"
+                    onClick={() => {
+                      addKeyword(query);
+                      setQuery('');
+                    }}
                   >
-                    Remove
-                  </button>
+                    Add
+                  </Button>
                 </div>
-              ))
-            )}
-          </div>
-        </FormControl>
-        <FormDescription>
-          These tags will be saved with your product.
-        </FormDescription>
-        <FormMessage />
-      </FormItem>
 
-      <FormItem>
-        <FormLabel>Add new tag</FormLabel>
-        <div className="flex gap-2">
-          <FormControl className="flex-1">
-            <Input
-              value={newTagText}
-              onChange={(e) => setNewTagText(e.target.value)}
-              placeholder="Enter tag name (e.g. 'summer', 'blue', 'premium')"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  handleAddFreeTag();
-                }
-              }}
-            />
-          </FormControl>
-          <Button type="button" onClick={handleAddFreeTag}>
-            Add
-          </Button>
-        </div>
-        <FormMessage />
-      </FormItem>
-
-      {/* Hidden inputs for RHF to track both fields */}
-      <div className="hidden">
-        {fields.map((f, idx) => (
-          <div key={f.id}>
-            <input
-              {...register(`tags.${idx}.tagId` as const)}
-              defaultValue={(f as any).tagId}
-            />
-            <input
-              {...register(`tags.${idx}.name` as const)}
-              defaultValue={(f as any).name}
-            />
-          </div>
-        ))}
-      </div>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {currentKeywords.map((k, idx) => (
+                    <div
+                      key={`${k}-${idx}`}
+                      className="inline-flex items-center gap-2 bg-muted/30 px-2 py-1 rounded"
+                    >
+                      <span className="text-sm">{k}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeKeyword(idx)}
+                        className="p-0.5"
+                        aria-label="Remove keyword"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </div>
   );
 }
