@@ -59,7 +59,7 @@ export const SuggestDealToday = ({ size }: TopDealItemsProps) => {
       {/* watch more */}
       <div className="w-full flex justify-center items-center">
         <Link
-          href={'#'}
+          href={'/search'}
           className={buttonVariants({
             variant: 'outline',
             className: 'text-primary',

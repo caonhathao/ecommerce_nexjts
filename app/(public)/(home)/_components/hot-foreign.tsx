@@ -48,7 +48,7 @@ export const HotForeign = ({ size }: TopDealItemsProps) => {
         <p className="w-fit flex flex-row gap-2 text-lg font-bold select-none">
           {t('title')}
         </p>
-        <Link href="#" className="text-primary hover:cursor-pointer">
+        <Link href="/search" className="text-primary hover:cursor-pointer">
           {t('watch_more')}
         </Link>
       </div>

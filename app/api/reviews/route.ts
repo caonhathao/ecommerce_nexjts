@@ -1,5 +1,7 @@
 import { prisma } from '@/lib/db';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { ActionResponse } from '@/lib/service-response';
+import { getCurrentUserId } from '@/lib/auth';
 
 export async function GET(req: Request) {
   try {
@@ -47,7 +49,7 @@ export async function GET(req: Request) {
       },
       skip,
       take: limit,
-      orderBy: { createdAt: 'desc' }, // review mới nhất trước
+      orderBy: { createdAt: 'desc' },
     });
 
     return NextResponse.json({
@@ -65,5 +67,44 @@ export async function GET(req: Request) {
     return new Response(JSON.stringify({ message: 'Internal Server Error' }), {
       status: 500,
     });
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      return ActionResponse.toNextResponse(
+        ActionResponse.error('Unauthorized', 401)
+      );
+    }
+    const data = await req.json();
+
+    const review = await prisma.review.create({
+      data: {
+        productId: data.productId,
+        userId: userId,
+        rating: data.rating,
+        orderItemId: data.orderItemId || null,
+        title: data.title || null,
+        body: data.body || null,
+        images:
+          data.images && data.images.length > 0
+            ? data.images?.map((i: any) => ({
+                url: i.url,
+                publicId: i.publicId,
+                alt: i.alt,
+                position: i.position,
+              }))
+            : null,
+      },
+    });
+    return ActionResponse.toNextResponse(
+      ActionResponse.success(review, 'Review successful', 201)
+    );
+  } catch (error) {
+    return ActionResponse.toNextResponse(
+      ActionResponse.error('failed', 400, { errorDetail: [String(error)] })
+    );
   }
 }

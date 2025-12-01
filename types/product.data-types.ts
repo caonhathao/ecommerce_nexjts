@@ -22,6 +22,7 @@ export interface SellerProductListItem {
 export interface SearchProduct {
   id: string;
   title: string;
+  description: string | null;
   minPrice: string;
   maxPrice: string;
   currency: string;

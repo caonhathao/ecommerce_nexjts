@@ -52,7 +52,7 @@ export function CheckoutClient({ order_draft }: CheckoutClientProps) {
           <FieldGroup>
             <FieldSet>
               <FieldLegend>{t('t_address')}</FieldLegend>
-              <FieldDescription>{'t_check_info'}</FieldDescription>
+              <FieldDescription>{t('t_check_info')}</FieldDescription>
 
               <div className="mt-4 space-y-3">
                 <Field orientation="horizontal">

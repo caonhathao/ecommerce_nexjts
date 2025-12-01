@@ -1,4 +1,10 @@
-export const voucher = {
-  voucher1: 'VC-UKDU3TYE',
-  voucher2: 'VC-8USKDRR3',
+import { $Enums } from '@/lib/generated/prisma';
+import VoucherType = $Enums.VoucherType;
+import { Decimal } from '@/lib/generated/prisma/runtime/library';
+
+export type VoucherDTO = {
+  id: string;
+  code: string;
+  type: VoucherType;
+  value: Decimal;
 };
