@@ -140,6 +140,10 @@
       "saving": "Saving...",
       "loading": "Loading...",
       "empty": "You have no addresses yet. Please add a new one.",
+      "t_city_palceholder": "Select Province/City",
+      "t_district_palceholder": "Select District",
+      "t_ward_palceholder": "Select Ward/Commune",
+      "t_empty": "No data",
       "toast_create_success": "Address added successfully!",
       "toast_create_failed": "Failed to add address!"
     },

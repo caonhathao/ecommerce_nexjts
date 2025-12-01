@@ -78,6 +78,10 @@
       "saving": "保存中...",
       "loading": "読み込み中...",
       "empty": "登録された住所はありません。新しい住所を追加してください。",
+      "t_city_palceholder": "省・市を選択",
+      "t_district_palceholder": "区・郡を選択",
+      "t_ward_palceholder": "坊・社を選択",
+      "t_empty": "データなし",
       "toast_create_success": "住所が正常に追加されました！",
       "toast_create_failed": "住所の追加に失敗しました！"
     },
