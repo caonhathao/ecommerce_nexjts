@@ -9,8 +9,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getSessionUser } from '@/lib/auth';
-import { formatCurrency } from '@/lib/utils';
 import { getSellerDashboardStats } from '@/app/data/section-cards-data';
+import { formatPrice } from '@/lib/utils';
 
 export async function SectionCardsSeller() {
   const session = await getSessionUser();
@@ -27,7 +27,7 @@ export async function SectionCardsSeller() {
         <CardHeader>
           <CardDescription>Today&apos;s Revenue</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {formatCurrency(stats.todayRevenue, 'VND')}
+            {formatPrice(stats.todayRevenue)}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">

@@ -1,6 +1,6 @@
 'use client';
 
-import { PackageSearch, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import {
@@ -15,8 +15,12 @@ import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/app/(public)/(customer)/customer/account/orders/_components/no-order-found';
 import { $Enums } from '@/lib/generated/prisma';
 import OrderStatus = $Enums.OrderStatus;
-import { formatPrice } from '@/lib/utils';
+import { DataTable } from '@/app/(seller)/seller/orders/_components/order-data-table';
+import { columns } from '@/app/(seller)/seller/orders/_components/order-column-table';
+import { OrderDTO } from '@/types/dtos/order.dto';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { formatPrice } from '@/lib/utils';
 //
 // enum OrderStatus {
 //   AWAITING_PAYMENT = 'AWAITING_PAYMENT',
@@ -26,38 +30,46 @@ import { useTranslations } from 'next-intl';
 //   CANCELED = 'CANCELED',
 // }
 
-interface OrderItem {
-  id: string;
-  title: string;
-  quantity: number;
-  total: number;
-  product: {
-    images: { url: string }[];
-    name: string;
-    slug: string;
-  };
-}
-
-interface Order {
-  id: string;
-  orderNumber: string;
-  status: OrderStatus;
-  grandTotal: number;
-  updatedAt: string;
-  items: OrderItem[];
-}
+// interface OrderItem {
+//   id: string;
+//   title: string;
+//   quantity: number;
+//   total: number;
+//   product: {
+//     images: { url: string }[];
+//     name: string;
+//     slug: string;
+//   };
+// }
+//
+// interface Order {
+//   id: string;
+//   orderNumber: string;
+//   status: OrderStatus;
+//   grandTotal: number;
+//   createdAt: string;
+//   items: OrderItem[];
+// }
 
 const LIMIT = 12;
 
 export default function SellerOrderPage() {
+  const t = useTranslations('seller.order_page');
   const [activeTab, setActiveTab] = useState<OrderStatus | 'ALL'>('ALL');
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<OrderDTO[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [refreshIndex, setRefreshIndex] = useState(0);
+  const router = useRouter();
 
   const observer = useRef<IntersectionObserver | null>(null);
+
+  const handleRefresh = useCallback(() => {
+    console.log('hihi');
+    setRefreshIndex((prev) => prev + 1);
+  }, []);
 
   const fetchOrders = useCallback(
     async (isNewTab = false, cursor?: string | null) => {
@@ -68,9 +80,10 @@ export default function SellerOrderPage() {
         if (activeTab !== 'ALL') params.append('status', activeTab);
         if (cursor) params.append('cursor', cursor);
 
-        const res = await fetch(`/api/seller/orders?${params.toString()}`);
+        const res = await fetch(`/api/seller/orders?${params.toString()}`, {
+          cache: 'no-store',
+        });
         const data = await res.json();
-        console.log(data);
 
         if (data.success) {
           setOrders((prev) => (isNewTab ? data.data : [...prev, ...data.data]));
@@ -93,7 +106,7 @@ export default function SellerOrderPage() {
     setHasMore(true);
     setIsInitialLoad(true);
     fetchOrders(true, null);
-  }, [activeTab, fetchOrders]);
+  }, [activeTab, fetchOrders, refreshIndex]);
 
   const lastOrderElementRef = useCallback(
     (node: HTMLDivElement) => {
@@ -111,27 +124,13 @@ export default function SellerOrderPage() {
 
   return (
     <div className="p-6 w-full max-w-6xl mx-auto">
-      <div className="mb-8 flex w-fit items-center gap-4 px-6 py-4 bg-gradient-to-r from-primary to-brand rounded-2xl shadow-xl">
-        <div className="p-3 bg-primary-foreground/20 rounded-full backdrop-blur-sm">
-          <PackageSearch className="w-7 h-7 text-primary-foreground" />
-        </div>
-        <div>
-          <h2 className="text-xl font-bold text-primary-foreground drop-shadow-md">
-            Quản lý đơn hàng
-          </h2>
-          <p className="text-xs font-medium text-primary-foreground/70">
-            Kênh người bán
-          </p>
-        </div>
-      </div>
-
       <div className="flex w-full flex-col gap-6">
         <Tabs
           defaultValue="ALL"
           value={activeTab}
           onValueChange={(val) => setActiveTab(val as any)}
         >
-          <TabsList className="w-full justify-start overflow-x-auto flex-nowrap bg-muted/40 p-1 rounded-xl shadow-inner h-auto">
+          <TabsList className="w-full justify-start overflow-x-auto flex-nowrap bg-muted/40 p-1 rounded-xl shadow-inner">
             <TabItem value="ALL" label="Tất cả" count={null} />
             <TabItem
               value={OrderStatus.AWAITING_PAYMENT}
@@ -153,7 +152,14 @@ export default function SellerOrderPage() {
               </div>
             )}
 
-            {!isInitialLoad && orders.length > 0 ? (
+            {activeTab === 'ALL' && !isInitialLoad && orders.length > 0 ? (
+              <div className="bg-background-secondary border-border border-2 rounded-lg">
+                <DataTable
+                  columns={columns(t, handleRefresh)}
+                  data={orders as OrderDTO[]}
+                />
+              </div>
+            ) : !isInitialLoad && orders.length > 0 ? (
               <div className="space-y-4">
                 {orders.map((order, index) => {
                   const isLastElement = orders.length === index + 1;
@@ -214,7 +220,7 @@ function TabItem({
   );
 }
 
-function SellerOrderCard({ order }: { order: Order }) {
+function SellerOrderCard({ order }: { order: OrderDTO }) {
   const statusColor: Record<string, string> = {
     AWAITING_PAYMENT: 'bg-warning/15 text-warning border-warning/30',
     PROCESSING: 'bg-info/15 text-info border-info/30',
@@ -232,7 +238,7 @@ function SellerOrderCard({ order }: { order: Order }) {
             #{order.orderNumber}
           </span>
           <span className="text-xs text-muted-foreground">
-            {new Date(order.updatedAt).toLocaleDateString('vi-VN')}
+            {new Date(order.placedAt).toLocaleDateString('vi-VN')}
           </span>
         </div>
         <Badge
@@ -249,7 +255,7 @@ function SellerOrderCard({ order }: { order: Order }) {
             <div className="relative w-16 h-16 rounded-md overflow-hidden border border-border bg-muted shrink-0">
               <Image
                 src={item.product.images[0]?.url || '/placeholder.png'}
-                alt={item.product.name ? item.product.name : ',,,'}
+                alt={item.product.title ? item.product.title : ',,,'}
                 fill
                 className="object-cover"
               />
@@ -258,9 +264,9 @@ function SellerOrderCard({ order }: { order: Order }) {
             <div className="flex-1 min-w-0">
               <p
                 className="text-sm font-medium text-foreground truncate"
-                title={item.product.name}
+                title={item.product.title}
               >
-                {item.product.name}
+                {item.product.title}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 Phân loại: {item.title}

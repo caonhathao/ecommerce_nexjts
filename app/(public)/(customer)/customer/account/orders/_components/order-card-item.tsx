@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { formatPrice } from '@/app/(public)/_components/global-function';
 import { Button } from '@/components/ui/button';
 import { DialogReview } from '@/app/(public)/(customer)/customer/account/orders/_components/dialogReview';
 import Link from 'next/link';
@@ -17,6 +16,7 @@ import { $Enums } from '@/lib/generated/prisma';
 import OrderStatus = $Enums.OrderStatus;
 import Image from 'next/image';
 import { paths } from '@/lib/path';
+import { formatPrice } from '@/lib/utils';
 
 export function OrderCardItem({ o, t }: { o: OrderDTO; t: any }) {
   const uniqueItemsForReview = o.items.reduce((acc: any[], current: any) => {
@@ -58,12 +58,7 @@ export function OrderCardItem({ o, t }: { o: OrderDTO; t: any }) {
               </span>
             </div>
             <div className="flex flex-col justify-start items-end min-w-[120px] text-right space-y-1">
-              <Link
-                href={paths.products.detail_id(item.product.id)}
-                className="hover:underline"
-              >
-                <p className="font-medium">{item.product.title}</p>
-              </Link>
+              <p className="font-medium">{item.product.name}</p>
               <p className="text-sm text-muted-foreground">
                 {t('card.items')}:{' '}
                 <span className="font-semibold">{item.quantity}</span>

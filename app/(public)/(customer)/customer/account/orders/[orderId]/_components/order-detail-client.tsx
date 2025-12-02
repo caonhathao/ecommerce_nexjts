@@ -6,12 +6,12 @@ import Image from 'next/image';
 import { ChevronLeft, Truck } from 'lucide-react';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { formatCurrency } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { ChatButton } from '@/components/chat/chat-button';
 import { useTranslations } from 'next-intl';
+import { formatPrice } from '@/lib/utils';
 
 interface OrderDetailClientProps {
   order: OrderDetails;
@@ -149,7 +149,7 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
                 {order.shipments?.[0]?.carrier || t('smart_logistics')}
               </p>
               <p className="text-muted-foreground">
-                {t('shipping_fee')}: {formatCurrency(order.shippingFee)}
+                {t('shipping_fee')}: {formatPrice(order.shippingFee)}
               </p>
             </CardContent>
           </Card>
@@ -234,7 +234,7 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
                         {/* Mobile Only Qty/Price */}
                         <div className="flex md:hidden items-center justify-between mt-2">
                           <p className="text-sm font-semibold text-foreground">
-                            {formatCurrency(item.unitPrice)}
+                            {formatPrice(item.unitPrice)}
                           </p>
                           <p className="text-sm text-muted-foreground">
                             x{item.quantity}
@@ -246,11 +246,11 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
                       <div className="hidden md:flex items-center gap-8 text-right">
                         <div className="w-28">
                           <p className="font-medium text-sm text-foreground">
-                            {formatCurrency(item.unitPrice)}
+                            {formatPrice(item.unitPrice)}
                           </p>
                           {Number(item.discount) > 0 && (
                             <span className="text-xs line-through text-muted-foreground">
-                              {formatCurrency(
+                              {formatPrice(
                                 Number(item.unitPrice) + Number(item.discount)
                               )}
                             </span>
@@ -260,7 +260,7 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
                           x{item.quantity}
                         </div>
                         <div className="w-28 font-bold text-sm text-foreground">
-                          {formatCurrency(item.total)}
+                          {formatPrice(item.total)}
                         </div>
                       </div>
                     </div>
@@ -298,13 +298,13 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>{t('summary.subtotal')}</span>
                 <span className="text-foreground">
-                  {formatCurrency(order.itemsTotal)}
+                  {formatPrice(order.itemsTotal)}
                 </span>
               </div>
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>{t('summary.shipping_fee')}</span>
                 <span className="text-foreground">
-                  {formatCurrency(order.shippingFee)}
+                  {formatPrice(order.shippingFee)}
                 </span>
               </div>
               <div className="flex justify-between text-sm text-muted-foreground">
@@ -314,7 +314,7 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>{t('summary.discount')}</span>
                 <span className="text-success">
-                  -{formatCurrency(order.discountTotal)}
+                  -{formatPrice(order.discountTotal)}
                 </span>
               </div>
               <Separator className="bg-border" />
@@ -324,7 +324,7 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
                 </span>
                 <div className="text-right">
                   <p className="text-xl font-bold text-destructive">
-                    {formatCurrency(order.grandTotal)}
+                    {formatPrice(order.grandTotal)}
                   </p>
                   <p className="text-xs text-muted-foreground font-light">
                     {t('summary.vat_included')}

@@ -24,9 +24,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { formatCurrency } from '@/lib/utils';
 import { fetchApi } from '@/lib/client-fetch';
 import { useEffect } from 'react';
+import { formatPrice } from '@/lib/utils';
 
 const chartConfig = {
   totalOrders: {
@@ -138,7 +138,7 @@ export function ChartAreaInteractiveSeller({
             <CardTitle>Total Orders</CardTitle>
             <CardDescription>
               {selectedShopName} • {totalOrders} orders •{' '}
-              {formatCurrency(totalRevenue)}
+              {formatPrice(totalRevenue)}
             </CardDescription>
           </div>
           <CardAction className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
