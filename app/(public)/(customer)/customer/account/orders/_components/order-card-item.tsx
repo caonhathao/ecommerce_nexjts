@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { $Enums } from '@/lib/generated/prisma';
 import OrderStatus = $Enums.OrderStatus;
 import Image from 'next/image';
+import { paths } from '@/lib/path';
 import { formatPrice } from '@/lib/utils';
 
 export function OrderCardItem({ o, t }: { o: OrderDTO; t: any }) {

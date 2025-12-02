@@ -19,7 +19,7 @@ export class ActionResponse {
     message = 'error',
     code: StatusCode = 400,
     errors?: Record<string, string[]>
-  ): ServiceResponse<null> {
+  ): ServiceResponse<never> {
     return {
       success: false,
       message,

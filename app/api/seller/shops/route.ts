@@ -38,10 +38,15 @@ export async function GET() {
         ActionResponse.error('Unauthenticated', 401)
       );
     }
-    const ownerId = session.user.id;
+    const sellerId = session.user.id;
 
     const shops = await prisma.shop.findMany({
-      where: { ownerId },
+      where: {
+        OR: [
+          { ownerId: sellerId },
+          { members: { some: { userId: sellerId } } },
+        ],
+      },
       select: {
         id: true,
         name: true,
