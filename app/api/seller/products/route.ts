@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { manageProductSchema } from '@/app/(seller)/seller/products/_components/productSchema';
 import { Prisma } from '@/lib/generated/prisma';
 import { requireSeller } from '@/lib/require-role';
+import { ActionResponse } from '@/lib/service-response';
 
 export async function GET() {
   const sellerSession = await requireSeller();
@@ -31,6 +32,7 @@ export async function GET() {
       minPrice: true,
       maxPrice: true,
       currency: true,
+      keywords: true,
       createdAt: true,
       updatedAt: true,
       shop: {
@@ -141,20 +143,14 @@ export async function POST(req: NextRequest) {
               isActive: variant.isActive,
             })) ?? [],
         },
-        tags: {
-          create:
-            parsed.tags?.map((tag) => ({
-              tag: { connect: { id: tag.tagId } },
-            })) ?? [],
-        },
+        keywords: parsed.keywords ?? [],
       },
     });
 
-    return NextResponse.json({ success: true, data: product });
+    return ActionResponse.toNextResponse(ActionResponse.success({ product }));
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 400 }
+    return ActionResponse.toNextResponse(
+      ActionResponse.error(error.message, 400)
     );
   }
 }

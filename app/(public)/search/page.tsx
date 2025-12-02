@@ -202,6 +202,7 @@ export default function SearchPage() {
                       item={{
                         id: product.id,
                         title: product.title,
+                        description: product.description || 'no desctiption',
                         minPrice: Number(product.minPrice),
                         ratingAvg: product.ratingAvg,
                         imageUrl: product.imageUrl || '',

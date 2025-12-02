@@ -20,7 +20,6 @@ export async function inviteMember({
   shopId: string;
   role?: ShopMemberRole;
 }) {
-  // Validate input with Zod and return structured validation errors when invalid
   const parsed = InviteMemberSchema.safeParse({ email, shopId, role });
   if (!parsed.success) {
     const errors = parsed.error.flatten().fieldErrors;

@@ -31,6 +31,7 @@ import {
 import { CreateShopInput, createShopSchema } from './shopSchema';
 import { generateClientSlug } from '@/helpers/slug-helper';
 import { paths } from '@/lib/path';
+import { fetchApi } from '@/lib/client-fetch';
 
 function slugify(input: string) {
   return input
@@ -88,33 +89,37 @@ export default function CreateShopForm() {
   async function onSubmit(values: CreateShopInput) {
     startTransition(async () => {
       try {
-        const res = await fetch('/api/seller/shops', {
+        const res = await fetchApi('/api/seller/shops', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(values),
         });
 
-        if (res.status === 201) {
-          const data = await res.json();
-          toast.success('Shop created' + (data?.name ? `: ${data.name}` : ''));
+        const data: any = res.data;
+
+        if (res.success) {
+          toast.success(
+            res.message ??
+              'Shop created successfully. You can now add products.'
+          );
           router.push('/seller/shops');
-        } else if (res.status === 409) {
-          const body = await res.json().catch(() => ({}));
-          toast.error(body?.error ?? 'Slug already taken — try another');
-        } else if (res.status === 401) {
+          return;
+        }
+
+        const errMsg = res.message ?? 'Failed to create shop';
+        if (res.code === 401) {
           toast.error('You must be signed in to create a shop');
           router.push(
             `${paths.login}?callbackUrl=${encodeURIComponent('/seller/shops/create')}`
           );
-        } else if (res.status === 400) {
-          const body = await res.json().catch(() => ({}));
-          toast.error(
-            body?.error ?? 'Validation error — please check the form'
-          );
-        } else {
-          const body = await res.json().catch(() => ({}));
-          toast.error(body?.error ?? 'Failed to create shop');
+          return;
         }
+        if (res.code === 409) {
+          toast.error(res.message ?? 'Slug already taken — try another');
+          return;
+        }
+
+        toast.error(errMsg);
       } catch (err) {
         console.error('create shop error', err);
         toast.error('Unexpected error');

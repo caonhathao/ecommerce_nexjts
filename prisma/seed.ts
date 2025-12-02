@@ -46,7 +46,6 @@ async function main() {
   await prisma.cart.deleteMany();
   await prisma.productVariant.deleteMany();
   await prisma.productImage.deleteMany();
-  await prisma.productTag.deleteMany();
   await prisma.product.deleteMany();
   await prisma.tag.deleteMany();
   await prisma.category.deleteMany();
@@ -712,24 +711,64 @@ async function main() {
   // ------------------------
   // 3️⃣ TAGS
   // ------------------------
-  const tags = await Promise.all(
-    Array.from({ length: 100 }).map(() => {
-      const name = faker.commerce.department();
-      const slug = faker.helpers.slugify(name.toLowerCase());
-      const uniqueSlug = `${slug}-${faker.string.alphanumeric(6).toLowerCase()}`;
+const TAG_COUNT = 50;
+  const tagData: { id: string; name: string; slug: string }[] = [];
+  const seenSlugs = new Set<string>();
+  const seenNames = new Set<string>();
 
-      return prisma.tag.create({
-        data: {
-          id: faker.string.uuid(),
-          name,
-          slug: uniqueSlug,
-        },
-      });
-    })
-  );
+  const MAX_ATTEMPTS = 20000; // safety cap to avoid infinite loop
+  let attempts = 0;
+
+  while (tagData.length < TAG_COUNT && attempts < MAX_ATTEMPTS) {
+    attempts++;
+
+    // 1) generate name and check name-uniqueness first
+    const name = faker.commerce.department().trim();
+    if (!name) continue;
+    if (seenNames.has(name)) continue;
+
+    // 2) generate slug and ensure slug-uniqueness
+    const slugBase = faker.helpers.slugify(name.toLowerCase()).replace(/[^a-z0-9-]+/g, '').slice(0, 40) || 'tag';
+    let uniqueSlug = slugBase;
+    let slugAttempts = 0;
+
+    // try a few times to make a unique slug
+    while (seenSlugs.has(uniqueSlug) && slugAttempts < 5) {
+      uniqueSlug = `${slugBase}-${faker.string.alphanumeric(6).toLowerCase()}`;
+      slugAttempts++;
+    }
+
+    // final fallback if collisions persist
+    if (seenSlugs.has(uniqueSlug)) {
+      uniqueSlug = `${slugBase}-${Date.now().toString(36)}-${faker.string.alphanumeric(4).toLowerCase()}`;
+    }
+
+    // 3) accept and record both name and slug
+    seenNames.add(name);
+    seenSlugs.add(uniqueSlug);
+    tagData.push({
+      id: faker.string.uuid(),
+      name,
+      slug: uniqueSlug,
+    });
+  }
+
+  if (attempts >= MAX_ATTEMPTS) {
+    console.warn(`Reached ${MAX_ATTEMPTS} attempts while generating tags; created ${tagData.length} unique tags.`);
+  }
+
+// Bulk insert (fast) and skip duplicates as a safety net
+  await prisma.tag.createMany({
+    data: tagData,
+    skipDuplicates: true,
+  });
+
+// Fetch the actual created tags for later use
+  const tags = await prisma.tag.findMany({
+    where: { slug: { in: tagData.map((t) => t.slug) } },
+  });
 
   console.log(`✅ Created ${tags.length} tags`);
-
   // ------------------------
   // 4️⃣ PRODUCTS
   // ------------------------
@@ -746,6 +785,24 @@ async function main() {
         minPrice +
         faker.number.float({ min: 10_000, max: 50_000, fractionDigits: 0 });
 
+         // Weighted status: 70% PUBLISHED, 20% DRAFT, 10% ARCHIVED
+      const statusRoll = faker.number.int({ min: 1, max: 100 });
+      const status =
+        statusRoll <= 70
+          ? ProductStatus.PUBLISHED
+          : statusRoll <= 90
+            ? ProductStatus.DRAFT
+            : ProductStatus.ARCHIVED;
+
+      // Weighted visibility: 80% PUBLIC, 15% UNLISTED, 5% PRIVATE
+      const visibilityRoll = faker.number.int({ min: 1, max: 100 });
+      const visibility =
+        visibilityRoll <= 80
+          ? Visibility.PUBLIC
+          : visibilityRoll <= 95
+            ? Visibility.UNLISTED
+            : Visibility.PRIVATE;
+
       return prisma.product.create({
         data: {
           shopId: shop.id,
@@ -759,8 +816,8 @@ async function main() {
           origin: faker.location.country(),
           minPrice,
           maxPrice,
-          status: faker.helpers.arrayElement(Object.values(ProductStatus)),
-          visibility: faker.helpers.arrayElement(Object.values(Visibility)),
+          status,
+          visibility,
           soldCount: faker.number.int({ min: 10, max: 10000 }),
         },
       });
@@ -807,6 +864,10 @@ async function main() {
             fractionDigits: 0,
           }),
           stock: faker.number.int({ min: 5, max: 20 }),
+          weightGrams: faker.number.int({ min: 50, max: 5000 }),
+          lengthMm: faker.number.int({ min: 50, max: 500 }),
+          widthMm: faker.number.int({ min: 50, max: 500 }),
+          heightMm: faker.number.int({ min: 10, max: 300 }),
         },
       });
       variants.push(variant);
@@ -815,11 +876,11 @@ async function main() {
 
   console.log(`✅ Created ${variants.length} product variants`);
 
-  // ------------------------
-  // 5️⃣ PRODUCT TAGS
-  // ------------------------
+// ------------------------
+// 5️⃣ PRODUCT TAGS
+// ------------------------
   const pairs = new Set<string>();
-  const productTagData = [];
+  const productTagData: { productId: string; tagId: string }[] = [];
 
   while (productTagData.length < 5) {
     const product = faker.helpers.arrayElement(products);
@@ -832,12 +893,23 @@ async function main() {
     }
   }
 
-  const productTags = await prisma.productTag.createMany({
-    data: productTagData,
-    skipDuplicates: true,
-  });
+// Link tags to products using nested writes (implicit many-to-many)
+  const linkPromises = productTagData.map(({ productId, tagId }) =>
+    prisma.product.update({
+      where: { id: productId },
+      data: {
+        tags: {
+          connect: { id: tagId },
+        },
+      },
+    })
+  );
 
-  console.log(`✅ Created ${productTags.count} product variants`);
+// Use allSettled to tolerate cases where the relation already exists
+  const settled = await Promise.allSettled(linkPromises);
+  const linkedCount = settled.filter((r) => r.status === 'fulfilled').length;
+
+  console.log(`✅ Linked ${linkedCount} product tags`);
 
   // ------------------------
   // 7️⃣ CARTS
@@ -988,6 +1060,19 @@ async function main() {
       startDate.setDate(startDate.getDate() - 180);
       const placedAt = faker.date.between({ from: startDate, to: new Date() });
 
+      // Weighted order status
+      const statusRoll = faker.number.int({ min: 1, max: 100 });
+      const orderStatus =
+        statusRoll <= 10
+          ? OrderStatus.AWAITING_PAYMENT
+          : statusRoll <= 30
+            ? OrderStatus.PROCESSING
+            : statusRoll <= 60
+              ? OrderStatus.SHIPPED
+              : statusRoll <= 85
+                ? OrderStatus.DELIVERED
+                : OrderStatus.CANCELED;
+
       // --- 4. Create the Order and its OrderItems in one transaction ---
       const order = await prisma.order.create({
         data: {
@@ -996,7 +1081,7 @@ async function main() {
           user: { connect: { id: user.id } },
           shop: { connect: { id: shop.id } },
 
-          status: faker.helpers.arrayElement(Object.values(OrderStatus)),
+          status: orderStatus,
           paymentStatus: faker.helpers.arrayElement(
             Object.values(PaymentStatus)
           ),

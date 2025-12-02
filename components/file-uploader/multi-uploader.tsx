@@ -8,6 +8,7 @@ import {
   RenderErrorState,
   RenderUploadingState,
 } from '@/components/file-uploader/render-state';
+import Image from 'next/image';
 
 const MAX_FILES = 6;
 
@@ -84,6 +85,7 @@ export function MultiUploader({
       xhr.onload = () => {
         try {
           const res = JSON.parse(xhr.responseText);
+          console.log('res:', res);
           if (xhr.status >= 200 && xhr.status < 300 && res.success) {
             temp.url = res.url;
             temp.publicId = res.publicId;
@@ -163,8 +165,14 @@ export function MultiUploader({
               <div className="p-2 text-red-500 text-center text-sm">Error</div>
             ) : (
               <>
-                <img src={file.url} className="object-cover w-full h-full" />
+                <Image
+                  fill
+                  src={file.url}
+                  alt={file.publicId}
+                  className="object-cover"
+                />
                 <button
+                  type="button"
                   onClick={() => removeFile(file)}
                   className="absolute top-1 right-1 bg-red-600 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition"
                 >

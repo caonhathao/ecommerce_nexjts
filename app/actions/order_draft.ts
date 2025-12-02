@@ -21,14 +21,28 @@ export async function createOrderDraft(formData: FormData) {
     const data = createOrderDraftSchema.parse(parseData);
     const { notes, items, voucher } = data;
 
+    const headersList = await headers();
+    const refer = headersList.get('referer');
+    let currentPath = '/';
+
+    if (refer) {
+      try {
+        const urlInstance = new URL(refer);
+        currentPath = urlInstance.pathname + urlInstance.search;
+      } catch (error) {
+        console.error('Invalid referer URL:', refer);
+      }
+    }
+
     // 1️⃣ Get Default Shipping Address
     const defaultAddress = await prisma.address.findFirst({
       where: { userId, isDefault: true },
     });
     if (!defaultAddress) {
+      const encodeCallBack = encodeURIComponent(currentPath);
       return {
         success: false,
-        redirectTo: '/customer/account/address',
+        redirectTo: `/customer/account/address?callbackUrl=${encodeCallBack}`,
         message: 'Default address missing',
       };
     }

@@ -8,7 +8,6 @@ import { Separator } from '@/components/ui/separator';
 import { useDebounce } from '@/hooks/debounce';
 import { env } from '@/lib/env';
 import { CartType } from '@/types/cart.data-types';
-import { voucher } from '@/types/voucher';
 import { TicketIcon, TrashIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -17,6 +16,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CiShoppingBasket } from 'react-icons/ci';
 import { toast } from 'sonner';
 import { formatPrice } from '@/lib/utils';
+import { getTwoRandomVoucherCodes } from '@/helpers/voucher-helper';
 
 const emptyCart: CartType = {
   id: '',
@@ -179,6 +179,8 @@ export default function Cart() {
       return;
     }
 
+    const vouchers = await getTwoRandomVoucherCodes();
+
     try {
       const existing = await getOrderDrafts();
       if (existing.success && existing.draft) {
@@ -195,10 +197,10 @@ export default function Cart() {
         items: selectedItem,
         voucher: [
           {
-            code: voucher.voucher1,
+            code: vouchers.voucher1,
           },
           {
-            code: voucher.voucher2,
+            code: vouchers.voucher2,
           },
         ],
       };

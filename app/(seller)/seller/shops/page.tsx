@@ -52,6 +52,8 @@ import {
 import TabShopSeller from './_components/tab-shop-seller';
 import { TableCellViewerSeller } from './_components/table-cell-viewer-seller';
 import { paths } from '@/lib/path';
+import { fetchApi } from '@/lib/client-fetch';
+import { toast } from 'sonner';
 
 type SellerShopListItem = {
   id: string;
@@ -112,12 +114,11 @@ export default function SellerShopsDashboard() {
     let active = true;
     (async () => {
       try {
-        const res = await fetch('/api/seller/shops');
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          throw new Error(data.error || 'Failed to load shops');
+        const res = await fetchApi('/api/seller/shops');
+        if (!res.success) {
+          toast.error(res.message || 'Failed to fetch shops');
         }
-        const data: SellerShopListItem[] = await res.json();
+        const data = (res.data as SellerShopListItem[]) ?? [];
         if (active) {
           setShops(data);
           setLoading(false);

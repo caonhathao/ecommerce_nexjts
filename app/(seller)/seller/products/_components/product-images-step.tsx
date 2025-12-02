@@ -27,10 +27,15 @@ export default function ProductImagesStep() {
             </FormLabel>
             <FormControl>
               <MultiUploader
-                onChange={(newFiles) => field.onChange(newFiles)}
+                onChange={(newFiles) => {
+                  field.onChange(newFiles);
+                }}
                 value={field.value}
               />
             </FormControl>
+            <p className="text-sm text-muted-foreground mt-2">
+              Ensure at least one valid image is uploaded.
+            </p>
           </FormItem>
         )}
       />

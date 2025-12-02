@@ -523,7 +523,7 @@
     "t_discount": "Giảm giá",
     "t_payment": " Tổng thanh toán",
     "payment_client": {
-      "t_payemnt_session_failed": "Không thể tạo phiên thanh toán",
+      "t_payment_session_failed": "Không thể tạo phiên thanh toán",
       "t_payment_direct": "Đang chuyển đến cổng thanh toán Stripe...",
       "t_payment_create_session_failed": "Lỗi khi tạo phiên thanh toán",
       "t_processing": "Đang xử lý...",
