@@ -1,6 +1,6 @@
 'use client';
 
-import { formatPrice } from '@/app/(public)/_components/global-function';
+import { formatPrice } from '@/lib/utils';
 import { getOrderDrafts, OrderDraftResult } from '@/app/actions/order_draft';
 import {
   Field,
@@ -31,6 +31,7 @@ interface CheckoutClientProps {
 export function CheckoutClient({ order_draft }: CheckoutClientProps) {
   const { success, draft, error } = order_draft;
   const t = useTranslations('checkout_page');
+  const c = useTranslations('general');
 
   if (!success || !draft) {
     return (
@@ -122,7 +123,10 @@ export function CheckoutClient({ order_draft }: CheckoutClientProps) {
                       {item.title}
                     </ItemTitle>
                     <ItemDescription className="text-sm text-text font-medium">
-                      {formatPrice(item.unitPrice)}
+                      {formatPrice(item.unitPrice, {
+                        currency: c('t_currency'),
+                        rate: Number(c('t_rate')),
+                      })}
                     </ItemDescription>
                   </ItemContent>
                   <ItemActions>
@@ -131,7 +135,10 @@ export function CheckoutClient({ order_draft }: CheckoutClientProps) {
                         {t('t_quantity')}: {item.quantity}
                       </p>
                       <p className="font-semibold text-primary">
-                        {formatPrice(item.total)}
+                        {formatPrice(item.total, {
+                          currency: c('t_currency'),
+                          rate: Number(c('t_rate')),
+                        })}
                       </p>
                     </div>
                   </ItemActions>
@@ -143,7 +150,10 @@ export function CheckoutClient({ order_draft }: CheckoutClientProps) {
               <p className="flex justify-between">
                 <span className="text-base text-text"> {t('t_subtotal')}:</span>{' '}
                 <span className="font-medium">
-                  {formatPrice(draft.itemsTotal)}
+                  {formatPrice(draft.itemsTotal, {
+                    currency: c('t_currency'),
+                    rate: Number(c('t_rate')),
+                  })}
                 </span>
               </p>
               <p className="flex justify-between">
@@ -151,19 +161,29 @@ export function CheckoutClient({ order_draft }: CheckoutClientProps) {
                   {t('t_delivery_fee')}:
                 </span>{' '}
                 <span className="font-medium">
-                  {formatPrice(draft.shippingFee)}
+                  {formatPrice(draft.shippingFee, {
+                    currency: c('t_currency'),
+                    rate: Number(c('t_rate')),
+                  })}
                 </span>
               </p>
               <p className="flex justify-between">
                 <span className="text-base text-text">{t('t_discount')}:</span>{' '}
                 <span className="font-medium text-destructive">
-                  -{formatPrice(draft.discountTotal)}
+                  -
+                  {formatPrice(draft.discountTotal, {
+                    currency: c('t_currency'),
+                    rate: Number(c('t_rate')),
+                  })}
                 </span>
               </p>
               <p className="text-lg font-semibold flex justify-between text-foreground">
                 {t('t_payment')}:{' '}
                 <span className="text-primary">
-                  {formatPrice(draft.grandTotal)}
+                  {formatPrice(draft.grandTotal, {
+                    currency: c('t_currency'),
+                    rate: Number(c('t_rate')),
+                  })}
                 </span>
               </p>
             </div>

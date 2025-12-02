@@ -20,7 +20,7 @@ import { HiMiniCheckBadge } from 'react-icons/hi2';
 import { MdAttachMoney, MdOutlineStore } from 'react-icons/md';
 import { PiTruckLight } from 'react-icons/pi';
 import { toast } from 'sonner';
-import { formatPrice } from '../../_components/global-function';
+import { formatPrice } from '@/lib/utils';
 import { Loading } from '../../../../components/loading';
 import { RatingStars } from '../../_components/rating-starts';
 import SlideImg from './_components/slide-img';
@@ -63,6 +63,7 @@ const DetailPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const amount: number = 1;
   const t = useTranslations('product_detail');
+  const c = useTranslations('general');
 
   useEffect(() => {
     authClient.getSession().then((session) => {
@@ -76,7 +77,14 @@ const DetailPage = () => {
     price: string
   ) => {
     if (!typeVoucher || !valueVoucher) {
-      return <p>{formatPrice(Number(price))}</p>;
+      return (
+        <p>
+          {formatPrice(Number(price), {
+            currency: c('t_currency'),
+            rate: Number(c('t_rate')),
+          })}
+        </p>
+      );
     }
 
     const numericPrice = Number(price);
@@ -89,15 +97,25 @@ const DetailPage = () => {
           <div className="flex flex-row justify-start items-center gap-3">
             {/* price-after-sale */}
             <p className="text-error text-3xl font-bold">
-              {formatPrice(finalPrice)}
+              {formatPrice(finalPrice, {
+                currency: c('t_currency'),
+                rate: Number(c('t_rate')),
+              })}
             </p>
             {/* sale discount (show fixed amount) */}
             <p className="bg-secondary rounded-lg p-1 text-xs">
-              {'-'} {formatPrice(numericValue)}
+              {'-'}{' '}
+              {formatPrice(numericValue, {
+                currency: c('t_currency'),
+                rate: Number(c('t_rate')),
+              })}
             </p>
             {/* origin price */}
             <p className="text-text-secondary line-through">
-              {formatPrice(numericPrice)}
+              {formatPrice(numericPrice, {
+                currency: c('t_currency'),
+                rate: Number(c('t_rate')),
+              })}
             </p>
           </div>
           <p className="text-text-secondary italic">{t('t_price_after')}</p>
@@ -113,7 +131,11 @@ const DetailPage = () => {
               {formatPrice(
                 Number(
                   Number(price) - (Number(price) * Number(valueVoucher)) / 100
-                )
+                ),
+                {
+                  currency: c('t_currency'),
+                  rate: Number(c('t_rate')),
+                }
               )}
             </p>
             {/* sale discount */}
@@ -122,7 +144,10 @@ const DetailPage = () => {
             </p>
             {/* origin price */}
             <p className="text-text-secondary line-through">
-              {formatPrice(Number(price))}
+              {formatPrice(Number(price), {
+                currency: c('t_currency'),
+                rate: Number(c('t_rate')),
+              })}
             </p>
           </div>
           <p className="text-text-secondary italic">{t('t_price_after')}</p>
@@ -614,7 +639,11 @@ const DetailPage = () => {
                 <p className="font-semibold">{t('t_total')}</p>
                 <p className="text-lg font-medium text-text">
                   {formatPrice(
-                    Number(selVariant.amount * Number(selVariant.price))
+                    Number(selVariant.amount * Number(selVariant.price)),
+                    {
+                      currency: c('t_currency'),
+                      rate: Number(c('t_rate')),
+                    }
                   )}
                 </p>
               </div>

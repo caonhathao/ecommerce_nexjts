@@ -42,11 +42,7 @@ const ShopProduct = () => {
   }, [filter]);
 
   if (!data)
-    return (
-      <div className="w-screen h-screen">
-        <Loading />
-      </div>
-    );
+    return <Loading className="w-full flex justify-center items-center" />;
 
   return (
     <div className="h-fit flex flex-col justify-center items-center gap-3">

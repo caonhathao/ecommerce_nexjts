@@ -13,7 +13,6 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/app/(public)/(customer)/customer/account/orders/_components/no-order-found';
-import { formatPrice } from '@/app/(public)/_components/global-function';
 import { $Enums } from '@/lib/generated/prisma';
 import OrderStatus = $Enums.OrderStatus;
 import { DataTable } from '@/app/(seller)/seller/orders/_components/order-data-table';
@@ -21,6 +20,7 @@ import { columns } from '@/app/(seller)/seller/orders/_components/order-column-t
 import { OrderDTO } from '@/types/dtos/order.dto';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { formatPrice } from '@/lib/utils';
 //
 // enum OrderStatus {
 //   AWAITING_PAYMENT = 'AWAITING_PAYMENT',
@@ -228,6 +228,7 @@ function SellerOrderCard({ order }: { order: OrderDTO }) {
     DELIVERED: 'bg-success/15 text-success border-success/30',
     CANCELED: 'bg-destructive/15 text-destructive border-destructive/30',
   };
+  const c = useTranslations('general');
 
   return (
     <Card className="w-full shadow-sm hover:shadow-md transition-shadow border border-border overflow-hidden">
@@ -277,7 +278,10 @@ function SellerOrderCard({ order }: { order: OrderDTO }) {
                 x{item.quantity}
               </p>
               <p className="text-sm text-primary font-semibold mt-1">
-                {formatPrice(item.total)}
+                {formatPrice(item.total, {
+                  currency: c('t_currency'),
+                  rate: Number(c('t_rate')),
+                })}
               </p>
             </div>
           </div>
@@ -288,7 +292,10 @@ function SellerOrderCard({ order }: { order: OrderDTO }) {
         <div className="text-sm text-foreground">
           Tổng thu:{' '}
           <span className="text-lg font-bold text-primary">
-            {formatPrice(order.grandTotal)}
+            {formatPrice(order.grandTotal, {
+              currency: c('t_currency'),
+              rate: Number(c('t_rate')),
+            })}
           </span>
         </div>
         <div className="flex gap-2">
