@@ -1,5 +1,4 @@
 'use client';
-import { formatDay } from '@/app/(public)/_components/global-function';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -65,6 +64,7 @@ import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
 import TabShop from './_components/tab-shop';
 import { TableCellViewer } from './_components/table-cell-viewer';
+import { formatDay } from '@/lib/utils';
 
 const ShopsPage = () => {
   const [data, setData] = React.useState<shopDataResponse | null>(null);

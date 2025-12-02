@@ -1,5 +1,4 @@
 'use client';
-import { formatDay } from '@/app/(public)/_components/global-function';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -66,8 +65,9 @@ import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
 import { NewCategoryForm } from './_components/new-category-form';
 import TabCategory from './_components/tab-category';
-import { TableCellViewer } from './_components/table-cell-viewer';
+import TableCellViewer from './_components/table-cell-viewer';
 import { handleDelete } from './_funcs/funcs';
+import { formatDay } from '@/lib/utils';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
@@ -116,13 +116,13 @@ const CategoryManagePage = () => {
       navigator.clipboard
         .writeText(value)
         .then(() => {
-          toast(t('t_action_noti'), {
-            description: t('t_copy_desc_noti'),
+          toast(t('t_action_not'), {
+            description: t('t_copy_desc_not'),
           });
         })
         .catch((err) => {
-          toast(t('t_action_failed_noti'), {
-            description: t('t_copy_failed_desc_noti'),
+          toast(t('t_action_failed_not'), {
+            description: t('t_copy_failed_desc_not'),
           });
 
           console.error('Failed to copy ID: ', err);

@@ -71,7 +71,7 @@ const formSchema = z.object({
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
-export function TableCellViewer({
+function TableCellViewer({
   item,
   setIsReset,
   handleCopy,
@@ -165,8 +165,8 @@ export function TableCellViewer({
         body: formData,
       });
       if (data.status === 200) {
-        toast(t('t_action_noti'), {
-          description: t('t_update_desc_noti'),
+        toast(t('t_action_not'), {
+          description: t('t_update_desc_not'),
         });
         setTimeout(() => {
           setOpen(false);
@@ -175,8 +175,8 @@ export function TableCellViewer({
       }
     } catch (error) {
       console.error('Failed to create category:', error);
-      toast(t('t_action_failed_noti'), {
-        description: t('t_update_failed_desc_noti'),
+      toast(t('t_action_failed_not'), {
+        description: t('t_update_failed_desc_not'),
       });
     }
   }
@@ -540,3 +540,5 @@ export function TableCellViewer({
     </Drawer>
   );
 }
+
+export default TableCellViewer;

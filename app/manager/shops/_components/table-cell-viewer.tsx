@@ -1,5 +1,4 @@
 'use client';
-import { formatDay } from '@/app/(public)/_components/global-function';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -35,6 +34,7 @@ import Image from 'next/image';
 import React, { SetStateAction, useMemo } from 'react';
 import { MdOutlineCopyAll } from 'react-icons/md';
 import { toast } from 'sonner';
+import { formatDay } from '@/lib/utils';
 
 export function TableCellViewer({
   item,

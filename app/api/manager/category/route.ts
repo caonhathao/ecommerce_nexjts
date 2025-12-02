@@ -319,9 +319,10 @@ export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
       );
     }
     //delete from cloudinary first
-    await deleteFromCloudinary(category.publicId ?? '', {
-      invalidate: true,
-    });
+    if (category.publicId !== '' && category.publicId)
+      await deleteFromCloudinary(category.publicId, {
+        invalidate: true,
+      });
     // Delete the category
     await prisma.category.delete({
       where: { id: categoryId },
