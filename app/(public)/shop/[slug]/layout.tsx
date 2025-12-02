@@ -62,7 +62,7 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
           {/* show cover phto */}
           <Image
             src={shopData.coverUrl}
-            width={1200}
+            width={800}
             height={300}
             alt="cover-photo"
           />
@@ -71,10 +71,10 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
             {/* logo */}
             <Image
               src={shopData.logoUrl}
-              width={50}
-              height={50}
+              width={200}
+              height={200}
               alt="shop-logo"
-              className="rounded-lg"
+              className="rounded-lg w-10 h-10"
             />
             {/* show name and rating */}
             <div className="flex flex-col justify-center items-start h-fit">

@@ -1,8 +1,5 @@
 'use client';
-import {
-  formatDay,
-  formatPrice,
-} from '@/app/(public)/_components/global-function';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -88,6 +85,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
 import TabProduct from './tab-product';
+import { formatDay, formatPrice } from '@/lib/utils';
 
 const TableTopProduct = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
@@ -109,6 +107,7 @@ const TableTopProduct = () => {
   );
 
   const t = useTranslations('admin_statistic_page.table_top_product');
+  const c = useTranslations('general');
 
   useEffect(() => {
     console.log(data);
@@ -338,7 +337,12 @@ const TableTopProduct = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-3">
               <Label htmlFor="price">{t('t_price')}</Label>
-              <div>{formatPrice(Number(value.price))}</div>
+              <div>
+                {formatPrice(Number(value.price), {
+                  currency: c('t_currency'),
+                  rate: Number(c('t_rate')),
+                })}
+              </div>
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="currency-variant">{t('t_currency')}</Label>
@@ -455,17 +459,27 @@ const TableTopProduct = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-3">
                   <Label htmlFor="target">{t('t_min_price')}</Label>
-                  <div>{formatPrice(Number(detail?.minPrice))}</div>
+                  <div>
+                    {formatPrice(Number(detail?.minPrice), {
+                      currency: c('t_currency'),
+                      rate: Number(c('t_rate')),
+                    })}
+                  </div>
                 </div>
                 <div className="flex flex-col gap-3">
                   <Label htmlFor="limit">{t('t_max_price')}</Label>
-                  <div>{formatPrice(Number(detail?.maxPrice))}</div>
+                  <div>
+                    {formatPrice(Number(detail?.maxPrice), {
+                      currency: c('t_currency'),
+                      rate: Number(c('t_rate')),
+                    })}
+                  </div>
                 </div>
               </div>
 
               <div className="flex flex-col gap-3">
                 <Label htmlFor="visibility">{t('t_visibility')}</Label>
-                <Select value={defaultVisibility}>
+                <Select value={defaultVisibility} disabled={true}>
                   <SelectTrigger id="visibility" className="w-full">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>

@@ -1,6 +1,5 @@
 import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
 
-import { formatPrice } from '@/app/(public)/_components/global-function';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -11,9 +10,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useTranslations } from 'next-intl';
+import { formatPrice } from '@/lib/utils';
 
 export function SectionCards() {
   const t = useTranslations('admin_dashboard.section_card');
+  const c = useTranslations('general');
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">
@@ -21,8 +22,8 @@ export function SectionCards() {
           <CardDescription>{t('t_total_revenue')}</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {formatPrice(1920056000, {
-              currency: t('t_currency'),
-              rate: Number(t('t_rate')),
+              currency: c('t_currency'),
+              rate: Number(c('t_rate')),
             })}
           </CardTitle>
           <CardAction>
@@ -57,9 +58,7 @@ export function SectionCards() {
             {t('t_customers_desc_1')} 20% {t('t_customers_desc_1_1')}{' '}
             <IconTrendingDown className="size-4" />
           </div>
-          <div className="text-muted-foreground">
-            {t('t_customeres_desc_2')}
-          </div>
+          <div className="text-muted-foreground">{t('t_customers_desc_2')}</div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
@@ -87,7 +86,7 @@ export function SectionCards() {
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>{t('t_grouwth_rate')}</CardDescription>
+          <CardDescription>{t('t_growth_rate')}</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             4.5%
           </CardTitle>
