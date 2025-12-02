@@ -964,5 +964,70 @@
       "t_showing": "Hiển thị",
       "t_column": "Cột"
     }
+  },
+  "seller": {
+    "order_page": {
+      "details": {
+        "title": "Chi tiết Đơn hàng",
+        "placed_at": "Thời gian đặt hàng"
+      },
+      "sections": {
+        "summary": "Tóm tắt Đơn hàng",
+        "items": "Danh sách Sản phẩm",
+        "shipping": "Thông tin Vận chuyển",
+        "pricing": "Chi tiết Chi phí"
+      },
+      "labels": {
+        "status": "Trạng thái",
+        "total_items": "Số lượng SP",
+        "order_placed": "Thời gian đặt",
+        "item_total": "Thành tiền",
+        "recipient": "Người nhận",
+        "phone": "Số điện thoại",
+        "address": "Địa chỉ nhận hàng",
+        "not_specified": "Không xác định",
+        "subtotal": "Tổng tiền hàng",
+        "shipping_fee": "Phí vận chuyển",
+        "discount": "Giảm giá",
+        "grand_total": "Tổng thanh toán"
+      },
+      "actions": {
+        "view_detail": "Xem Chi Tiết",
+        "print_invoice": "In hóa đơn",
+        "close": "Đóng",
+        "change_status": "Thay đổi trạng thái",
+        "refund": "Hoàn tiền"
+      },
+      "table": {
+        "order_id": "Mã đơn hàng",
+        "status": "Trạng thái",
+        "amount": "Số tiền",
+        "date": "Ngày cập nhật",
+        "actions": "Hành động"
+      },
+      "order_update": {
+        "actions": {
+          "change_status": "Thay đổi Trạng thái",
+          "save_changes": "Lưu thay đổi",
+          "saving": "Đang lưu...",
+          "cancel": "Hủy",
+          "update_success": "Cập nhật đơn hàng thành công!",
+          "update_failed": "Cập nhật thất bại."
+        },
+        "dialog": {
+          "title": "Cập nhật Trạng thái Đơn hàng",
+          "current_status": "Trạng thái hiện tại",
+          "select_new_status": "Chọn Trạng thái mới",
+          "select_placeholder": "Chọn một trạng thái"
+        },
+        "status": {
+          "awaiting_payment": "Chờ thanh toán",
+          "processing": "Đang xử lý",
+          "shipped": "Đang vận chuyển",
+          "delivered": "Đã giao hàng",
+          "canceled": "Đã hủy"
+        }
+      }
+    }
   }
 }

@@ -52,6 +52,7 @@ export type OrderItemsDTO = {
   metadata: any;
 
   product: ProductOrderItem;
+  productVariant: ProductVariantItem;
 };
 
 export type ProductOrderItem = {
@@ -85,4 +86,8 @@ export type ProductImageDTO = {
   alt?: string | null;
   position: number;
   productId: string;
+};
+
+export type ProductVariantItem = {
+  image: string;
 };

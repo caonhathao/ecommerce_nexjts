@@ -166,6 +166,11 @@ export async function getOrder(
             product: {
               include: { images: true },
             },
+            variant: {
+              select: {
+                image: true,
+              },
+            },
           },
         },
       },

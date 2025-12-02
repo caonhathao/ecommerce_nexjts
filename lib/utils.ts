@@ -35,3 +35,21 @@ export function getUserNameOrEmailPrefix(user: {
   }
   return 'User';
 }
+
+export function formatTime(isoString: string | Date): string {
+  const date = isoString instanceof Date ? isoString : new Date(isoString);
+
+  const timePart = date.toLocaleTimeString('vi-VN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
+  const datePart = date.toLocaleDateString('vi-VN', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  return `${timePart} - ${datePart}`;
+}
