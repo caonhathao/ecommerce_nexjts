@@ -9,13 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { formatPrice } from '@/app/(public)/_components/global-function';
 import { Button } from '@/components/ui/button';
 import { DialogReview } from '@/app/(public)/(customer)/customer/account/orders/_components/dialogReview';
 import Link from 'next/link';
 import { $Enums } from '@/lib/generated/prisma';
 import OrderStatus = $Enums.OrderStatus;
 import Image from 'next/image';
+import { formatPrice } from '@/lib/utils';
 
 export function OrderCardItem({ o, t }: { o: OrderDTO; t: any }) {
   const uniqueItemsForReview = o.items.reduce((acc: any[], current: any) => {

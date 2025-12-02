@@ -37,7 +37,6 @@ export function formatPrice(
   console.log('value', value);
   console.log(numValue);
 
-  // 1. Kiểm tra giá trị đầu vào hợp lệ
   if (
     value === null ||
     value === undefined ||

@@ -18,8 +18,7 @@ import {
 import { OrderDTO } from '@/types/dtos/order.dto';
 import { useTranslations } from 'next-intl';
 import { JSX } from 'react';
-import { formatPrice } from '@/app/(public)/_components/global-function';
-import { formatTime } from '@/lib/utils';
+import { formatPrice, formatTime } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 
 export function SellerOrderDetails({
