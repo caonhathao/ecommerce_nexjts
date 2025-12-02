@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { $Enums } from '@/lib/generated/prisma';
 import OrderStatus = $Enums.OrderStatus;
+import { OrderDTO } from '@/types/dtos/order.dto';
 
 export async function GET(req: NextRequest) {
   const sellerSession = await requireSeller();
@@ -41,6 +42,11 @@ export async function GET(req: NextRequest) {
         include: {
           product: {
             include: { images: true },
+          },
+          variant: {
+            select: {
+              image: true,
+            },
           },
         },
       },
