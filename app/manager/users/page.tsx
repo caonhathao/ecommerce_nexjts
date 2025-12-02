@@ -1,5 +1,4 @@
 'use client';
-import { formatDay } from '@/app/(public)/_components/global-function';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -63,6 +62,7 @@ import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
 import TabUser from './_components/tab-user';
 import { TableCellViewer } from './_components/table-cell-viewer';
+import { formatDay } from '@/lib/utils';
 
 const UsersPage = () => {
   const [data, setData] = React.useState<userDataResponse | null>(null);

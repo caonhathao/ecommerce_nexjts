@@ -1,5 +1,4 @@
 'use client';
-import { formatDay } from '@/app/(public)/_components/global-function';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -68,6 +67,7 @@ import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
 import TabProduct from './_components/tab-product';
 import { TableCellViewer } from './_components/table-cell-viewer';
+import { formatDay } from '@/lib/utils';
 
 const ProductsPage = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
@@ -331,7 +331,7 @@ const ProductsPage = () => {
               <SelectItem value="all-public">{t('t_tab_public')}</SelectItem>
               <SelectItem value="all-private">{t('t_tab_private')}</SelectItem>
               <SelectItem value="all-unlisted">
-                {t('t_tab_inlisted')}
+                {t('t_tab_unlisted')}
               </SelectItem>
             </SelectContent>
           </Select>
@@ -340,7 +340,7 @@ const ProductsPage = () => {
             <TabsTrigger value="all-public">{t('t_tab_public')}</TabsTrigger>
             <TabsTrigger value="all-private">{t('t_tab_private')}</TabsTrigger>
             <TabsTrigger value="all-unlisted">
-              {t('t_tab_inlisted')}
+              {t('t_tab_unlisted')}
             </TabsTrigger>
           </TabsList>
           <div className="flex items-center gap-2">

@@ -17,8 +17,8 @@ export const handleDelete = async ({
       url: paths.manager.category.del_one(id),
     });
     if (response.ok) {
-      toast(t('t_action_noti'), {
-        description: t('t_del_desc_noti'),
+      toast(t('t_action_not'), {
+        description: t('t_del_desc_not'),
       });
       setTimeout(() => {
         setIsReset((prev) => !prev);
@@ -26,8 +26,8 @@ export const handleDelete = async ({
     }
   } catch (error) {
     console.error('Failed to delete category:', error);
-    toast(t('t_action_noti'), {
-      description: t('t_del_failed_desc_noti'),
+    toast(t('t_action_not'), {
+      description: t('t_del_failed_desc_not'),
     });
   }
 };

@@ -193,7 +193,7 @@ const HeaderClient = ({ user }: { user: HeaderUser }) => {
         <Separator orientation="vertical" />
         <Link href="" className="flex gap-1">
           <Truck className="w-4 h-4 text-primary" />
-          {t('freeship_all')}
+          {t('free_ship_all')}
         </Link>
         <Separator orientation="vertical" />
         <Link href="" className="flex gap-1">

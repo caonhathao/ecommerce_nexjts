@@ -1,5 +1,4 @@
 'use client';
-import { formatDay } from '@/app/(public)/_components/global-function';
 import { RatingStars } from '@/app/(public)/_components/rating-starts';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -8,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useMemo } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
+import { formatDay } from '@/lib/utils';
 
 interface props {
   ratingAvg: number;

@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { CiShoppingBasket } from 'react-icons/ci';
 import { toast } from 'sonner';
-import { formatPrice } from '../../_components/global-function';
+import { formatPrice } from '@/lib/utils';
 
 const emptyCart: CartType = {
   id: '',
@@ -33,6 +33,7 @@ type itemType = {
 export default function Cart() {
   const router = useRouter();
   const t = useTranslations('cart_page');
+  const c = useTranslations('general');
   const [cart, setCart] = useState<CartType>(emptyCart);
   const [loading, setLoading] = useState(true);
   let noItems = false;
@@ -347,7 +348,10 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className="text-center text-foreground">
-                    {formatPrice(item.variant.price)}
+                    {formatPrice(item.variant.price, {
+                      currency: c('t_currency'),
+                      rate: Number(c('t_rate')),
+                    })}
                   </div>
                   <div className="flex gap-2 items-center justify-center">
                     <Button
@@ -375,7 +379,10 @@ export default function Cart() {
                     </Button>
                   </div>
                   <div className="text-center text-foreground">
-                    {formatPrice(item.quantity * item.variant.price)}
+                    {formatPrice(item.quantity * item.variant.price, {
+                      currency: c('t_currency'),
+                      rate: Number(c('t_rate')),
+                    })}
                   </div>
                   <Button
                     variant="ghost"
@@ -474,9 +481,7 @@ export default function Cart() {
                 </p>
               </div>
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-text-secondary text-sm">
-                  {t('t_discount')}
-                </p>
+                <p className="text-text-secondary text-sm">{t('t_discount')}</p>
                 <p className="text-success">
                   -
                   {cart.items
@@ -497,7 +502,9 @@ export default function Cart() {
               </div>
               <Separator />
               <div className="flex items-center gap-3 justify-between">
-                <p className="text-text-secondary text-sm">{t('t_total_payment')}</p>
+                <p className="text-text-secondary text-sm">
+                  {t('t_total_payment')}
+                </p>
                 <p className="text-error">
                   {cart.items
                     .filter((item: any) =>

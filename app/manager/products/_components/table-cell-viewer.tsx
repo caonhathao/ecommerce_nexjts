@@ -1,5 +1,4 @@
 'use client';
-import { formatPrice } from '@/app/(public)/_components/global-function';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -50,6 +49,7 @@ import React, { useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
+import { formatPrice } from '@/lib/utils';
 
 export function TableCellViewer({
   item,
@@ -65,6 +65,7 @@ export function TableCellViewer({
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
   const t = useTranslations('admin_product_page.product_drawer');
+  const c = useTranslations('general');
   const [open, setOpen] = React.useState<boolean>(false);
 
   const [value, setValue] = React.useState<string>('');
@@ -184,7 +185,12 @@ export function TableCellViewer({
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-3">
             <Label htmlFor="price">{t('t_price')}</Label>
-            <div>{formatPrice(Number(value.price))}</div>
+            <div>
+              {formatPrice(Number(value.price), {
+                currency: c('t_currency'),
+                rate: Number(c('t_rate')),
+              })}
+            </div>
           </div>
           <div className="flex flex-col gap-3">
             <Label htmlFor="currency-variant">{t('t_currency')}</Label>
@@ -307,11 +313,21 @@ export function TableCellViewer({
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
                 <Label htmlFor="target">{t('t_min_price')}</Label>
-                <div>{formatPrice(Number(detail?.minPrice))}</div>
+                <div>
+                  {formatPrice(Number(detail?.minPrice), {
+                    currency: c('t_currency'),
+                    rate: Number(c('t_rate')),
+                  })}
+                </div>
               </div>
               <div className="flex flex-col gap-3">
                 <Label htmlFor="limit">{t('t_max_price')}</Label>
-                <div>{formatPrice(Number(detail?.maxPrice))}</div>
+                <div>
+                  {formatPrice(Number(detail?.maxPrice), {
+                    currency: c('t_currency'),
+                    rate: Number(c('t_rate')),
+                  })}
+                </div>
               </div>
             </div>
 

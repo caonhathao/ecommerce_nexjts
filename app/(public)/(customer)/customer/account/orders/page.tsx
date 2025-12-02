@@ -18,12 +18,14 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { formatPrice } from '@/app/(public)/_components/global-function';
+
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { formatPrice } from '@/lib/utils';
 
 export default function OrderPage() {
   const t = useTranslations('customer.orders');
+  const c = useTranslations('general');
   const [status, setStatus] = useState<OrderStatus | 'ALL'>('ALL');
   const [isPendingTransition, startTransition] = useTransition();
   const [data, dispatch, isPending] = useActionState<
@@ -149,7 +151,10 @@ export default function OrderPage() {
                               </span>
                             </p>
                             <p className="text-sm font-semibold text-primary">
-                              {formatPrice(item.total)}
+                              {formatPrice(item.total, {
+                                currency: c('t_currency'),
+                                rate: Number(c('t_rate')),
+                              })}
                             </p>
                           </div>
                         </div>

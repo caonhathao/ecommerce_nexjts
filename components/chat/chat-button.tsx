@@ -52,7 +52,7 @@ export function ChatButton({ shopId, product, order }: ChatButtonProps) {
       className="ml-auto text-info border-info/30 hover:bg-info/10 h-8 text-xs font-medium hover:cursor-pointer"
       onClick={handleChat}
     >
-      <MessageCircle className="w-3 h-3 mr-1" /> {t('t_chat_will_sellter')}
+      <MessageCircle className="w-3 h-3 mr-1" /> {t('t_chat_will_seller')}
     </Button>
   );
 }
