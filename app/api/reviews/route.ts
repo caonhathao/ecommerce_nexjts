@@ -103,6 +103,7 @@ export async function POST(req: NextRequest) {
       ActionResponse.success(review, 'Review successful', 201)
     );
   } catch (error) {
+    console.error('POST /api/reviews error:', error);
     return ActionResponse.toNextResponse(
       ActionResponse.error('failed', 400, { errorDetail: [String(error)] })
     );

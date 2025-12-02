@@ -42,7 +42,7 @@ interface Order {
   orderNumber: string;
   status: OrderStatus;
   grandTotal: number;
-  createdAt: string;
+  updatedAt: string;
   items: OrderItem[];
 }
 
@@ -69,6 +69,7 @@ export default function SellerOrderPage() {
 
         const res = await fetch(`/api/seller/orders?${params.toString()}`);
         const data = await res.json();
+        console.log(data);
 
         if (data.success) {
           setOrders((prev) => (isNewTab ? data.data : [...prev, ...data.data]));
@@ -229,7 +230,7 @@ function SellerOrderCard({ order }: { order: Order }) {
             #{order.orderNumber}
           </span>
           <span className="text-xs text-muted-foreground">
-            {new Date(order.createdAt).toLocaleDateString('vi-VN')}
+            {new Date(order.updatedAt).toLocaleDateString('vi-VN')}
           </span>
         </div>
         <Badge
