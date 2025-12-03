@@ -109,9 +109,9 @@ const TableTopProduct = () => {
   const t = useTranslations('admin_statistic_page.table_top_product');
   const c = useTranslations('general');
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;

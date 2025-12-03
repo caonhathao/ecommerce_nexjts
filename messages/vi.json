@@ -566,11 +566,11 @@
       "t_new_customers": "Khách hàng mới",
       "t_customers_desc_1": "Giảm",
       "t_customers_desc_1_1": "cùng kì",
-      "t_customeres_desc_2": "Cần chú ý tăng trưởng",
+      "t_customers_desc_2": "Cần chú ý tăng trưởng",
       "t_active_customers": "Tài khoản đang hoạt động",
       "t_active_customer_desc_1": "Lượng người dùng lâu dài",
       "t_active_customer_desc_2": "Cam kết vượt mục tiêu",
-      "t_grouwth_rate": "Tốc độ phát triển",
+      "t_growth_rate": "Tốc độ phát triển",
       "t_growth_rate_desc_1": "Hiệu suất tăng trưởng ổn định",
       "t_growth_rate_desc_2": "Đạt mục tiêu tăng trưởng"
     },
@@ -585,7 +585,14 @@
     }
   },
   "admin_search_bar": {
-    "t_search_action": "Tìm kiếm"
+    "t_search_action": "Tìm kiếm",
+    "t_filter_by": "Lọc theo",
+    "t_name": "Tên",
+    "t_id": "ID",
+    "t_title": "Tên",
+    "t_shopId": "Mã cửa hàng",
+    "t_ownerId": "Mã chủ cửa hàng",
+    "t_email": "Email"
   },
   "admin_category_page": {
     "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
@@ -682,7 +689,7 @@
     "t_tab_all": "Tất cả",
     "t_tab_public": "Đang công khai",
     "t_tab_private": "Đang ẩn",
-    "t_tab_inlisted": "Bị cấm",
+    "t_tab_unlisted": "Bị cấm",
     "t_showing": "Hiển thị",
     "t_column": "Cột",
     "product_tab": {

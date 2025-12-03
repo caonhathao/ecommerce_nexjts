@@ -1,4 +1,14 @@
 'use client';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import {
   InputGroup,
@@ -6,19 +16,23 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group';
+import { fetchData } from '@/funcs/fetch';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { IoFilterOutline } from 'react-icons/io5';
 import { RiResetRightLine } from 'react-icons/ri';
 import { z } from 'zod';
 
 interface SearchProps<T> {
   baseUrl: string;
   placeholder: string;
-  setData: Dispatch<SetStateAction<T[]>>;
+  setData: Dispatch<SetStateAction<T | null>>;
   isReset: boolean;
   setIsReset: Dispatch<SetStateAction<boolean>>;
+  setIsFalse: Dispatch<SetStateAction<boolean>>;
+  keyQueryList: string[];
 }
 
 const formSchema = z.object({
@@ -31,15 +45,33 @@ const SearchBar = <T,>({
   setData,
   setIsReset,
   isReset,
+  setIsFalse,
+  keyQueryList,
 }: SearchProps<T>) => {
   const t = useTranslations('admin_search_bar');
+
+  const [keyQuery, setKeyQuery] = useState<string>(keyQueryList[0]);
+
   async function onSubmit(value: z.infer<typeof formSchema>) {
     try {
-      const response = await fetch(`${baseUrl}?keyword=${value.keyword}`);
-      const data = await response.json();
-      console.log('data searched:', data.data);
-      if (data.success === 403 || data.success === 500) setData([]);
-      else setData(data.data);
+      // const response = await fetch(`${baseUrl}?${keyQuery}=${value.keyword}`);
+
+      const response = await fetchData({
+        baseUrl: baseUrl,
+        params: { [keyQuery]: value.keyword },
+        setData: undefined,
+      });
+      if (
+        response.success === 403 ||
+        response.success === 500 ||
+        response.success === 400
+      ) {
+        setData(null);
+        setIsFalse(true);
+      } else {
+        setData(response);
+        setIsFalse(false);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -53,8 +85,10 @@ const SearchBar = <T,>({
     },
   });
 
+  //console.log(keyQuery);
+
   return (
-    <div className="w-full flex flex-row justify-center items-center mb-5">
+    <div className="w-full flex flex-row justify-center items-center gap-3 mb-5">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-[50%]">
           <FormField
@@ -74,7 +108,11 @@ const SearchBar = <T,>({
                     >
                       <RiResetRightLine />
                     </InputGroupButton>
-                    <InputGroupButton variant="secondary" type="submit">
+                    <InputGroupButton
+                      variant="secondary"
+                      type="submit"
+                      className="hover:cursor-pointer"
+                    >
                       {t('t_search_action')}
                     </InputGroupButton>
                   </InputGroupAddon>
@@ -85,6 +123,29 @@ const SearchBar = <T,>({
           />
         </form>
       </Form>
+      <div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <IoFilterOutline />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="start">
+            <DropdownMenuLabel>{t('t_filter_by')}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuRadioGroup
+              value={keyQuery}
+              onValueChange={setKeyQuery}
+            >
+              {keyQueryList.map((value, key) => (
+                <DropdownMenuRadioItem key={key} value={value}>
+                  {t(`t_${value}`)}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 };

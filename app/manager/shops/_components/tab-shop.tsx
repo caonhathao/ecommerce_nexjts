@@ -83,6 +83,9 @@ interface tabShopProps {
   /** The React state setter for the `shopList` array. */
   setShopList: Dispatch<SetStateAction<shopItemData[]>>;
 
+  /**Check if no data returns */
+  isFalse: boolean;
+
   /** Memoized array of shop IDs for dnd-kit's `SortableContext`. */
   dataIds: UniqueIdentifier[];
 
@@ -111,6 +114,7 @@ const TabShop = ({
   setData,
   shopList,
   setShopList,
+  isFalse,
   dataIds,
   DraggableRow,
   handleDragEnd,
@@ -133,7 +137,7 @@ const TabShop = ({
     }
   }, [data, setShopList]);
 
-  if (!data || !shopList) return <Loading />;
+  if (!data && isFalse === false) return <Loading />;
 
   return (
     <>
@@ -165,7 +169,7 @@ const TabShop = ({
               ))}
             </TableHeader>
             <TableBody className="**:data-[slot=table-cell]:first:w-8">
-              {shopList.length !== 0 ? (
+              {shopList.length !== 0 || isFalse === true ? (
                 <SortableContext
                   items={dataIds}
                   strategy={verticalListSortingStrategy}
@@ -229,7 +233,8 @@ const TabShop = ({
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center text-sm font-medium">
-            Page {data.pagination.page} of {data.pagination.totalPages}
+            {t('t_page')} {data?.pagination.page || 0} {t('t_of')}{' '}
+            {data?.pagination.totalPages || 0}{' '}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button
@@ -243,7 +248,7 @@ const TabShop = ({
                   setData: setData,
                 });
               }}
-              disabled={data.pagination.page - 1 <= 0}
+              disabled={data ? data?.pagination.page - 1 <= 0 : true}
             >
               <span className="sr-only">Go to first page</span>
               <IconChevronsLeft />
@@ -257,14 +262,14 @@ const TabShop = ({
                 fetchData({
                   baseUrl: paths.manager.shop.fetch_all,
                   params: {
-                    page: data.pagination.page - 1,
+                    page: data ? data.pagination.page - 1 : 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
                   setData: setData,
                 });
               }}
-              disabled={data.pagination.page - 1 <= 0}
+              disabled={data ? data.pagination.page - 1 <= 0 : true}
             >
               <span className="sr-only">Go to previous page</span>
               <IconChevronLeft />
@@ -278,14 +283,18 @@ const TabShop = ({
                 fetchData({
                   baseUrl: paths.manager.shop.fetch_all,
                   params: {
-                    page: data.pagination.page + 1,
+                    page: data ? data.pagination.page + 1 : 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
                   setData: setData,
                 });
               }}
-              disabled={data.pagination.page + 1 > data.pagination.totalPages}
+              disabled={
+                data
+                  ? data.pagination.page + 1 > data.pagination.totalPages
+                  : true
+              }
             >
               <span className="sr-only">Go to next page</span>
               <IconChevronRight />
@@ -299,14 +308,18 @@ const TabShop = ({
                 fetchData({
                   baseUrl: paths.manager.shop.fetch_all,
                   params: {
-                    page: data.pagination.totalPages,
+                    page: data ? data.pagination.totalPages : 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
                   setData: setData,
                 });
               }}
-              disabled={data.pagination.page + 1 > data.pagination.totalPages}
+              disabled={
+                data
+                  ? data.pagination.page + 1 > data.pagination.totalPages
+                  : true
+              }
             >
               <span className="sr-only">Go to last page</span>
               <IconChevronsRight />

@@ -1,13 +1,21 @@
 import { prisma } from '@/lib/db';
+import { Prisma } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
+import z from 'zod';
 
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
-  const keyword = searchParams.get('keyword');
+  const id = searchParams.get('id');
+  const name = searchParams.get('name');
+  const ownerId = searchParams.get('ownerId');
 
-  if (!keyword || keyword.trim() === '') {
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '10');
+
+  //check valid params (one of them)
+  if (!id && !name && !ownerId)
     return NextResponse.json(
       {
         success: false,
@@ -17,17 +25,27 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
       { status: 400 }
     );
-  }
-  let data = null;
+
+  const whereClause: Prisma.ShopWhereInput = {};
+
+  if (id) {
+    const isValidUUID = z.string().uuid().safeParse(id).success;
+
+    if (!isValidUUID) {
+      return NextResponse.json({ success: 400, data: [] });
+    }
+
+    whereClause.id = id;
+  } else if (name)
+    whereClause.name = {
+      contains: name,
+      mode: 'insensitive',
+    };
+  else if (ownerId) whereClause.ownerId = ownerId;
 
   try {
-    data = await prisma.shop.findFirst({
-      where: {
-        name: {
-          contains: keyword,
-          mode: 'insensitive',
-        },
-      },
+    const data = await prisma.shop.findMany({
+      where: whereClause,
       select: {
         id: true,
         name: true,
@@ -45,18 +63,19 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
         updatedAt: true,
       },
     });
-    if (data)
-      return NextResponse.json({
-        success: true,
-        data: data,
-      });
-    else
-      return NextResponse.json({
-        success: 403,
-        data: {
-          message: 'No result',
-        },
-      });
+
+    const total = data.length;
+
+    return NextResponse.json({
+      success: true,
+      data: data,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (e) {
     // This catch block is still important for REAL errors
     // (e.g., database connection fails)

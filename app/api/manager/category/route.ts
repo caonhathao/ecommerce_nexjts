@@ -81,13 +81,11 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     return NextResponse.json(
       {
         data: categories,
-        meta: {
+        pagination: {
+          page,
+          limit,
           total,
-          page: currentPage,
-          limit: itemsPerPage,
-          totalPages,
-          hasNextPage,
-          hasPrevPage,
+          totalPages: Math.ceil(total / limit),
         },
       },
       { status: 200 }

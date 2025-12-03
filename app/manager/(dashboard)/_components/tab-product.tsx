@@ -190,11 +190,7 @@ const TabProduct = ({
           </Table>
         </DndContext>
       </div>
-      <div className="flex items-center justify-between px-4">
-        <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-          {table.getFilteredSelectedRowModel().rows.length} {t('t_of')}{' '}
-          {table.getFilteredRowModel().rows.length} {t('t_rows_selected')}
-        </div>
+      <div className="flex items-center justify-end px-4">
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="hidden items-center gap-2 lg:flex">
             <Label htmlFor="rows-per-page" className="text-sm font-medium">

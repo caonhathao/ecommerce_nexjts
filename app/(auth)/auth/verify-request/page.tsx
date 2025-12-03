@@ -121,7 +121,7 @@ export default function VerifyRequest() {
             otp,
             fetchOptions: {
               onSuccess: () => {
-                toast.success(t('t_signin_success'));
+                toast.success(t('t_sign_in_success'));
               },
               onError: (err) => {
                 console.error(err);
@@ -131,7 +131,7 @@ export default function VerifyRequest() {
           });
 
           if (error) {
-            toast.error(error.message || t('t_signin_failed'));
+            toast.error(error.message || t('t_sign_in_failed'));
             return;
           }
 
@@ -159,7 +159,7 @@ export default function VerifyRequest() {
               {isSignUp ? t('t_verify_email') : t('t_check_email')}
             </CardTitle>
             <CardDescription className="mt-2">
-              {isSignUp ? t('t_verify_desc') : t('t_signin_desc')}
+              {isSignUp ? t('t_verify_desc') : t('t_sign_in_desc')}
             </CardDescription>
           </div>
 

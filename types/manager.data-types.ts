@@ -1,3 +1,10 @@
+interface pagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface productItemData {
   id: string;
   title: string;
@@ -18,12 +25,7 @@ export interface productItemData {
 
 export interface productDataResponse {
   data: productItemData[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  pagination: pagination;
 }
 
 export interface variantDetail {
@@ -81,12 +83,7 @@ export interface shopItemData {
 
 export interface shopDataResponse {
   data: shopItemData[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  pagination: pagination;
 }
 
 export interface shopMember {
@@ -143,14 +140,7 @@ export interface topProductChart {
 
 export interface categoryDataResponse {
   data: categoryItemData[];
-  meta: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-  };
+  pagination: pagination;
 }
 
 export interface categoryDataFormResponse {
@@ -206,12 +196,7 @@ export interface categoryChildDetail {
 
 export interface userDataResponse {
   data: userItemData[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  pagination: pagination;
 }
 
 export interface userItemData {
@@ -253,10 +238,3 @@ export interface userDetail {
     };
   }[];
 }
-
-export type responseData =
-  | categoryDataResponse
-  | shopDataResponse
-  | productDataResponse;
-
-export type itemData = categoryItemData | productItemData | shopItemData;

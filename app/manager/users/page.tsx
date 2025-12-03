@@ -21,6 +21,7 @@ import {
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { paths } from '@/lib/path';
+import { formatDay } from '@/lib/utils';
 import { userDataResponse, userItemData } from '@/types/manager.data-types';
 import {
   DragEndEvent,
@@ -62,12 +63,12 @@ import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
 import TabUser from './_components/tab-user';
 import { TableCellViewer } from './_components/table-cell-viewer';
-import { formatDay } from '@/lib/utils';
 
 const UsersPage = () => {
   const [data, setData] = React.useState<userDataResponse | null>(null);
   const [userList, setUserList] = React.useState<userItemData[]>([]);
-  const [isReset, SetIsReset] = React.useState<boolean>(false);
+  const [isReset, setIsReset] = React.useState<boolean>(false);
+  const [isFalse, setIsFalse] = React.useState<boolean>(false);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -318,9 +319,11 @@ const UsersPage = () => {
       <SearchBar
         baseUrl={paths.manager.user.search}
         placeholder={t('t_search_placeholder')}
-        setData={setUserList}
-        setIsReset={SetIsReset}
+        setData={setData}
+        setIsReset={setIsReset}
         isReset={isReset}
+        setIsFalse={setIsFalse}
+        keyQueryList={['name', 'id', 'email']}
       />
       <Tabs
         defaultValue="all-status"
@@ -404,6 +407,7 @@ const UsersPage = () => {
             setData={setData}
             userList={userList}
             setUserList={setUserList}
+            isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}
@@ -425,6 +429,7 @@ const UsersPage = () => {
               setData={setData}
               userList={userList}
               setUserList={setUserList}
+              isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
@@ -444,6 +449,7 @@ const UsersPage = () => {
               setData={setData}
               userList={userList}
               setUserList={setUserList}
+              isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}

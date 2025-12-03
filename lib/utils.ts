@@ -34,8 +34,8 @@ export function formatPrice(
   options: FormatOptions = {}
 ): string {
   let numValue = Number(value);
-  console.log('value', value);
-  console.log(numValue);
+  // console.log('value', value);
+  // console.log(numValue);
 
   if (
     value === null ||

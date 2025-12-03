@@ -86,6 +86,9 @@ interface tabProductProps {
   /** The React state setter for the `productList` array. */
   setCategoryList: Dispatch<SetStateAction<categoryItemData[]>>;
 
+  /**Check if no data returns */
+  isFalse: boolean;
+
   /** Memoized array of product IDs for dnd-kit's `SortableContext`. */
   dataIds: UniqueIdentifier[];
 
@@ -114,6 +117,7 @@ const TabCategory = ({
   setData,
   categoryList,
   setCategoryList,
+  isFalse,
   dataIds,
   DraggableRow,
   handleDragEnd,
@@ -134,9 +138,11 @@ const TabCategory = ({
     if (data) {
       setCategoryList(data.data);
     }
-  }, [data, setCategoryList]);
+  }, [data]);
 
-  if (!data || !categoryList) return <Loading />;
+  if (!data && isFalse === false) return <Loading />;
+
+  console.log(isFalse);
 
   return (
     <>
@@ -168,7 +174,7 @@ const TabCategory = ({
               ))}
             </TableHeader>
             <TableBody className="**:data-[slot=table-cell]:first:w-8">
-              {categoryList.length !== 0 ? (
+              {categoryList.length !== 0 && isFalse === false ? (
                 <SortableContext
                   items={dataIds}
                   strategy={verticalListSortingStrategy}
@@ -232,7 +238,8 @@ const TabCategory = ({
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center text-sm font-medium">
-            {t('t_page')} {data.meta.page} {t('t_of')} {data.meta.totalPages}
+            {t('t_page')} {data?.pagination.page || 0} {t('t_of')}{' '}
+            {data?.pagination.totalPages || 0}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button
@@ -246,7 +253,7 @@ const TabCategory = ({
                   setData: setData,
                 });
               }}
-              disabled={data.meta.page - 1 <= 0}
+              disabled={data ? data.pagination.page - 1 <= 0 : true}
             >
               <span className="sr-only">Go to first page</span>
               <IconChevronsLeft />
@@ -260,14 +267,18 @@ const TabCategory = ({
                 fetchData({
                   baseUrl: paths.manager.category.fetch_all,
                   params: {
-                    page: data.meta.page - 1,
+                    page: data ? data.pagination.page + 1 : 1,
                     limit: rows,
                     isActive: activeFilter,
                   },
                   setData: setData,
                 });
               }}
-              disabled={data.meta.page - 1 <= 0}
+              disabled={
+                data
+                  ? data.pagination.page + 1 > data.pagination.totalPages
+                  : true
+              }
             >
               <span className="sr-only">Go to previous page</span>
               <IconChevronLeft />
@@ -281,14 +292,18 @@ const TabCategory = ({
                 fetchData({
                   baseUrl: paths.manager.category.fetch_all,
                   params: {
-                    page: data.meta.page + 1,
+                    page: data ? data.pagination.page + 1 : 1,
                     limit: rows,
                     isActive: activeFilter,
                   },
                   setData: setData,
                 });
               }}
-              disabled={data.meta.page + 1 > data.meta.totalPages}
+              disabled={
+                data
+                  ? data.pagination.page + 1 > data.pagination.totalPages
+                  : true
+              }
             >
               <span className="sr-only">Go to next page</span>
               <IconChevronRight />
@@ -302,14 +317,18 @@ const TabCategory = ({
                 fetchData({
                   baseUrl: paths.manager.category.fetch_all,
                   params: {
-                    page: data.meta.totalPages,
+                    page: data ? data.pagination.totalPages : 1,
                     limit: rows,
                     isActive: activeFilter,
                   },
                   setData: setData,
                 });
               }}
-              disabled={data.meta.page + 1 > data.meta.totalPages}
+              disabled={
+                data
+                  ? data.pagination.page + 1 > data.pagination.totalPages
+                  : true
+              }
             >
               <span className="sr-only">Go to last page</span>
               <IconChevronsRight />

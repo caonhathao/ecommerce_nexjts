@@ -24,6 +24,7 @@ import { fetchData } from '@/funcs/fetch';
 import { putData } from '@/funcs/put';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
+import { formatDay } from '@/lib/utils';
 import {
   shopDetail,
   shopItemData,
@@ -34,7 +35,6 @@ import Image from 'next/image';
 import React, { SetStateAction, useMemo } from 'react';
 import { MdOutlineCopyAll } from 'react-icons/md';
 import { toast } from 'sonner';
-import { formatDay } from '@/lib/utils';
 
 export function TableCellViewer({
   item,
@@ -157,7 +157,7 @@ export function TableCellViewer({
                 <Button
                   variant={'outline'}
                   type="button"
-                  onClick={() => handleCopy(detail?.id ?? '')}
+                  onClick={() => handleCopy(detail?.owner.id ?? '')}
                 >
                   {t('t_copy_action')}
                   <MdOutlineCopyAll />

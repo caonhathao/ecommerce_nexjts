@@ -276,7 +276,7 @@ export function TableCellViewer({
                     <DropdownMenuItem>
                       <Button
                         variant={'ghost'}
-                        onClick={() => handleCopy(detail?.id ?? '')}
+                        onClick={() => handleCopy(detail?.shop.id ?? '')}
                       >
                         {t('t_copy_action')}
                       </Button>
