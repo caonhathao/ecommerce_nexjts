@@ -21,10 +21,8 @@ import { HiMiniCheckBadge } from 'react-icons/hi2';
 import { PiTruckLight } from 'react-icons/pi';
 import { toast } from 'sonner';
 
-// Icons
 import { TicketPercent } from 'lucide-react';
 
-// Components
 import { ChatButton } from '@/components/chat/chat-button';
 
 import Desc from './_components/desc';
@@ -34,7 +32,6 @@ import { SuggestDealToday } from './_components/suggest-deal-today';
 import { VoucherSelector } from '@/features/voucher/_components/voucher-selector';
 import { VoucherDto } from '@/features/voucher/voucher.dto';
 
-// Placeholder Logo (replace with your actual import)
 import logo from '@/public/logo.jpg';
 import Decimal = Prisma.Decimal;
 import { RatingStars } from '@/app/(public)/_components/rating-starts';
@@ -58,7 +55,6 @@ const DetailPage = () => {
   const params = useParams();
   const pathname = usePathname();
 
-  // State
   const [data, setData] = useState<productDetailType | null>(null);
   const [selVariant, setSelVariant] = useState<SelectedVariant | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -67,14 +63,12 @@ const DetailPage = () => {
   const t = useTranslations('product_detail');
   const c = useTranslations('general');
 
-  // 1. Check Auth
   useEffect(() => {
     authClient.getSession().then((session) => {
       setIsLoggedIn(!!session.data);
     });
   }, []);
 
-  // 2. Fetch Data
   useEffect(() => {
     if (typeof params?.id === 'string') {
       const loadData = async () => {
@@ -96,12 +90,11 @@ const DetailPage = () => {
     }
   }, [params?.id]);
 
-  // 3. Helper: Current Variant Price
   const currentVariantPrice = useMemo(() => {
     return selVariant ? Number(selVariant.price) : 0;
   }, [selVariant]);
 
-  // 4. Logic: Calculate Final Price with Voucher Stacking
+  //  Calculate Final Price with Voucher Stacking
   const priceDetails = useMemo(() => {
     if (!selVariant) return { original: 0, final: 0, discountAmount: 0 };
 
@@ -109,11 +102,10 @@ const DetailPage = () => {
     let final = original;
     let totalDiscount = 0;
 
-    // Filter Vouchers
     const shopVouchers = selectedVouchers.filter((v) => !!v.shopId);
     const platformVouchers = selectedVouchers.filter((v) => !v.shopId);
 
-    // Step A: Apply Shop Voucher
+    // Apply Shop Voucher
     shopVouchers.forEach((v) => {
       let discount = 0;
       if (v.type === 'FIXED') {
@@ -129,7 +121,7 @@ const DetailPage = () => {
     // Ensure not negative before applying platform
     final = Math.max(0, final);
 
-    // Step B: Apply Platform Voucher
+    // Apply Platform Voucher
     platformVouchers.forEach((v) => {
       let discount = 0;
       if (v.type === 'FIXED') {
@@ -150,7 +142,7 @@ const DetailPage = () => {
     };
   }, [currentVariantPrice, selectedVouchers]);
 
-  // 5. Actions
+  // Actions
   const handleSelectVariant = (
     id: string,
     name: string,
@@ -209,7 +201,7 @@ const DetailPage = () => {
       if (res.success) {
         toast.success('Đang chuyển đến trang thanh toán...');
         route.push('/checkout');
-      } else if (!res.success && res.redirectTo) {
+      } else if (!res.success && res?.redirectTo) {
         toast.error(res.message);
         route.push(res.redirectTo);
       } else {
@@ -252,7 +244,7 @@ const DetailPage = () => {
     }
   };
 
-  // 6. UI Renderers
+  //  UI Renderers
   const renderPriceSection = () => {
     if (!selVariant) return null;
 
@@ -308,7 +300,6 @@ const DetailPage = () => {
     );
   };
 
-  // Loading State
   if (!data)
     return (
       <div className="w-full h-screen max-h-2/3 flex justify-center items-center">

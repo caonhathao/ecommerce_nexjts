@@ -7,9 +7,7 @@ import { createOrderDraftSchema } from '@/lib/validation/orderDraft';
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 
-// Make sure to export this so we can reuse it
 export async function getOrderDrafts() {
-  //Check Auth
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -18,7 +16,6 @@ export async function getOrderDrafts() {
     return { success: false, error: 'Unauthorized' };
   }
 
-  //Get user id
   const userId = session.user.id;
 
   const draft = await prisma.orderDraft.findUnique({
@@ -105,8 +102,14 @@ export async function getOrderDrafts() {
 
 export type OrderDraftResult = Awaited<ReturnType<typeof getOrderDrafts>>;
 
-// --- UPDATED CREATE FUNCTION ---
-export async function createOrderDraft(formData: FormData) {
+export type OrderDraftActionResponse = OrderDraftResult & {
+  redirectTo?: string;
+  message?: string;
+};
+
+export async function createOrderDraft(
+  formData: FormData
+): Promise<OrderDraftActionResponse> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) return { success: false, error: 'Unauthorized' };
@@ -143,6 +146,7 @@ export async function createOrderDraft(formData: FormData) {
         success: false,
         redirectTo: `/customer/account/address?callbackUrl=${encodeCallBack}`,
         message: 'Default address missing',
+        error: 'Address Missing',
       };
     }
 
@@ -220,7 +224,7 @@ export async function createOrderDraft(formData: FormData) {
 
     const BASE_SHIPPING = 30000;
 
-    // 5️⃣ Logic: Apply Shop Vouchers FIRST
+    // 5️⃣ Apply Shop Vouchers FIRST
     let totalShopDiscount = 0;
 
     shopGroups = shopGroups.map((shop) => {
@@ -246,7 +250,7 @@ export async function createOrderDraft(formData: FormData) {
       return { ...shop, shopDiscount: discount };
     });
 
-    // 6️⃣ Logic: Apply Platform/Shipping Vouchers
+    // 6️⃣  Apply Platform/Shipping Vouchers
     const platformVouchers = voucherDetails.filter((v) => v.shopId === null);
 
     const totalSubtotal = shopGroups.reduce((s, x) => s + x.subtotal, 0);
@@ -324,7 +328,6 @@ export async function createOrderDraft(formData: FormData) {
         },
       });
     } else {
-      // 9️⃣ Create new OrderDraft
       await prisma.orderDraft.create({
         data: {
           userId,
@@ -354,8 +357,6 @@ export async function createOrderDraft(formData: FormData) {
 
     revalidatePath('/draft');
 
-    // 🔟 RETURN THE FORMATTED DRAFT USING THE HELPER
-    // This ensures consistency without rewriting the format logic
     return await getOrderDrafts();
   } catch (error) {
     console.error(error);
