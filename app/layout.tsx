@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { Toaster } from 'sonner';
+import { Toaster, ToasterProps } from 'sonner';
 import { ThemeProvider } from '@/components/theme-provider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import { useTheme } from 'next-themes';
+import { ToasterWrapper } from '@/app/ToasterWrapper';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -36,7 +38,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             {children}
-            <Toaster position="top-center" />
+            <ToasterWrapper />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

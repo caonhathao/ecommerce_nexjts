@@ -127,4 +127,4 @@ export async function seedOrdersForSeller(sellerId: string) {
   console.log(`✅ Finished seeding demo orders for ${sellerId}`);
 }
 
-seedOrdersForSeller('d1476c1d-488f-4a87-9ece-2f2e46d104cc');
+seedOrdersForSeller('8561c39a-c3d9-43ff-bd56-b35af06b2ca9');

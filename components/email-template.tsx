@@ -21,7 +21,6 @@ export function renderOtpEmail(otp: string): string {
   `.trim();
 }
 
-
 export function renderPasswordResetEmail(
   resetLink: string,
   userName?: string
@@ -171,6 +170,67 @@ export function renderShopInviteTemplate(
             
             <p style="margin-top: 16px; color: #6b7280; font-size: 14px;">
               If you didn't expect this invitation or don't want to join, you can safely ignore this email.
+            </p>
+          </div>
+          <div class="footer">
+            <p style="margin: 0;">This is an automated email, please do not reply.</p>
+            <p style="margin: 8px 0 0 0;">© ${new Date().getFullYear()} All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `.trim();
+}
+
+export function renderShopStatusChangeEmail(
+  shopName: string,
+  ownerName: string,
+  newStatus: string
+): string {
+  const statusColors: Record<string, string> = {
+    ACTIVE: '#10b981',
+    INACTIVE: '#6b7280',
+    PENDING: '#f59e0b',
+    REJECTED: '#ef4444',
+  };
+
+  const statusColor = statusColors[newStatus] || '#7c3aed';
+
+  return `
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Shop Status Update</title>
+        <style>
+          body { font-family: Inter, system-ui, -apple-system, sans-serif; color: #111827; padding: 24px; background: #f9fafb; }
+          .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+          .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); padding: 32px 24px; text-align: center; color: #ffffff; }
+          .content { padding: 32px 24px; }
+          .status-badge { display: inline-block; background: ${statusColor}; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; margin: 16px 0; }
+          .footer { padding: 16px 24px; background: #f9fafb; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #e5e7eb; }
+          .icon { font-size: 48px; margin-bottom: 16px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <div class="icon">🏪</div>
+            <h1 style="margin: 0; font-size: 28px;">Shop Status Updated</h1>
+          </div>
+          <div class="content">
+            <p style="font-size: 16px; line-height: 24px;">
+              Hello ${ownerName},
+            </p>
+            <p style="font-size: 16px; line-height: 24px;">
+              The status of your shop <strong>${shopName}</strong> has been updated.
+            </p>
+            <div style="text-align: center; margin: 24px 0;">
+              <div class="status-badge">${newStatus}</div>
+            </div>
+            <p style="font-size: 14px; color: #6b7280; margin-top: 24px;">
+              If you have any questions, please contact support.
             </p>
           </div>
           <div class="footer">

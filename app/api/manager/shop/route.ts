@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db';
 import { Prisma, ShopStatus } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { sendShopStatusChangeEmail } from '@/lib/mailer';
 
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
@@ -80,12 +81,28 @@ export const PUT = withAuth(async (userId: string, request: NextRequest) => {
     }
 
     // Update product status (adjust values to match your schema/enums)
-    await prisma.shop.update({
+    const shop = await prisma.shop.update({
       where: { id },
       data: {
         status: status,
       },
+      include: {
+        owner: {
+          select: {
+            email: true,
+            name: true,
+          },
+        },
+      },
     });
+
+    // send email to owner
+    await sendShopStatusChangeEmail(
+      shop.owner.email,
+      shop.name,
+      shop.owner.name || 'Shop Owner',
+      status
+    );
 
     return NextResponse.json({ success: true });
   } catch (err) {

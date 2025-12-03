@@ -39,6 +39,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
           sku: true,
           name: true,
           price: true,
+          stock: true,
           image: true,
           currency: true,
           attributes: true,

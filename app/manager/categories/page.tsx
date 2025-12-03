@@ -118,8 +118,8 @@ const CategoryManagePage = () => {
       navigator.clipboard
         .writeText(value)
         .then(() => {
-          toast(t('t_action_not'), {
-            description: t('t_copy_desc_not'),
+          toast(t('t_action_noti'), {
+            description: t('t_copy_desc_noti'),
             duration: 3000,
             icon: <FaCheck />,
             cancel: {
@@ -129,8 +129,8 @@ const CategoryManagePage = () => {
           });
         })
         .catch((err) => {
-          toast(t('t_action_failed_not'), {
-            description: t('t_copy_failed_desc_not'),
+          toast(t('t_action_failed_noti'), {
+            description: t('t_copy_failed_desc_noti'),
             duration: 3000,
             icon: <IoMdCloseCircle />,
             cancel: {
