@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import {
   Card,
@@ -35,7 +35,7 @@ const chartConfig = {
   },
   revenue: {
     label: 'Revenue',
-    color: 'var(--primary)',
+    color: 'var(--info)',
   },
 } satisfies ChartConfig;
 
@@ -224,6 +224,18 @@ export function ChartAreaInteractiveSeller({
                     stopOpacity={0}
                   />
                 </linearGradient>
+                <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-revenue)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-revenue)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
               </defs>
               <CartesianGrid vertical={false} />
               <XAxis
@@ -240,13 +252,25 @@ export function ChartAreaInteractiveSeller({
                   });
                 }}
               />
+              <YAxis yAxisId="left" orientation="left" hide />
+              <YAxis yAxisId="right" orientation="right" hide />
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
               <Area
+                yAxisId="left"
+                dataKey="revenue"
+                type="natural"
+                fill="url(#fillRevenue)"
+                stroke="var(--color-revenue)"
+                stackId="a"
+              />
+              <Area
+                yAxisId="right"
                 dataKey="totalOrders"
                 type="natural"
                 fill="url(#fillOrders)"
                 stroke="var(--color-totalOrders)"
                 strokeWidth={2}
+                stackId="b"
               />
             </AreaChart>
           )}

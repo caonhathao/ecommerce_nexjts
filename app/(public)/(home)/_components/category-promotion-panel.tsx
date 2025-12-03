@@ -1,10 +1,7 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { Crown } from 'lucide-react';
 const data = [
-  {
-    name: 'deal_vip',
-    icon: 'https://salt.tikicdn.com/ts/upload/2b/e0/e7/05cf3f6008c57d97c9f5d8759c68633e.png',
-  },
   {
     name: 'super_sale',
     icon: 'https://salt.tikicdn.com/ts/upload/ff/a6/e1/a6cf760c8a71eb317856728600845165.png',
@@ -42,6 +39,17 @@ export const CategoryPromotionPanel = () => {
   const t = useTranslations('home_layout.category_promotion_panel');
   return (
     <div className="w-full flex flex-row justify-evenly items-start bg-background-secondary rounded-lg py-3 overflow-x-auto">
+      <div
+        key={'deal_vip'}
+        className="flex flex-col gap-1 justify-center items-center hover:cursor-pointer"
+      >
+        <div className="w-10 h-10 flex items-center justify-center rounded-2xl bg-primary/10">
+          <Crown className="w-6 h-6 text-primary" />
+        </div>
+        <p className="w-4/5 text-center text-base overflow-hidden">
+          {t('deal_vip')}
+        </p>
+      </div>
       {data.map((item, index) => (
         <div
           key={index}

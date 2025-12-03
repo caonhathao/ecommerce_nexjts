@@ -31,33 +31,26 @@ export async function getSellerDashboardStats(userId: string) {
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
 
-  // 1. Today's Revenue (PAID orders placed today)
   const [todayRevenueData, yesterdayRevenueData] = await Promise.all([
     prisma.order.aggregate({
       where: {
         shopId,
-        status: OrderStatus.PAID,
-        placedAt: {
-          gte: today,
-          lt: tomorrow,
+        status: {
+          in: [OrderStatus.PAID, OrderStatus.DELIVERED, OrderStatus.SHIPPED],
         },
+        placedAt: { gte: today, lt: tomorrow },
       },
-      _sum: {
-        grandTotal: true,
-      },
+      _sum: { grandTotal: true },
     }),
     prisma.order.aggregate({
       where: {
         shopId,
-        status: OrderStatus.PAID,
-        placedAt: {
-          gte: yesterday,
-          lt: today,
+        status: {
+          in: [OrderStatus.PAID, OrderStatus.DELIVERED, OrderStatus.SHIPPED],
         },
+        placedAt: { gte: yesterday, lt: today },
       },
-      _sum: {
-        grandTotal: true,
-      },
+      _sum: { grandTotal: true },
     }),
   ]);
 

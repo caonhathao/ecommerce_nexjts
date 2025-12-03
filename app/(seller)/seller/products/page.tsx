@@ -1,139 +1,484 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { TableCell, TableRow } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  DragEndEvent,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  UniqueIdentifier,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import { arrayMove, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import {
+  IconChevronDown,
+  IconDotsVertical,
+  IconGripVertical,
+  IconLayoutColumns,
+} from '@tabler/icons-react';
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  Row,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from '@tanstack/react-table';
+import TabProductSeller from './_components/tab-product-seller';
+import { fetchApi } from '@/lib/client-fetch';
+import { toast } from 'sonner';
 import { SellerProductListItem } from '@/types/product.data-types';
+import Image from 'next/image';
+import { TableCellViewerSellerProduct } from './_components/table-cell-viewer-seller-product';
 
 export default function SellerProductsDashboard() {
   const [products, setProducts] = useState<SellerProductListItem[]>([]);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [rowSelection, setRowSelection] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
   const router = useRouter();
 
+  const dataIds = React.useMemo<UniqueIdentifier[]>(
+    () => products?.map(({ id }) => id) || [],
+    [products]
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (active && over && active.id !== over.id) {
+      setProducts((data) => {
+        const oldIndex = dataIds.indexOf(active.id);
+        const newIndex = dataIds.indexOf(over.id);
+        return arrayMove(data, oldIndex, newIndex);
+      });
+    }
+  }
+
+  const sortableId = React.useId();
+  const sensors = useSensors(
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {}),
+    useSensor(KeyboardSensor, {})
+  );
+
   useEffect(() => {
-    fetch('/api/seller/products')
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data.data || []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetchApi('/api/seller/products');
+        if (!res.success) {
+          toast.error(res.message || 'Failed to fetch products');
+        }
+        const data = (res.data as SellerProductListItem[]) ?? [];
+        if (active) {
+          setProducts(data);
+          setLoading(false);
+        }
+      } catch (e: any) {
+        if (active) {
+          setError(e.message || 'Error');
+          setLoading(false);
+        }
+      }
+    })();
+    return () => {
+      active = false;
+    };
   }, []);
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Product Listing</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <div className="py-8 text-center">Loading...</div>
-        ) : !products || products.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 gap-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-12 w-12 text-muted-foreground"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
+  const columns: ColumnDef<SellerProductListItem>[] = [
+    {
+      id: 'drag',
+      header: () => null,
+      cell: ({ row }) => <DragHandle id={row.original.id} />,
+    },
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <div className="flex items-center justify-center">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center">
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: 'image',
+      header: 'Image',
+      cell: ({ row }) => (
+        <div className="w-12 h-12 relative">
+          {row.original.images?.[0]?.url ? (
+            <Image
+              src={row.original.images[0].url}
+              alt={row.original.images[0].alt || row.original.title}
+              width={48}
+              height={48}
+              className="rounded object-cover"
+            />
+          ) : (
+            <div className="w-12 h-12 bg-muted rounded flex items-center justify-center text-xs text-muted-foreground">
+              No img
+            </div>
+          )}
+        </div>
+      ),
+      enableHiding: false,
+    },
+    {
+      accessorKey: 'title',
+      header: 'Product Name',
+      cell: ({ row }) => <TableCellViewerSellerProduct item={row.original} />,
+      enableHiding: false,
+    },
+    {
+      accessorKey: 'shop',
+      header: 'Shop',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Avatar className="w-6 h-6">
+            <AvatarImage src={row.original.shop.logoUrl || ''} />
+            <AvatarFallback>{row.original.shop.name[0]}</AvatarFallback>
+          </Avatar>
+          <span className="text-sm">{row.original.shop.name}</span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'status',
+      header: 'Status',
+      cell: ({ row }) => (
+        <Badge
+          variant={
+            row.original.status === 'PUBLISHED' ? 'default' : 'secondary'
+          }
+        >
+          {row.original.status}
+        </Badge>
+      ),
+    },
+    {
+      accessorKey: 'visibility',
+      header: 'Visibility',
+      cell: ({ row }) => (
+        <Badge variant="outline">{row.original.visibility}</Badge>
+      ),
+    },
+    {
+      accessorKey: 'price',
+      header: 'Price Range',
+      cell: ({ row }) => (
+        <div className="text-sm">
+          {Number(row.original.minPrice).toLocaleString()} -{' '}
+          {Number(row.original.maxPrice).toLocaleString()}{' '}
+          {row.original.currency}
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'createdAt',
+      header: 'Created',
+      cell: ({ row }) => (
+        <span className="text-sm text-muted-foreground">
+          {new Date(row.original.createdAt).toLocaleDateString()}
+        </span>
+      ),
+    },
+    {
+      id: 'actions',
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+              size="icon"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 7h18M3 12h18M3 17h18"
-              />
-            </svg>
-            <h3 className="text-lg font-medium">No products yet</h3>
-            <p className="text-sm text-muted-foreground">
-              You haven&apos;t created any products. Create your first product
-              to get started.
-            </p>
+              <IconDotsVertical />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-32">
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(`/seller/products/${row.original.id}/edit`)
+              }
+            >
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem>Duplicate</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ];
+
+  const table = useReactTable({
+    data: products,
+    columns,
+    state: {
+      sorting,
+      columnVisibility,
+      rowSelection,
+      columnFilters,
+      pagination,
+      globalFilter: search,
+    },
+    getRowId: (row) => row.id,
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
+    onGlobalFilterChange: setSearch,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+  });
+
+  function DragHandle({ id }: { id: string }) {
+    const { attributes, listeners } = useSortable({ id });
+
+    return (
+      <Button
+        {...attributes}
+        {...listeners}
+        variant="ghost"
+        size="icon"
+        className="text-muted-foreground size-7 hover:bg-transparent"
+      >
+        <IconGripVertical className="text-muted-foreground size-3" />
+        <span className="sr-only">Drag to reorder</span>
+      </Button>
+    );
+  }
+
+  function DraggableRow({ row }: { row: Row<SellerProductListItem> }) {
+    const { transform, transition, setNodeRef, isDragging } = useSortable({
+      id: row.original.id,
+    });
+
+    return (
+      <TableRow
+        data-state={row.getIsSelected() && 'selected'}
+        data-dragging={isDragging}
+        ref={setNodeRef}
+        className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
+        style={{
+          transform: CSS.Transform.toString(transform),
+          transition: transition,
+        }}
+      >
+        {row.getVisibleCells().map((cell) => (
+          <TableCell key={cell.id}>
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </TableCell>
+        ))}
+      </TableRow>
+    );
+  }
+
+  return (
+    <div className="w-full h-full p-3 flex flex-col justify-start items-center">
+      <Tabs
+        defaultValue="all-status"
+        className="w-full flex-col justify-start gap-6"
+      >
+        <div className="flex items-center justify-between px-4 lg:px-6 mb-4">
+          <h1 className="text-2xl font-bold">My Products</h1>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Search products..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-56"
+            />
             <Button onClick={() => router.push('/seller/products/create')}>
-              Create product
+              Create Product
             </Button>
           </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Image</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Visibility</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Shop</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {products.map((product) => (
-                <TableRow key={product.id}>
-                  <TableCell>
-                    {product.images?.[0]?.url ? (
-                      <Image
-                        src={product.images[0].url}
-                        alt={product.images[0].alt || product.title}
-                        width={48}
-                        height={48}
-                        className="rounded"
-                      />
-                    ) : (
-                      <span>No image</span>
-                    )}
-                  </TableCell>
-                  <TableCell>{product.title}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{product.status}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">{product.visibility}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    {product.minPrice} - {product.maxPrice} {product.currency}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      {product.shop.logoUrl && (
-                        <Image
-                          src={product.shop.logoUrl}
-                          alt={product.shop.name}
-                          width={24}
-                          height={24}
-                          className="rounded-full"
-                        />
-                      )}
-                      <span>{product.shop.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() =>
-                        router.push(`/seller/products/${product.id}/edit`)
+        </div>
+
+        <div className="flex items-center justify-between px-4 lg:px-6">
+          <TabsList>
+            <TabsTrigger value="all-status">All</TabsTrigger>
+            <TabsTrigger value="published">Published</TabsTrigger>
+            <TabsTrigger value="draft">Draft</TabsTrigger>
+            <TabsTrigger value="archived">Archived</TabsTrigger>
+          </TabsList>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <IconLayoutColumns />
+                <span className="hidden lg:inline">Columns</span>
+                <IconChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              {table
+                .getAllColumns()
+                .filter(
+                  (column) =>
+                    typeof column.accessorFn !== 'undefined' &&
+                    column.getCanHide()
+                )
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
                       }
                     >
-                      Edit
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {error && (
+          <div className="mx-4 p-4 rounded border bg-red-50 text-red-600">
+            {error}
+          </div>
         )}
-      </CardContent>
-    </Card>
+
+        <TabsContent
+          value="all-status"
+          className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
+        >
+          <TabProductSeller
+            statusFilter=""
+            sensors={sensors}
+            sortableId={sortableId}
+            table={table}
+            columns={columns}
+            productList={products}
+            setProductList={setProducts}
+            dataIds={dataIds}
+            DraggableRow={DraggableRow}
+            handleDragEnd={handleDragEnd}
+            loading={loading}
+          />
+        </TabsContent>
+
+        <TabsContent
+          value="published"
+          className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
+        >
+          <TabProductSeller
+            statusFilter="PUBLISHED"
+            sensors={sensors}
+            sortableId={sortableId}
+            table={table}
+            columns={columns}
+            productList={products.filter((p) => p.status === 'PUBLISHED')}
+            setProductList={setProducts}
+            dataIds={dataIds}
+            DraggableRow={DraggableRow}
+            handleDragEnd={handleDragEnd}
+            loading={loading}
+          />
+        </TabsContent>
+
+        <TabsContent
+          value="draft"
+          className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
+        >
+          <TabProductSeller
+            statusFilter="DRAFT"
+            sensors={sensors}
+            sortableId={sortableId}
+            table={table}
+            columns={columns}
+            productList={products.filter((p) => p.status === 'DRAFT')}
+            setProductList={setProducts}
+            dataIds={dataIds}
+            DraggableRow={DraggableRow}
+            handleDragEnd={handleDragEnd}
+            loading={loading}
+          />
+        </TabsContent>
+
+        <TabsContent
+          value="archived"
+          className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
+        >
+          <TabProductSeller
+            statusFilter="ARCHIVED"
+            sensors={sensors}
+            sortableId={sortableId}
+            table={table}
+            columns={columns}
+            productList={products.filter((p) => p.status === 'ARCHIVED')}
+            setProductList={setProducts}
+            dataIds={dataIds}
+            DraggableRow={DraggableRow}
+            handleDragEnd={handleDragEnd}
+            loading={loading}
+          />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }
