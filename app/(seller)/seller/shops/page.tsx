@@ -55,7 +55,7 @@ import { paths } from '@/lib/path';
 import { fetchApi } from '@/lib/client-fetch';
 import { toast } from 'sonner';
 
-type SellerShopListItem = {
+export type SellerShopListItem = {
   id: string;
   name: string;
   slug: string;

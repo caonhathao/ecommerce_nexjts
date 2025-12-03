@@ -9,6 +9,8 @@ export const PaymentClient = ({ draftId }: { draftId: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations('checkout_page.payment_client');
 
+  console.log('payment: ' + draftId);
+
   const handlePayment = async () => {
     try {
       setIsLoading(true);

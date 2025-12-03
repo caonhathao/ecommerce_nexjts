@@ -59,17 +59,18 @@ export const columns = (
     },
   },
   {
-    accessorKey: 'updatedAt',
+    accessorKey: 'placedAt',
     header: 'Date',
     cell: ({ row }) => {
       return (
         <div className="font-normal">
-          {formatTime(row.getValue('updatedAt') as string)}
+          {formatTime(row.getValue('placedAt') as string)}
         </div>
       );
     },
   },
   {
+    header: 'actions',
     id: 'actions',
     cell: ({ row }) => {
       return (

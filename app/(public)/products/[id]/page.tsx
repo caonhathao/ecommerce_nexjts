@@ -260,6 +260,7 @@ const DetailPage = () => {
 
       if (res.success) {
         toast.success('Đang chuyển đến trang thanh toán...');
+        console.log('create Draft' + res.draft?.id);
         route.push('/checkout');
       } else if (!res.success && res.redirectTo) {
         toast.error(res.message, {
