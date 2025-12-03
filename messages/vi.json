@@ -28,6 +28,7 @@
     "login_form_tab": {
       "t_github_success": "Đăng nhập bằng Github, bạn sẽ được chuyển hướng...",
       "t_google_success": "Đăng nhập bằng Google, bạn sẽ được chuyển hướng...",
+      "t_signin_success": "Đăng nhập thành công",
       "t_email_failed_not": "Vui lòng nhập email của bạn",
       "t_verify_otp": "Mã OTP đã được gửi đến email của bạn",
       "t_password_missing": "Vui lòng nhập email và mật khẩu",
@@ -566,11 +567,11 @@
       "t_new_customers": "Khách hàng mới",
       "t_customers_desc_1": "Giảm",
       "t_customers_desc_1_1": "cùng kì",
-      "t_customeres_desc_2": "Cần chú ý tăng trưởng",
+      "t_customers_desc_2": "Cần chú ý tăng trưởng",
       "t_active_customers": "Tài khoản đang hoạt động",
       "t_active_customer_desc_1": "Lượng người dùng lâu dài",
       "t_active_customer_desc_2": "Cam kết vượt mục tiêu",
-      "t_grouwth_rate": "Tốc độ phát triển",
+      "t_growth_rate": "Tốc độ phát triển",
       "t_growth_rate_desc_1": "Hiệu suất tăng trưởng ổn định",
       "t_growth_rate_desc_2": "Đạt mục tiêu tăng trưởng"
     },
