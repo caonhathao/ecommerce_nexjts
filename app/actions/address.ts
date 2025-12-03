@@ -1,10 +1,8 @@
 'use server';
 
-import { auth, getCurrentUserId } from '@/lib/auth';
+import { getCurrentUserId } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { GetAddressResult } from '@/types/dtos/address.dto';
-import { headers } from 'next/headers';
-import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 
 type ActionResponse = {

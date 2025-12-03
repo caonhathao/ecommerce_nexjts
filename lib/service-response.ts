@@ -18,8 +18,8 @@ export class ActionResponse {
   static error(
     message = 'error',
     code: StatusCode = 400,
-    errors?: Record<string, string[]>
-  ): ServiceResponse<null> {
+    errors?: Record<string, string[] | undefined> | null
+  ): ServiceResponse<never> {
     return {
       success: false,
       message,

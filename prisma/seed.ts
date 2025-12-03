@@ -65,12 +65,12 @@ async function main() {
   // 1️⃣ USERS
   // ------------------------
 
-  const TOTAL_USERS = 500;
-  const SELLER_COUNT = 120;
+  const TOTAL_USERS = 100;
+  const SELLER_COUNT = 30;
   const ADMIN_COUNT = 3;
 
   const uniqueEmails = new Set<string>();
-  while (uniqueEmails.size < 500) {
+  while (uniqueEmails.size < TOTAL_USERS) {
     uniqueEmails.add(faker.internet.email().toLowerCase());
   }
   const emailList = Array.from(uniqueEmails);
@@ -101,7 +101,7 @@ async function main() {
   // 1️⃣ SESSIONS
   // ------------------------
   const session = await Promise.all(
-    Array.from({ length: 500 }).map(() =>
+    Array.from({ length: TOTAL_USERS }).map(() =>
       prisma.session.create({
         data: {
           id: faker.string.uuid(),
@@ -123,7 +123,7 @@ async function main() {
   // 1️⃣ ACCOUNTS
   // ------------------------
   const account = await Promise.all(
-    Array.from({ length: 500 }).map(() =>
+    Array.from({ length: TOTAL_USERS }).map(() =>
       prisma.account.create({
         data: {
           id: faker.string.uuid(),
@@ -149,7 +149,7 @@ async function main() {
   // 1️⃣ VERIFICAION
   // ------------------------
   const verification = await Promise.all(
-    Array.from({ length: 500 }).map(() =>
+    Array.from({ length: TOTAL_USERS }).map(() =>
       prisma.verification.create({
         data: {
           id: faker.string.uuid(),
@@ -169,7 +169,7 @@ async function main() {
   // 1️⃣ USER PROFILE
   // ------------------------
   const userProfiles = await Promise.all(
-    users.slice(0, 500).map((user) =>
+    users.slice(0, 100).map((user) =>
       prisma.userProfile.create({
         data: {
           id: faker.string.uuid(),
@@ -192,7 +192,7 @@ async function main() {
   // 1️⃣ ADDRESS
   // ------------------------
   const address = await Promise.all(
-    Array.from({ length: 500 }).map(() =>
+    Array.from({ length: TOTAL_USERS }).map(() =>
       prisma.address.create({
         data: {
           id: faker.string.uuid(),
@@ -217,33 +217,33 @@ async function main() {
 
   console.log(`✅ Created ${address.length} addresses`);
 
-  // ------------------------
+  // ------------------------v
   // 1️⃣ NOTIFICATION
   // ------------------------
-  const notification = await Promise.all(
-    Array.from({ length: 500 }).map(() =>
-      prisma.notification.create({
-        data: {
-          id: faker.string.uuid(),
-          userId: faker.helpers.arrayElement(users).id,
-          type: faker.helpers.arrayElement(['INFO', 'WARNING', 'ALERT']),
-          title: faker.lorem.sentence(),
-          body: faker.lorem.paragraph(),
-          metadata: undefined,
-          readAt: null,
-          createdAt: faker.date.past(),
-        },
-      })
-    )
-  );
-
-  console.log(`✅ Created ${notification.length} notifications`);
+  // const notification = await Promise.all(
+  //   Array.from({ length: TOTAL_USERS }).map(() =>
+  //     prisma.notification.create({
+  //       data: {
+  //         id: faker.string.uuid(),
+  //         userId: faker.helpers.arrayElement(users).id,
+  //         type: faker.helpers.arrayElement(['INFO', 'WARNING', 'ALERT']),
+  //         title: faker.lorem.sentence(),
+  //         body: faker.lorem.paragraph(),
+  //         metadata: undefined,
+  //         readAt: null,
+  //         createdAt: faker.date.past(),
+  //       },
+  //     })
+  //   )
+  // );
+  //
+  // console.log(`✅ Created ${notification.length} notifications`);
 
   // ------------------------
   // 2️⃣ SHOPS
   // ------------------------
   const sellerUsers = users.filter((u) => u.role === Role.seller);
-  const SHOP_COUNT = Math.min(100, sellerUsers.length);
+  const SHOP_COUNT = Math.min(SELLER_COUNT, sellerUsers.length);
 
   const shops = await Promise.all(
     sellerUsers.slice(0, SHOP_COUNT).map((owner) =>
@@ -268,7 +268,7 @@ async function main() {
   // ------------------------
   // 2️⃣ SHOP MEMBERS
   // ------------------------
-  const BATCH = 500;
+  const BATCH = 100;
   const rows: Prisma.ShopMemberCreateManyInput[] = [];
   const usedPairs = new Set<string>();
 
@@ -289,7 +289,7 @@ async function main() {
 
   // 2) Add 2-6 additional members per shop with weighted roles
   for (const s of shops) {
-    const memberCount = faker.number.int({ min: 2, max: 6 });
+    const memberCount = faker.number.int({ min: 1, max: 6 });
     const sellerPool = sellerUsers.filter((u) => u.id !== s.ownerId);
     const userPool = users.filter((u) => u.id !== s.ownerId);
 
@@ -306,8 +306,8 @@ async function main() {
       picked.add(key);
 
       // Weighted role selection
-      const roll = faker.number.int({ min: 1, max: 100 });
-      const role = roll <= 80 ? ShopMemberRole.STAFF : ShopMemberRole.MANAGER;
+      const roll = faker.number.int({ min: 1, max: SELLER_COUNT });
+      const role = roll <= 20 ? ShopMemberRole.STAFF : ShopMemberRole.MANAGER;
 
 
       usedPairs.add(key);
@@ -711,64 +711,64 @@ async function main() {
   // ------------------------
   // 3️⃣ TAGS
   // ------------------------
-const TAG_COUNT = 50;
-  const tagData: { id: string; name: string; slug: string }[] = [];
-  const seenSlugs = new Set<string>();
-  const seenNames = new Set<string>();
-
-  const MAX_ATTEMPTS = 20000; // safety cap to avoid infinite loop
-  let attempts = 0;
-
-  while (tagData.length < TAG_COUNT && attempts < MAX_ATTEMPTS) {
-    attempts++;
-
-    // 1) generate name and check name-uniqueness first
-    const name = faker.commerce.department().trim();
-    if (!name) continue;
-    if (seenNames.has(name)) continue;
-
-    // 2) generate slug and ensure slug-uniqueness
-    const slugBase = faker.helpers.slugify(name.toLowerCase()).replace(/[^a-z0-9-]+/g, '').slice(0, 40) || 'tag';
-    let uniqueSlug = slugBase;
-    let slugAttempts = 0;
-
-    // try a few times to make a unique slug
-    while (seenSlugs.has(uniqueSlug) && slugAttempts < 5) {
-      uniqueSlug = `${slugBase}-${faker.string.alphanumeric(6).toLowerCase()}`;
-      slugAttempts++;
-    }
-
-    // final fallback if collisions persist
-    if (seenSlugs.has(uniqueSlug)) {
-      uniqueSlug = `${slugBase}-${Date.now().toString(36)}-${faker.string.alphanumeric(4).toLowerCase()}`;
-    }
-
-    // 3) accept and record both name and slug
-    seenNames.add(name);
-    seenSlugs.add(uniqueSlug);
-    tagData.push({
-      id: faker.string.uuid(),
-      name,
-      slug: uniqueSlug,
-    });
-  }
-
-  if (attempts >= MAX_ATTEMPTS) {
-    console.warn(`Reached ${MAX_ATTEMPTS} attempts while generating tags; created ${tagData.length} unique tags.`);
-  }
-
-// Bulk insert (fast) and skip duplicates as a safety net
-  await prisma.tag.createMany({
-    data: tagData,
-    skipDuplicates: true,
-  });
-
-// Fetch the actual created tags for later use
-  const tags = await prisma.tag.findMany({
-    where: { slug: { in: tagData.map((t) => t.slug) } },
-  });
-
-  console.log(`✅ Created ${tags.length} tags`);
+// const TAG_COUNT = 50;
+//   const tagData: { id: string; name: string; slug: string }[] = [];
+//   const seenSlugs = new Set<string>();
+//   const seenNames = new Set<string>();
+//
+//   const MAX_ATTEMPTS = 20000; // safety cap to avoid infinite loop
+//   let attempts = 0;
+//
+//   while (tagData.length < TAG_COUNT && attempts < MAX_ATTEMPTS) {
+//     attempts++;
+//
+//     // 1) generate name and check name-uniqueness first
+//     const name = faker.commerce.department().trim();
+//     if (!name) continue;
+//     if (seenNames.has(name)) continue;
+//
+//     // 2) generate slug and ensure slug-uniqueness
+//     const slugBase = faker.helpers.slugify(name.toLowerCase()).replace(/[^a-z0-9-]+/g, '').slice(0, 40) || 'tag';
+//     let uniqueSlug = slugBase;
+//     let slugAttempts = 0;
+//
+//     // try a few times to make a unique slug
+//     while (seenSlugs.has(uniqueSlug) && slugAttempts < 5) {
+//       uniqueSlug = `${slugBase}-${faker.string.alphanumeric(6).toLowerCase()}`;
+//       slugAttempts++;
+//     }
+//
+//     // final fallback if collisions persist
+//     if (seenSlugs.has(uniqueSlug)) {
+//       uniqueSlug = `${slugBase}-${Date.now().toString(36)}-${faker.string.alphanumeric(4).toLowerCase()}`;
+//     }
+//
+//     // 3) accept and record both name and slug
+//     seenNames.add(name);
+//     seenSlugs.add(uniqueSlug);
+//     tagData.push({
+//       id: faker.string.uuid(),
+//       name,
+//       slug: uniqueSlug,
+//     });
+//   }
+//
+//   if (attempts >= MAX_ATTEMPTS) {
+//     console.warn(`Reached ${MAX_ATTEMPTS} attempts while generating tags; created ${tagData.length} unique tags.`);
+//   }
+//
+// // Bulk insert (fast) and skip duplicates as a safety net
+//   await prisma.tag.createMany({
+//     data: tagData,
+//     skipDuplicates: true,
+//   });
+//
+// // Fetch the actual created tags for later use
+//   const tags = await prisma.tag.findMany({
+//     where: { slug: { in: tagData.map((t) => t.slug) } },
+//   });
+//
+//   console.log(`✅ Created ${tags.length} tags`);
   // ------------------------
   // 4️⃣ PRODUCTS
   // ------------------------
@@ -879,37 +879,37 @@ const TAG_COUNT = 50;
 // ------------------------
 // 5️⃣ PRODUCT TAGS
 // ------------------------
-  const pairs = new Set<string>();
-  const productTagData: { productId: string; tagId: string }[] = [];
-
-  while (productTagData.length < 5) {
-    const product = faker.helpers.arrayElement(products);
-    const tag = faker.helpers.arrayElement(tags);
-    const key = `${product.id}-${tag.id}`;
-
-    if (!pairs.has(key)) {
-      pairs.add(key);
-      productTagData.push({ productId: product.id, tagId: tag.id });
-    }
-  }
-
-// Link tags to products using nested writes (implicit many-to-many)
-  const linkPromises = productTagData.map(({ productId, tagId }) =>
-    prisma.product.update({
-      where: { id: productId },
-      data: {
-        tags: {
-          connect: { id: tagId },
-        },
-      },
-    })
-  );
-
-// Use allSettled to tolerate cases where the relation already exists
-  const settled = await Promise.allSettled(linkPromises);
-  const linkedCount = settled.filter((r) => r.status === 'fulfilled').length;
-
-  console.log(`✅ Linked ${linkedCount} product tags`);
+//   const pairs = new Set<string>();
+//   const productTagData: { productId: string; tagId: string }[] = [];
+//
+//   while (productTagData.length < 5) {
+//     const product = faker.helpers.arrayElement(products);
+//     const tag = faker.helpers.arrayElement(tags);
+//     const key = `${product.id}-${tag.id}`;
+//
+//     if (!pairs.has(key)) {
+//       pairs.add(key);
+//       productTagData.push({ productId: product.id, tagId: tag.id });
+//     }
+//   }
+//
+// // Link tags to products using nested writes (implicit many-to-many)
+//   const linkPromises = productTagData.map(({ productId, tagId }) =>
+//     prisma.product.update({
+//       where: { id: productId },
+//       data: {
+//         tags: {
+//           connect: { id: tagId },
+//         },
+//       },
+//     })
+//   );
+//
+// // Use allSettled to tolerate cases where the relation already exists
+//   const settled = await Promise.allSettled(linkPromises);
+//   const linkedCount = settled.filter((r) => r.status === 'fulfilled').length;
+//
+//   console.log(`✅ Linked ${linkedCount} product tags`);
 
   // ------------------------
   // 7️⃣ CARTS

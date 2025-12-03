@@ -116,13 +116,13 @@ const CategoryManagePage = () => {
       navigator.clipboard
         .writeText(value)
         .then(() => {
-          toast(t('t_action_not'), {
-            description: t('t_copy_desc_not'),
+          toast(t('t_action_noti'), {
+            description: t('t_copy_desc_noti'),
           });
         })
         .catch((err) => {
-          toast(t('t_action_failed_not'), {
-            description: t('t_copy_failed_desc_not'),
+          toast(t('t_action_failed_noti'), {
+            description: t('t_copy_failed_desc_noti'),
           });
 
           console.error('Failed to copy ID: ', err);

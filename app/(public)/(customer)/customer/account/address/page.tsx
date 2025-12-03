@@ -201,7 +201,7 @@ export default function AddressPage() {
                     }}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder={t('t_city_palceholder')} />
+                      <SelectValue placeholder={t('t_city_placeholder')} />
                     </SelectTrigger>
                     <SelectContent className="shadow shadow-primary rounded-lg bg-background">
                       <SelectGroup className="max-h-[200px] overflow-y-scroll">
@@ -233,7 +233,7 @@ export default function AddressPage() {
                     }}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder={t('t_district_palceholder')} />
+                      <SelectValue placeholder={t('t_district_placeholder')} />
                     </SelectTrigger>
                     <SelectContent className="shadow shadow-primary rounded-lg bg-background">
                       <SelectGroup className="max-h-[200px] overflow-y-scroll">
@@ -265,7 +265,7 @@ export default function AddressPage() {
                     }}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder={t('t_ward_palceholder')} />
+                      <SelectValue placeholder={t('t_ward_placeholder')} />
                     </SelectTrigger>
                     <SelectContent className="shadow shadow-primary rounded-lg bg-background">
                       <SelectGroup className="max-h-[200px] overflow-y-scroll">

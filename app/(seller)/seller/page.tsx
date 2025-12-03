@@ -3,7 +3,7 @@ import { SectionCardsSeller } from '@/app/(seller)/_components/sidebar/section-c
 import { ChartAreaInteractiveSeller } from '@/app/(seller)/_components/sidebar/chart-area-interactive-seller';
 import { DataTableSeller } from '@/app/(seller)/_components/sidebar/data-table-seller';
 
-export default function AdminIndexPagee() {
+export default function AdminIndexPage() {
   return (
     <>
       <SectionCardsSeller />

@@ -43,7 +43,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         {children}
 
         <div className="text-balance text-center text-xs text-muted-foreground">
-          {t('t_accepct_1')}{' '}
+          {t('t_accept_1')}{' '}
           <Link
             className="hover:text-primary hover:underline"
             href={'/term-of-service'}

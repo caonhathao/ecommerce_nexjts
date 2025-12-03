@@ -1,5 +1,3 @@
-'use client';
-
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 
 import { ReactNode } from 'react';
@@ -21,7 +19,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <SiteHeaderSeller />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6 h-full">
               {children}
             </div>
           </div>

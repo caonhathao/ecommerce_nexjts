@@ -165,8 +165,8 @@ function TableCellViewer({
         body: formData,
       });
       if (data.status === 200) {
-        toast(t('t_action_not'), {
-          description: t('t_update_desc_not'),
+        toast(t('t_action_noti'), {
+          description: t('t_update_desc_noti'),
         });
         setTimeout(() => {
           setOpen(false);
@@ -175,8 +175,8 @@ function TableCellViewer({
       }
     } catch (error) {
       console.error('Failed to create category:', error);
-      toast(t('t_action_failed_not'), {
-        description: t('t_update_failed_desc_not'),
+      toast(t('t_action_failed_noti'), {
+        description: t('t_update_failed_desc_noti'),
       });
     }
   }
