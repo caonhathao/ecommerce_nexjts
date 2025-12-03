@@ -297,7 +297,7 @@ export const NewCategoryForm = ({
                         height={40}
                       />
                     ) : (
-                      <p className="italic">Trống</p>
+                      <p className="italic">{t('t_empty')}</p>
                     )}
                     <Button
                       type="button"
@@ -307,7 +307,7 @@ export const NewCategoryForm = ({
                         document.getElementById('input-image-file')?.click()
                       }
                     >
-                      {previewUrl ? 'Đổi' : 'Thêm'}
+                      {previewUrl ? t('t_change') : t('t_add')}
                     </Button>
                     <FormField
                       control={form.control}

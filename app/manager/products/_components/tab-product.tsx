@@ -214,7 +214,7 @@ const TabProduct = ({
                   params: {
                     page: 1,
                     limit: Number(value),
-                    isActive: visibilityFilter,
+                    visibility: visibilityFilter,
                   },
                   setData: setData,
                 });
@@ -266,7 +266,7 @@ const TabProduct = ({
                   params: {
                     page: data ? data.pagination.page - 1 : 1,
                     limit: rows,
-                    isActive: visibilityFilter,
+                    visibility: visibilityFilter,
                   },
                   setData: setData,
                 });
@@ -287,7 +287,7 @@ const TabProduct = ({
                   params: {
                     page: data ? data.pagination.page + 1 : 1,
                     limit: rows,
-                    isActive: visibilityFilter,
+                    visibility: visibilityFilter,
                   },
                   setData: setData,
                 });
@@ -312,7 +312,7 @@ const TabProduct = ({
                   params: {
                     page: data ? data.pagination.totalPages : 1,
                     limit: rows,
-                    isActive: visibilityFilter,
+                    visibility: visibilityFilter,
                   },
                   setData: setData,
                 });

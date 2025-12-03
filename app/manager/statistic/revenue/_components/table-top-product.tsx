@@ -1,5 +1,4 @@
 'use client';
-import { formatDay, formatPrice } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -41,6 +40,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
+import { formatDay, formatPrice } from '@/lib/utils';
 import {
   productDataResponse,
   productDetail,
@@ -108,9 +108,9 @@ const TableTopProduct = () => {
   const t = useTranslations('admin_statistic_page.table_top_product');
   const c = useTranslations('general');
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;

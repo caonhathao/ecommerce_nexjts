@@ -41,7 +41,15 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       contains: name,
       mode: 'insensitive',
     };
-  else if (ownerId) whereClause.ownerId = ownerId;
+  else if (ownerId) {
+    const isValidUUID = z.string().uuid().safeParse(ownerId).success;
+
+    if (!isValidUUID) {
+      return NextResponse.json({ success: 400, data: [] });
+    }
+
+    whereClause.ownerId = ownerId;
+  }
 
   try {
     const data = await prisma.shop.findMany({
