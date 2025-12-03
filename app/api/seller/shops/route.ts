@@ -120,7 +120,7 @@ export async function POST(req: Request) {
         coverPublicId: payload.coverPublicId ?? null,
         contactEmail: payload.contactEmail ?? null,
         contactPhone: payload.contactPhone ?? null,
-        status: 'ACTIVE',
+        status: 'PENDING',
       },
     });
 

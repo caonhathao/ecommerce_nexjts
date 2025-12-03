@@ -5,6 +5,7 @@ import {
   renderOtpEmail,
   renderPasswordResetEmail,
   renderShopInviteTemplate,
+  renderShopStatusChangeEmail,
 } from '@/components/email-template';
 import { env } from './env';
 
@@ -84,7 +85,6 @@ export async function sendPasswordResetEmail(
   }
 }
 
-
 export async function sendShopInvitationEmail(
   to: string,
   shopName: string,
@@ -115,5 +115,38 @@ export async function sendShopInvitationEmail(
   } catch (err) {
     console.error('Error sending shop invitation email:', err);
     throw new Error('Error sending shop invitation email');
+  }
+}
+
+export async function sendShopStatusChangeEmail(
+  to: string,
+  shopName: string,
+  ownerName: string,
+  newStatus: string
+) {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('----------------------------------------------');
+    console.log(`📧 MOCK SHOP STATUS CHANGE EMAIL TO: ${to}`);
+    console.log(`🏪 SHOP: ${shopName}`);
+    console.log(`👤 OWNER: ${ownerName}`);
+    console.log(`📊 NEW STATUS: ${newStatus}`);
+    console.log('----------------------------------------------');
+    return;
+  }
+
+  const transporter = createTransporter();
+  const fromAddress = `${webName} <no-reply@localhost>`;
+  const html = renderShopStatusChangeEmail(shopName, ownerName, newStatus);
+
+  try {
+    await transporter.sendMail({
+      from: fromAddress,
+      to,
+      subject: `${webName} - Shop Status Updated: ${shopName}`,
+      html,
+    });
+  } catch (err) {
+    console.error('Error sending shop status change email:', err);
+    throw new Error('Error sending shop status change email');
   }
 }

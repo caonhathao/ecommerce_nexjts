@@ -159,7 +159,7 @@ export default function VerifyRequest() {
               {isSignUp ? t('t_verify_email') : t('t_check_email')}
             </CardTitle>
             <CardDescription className="mt-2">
-              {isSignUp ? t('t_verify_desc') : t('t_signin_desc')}
+              {isSignUp ? t('t_verify_desc') : t('t_sign_in_desc')}
             </CardDescription>
           </div>
 

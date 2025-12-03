@@ -35,7 +35,7 @@ const chartConfig = {
   },
   revenue: {
     label: 'Revenue',
-    color: 'var(--primary-foreground)',
+    color: 'var(--info)',
   },
 } satisfies ChartConfig;
 
