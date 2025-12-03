@@ -343,7 +343,7 @@ function TableCellViewer({
                         height={30}
                       />
                     ) : (
-                      <p className="italic">Trống</p>
+                      <p className="italic">{t('t_empty')}</p>
                     )}
                     <Button
                       type="button"
@@ -352,10 +352,10 @@ function TableCellViewer({
                       }
                     >
                       {previewUrl
-                        ? 'Đổi'
+                        ? t('t_change')
                         : detail?.imageUrl && detail?.imageUrl.length
-                          ? 'Đổi'
-                          : 'Thêm'}
+                          ? t('t_change')
+                          : t('t_add')}
                     </Button>
 
                     <FormField

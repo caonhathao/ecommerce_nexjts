@@ -169,7 +169,7 @@ const TabShop = ({
               ))}
             </TableHeader>
             <TableBody className="**:data-[slot=table-cell]:first:w-8">
-              {shopList.length !== 0 || isFalse === true ? (
+              {shopList.length !== 0 && isFalse === false ? (
                 <SortableContext
                   items={dataIds}
                   strategy={verticalListSortingStrategy}

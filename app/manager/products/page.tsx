@@ -245,14 +245,14 @@ const ProductsPage = () => {
       ),
     },
     {
-      accessorKey: 'createdAt',
+      accessorKey: t('t_created_at'),
       header: t('t_created_at'),
       cell: ({ row }) => {
         return <div className="w-32">{formatDay(row.original.createdAt)}</div>;
       },
     },
     {
-      accessorKey: 'updatedAt',
+      accessorKey: t('t_updated_at'),
       header: t('t_updated_at'),
       cell: ({ row }) => {
         return <div className="w-32">{formatDay(row.original.updatedAt)}</div>;
