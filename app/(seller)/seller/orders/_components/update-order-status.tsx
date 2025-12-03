@@ -40,6 +40,24 @@ const AVAILABLE_STATUSES: OrderStatus[] = [
   OrderStatus.CANCELED,
 ];
 
+export const ALLOWED_TRANSITIONS: Partial<Record<OrderStatus, OrderStatus[]>> =
+  {
+    [OrderStatus.AWAITING_PAYMENT]: [
+      OrderStatus.PROCESSING,
+      OrderStatus.SHIPPED,
+      OrderStatus.DELIVERED,
+      OrderStatus.CANCELED,
+    ],
+    [OrderStatus.PROCESSING]: [
+      OrderStatus.SHIPPED,
+      OrderStatus.DELIVERED,
+      OrderStatus.CANCELED,
+    ],
+    [OrderStatus.SHIPPED]: [OrderStatus.DELIVERED, OrderStatus.CANCELED],
+    [OrderStatus.DELIVERED]: [OrderStatus.CANCELED],
+    [OrderStatus.CANCELED]: [],
+  };
+
 export function UpdateOrderStatus({
   item,
   t,
@@ -51,6 +69,8 @@ export function UpdateOrderStatus({
 }) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
+  const allowedNextStatuses = ALLOWED_TRANSITIONS[item.status] || [];
+  const isTerminalState = allowedNextStatuses.length === 0;
 
   const form = useForm<StatusUpdateForm>({
     resolver: zodResolver(statusUpdateSchema),
@@ -59,6 +79,11 @@ export function UpdateOrderStatus({
   const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: StatusUpdateForm) => {
+    if (!allowedNextStatuses.includes(data.newStatus)) {
+      toast.error('Trạng thái không hợp lệ');
+      return;
+    }
+
     const payload = {
       orderId: item.id,
       status: data.newStatus,
@@ -89,9 +114,15 @@ export function UpdateOrderStatus({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <p className="text-text cursor-pointer">
-          {t('order_update.actions.change_status')}
-        </p>
+        {isTerminalState ? (
+          <p className="text-border cursor-not-allowed text-sm">
+            {t('order_update.status.completed')}
+          </p>
+        ) : (
+          <p className="text-text cursor-pointer text-sm font-medium">
+            {t('order_update.actions.change_status')}
+          </p>
+        )}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
@@ -117,7 +148,9 @@ export function UpdateOrderStatus({
                 render={({ field }) => (
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={
+                      field.value === item.status ? undefined : field.value
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue
@@ -127,11 +160,25 @@ export function UpdateOrderStatus({
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {AVAILABLE_STATUSES.map((s) => (
-                        <SelectItem key={s} value={s}>
-                          {t(`order_update.status.${s.toLowerCase()}`)}
-                        </SelectItem>
-                      ))}
+                      {AVAILABLE_STATUSES.map((status) => {
+                        const isCurrent = status === item.status;
+                        const isAllowed = allowedNextStatuses.includes(status);
+                        const isDisabled = !isAllowed;
+
+                        return (
+                          <SelectItem
+                            key={status}
+                            value={status}
+                            disabled={isDisabled}
+                            className={
+                              isDisabled ? 'opacity-50 cursor-not-allowed' : ''
+                            }
+                          >
+                            {t(`order_update.status.${status.toLowerCase()}`)}
+                            {isCurrent && ' (Hiện tại)'}
+                          </SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
                 )}

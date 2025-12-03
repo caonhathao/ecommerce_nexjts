@@ -39,7 +39,19 @@ import { Calendar } from '@/components/ui/calendar';
 import { vi } from 'date-fns/locale';
 import { SellerShopListItem } from '@/app/(seller)/seller/shops/page';
 import { fetchApi } from '@/lib/client-fetch';
+import { SellerOrderDetails } from '@/app/(seller)/seller/orders/_components/order-details';
+import { UpdateOrderStatus } from '@/app/(seller)/seller/orders/_components/update-order-status';
 
+type OrderResponseData = {
+  orders: OrderDTO[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  nextCursor?: string | null;
+};
 const LIMIT = 12;
 
 export default function SellerOrderPage() {
@@ -103,17 +115,24 @@ export default function SellerOrderPage() {
         if (date) params.append('date', date.toString()); //Date params ?date=...
         if (shopId !== 'all') params.append('shopId', shopId); //Shop params ?shopId=...
 
-        const res = await fetch(`/api/seller/orders?${params.toString()}`, {
-          cache: 'no-store',
-        });
-        const data = await res.json();
+        const res = await fetchApi<OrderResponseData>(
+          `/api/seller/orders?${params.toString()}`,
+          {
+            cache: 'no-store',
+          }
+        );
 
-        if (data.success) {
-          setOrders((prev) =>
-            isNewTab ? data.data.orders : [...prev, ...data.data.orders]
-          );
-          setNextCursor(data.nextCursor);
-          setHasMore(!!data.nextCursor);
+        if (res.success && res.data) {
+          const {
+            orders: newOrders,
+            pagination: newPagination,
+            nextCursor: newCursor,
+          } = res.data;
+          setOrders((prev) => (isNewTab ? newOrders : [...prev, ...newOrders]));
+          // setNextCursor(res.data.nextCursor);
+          // setHasMore(!!res.data.nextCursor);
+          setPageCount(newPagination.totalPages);
+          console.log('jkafjakbk' + newPagination.totalPages);
         }
       } catch (error) {
         console.error('Failed to fetch orders', error);
@@ -345,7 +364,11 @@ export default function SellerOrderPage() {
                       key={order.id}
                       ref={isLastElement ? lastOrderElementRef : null}
                     >
-                      <SellerOrderCard order={order} />
+                      <SellerOrderCard
+                        order={order}
+                        t={t}
+                        onUpdateSuccess={handleRefresh}
+                      />
                     </div>
                   );
                 })}
@@ -397,7 +420,15 @@ function TabItem({
   );
 }
 
-function SellerOrderCard({ order }: { order: OrderDTO }) {
+function SellerOrderCard({
+  order,
+  t,
+  onUpdateSuccess,
+}: {
+  order: OrderDTO;
+  t: ReturnType<typeof useTranslations>;
+  onUpdateSuccess: () => void;
+}) {
   const statusColor: Record<string, string> = {
     AWAITING_PAYMENT: 'bg-warning/15 text-warning border-warning/30',
     PROCESSING: 'bg-info/15 text-info border-info/30',
@@ -476,8 +507,16 @@ function SellerOrderCard({ order }: { order: OrderDTO }) {
           </span>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            Xem chi tiết
+          <Button variant={'outline'}>
+            <SellerOrderDetails key={order.id} item={order} t={t} />
+          </Button>
+          <Button variant="outline">
+            <UpdateOrderStatus
+              key={order.id}
+              item={order}
+              t={t}
+              onUpdateSuccess={onUpdateSuccess}
+            />
           </Button>
           {order.status === 'PROCESSING' && (
             <Button

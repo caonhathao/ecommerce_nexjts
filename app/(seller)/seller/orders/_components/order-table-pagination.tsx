@@ -22,12 +22,13 @@ interface DataTablePaginationProps<TData> {
 export function OrderDataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
+  console.log('orderDataTablePagination', table.getPageCount());
   return (
     <div className="flex items-center justify-end px-2 m-4">
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
           Page {table.getState().pagination.pageIndex + 1} of{' '}
-          {table.getPageCount() + 1}
+          {table.getPageCount()}
         </div>
         <div className="flex items-center space-x-2">
           <Button
