@@ -525,7 +525,14 @@
     }
   },
   "admin_search_bar": {
-    "t_search_action": "検索"
+    "t_search_action": "検索",
+    "t_filter_by": "絞り込み",
+    "t_name": "名前",
+    "t_id": "ID",
+    "t_title": "タイトル",
+    "t_shopId": "ショップID",
+    "t_ownerId": "オーナーID",
+    "t_email": "メール"
   },
   "admin_category_page": {
     "t_search_placeholder": "検索キーワードを入力...",
@@ -569,6 +576,9 @@
       "t_copy_action": "IDをコピー",
       "t_del_action": "削除",
       "t_icon": "画像",
+      "t_empty": "データなし",
+      "t_change": "変更",
+      "t_add": "追加",
       "t_is_active": "表示",
       "t_is_active_placeholder": "ステータスを選択",
       "c_active": "有効",
@@ -594,6 +604,9 @@
       "t_desc": "新しい製品カテゴリーを作成します。",
       "t_name": "カテゴリー名",
       "t_photo": "サムネイル画像",
+      "t_empty": "データなし",
+      "t_change": "変更",
+      "t_add": "追加",
       "t_status": "ステータス",
       "c_active": "表示",
       "c_inactive": "非表示",
@@ -733,7 +746,7 @@
     }
   },
   "admin_user_page": {
-    "t_search_placeholder": "ユーザーIDを入力...",
+    "t_search_placeholder": "検索キーワードを入力...",
     "t_action_not": "操作",
     "t_copy_desc_not": "情報のコピーに成功しました！",
     "t_del_desc_not": "ユーザーの削除に成功しました！",

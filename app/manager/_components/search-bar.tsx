@@ -104,6 +104,7 @@ const SearchBar = <T,>({
                       onClick={() => {
                         form.reset();
                         setIsReset(!isReset);
+                        setIsFalse(false);
                       }}
                     >
                       <RiResetRightLine />
