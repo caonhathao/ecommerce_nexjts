@@ -587,7 +587,14 @@
     }
   },
   "admin_search_bar": {
-    "t_search_action": "Tìm kiếm"
+    "t_search_action": "Tìm kiếm",
+    "t_filter_by": "Lọc theo",
+    "t_name": "Tên",
+    "t_id": "ID",
+    "t_title": "Tên",
+    "t_shopId": "Mã cửa hàng",
+    "t_ownerId": "Mã chủ cửa hàng",
+    "t_email": "Email"
   },
   "admin_category_page": {
     "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
@@ -684,7 +691,7 @@
     "t_tab_all": "Tất cả",
     "t_tab_public": "Đang công khai",
     "t_tab_private": "Đang ẩn",
-    "t_tab_inlisted": "Bị cấm",
+    "t_tab_unlisted": "Bị cấm",
     "t_showing": "Hiển thị",
     "t_column": "Cột",
     "product_tab": {

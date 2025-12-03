@@ -97,6 +97,7 @@ export const ProductItemSm = ({
         <Image
           src={item.imageUrl}
           alt="thumbnail"
+          sizes="auto"
           fill
           className="object-cover"
         />

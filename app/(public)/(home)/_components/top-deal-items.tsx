@@ -47,7 +47,7 @@ export const TopDealItems = ({
     return response?.data || [];
   }, [response]);
 
-  console.log(data);
+  //console.log(data);
 
   if (!data) return <Loading />;
 

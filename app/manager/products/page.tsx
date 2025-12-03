@@ -22,6 +22,7 @@ import {
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { paths } from '@/lib/path';
+import { formatDay } from '@/lib/utils';
 import {
   productDataResponse,
   productItemData,
@@ -61,19 +62,19 @@ import {
 } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
+import { IoMdCloseCircle } from 'react-icons/io';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
 import TabProduct from './_components/tab-product';
 import { TableCellViewer } from './_components/table-cell-viewer';
-import { formatDay } from '@/lib/utils';
 
 const ProductsPage = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
   const [productList, setProductList] = React.useState<productItemData[]>([]);
   const [isReset, setIsReset] = React.useState<boolean>(false);
-
+  const [isFalse, setIsFalse] = React.useState<boolean>(false);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -114,21 +115,39 @@ const ProductsPage = () => {
   const handleCopy = React.useCallback(
     (value: string) => {
       if (!value || value.length === 0 || value === undefined) {
-        toast(t('t_action_failed_noti'), {
-          description: t('t_copy_failed_desc_noti'),
+        toast(t('t_action_failed_not'), {
+          description: t('t_copy_failed_desc_not'),
+          duration: 3000,
+          icon: <IoMdCloseCircle />,
+          cancel: {
+            label: 'OK',
+            onClick: () => console.log(''),
+          },
         });
         return;
       }
       navigator.clipboard
         .writeText(value)
         .then(() => {
-          toast(t('t_action_noti'), {
-            description: t('t_copy_desc_noti'),
+          toast(t('t_action_not'), {
+            description: t('t_copy_desc_not'),
+            duration: 3000,
+            icon: <FaCheck />,
+            cancel: {
+              label: 'OK',
+              onClick: () => console.log(''),
+            },
           });
         })
         .catch((err) => {
-          toast(t('t_action_failed_noti'), {
-            description: t('t_copy_failed_desc_noti'),
+          toast(t('t_action_failed_not'), {
+            description: t('t_copy_failed_desc_not'),
+            duration: 3000,
+            icon: <IoMdCloseCircle />,
+            cancel: {
+              label: 'OK',
+              onClick: () => console.log(''),
+            },
           });
 
           console.error('Failed to copy ID: ', err);
@@ -136,9 +155,6 @@ const ProductsPage = () => {
     },
     [t]
   );
-
-  // Assume you have a `t` function in scope, for example:
-  // const t = useTranslations('admin_product_page');
 
   const columns: ColumnDef<productItemData>[] = [
     {
@@ -306,9 +322,11 @@ const ProductsPage = () => {
       <SearchBar
         baseUrl={paths.manager.product.search}
         placeholder={t('t_search_placeholder')}
-        setData={setProductList}
+        setData={setData}
         setIsReset={setIsReset}
         isReset={isReset}
+        setIsFalse={setIsFalse}
+        keyQueryList={['title', 'id', 'shopId']}
       />
       <Tabs
         defaultValue="all-status"
@@ -394,6 +412,7 @@ const ProductsPage = () => {
             setData={setData}
             productList={productList}
             setProductList={setProductList}
+            isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}
@@ -412,6 +431,7 @@ const ProductsPage = () => {
               setData={setData}
               productList={productList}
               setProductList={setProductList}
+              isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
@@ -431,6 +451,7 @@ const ProductsPage = () => {
               setData={setData}
               productList={productList}
               setProductList={setProductList}
+              isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
@@ -453,6 +474,7 @@ const ProductsPage = () => {
               setData={setData}
               productList={productList}
               setProductList={setProductList}
+              isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}

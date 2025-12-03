@@ -58,18 +58,21 @@ import {
 } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
 import TabShop from './_components/tab-shop';
 import { TableCellViewer } from './_components/table-cell-viewer';
 import { formatDay } from '@/lib/utils';
+import { IoMdCloseCircle } from 'react-icons/io';
 
 const ShopsPage = () => {
   const [data, setData] = React.useState<shopDataResponse | null>(null);
   const [shopList, setShopList] = React.useState<shopItemData[]>([]);
-  const [isReset, SetIsReset] = React.useState<boolean>(false);
+  const [isReset, setIsReset] = React.useState<boolean>(false);
+  const [isFalse, setIsFalse] = React.useState<boolean>(false);
+
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -108,19 +111,40 @@ const ShopsPage = () => {
 
   const handleCopy = (value: string | undefined) => {
     if (!value) {
-      toast(t('t_action_failed_noti'), {
-        description: t('t_copy_failed_desc_noti'),
+      toast(t('t_action_failed_not'), {
+        description: t('t_copy_failed_desc_not'),
+        duration: 3000,
+        icon: <IoMdCloseCircle />,
+        cancel: {
+          label: 'OK',
+          onClick: () => console.log(''),
+        },
       });
     } else {
       navigator.clipboard
         .writeText(value)
         .then(() => {
-          toast(t('t_action_noti'), {
-            description: t('t_copy_desc_noti'),
+          toast(t('t_action_not'), {
+            description: t('t_copy_desc_not'),
+            duration: 3000,
+            icon: <FaCheck />,
+            cancel: {
+              label: 'OK',
+              onClick: () => console.log(''),
+            },
           });
         })
         .catch((err) => {
           console.error('Failed to copy ID: ', err);
+          toast(t('t_action_failed_not'), {
+            description: t('t_copy_failed_desc_not'),
+            duration: 3000,
+            icon: <IoMdCloseCircle />,
+            cancel: {
+              label: 'OK',
+              onClick: () => console.log(''),
+            },
+          });
         });
     }
   };
@@ -336,9 +360,11 @@ const ShopsPage = () => {
       <SearchBar
         baseUrl={paths.manager.shop.search}
         placeholder={t('t_search_placeholder')}
-        setData={setShopList}
-        setIsReset={SetIsReset}
+        setData={setData}
+        setIsReset={setIsReset}
         isReset={isReset}
+        setIsFalse={setIsFalse}
+        keyQueryList={['name', 'id', 'ownerId']}
       />
       <Tabs
         defaultValue="all-status"
@@ -426,6 +452,7 @@ const ShopsPage = () => {
             setData={setData}
             shopList={shopList}
             setShopList={setShopList}
+            isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}
@@ -444,6 +471,7 @@ const ShopsPage = () => {
               setData={setData}
               shopList={shopList}
               setShopList={setShopList}
+              isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
@@ -463,6 +491,7 @@ const ShopsPage = () => {
               setData={setData}
               shopList={shopList}
               setShopList={setShopList}
+              isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
@@ -485,6 +514,7 @@ const ShopsPage = () => {
               setData={setData}
               shopList={shopList}
               setShopList={setShopList}
+              isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}
@@ -504,6 +534,7 @@ const ShopsPage = () => {
               setData={setData}
               shopList={shopList}
               setShopList={setShopList}
+              isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
               handleDragEnd={handleDragEnd}

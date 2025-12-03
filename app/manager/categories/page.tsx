@@ -59,7 +59,7 @@ import {
 } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
@@ -68,6 +68,7 @@ import TabCategory from './_components/tab-category';
 import TableCellViewer from './_components/table-cell-viewer';
 import { handleDelete } from './_funcs/funcs';
 import { formatDay } from '@/lib/utils';
+import { IoMdCloseCircle } from 'react-icons/io';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
@@ -75,6 +76,7 @@ const CategoryManagePage = () => {
     []
   );
   const [isReset, setIsReset] = React.useState<boolean>(false);
+  const [isFalse, setIsFalse] = React.useState<boolean>(false);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -118,11 +120,23 @@ const CategoryManagePage = () => {
         .then(() => {
           toast(t('t_action_noti'), {
             description: t('t_copy_desc_noti'),
+            duration: 3000,
+            icon: <FaCheck />,
+            cancel: {
+              label: 'OK',
+              onClick: () => console.log(''),
+            },
           });
         })
         .catch((err) => {
           toast(t('t_action_failed_noti'), {
             description: t('t_copy_failed_desc_noti'),
+            duration: 3000,
+            icon: <IoMdCloseCircle />,
+            cancel: {
+              label: 'OK',
+              onClick: () => console.log(''),
+            },
           });
 
           console.error('Failed to copy ID: ', err);
@@ -314,9 +328,11 @@ const CategoryManagePage = () => {
       <SearchBar
         baseUrl={paths.manager.category.search}
         placeholder={t('t_search_placeholder')}
-        setData={setCategoryList}
+        setData={setData}
         setIsReset={setIsReset}
         isReset={isReset}
+        setIsFalse={setIsFalse}
+        keyQueryList={['name', 'id']}
       />
       <Tabs
         defaultValue="all-status"
@@ -401,6 +417,7 @@ const CategoryManagePage = () => {
             setData={setData}
             categoryList={categoryList}
             setCategoryList={setCategoryList}
+            isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}
@@ -421,6 +438,7 @@ const CategoryManagePage = () => {
             setData={setData}
             categoryList={categoryList}
             setCategoryList={setCategoryList}
+            isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}
@@ -441,6 +459,7 @@ const CategoryManagePage = () => {
             setData={setData}
             categoryList={categoryList}
             setCategoryList={setCategoryList}
+            isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}

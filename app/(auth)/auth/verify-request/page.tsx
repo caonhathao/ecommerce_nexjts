@@ -121,7 +121,7 @@ export default function VerifyRequest() {
             otp,
             fetchOptions: {
               onSuccess: () => {
-                toast.success(t('t_signin_success'));
+                toast.success(t('t_sign_in_success'));
               },
               onError: (err) => {
                 console.error(err);
@@ -131,7 +131,7 @@ export default function VerifyRequest() {
           });
 
           if (error) {
-            toast.error(error.message || t('t_signin_failed'));
+            toast.error(error.message || t('t_sign_in_failed'));
             return;
           }
 

@@ -83,6 +83,9 @@ interface tabShopProps {
   /** The React state setter for the `shopList` array. */
   setUserList: Dispatch<SetStateAction<userItemData[]>>;
 
+  /**Check if no data returns */
+  isFalse: boolean;
+
   /** Memoized array of shop IDs for dnd-kit's `SortableContext`. */
   dataIds: UniqueIdentifier[];
 
@@ -111,6 +114,7 @@ const TabUser = ({
   setData,
   userList,
   setUserList,
+  isFalse,
   dataIds,
   DraggableRow,
   handleDragEnd,
@@ -132,7 +136,7 @@ const TabUser = ({
     }
   }, [data, setUserList]);
 
-  if (!data || !userList) return <Loading />;
+  if (!data && isFalse === false) return <Loading />;
 
   return (
     <>
@@ -164,7 +168,7 @@ const TabUser = ({
               ))}
             </TableHeader>
             <TableBody className="**:data-[slot=table-cell]:first:w-8">
-              {userList.length !== 0 ? (
+              {userList.length !== 0 && isFalse === false ? (
                 <SortableContext
                   items={dataIds}
                   strategy={verticalListSortingStrategy}
@@ -198,6 +202,7 @@ const TabUser = ({
               {t('t_rows_per_page')}
             </Label>
             <Select
+              disabled={isFalse}
               value={rows.toString()}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
@@ -228,8 +233,8 @@ const TabUser = ({
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center text-sm font-medium">
-            {t('t_page')} {data.pagination.page} {t('t_of')}{' '}
-            {data.pagination.totalPages}
+            {t('t_page')} {data?.pagination.page || 0} {t('t_of')}{' '}
+            {data?.pagination.totalPages || 0}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button
@@ -243,7 +248,7 @@ const TabUser = ({
                   setData: setData,
                 });
               }}
-              disabled={data.pagination.page - 1 <= 0}
+              disabled={data ? data?.pagination.page - 1 <= 0 : true}
             >
               <span className="sr-only">Go to first page</span>
               <IconChevronsLeft />
@@ -257,14 +262,14 @@ const TabUser = ({
                 fetchData({
                   baseUrl: paths.manager.user.fetch_all,
                   params: {
-                    page: data.pagination.page - 1,
+                    page: data ? data.pagination.page - 1 : 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
                   setData: setData,
                 });
               }}
-              disabled={data.pagination.page - 1 <= 0}
+              disabled={data ? data.pagination.page - 1 <= 0 : true}
             >
               <span className="sr-only">Go to previous page</span>
               <IconChevronLeft />
@@ -278,14 +283,18 @@ const TabUser = ({
                 fetchData({
                   baseUrl: paths.manager.user.fetch_all,
                   params: {
-                    page: data.pagination.page + 1,
+                    page: data ? data.pagination.page + 1 : 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
                   setData: setData,
                 });
               }}
-              disabled={data.pagination.page + 1 > data.pagination.totalPages}
+              disabled={
+                data
+                  ? data.pagination.page + 1 > data.pagination.totalPages
+                  : true
+              }
             >
               <span className="sr-only">Go to next page</span>
               <IconChevronRight />
@@ -299,14 +308,18 @@ const TabUser = ({
                 fetchData({
                   baseUrl: '/api/manager/shop',
                   params: {
-                    page: data.pagination.totalPages,
+                    page: data ? data.pagination.totalPages : 1,
                     limit: rows,
                     isActive: statusFilter,
                   },
                   setData: setData,
                 });
               }}
-              disabled={data.pagination.page + 1 > data.pagination.totalPages}
+              disabled={
+                data
+                  ? data.pagination.page + 1 > data.pagination.totalPages
+                  : true
+              }
             >
               <span className="sr-only">Go to last page</span>
               <IconChevronsRight />

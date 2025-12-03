@@ -1,26 +1,49 @@
 import { prisma } from '@/lib/db';
+import { Prisma } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
 //api to get list of user
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
-  const keyword = String(searchParams.get('keyword'));
+  const id = searchParams.get('id');
+  const name = searchParams.get('name');
+  const email = searchParams.get('email');
 
-  if (!keyword) {
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '10');
+
+  //check valid params (one of them)
+  if (!id && !name && !email)
     return NextResponse.json({
-      success: false,
+      success: 403,
       data: {
-        message: `Missing product's id`,
+        message: 'Missing search keyword',
       },
     });
-  }
+
+  const whereClause: Prisma.UserWhereInput = {};
+
+  if (id) {
+    const isValidUUID = z.string().uuid().safeParse(id).success;
+
+    if (!isValidUUID) {
+      return NextResponse.json({ success: 400, data: [] });
+    }
+
+    whereClause.id = id;
+  } else if (name)
+    whereClause.name = {
+      contains: name,
+      mode: 'insensitive',
+    };
+  else if (email) whereClause.email = email;
+
   try {
-    const data = await prisma.user.findFirst({
-      where: {
-        id: keyword,
-      },
+    const data = await prisma.user.findMany({
+      where: whereClause,
       select: {
         id: true,
         name: true,
@@ -31,10 +54,18 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
     });
 
+    const total = data.length;
+
     if (data)
       return NextResponse.json({
         success: true,
-        data: [data],
+        data: data,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages: Math.ceil(total / limit),
+        },
       });
     else
       return NextResponse.json({
