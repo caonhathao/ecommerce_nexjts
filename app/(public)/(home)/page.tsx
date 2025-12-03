@@ -2,7 +2,7 @@
 
 import { CarouselPanel } from '@/app/(public)/(home)/_components/carousel-panel';
 import { CategoryPromotionPanel } from '@/app/(public)/(home)/_components/category-promotion-panel';
-import { HotForeign } from './_components/hot-foreign';
+import { NewArrivals } from './_components/new-arrivals';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 import { TopDealItems } from './_components/top-deal-items';
 
@@ -12,7 +12,7 @@ export default function Home() {
       <CarouselPanel />
       <CategoryPromotionPanel />
       <TopDealItems size={'5'} />
-      <HotForeign size={'5'} />
+      <NewArrivals size={'5'} />
       <SuggestDealToday size="5" />
     </div>
   );

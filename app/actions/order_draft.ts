@@ -7,7 +7,109 @@ import { createOrderDraftSchema } from '@/lib/validation/orderDraft';
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 
-export async function createOrderDraft(formData: FormData) {
+export async function getOrderDrafts() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const userId = session.user.id;
+
+  const draft = await prisma.orderDraft.findUnique({
+    where: { userId: userId },
+    select: {
+      id: true,
+      orderNumber: true,
+      itemsTotal: true,
+      shippingFee: true,
+      discountTotal: true,
+      grandTotal: true,
+      shippingInfor: true,
+      vouchers: {
+        select: {
+          voucher: {
+            select: {
+              id: true,
+              code: true,
+              type: true,
+              value: true,
+              minSubtotal: true,
+              maxDiscount: true,
+              startAt: true,
+              endAt: true,
+              shopId: true,
+            },
+          },
+        },
+      },
+      items: {
+        select: {
+          title: true,
+          quantity: true,
+          unitPrice: true,
+          total: true,
+          product: {
+            select: {
+              shop: {
+                select: {
+                  name: true,
+                },
+              },
+              images: {
+                select: {
+                  url: true,
+                  alt: true,
+                  position: true,
+                },
+                orderBy: { position: 'asc' },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  if (!draft) return { success: false, error: 'No draft found' };
+
+  const draftPlain = {
+    ...draft,
+    itemsTotal: draft.itemsTotal.toNumber(),
+    shippingFee: draft.shippingFee.toNumber(),
+    discountTotal: draft.discountTotal.toNumber(),
+    grandTotal: draft.grandTotal.toNumber(),
+    vouchers: draft.vouchers.map((v) => ({
+      ...v.voucher,
+      value: v.voucher.value.toNumber(),
+      maxDiscount: v.voucher.maxDiscount
+        ? v.voucher.maxDiscount.toNumber()
+        : null,
+      minSubtotal: v.voucher.minSubtotal
+        ? v.voucher.minSubtotal.toNumber()
+        : null,
+    })),
+    items: draft.items.map((item) => ({
+      ...item,
+      unitPrice: item.unitPrice.toNumber(),
+      total: item.total.toNumber(),
+    })),
+  };
+
+  return { success: true, draft: draftPlain };
+}
+
+export type OrderDraftResult = Awaited<ReturnType<typeof getOrderDrafts>>;
+
+export type OrderDraftActionResponse = OrderDraftResult & {
+  redirectTo?: string;
+  message?: string;
+};
+
+export async function createOrderDraft(
+  formData: FormData
+): Promise<OrderDraftActionResponse> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) return { success: false, error: 'Unauthorized' };
@@ -44,6 +146,7 @@ export async function createOrderDraft(formData: FormData) {
         success: false,
         redirectTo: `/customer/account/address?callbackUrl=${encodeCallBack}`,
         message: 'Default address missing',
+        error: 'Address Missing',
       };
     }
 
@@ -56,7 +159,7 @@ export async function createOrderDraft(formData: FormData) {
       ward: defaultAddress.ward,
     };
 
-    // 2️⃣ Fetch product + variant and build item details
+    // 2️⃣ Fetch product + variant details
     const itemDetails = await Promise.all(
       items.map(async (item) => {
         const variant = await prisma.productVariant.findUnique({
@@ -74,27 +177,32 @@ export async function createOrderDraft(formData: FormData) {
           variantId: variant.id,
           shopId: product.shopId,
           quantity: item.quantity,
-          unitPrice: variant.price,
+          unitPrice: Number(variant.price),
           title: variant.name || product.title,
           total: Number(variant.price) * item.quantity,
         };
       })
     );
 
-    // 3️⃣ Voucher
-    const voucherDetail = voucher
+    // 3️⃣ Fetch Voucher Details
+    const voucherDetails = voucher
       ? await Promise.all(
           voucher.map(async (v) => {
             const vc = await prisma.voucher.findUnique({
               where: { code: v.code },
             });
             if (!vc) throw new Error(`Voucher not found: ${v.code}`);
+
+            const now = new Date();
+            if (vc.startAt > now || vc.endAt < now || !vc.isActive) {
+              throw new Error(`Voucher ${v.code} is expired or inactive`);
+            }
             return vc;
           })
         )
       : [];
 
-    // 4️⃣ Group items by shop
+    // 4️⃣ Group items by shop & Calculate Shop Subtotals
     const itemsByShop = itemDetails.reduce(
       (acc, item) => {
         if (!acc[item.shopId]) acc[item.shopId] = [];
@@ -104,62 +212,90 @@ export async function createOrderDraft(formData: FormData) {
       {} as Record<string, typeof itemDetails>
     );
 
-    const shops = Object.entries(itemsByShop).map(([shopId, items]) => {
+    let shopGroups = Object.entries(itemsByShop).map(([shopId, items]) => {
       const subtotal = items.reduce((s, i) => s + i.total, 0);
       return {
         shopId,
         items,
         subtotal,
+        shopDiscount: 0,
       };
     });
 
-    const totalSubtotal = shops.reduce((s, x) => s + x.subtotal, 0);
-
-    // 5️⃣ Shipping Fee + Discount phân bổ theo tỷ lệ subtotal
     const BASE_SHIPPING = 30000;
 
-    const totalDiscount = voucherDetail.reduce((sum, v) => {
-      if (v.type === 'PERCENT')
-        return sum + (totalSubtotal * Number(v.value)) / 100;
-      if (v.type === 'FIXED') return sum + Number(v.value);
-      return sum;
-    }, 0);
+    // 5️⃣ Apply Shop Vouchers FIRST
+    let totalShopDiscount = 0;
 
-    const totalShippingDiscount = voucherDetail.reduce((sum, v) => {
-      if (v.type === 'SHIPPING') return sum + Number(v.value);
-      return sum;
-    }, 0);
-
-    const shopCalculations = shops.map((shop) => {
-      const ratio = shop.subtotal / totalSubtotal;
-      const shopShipping =
-        BASE_SHIPPING - totalShippingDiscount < 0
-          ? 0
-          : BASE_SHIPPING - totalShippingDiscount;
-      const shopDiscount = totalDiscount * ratio;
-      const total = shop.subtotal + shopShipping - shopDiscount;
-      return {
-        ...shop,
-        shopShipping,
-        shopDiscount,
-        total,
-      };
+    shopGroups = shopGroups.map((shop) => {
+      const shopVoucher = voucherDetails.find((v) => v.shopId === shop.shopId);
+      let discount = 0;
+      if (shopVoucher) {
+        if (shop.subtotal >= Number(shopVoucher.minSubtotal)) {
+          if (shopVoucher.type === 'PERCENT') {
+            discount = (shop.subtotal * Number(shopVoucher.value)) / 100;
+            if (
+              shopVoucher.maxDiscount &&
+              Number(shopVoucher.maxDiscount) > 0
+            ) {
+              discount = Math.min(discount, Number(shopVoucher.maxDiscount));
+            }
+          } else if (shopVoucher.type === 'FIXED') {
+            discount = Number(shopVoucher.value);
+          }
+        }
+      }
+      discount = Math.min(discount, shop.subtotal);
+      totalShopDiscount += discount;
+      return { ...shop, shopDiscount: discount };
     });
 
-    const itemsTotal = new Prisma.Decimal(totalSubtotal);
-    const shippingFee = new Prisma.Decimal(
-      shopCalculations.reduce((s, x) => s + x.shopShipping, 0)
+    // 6️⃣  Apply Platform/Shipping Vouchers
+    const platformVouchers = voucherDetails.filter((v) => v.shopId === null);
+
+    const totalSubtotal = shopGroups.reduce((s, x) => s + x.subtotal, 0);
+    const totalSubtotalAfterShopDiscount = totalSubtotal - totalShopDiscount;
+
+    let totalPlatformDiscount = 0;
+    let totalShippingDiscount = 0;
+
+    platformVouchers.forEach((v) => {
+      if (totalSubtotalAfterShopDiscount >= Number(v.minSubtotal)) {
+        if (v.type === 'SHIPPING') {
+          totalShippingDiscount += Number(v.value);
+        } else {
+          let discount = 0;
+          if (v.type === 'PERCENT') {
+            discount = (totalSubtotalAfterShopDiscount * Number(v.value)) / 100;
+            if (v.maxDiscount && Number(v.maxDiscount) > 0) {
+              discount = Math.min(discount, Number(v.maxDiscount));
+            }
+          } else if (v.type === 'FIXED') {
+            discount = Number(v.value);
+          }
+          totalPlatformDiscount += discount;
+        }
+      }
+    });
+
+    // 7️⃣ Final Calculations
+    const totalBaseShipping = BASE_SHIPPING * shopGroups.length;
+    const finalShippingFee = Math.max(
+      0,
+      totalBaseShipping - totalShippingDiscount
+    );
+    const finalTotalDiscount = totalShopDiscount + totalPlatformDiscount;
+    const finalGrandTotal = Math.max(
+      0,
+      totalSubtotal + finalShippingFee - finalTotalDiscount
     );
 
-    const discountTotal = new Prisma.Decimal(
-      shopCalculations.reduce((s, x) => s + x.shopDiscount, 0)
-    );
+    const itemsTotalDecimal = new Prisma.Decimal(totalSubtotal);
+    const shippingFeeDecimal = new Prisma.Decimal(finalShippingFee);
+    const discountTotalDecimal = new Prisma.Decimal(finalTotalDiscount);
+    const grandTotalDecimal = new Prisma.Decimal(finalGrandTotal);
 
-    const grandTotal = new Prisma.Decimal(
-      shopCalculations.reduce((s, x) => s + x.total, 0)
-    );
-
-    // 6️⃣ Check Existing Draft
+    // 8️⃣ Check Existing Draft
     const existingDraft = await prisma.orderDraft.findFirst({
       where: { userId, status: 'AWAITING_PAYMENT' },
     });
@@ -169,10 +305,10 @@ export async function createOrderDraft(formData: FormData) {
         where: { id: existingDraft.id },
         data: {
           notes,
-          itemsTotal,
-          shippingFee,
-          discountTotal,
-          grandTotal,
+          itemsTotal: itemsTotalDecimal,
+          shippingFee: shippingFeeDecimal,
+          discountTotal: discountTotalDecimal,
+          grandTotal: grandTotalDecimal,
           shippingInfor,
           updatedAt: new Date(),
           items: {
@@ -185,46 +321,43 @@ export async function createOrderDraft(formData: FormData) {
           },
           vouchers: {
             deleteMany: {},
-            create: voucherDetail.map((v) => ({
+            create: voucherDetails.map((v) => ({
               voucher: { connect: { id: v.id } },
             })),
           },
         },
       });
-
-      revalidatePath('/draft');
-      return { success: true, updated: true };
+    } else {
+      await prisma.orderDraft.create({
+        data: {
+          userId,
+          orderNumber: `ORD-${Date.now()}`,
+          status: 'AWAITING_PAYMENT',
+          itemsTotal: itemsTotalDecimal,
+          shippingFee: shippingFeeDecimal,
+          discountTotal: discountTotalDecimal,
+          grandTotal: grandTotalDecimal,
+          notes,
+          shippingInfor,
+          items: {
+            create: itemDetails.map((i) => ({
+              ...i,
+              total: new Prisma.Decimal(i.total),
+              unitPrice: new Prisma.Decimal(i.unitPrice),
+            })),
+          },
+          vouchers: {
+            create: voucherDetails.map((v) => ({
+              voucher: { connect: { id: v.id } },
+            })),
+          },
+        },
+      });
     }
 
-    // 7️⃣ Create new OrderDraft
-    const draft = await prisma.orderDraft.create({
-      data: {
-        userId,
-        orderNumber: `ORD-${Date.now()}`,
-        status: 'AWAITING_PAYMENT',
-        itemsTotal,
-        shippingFee,
-        discountTotal,
-        grandTotal,
-        notes,
-        shippingInfor,
-        items: {
-          create: itemDetails.map((i) => ({
-            ...i,
-            total: new Prisma.Decimal(i.total),
-            unitPrice: new Prisma.Decimal(i.unitPrice),
-          })),
-        },
-        vouchers: {
-          create: voucherDetail.map((v) => ({
-            voucher: { connect: { id: v.id } },
-          })),
-        },
-      },
-    });
-
     revalidatePath('/draft');
-    return { success: true, draft };
+
+    return await getOrderDrafts();
   } catch (error) {
     console.error(error);
     return {
@@ -233,73 +366,3 @@ export async function createOrderDraft(formData: FormData) {
     };
   }
 }
-
-export async function getOrderDrafts() {
-  //Check Auth
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: 'Unauthorized' };
-  }
-
-  //Get user id
-  const userId = session.user.id;
-
-  const draft = await prisma.orderDraft.findUnique({
-    where: { userId: userId },
-    select: {
-      id: true,
-      orderNumber: true,
-      itemsTotal: true,
-      shippingFee: true,
-      discountTotal: true,
-      grandTotal: true,
-      shippingInfor: true,
-      items: {
-        select: {
-          title: true,
-          quantity: true,
-          unitPrice: true,
-          total: true,
-          product: {
-            select: {
-              shop: {
-                select: {
-                  name: true,
-                },
-              },
-              images: {
-                select: {
-                  url: true,
-                  alt: true,
-                  position: true,
-                },
-                orderBy: { position: 'asc' },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-  if (!draft) return { success: false, error: 'No draft found' };
-
-  const draftPlain = {
-    ...draft,
-    itemsTotal: draft.itemsTotal.toNumber(),
-    shippingFee: draft.shippingFee.toNumber(),
-    discountTotal: draft.discountTotal.toNumber(),
-    grandTotal: draft.grandTotal.toNumber(),
-    items: draft.items.map((item) => ({
-      ...item,
-      unitPrice: item.unitPrice.toNumber(),
-      total: item.total.toNumber(),
-    })),
-  };
-
-  return { success: true, draft: draftPlain };
-}
-
-export type OrderDraftResult = Awaited<ReturnType<typeof getOrderDrafts>>;

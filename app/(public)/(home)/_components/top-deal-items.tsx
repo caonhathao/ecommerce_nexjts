@@ -38,7 +38,7 @@ export const TopDealItems = ({
   useEffect(() => {
     fetchData({
       baseUrl: '/api/product',
-      params: { page: 1, limit: size },
+      params: { page: 1, limit: size, type: 'deal' },
       setData: setResponse,
     });
   }, [size]);

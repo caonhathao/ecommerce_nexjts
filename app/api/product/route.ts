@@ -1,33 +1,50 @@
 import { prisma } from '@/lib/db';
+import { Prisma } from '@/lib/generated/prisma';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
 
-    // Lấy pagination params
     const page = Number(searchParams.get('page')) || 1;
     const limit = Number(searchParams.get('limit')) || 10;
     const skip = (page - 1) * limit;
 
-    // Truy vấn sản phẩm
+    const type = searchParams.get('type') || 'default';
+
+    const whereCondition: Prisma.ProductWhereInput = {
+      status: 'PUBLISHED',
+      visibility: 'PUBLIC',
+    };
+
+    if (type === 'deal') {
+      whereCondition.VoucherProduct = {
+        some: {
+          voucher: {
+            isActive: true,
+            type: { in: ['PERCENT', 'FIXED'] },
+          },
+        },
+      };
+    }
+
     const products = await prisma.product.findMany({
-      where: {
-        status: 'PUBLISHED',
-        visibility: 'PUBLIC',
-      },
+      where: whereCondition,
       select: {
         id: true,
         title: true,
         minPrice: true,
         ratingAvg: true,
+        soldCount: true,
         description: true,
+        origin: true,
         images: {
           take: 1,
           select: { url: true },
         },
         VoucherProduct: {
           take: 1,
+          where: { voucher: { isActive: true } },
           select: {
             voucher: {
               select: {
@@ -38,30 +55,21 @@ export async function GET(req: Request) {
             },
           },
         },
-        origin: true,
       },
       skip,
       take: limit,
-      //distinct: ['id'], // tương đương DISTINCT ON (p.id)
-      orderBy: { id: 'asc' },
+      orderBy:
+        type === 'deal'
+          ? { soldCount: 'desc' }
+          : type === 'new'
+            ? { createdAt: 'desc' }
+            : type === 'suggest'
+              ? { updatedAt: 'desc' }
+              : { createdAt: 'desc' },
     });
 
-    // Tổng số bản ghi để tính tổng trang
-    const total = await prisma.product.count({
-      where: {
-        status: 'PUBLISHED',
-        visibility: 'PUBLIC',
-        VoucherProduct: {
-          some: {
-            voucher: {
-              type: { not: 'SHIPPING' },
-            },
-          },
-        },
-      },
-    });
+    const total = await prisma.product.count({ where: whereCondition });
 
-    // Chuẩn hóa dữ liệu trả về
     const formatted = products.map((p) => ({
       id: p.id,
       title: p.title,
@@ -84,7 +92,7 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
-    console.error('GET /api/products error:', error);
+    console.error('GET /api/product error:', error);
     return NextResponse.json(
       { success: false, error: 'Internal Server Error' },
       { status: 500 }

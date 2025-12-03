@@ -7,6 +7,8 @@ export async function GET(
   try {
     const { id } = await context.params;
 
+    const now = new Date();
+
     const data = await prisma.product.findUnique({
       where: {
         id: id,
@@ -59,13 +61,24 @@ export async function GET(
           },
         },
         VoucherProduct: {
+          where: {
+            voucher: {
+              isActive: true,
+              startAt: { lte: now },
+              endAt: { gte: now },
+            },
+          },
           select: {
             voucher: {
               select: {
                 id: true,
+                code: true,
                 type: true,
                 value: true,
                 maxDiscount: true,
+                minSubtotal: true,
+                startAt: true,
+                endAt: true,
               },
             },
           },
@@ -78,6 +91,10 @@ export async function GET(
         status: 404,
       });
     }
+
+    console.log(
+      `[GET /api/product/${id}] data: ${JSON.stringify(data, null, 2)}`
+    );
 
     return new Response(JSON.stringify({ success: true, data }), {
       status: 200,
