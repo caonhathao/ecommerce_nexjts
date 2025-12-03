@@ -14,11 +14,16 @@ type CreateOrderResult =
 
 export async function createOrder(draftId: string): Promise<CreateOrderResult> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) return { success: false, error: 'Unauthorized' };
+    // const session = await auth.api.getSession({ headers: await headers() });
+    // if (!session) return { success: false, error: 'Unauthorized' };
+    //
+    // const userId = session.user.id;
 
-    const userId = session.user.id;
-
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      return { success: false, error: 'Unauthorized' };
+    }
+    console.log('api call: ' + draftId);
     const draft = await prisma.orderDraft.findUnique({
       where: { id: draftId, userId },
       include: {
