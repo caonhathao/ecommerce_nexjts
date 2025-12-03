@@ -709,83 +709,39 @@ async function main() {
   );
 
   // ------------------------
-  // 3️⃣ TAGS
-  // ------------------------
-// const TAG_COUNT = 50;
-//   const tagData: { id: string; name: string; slug: string }[] = [];
-//   const seenSlugs = new Set<string>();
-//   const seenNames = new Set<string>();
-//
-//   const MAX_ATTEMPTS = 20000; // safety cap to avoid infinite loop
-//   let attempts = 0;
-//
-//   while (tagData.length < TAG_COUNT && attempts < MAX_ATTEMPTS) {
-//     attempts++;
-//
-//     // 1) generate name and check name-uniqueness first
-//     const name = faker.commerce.department().trim();
-//     if (!name) continue;
-//     if (seenNames.has(name)) continue;
-//
-//     // 2) generate slug and ensure slug-uniqueness
-//     const slugBase = faker.helpers.slugify(name.toLowerCase()).replace(/[^a-z0-9-]+/g, '').slice(0, 40) || 'tag';
-//     let uniqueSlug = slugBase;
-//     let slugAttempts = 0;
-//
-//     // try a few times to make a unique slug
-//     while (seenSlugs.has(uniqueSlug) && slugAttempts < 5) {
-//       uniqueSlug = `${slugBase}-${faker.string.alphanumeric(6).toLowerCase()}`;
-//       slugAttempts++;
-//     }
-//
-//     // final fallback if collisions persist
-//     if (seenSlugs.has(uniqueSlug)) {
-//       uniqueSlug = `${slugBase}-${Date.now().toString(36)}-${faker.string.alphanumeric(4).toLowerCase()}`;
-//     }
-//
-//     // 3) accept and record both name and slug
-//     seenNames.add(name);
-//     seenSlugs.add(uniqueSlug);
-//     tagData.push({
-//       id: faker.string.uuid(),
-//       name,
-//       slug: uniqueSlug,
-//     });
-//   }
-//
-//   if (attempts >= MAX_ATTEMPTS) {
-//     console.warn(`Reached ${MAX_ATTEMPTS} attempts while generating tags; created ${tagData.length} unique tags.`);
-//   }
-//
-// // Bulk insert (fast) and skip duplicates as a safety net
-//   await prisma.tag.createMany({
-//     data: tagData,
-//     skipDuplicates: true,
-//   });
-//
-// // Fetch the actual created tags for later use
-//   const tags = await prisma.tag.findMany({
-//     where: { slug: { in: tagData.map((t) => t.slug) } },
-//   });
-//
-//   console.log(`✅ Created ${tags.length} tags`);
-  // ------------------------
   // 4️⃣ PRODUCTS
   // ------------------------
+  console.log('🌱 Creating Products with consistent Variant prices...');
+
   const products = await Promise.all(
-    Array.from({ length: 200 }).map(() => {
+    Array.from({ length: 200 }).map(async () => {
       const shop = faker.helpers.arrayElement(shops);
       const category = faker.helpers.arrayElement(categories);
-      const minPrice = faker.number.float({
-        min: 100_000,
-        max: 300_000,
-        fractionDigits: 0,
-      });
-      const maxPrice =
-        minPrice +
-        faker.number.float({ min: 10_000, max: 50_000, fractionDigits: 0 });
 
-         // Weighted status: 70% PUBLISHED, 20% DRAFT, 10% ARCHIVED
+      // 1. Generate Variant Data in Memory First
+      // We generate 3 variants per product
+      const generatedVariants = Array.from({ length: 3 }).map(() => ({
+        sku: `SKU-${faker.string.alphanumeric(8).toUpperCase()}-${Date.now()}`,
+        name: faker.commerce.productMaterial(),
+        image: faker.image.urlPicsumPhotos({ width: 600, height: 600, blur: 0 }),
+        price: faker.number.float({
+          min: 100_000,
+          max: 500_000,
+          fractionDigits: 0,
+        }),
+        stock: faker.number.int({ min: 5, max: 20 }),
+        weightGrams: faker.number.int({ min: 50, max: 5000 }),
+        lengthMm: faker.number.int({ min: 50, max: 500 }),
+        widthMm: faker.number.int({ min: 50, max: 500 }),
+        heightMm: faker.number.int({ min: 10, max: 300 }),
+      }));
+
+      // 2. Calculate Min and Max from the generated variants
+      const prices = generatedVariants.map((v) => v.price);
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+
+      // Status & Visibility Logic
       const statusRoll = faker.number.int({ min: 1, max: 100 });
       const status =
         statusRoll <= 70
@@ -794,7 +750,6 @@ async function main() {
             ? ProductStatus.DRAFT
             : ProductStatus.ARCHIVED;
 
-      // Weighted visibility: 80% PUBLIC, 15% UNLISTED, 5% PRIVATE
       const visibilityRoll = faker.number.int({ min: 1, max: 100 });
       const visibility =
         visibilityRoll <= 80
@@ -803,28 +758,62 @@ async function main() {
             ? Visibility.UNLISTED
             : Visibility.PRIVATE;
 
+      const productTitle = faker.commerce.productName();
+
+      // 3. Create Product AND Variants in one go (Nested Write)
       return prisma.product.create({
         data: {
           shopId: shop.id,
           categoryId: category.id,
-          title: faker.commerce.productName(),
+          title: productTitle,
           slug:
-            faker.helpers.slugify(faker.commerce.productName().toLowerCase()) +
+            faker.helpers.slugify(productTitle.toLowerCase()) +
             '-' +
             faker.string.alphanumeric(6).toLowerCase(),
           description: faker.commerce.productDescription(),
           origin: faker.location.country(),
-          minPrice,
-          maxPrice,
+          // ✅ USE CALCULATED VALUES HERE
+          minPrice: minPrice,
+          maxPrice: maxPrice,
           status,
           visibility,
           soldCount: faker.number.int({ min: 10, max: 10000 }),
+
+          // Create Images inline
+          images: {
+            create: Array.from({ length: 3 }).map(() => ({
+              url: faker.image.urlPicsumPhotos({ width: 600, height: 600, blur: 0 }),
+              alt: productTitle,
+            })),
+          },
+
+          // Create Variants inline using the pre-generated data
+          variants: {
+            create: generatedVariants.map((v) => ({
+              sku: v.sku,
+              name: v.name,
+              image: v.image,
+              price: v.price, // ✅ Matches the calculation used for min/max
+              stock: v.stock,
+              weightGrams: v.weightGrams,
+              lengthMm: v.lengthMm,
+              widthMm: v.widthMm,
+              heightMm: v.heightMm,
+            })),
+          },
+        },
+        include: {
+          variants: true, // Return variants so we can use them for Orders later
         },
       });
     })
   );
 
-  console.log(`✅ Created ${products.length} products`);
+  // Flatten variants array for later use in Cart/Orders seeding
+  const variants = products.flatMap((p) => p.variants);
+
+  console.log(`✅ Created ${products.length} products with consistent price ranges.`);
+  console.log(`✅ Created ${variants.length} product variants.`);
 
   // ------------------------
   // 6️⃣ PRODUCT IMAGES
@@ -845,71 +834,12 @@ async function main() {
 
   console.log(`✅ Created ${images.length} product images`);
 
-  // ------------------------
-  // 5️⃣ PRODUCT VARIANTS
-  // ------------------------
-  const variants: { id: string; price: Decimal }[] = [];
 
-  for (const product of products) {
-    for (let i = 0; i < 3; i++) {
-      const variant = await prisma.productVariant.create({
-        data: {
-          productId: product.id,
-          sku: `SKU-${faker.string.alphanumeric(8)}-${Date.now()}`,
-          name: faker.commerce.productMaterial(),
-          image: faker.image.urlPicsumPhotos({ width: 600, height: 600 ,blur:0}),
-          price: faker.number.float({
-            min: 100_000,
-            max: 300_000,
-            fractionDigits: 0,
-          }),
-          stock: faker.number.int({ min: 5, max: 20 }),
-          weightGrams: faker.number.int({ min: 50, max: 5000 }),
-          lengthMm: faker.number.int({ min: 50, max: 500 }),
-          widthMm: faker.number.int({ min: 50, max: 500 }),
-          heightMm: faker.number.int({ min: 10, max: 300 }),
-        },
-      });
-      variants.push(variant);
-    }
-  }
-
-  console.log(`✅ Created ${variants.length} product variants`);
 
 // ------------------------
 // 5️⃣ PRODUCT TAGS
 // ------------------------
-//   const pairs = new Set<string>();
-//   const productTagData: { productId: string; tagId: string }[] = [];
-//
-//   while (productTagData.length < 5) {
-//     const product = faker.helpers.arrayElement(products);
-//     const tag = faker.helpers.arrayElement(tags);
-//     const key = `${product.id}-${tag.id}`;
-//
-//     if (!pairs.has(key)) {
-//       pairs.add(key);
-//       productTagData.push({ productId: product.id, tagId: tag.id });
-//     }
-//   }
-//
-// // Link tags to products using nested writes (implicit many-to-many)
-//   const linkPromises = productTagData.map(({ productId, tagId }) =>
-//     prisma.product.update({
-//       where: { id: productId },
-//       data: {
-//         tags: {
-//           connect: { id: tagId },
-//         },
-//       },
-//     })
-//   );
-//
-// // Use allSettled to tolerate cases where the relation already exists
-//   const settled = await Promise.allSettled(linkPromises);
-//   const linkedCount = settled.filter((r) => r.status === 'fulfilled').length;
-//
-//   console.log(`✅ Linked ${linkedCount} product tags`);
+
 
   // ------------------------
   // 7️⃣ CARTS
@@ -1002,418 +932,272 @@ async function main() {
   });
 
   console.log(`✅ Created ${10} wishlist items`);
+// ------------------------
+  // 5️⃣ VOUCHERS (Enhanced for Top Deals)
+  // ------------------------
+  console.log('🌱 Creating Vouchers...');
+
+  const vouchers = await Promise.all(
+    Array.from({ length: 150 }).map(async (_, index) => {
+      // First 40 vouchers are "High Value" for Top Deals
+      const isHighValue = index < 40;
+
+      const type = isHighValue
+        ? VoucherType.PERCENT
+        : faker.helpers.arrayElement(Object.values(VoucherType));
+
+      // 70% Shop Specific
+      const shop = faker.helpers.maybe(() => faker.helpers.arrayElement(shops), { probability: 0.7 });
+
+      const startAt = faker.date.recent({ days: 90 });
+      const endAt = faker.date.future();
+
+      let value = 0;
+      let maxDiscount = null;
+
+      if (type === 'PERCENT') {
+        value = isHighValue
+          ? faker.number.int({ min: 20, max: 50 }) // 20-50% off
+          : faker.number.int({ min: 5, max: 15 });
+        maxDiscount = faker.number.int({ min: 50_000, max: 500_000 });
+      } else {
+        value = faker.number.int({ min: 20_000, max: 200_000 });
+      }
+
+      return prisma.voucher.create({
+        data: {
+          code: (isHighValue ? 'HOT-' : 'VC-') + faker.string.alphanumeric(6).toUpperCase(),
+          type,
+          value,
+          maxDiscount,
+          minSubtotal: faker.number.int({ min: 0, max: 300_000 }),
+          shopId: shop?.id,
+          isActive: true,
+          startAt,
+          endAt,
+          usageLimit: 1000,
+        },
+      });
+    })
+  );
+  console.log(`✅ Created ${vouchers.length} vouchers`);
 
   // ------------------------
-  // 8️⃣ ORDERS
+  // 6️⃣ VOUCHER LINKING (Guaranteed Top Deals)
   // ------------------------
+  const voucherProductsData: Prisma.VoucherProductCreateManyInput[] = [];
+  const usedLinks = new Set<string>();
+
+  // STRATEGY: Link High Value Vouchers to Best Sellers
+  const popularProducts = [...products].sort((a, b) => b.soldCount - a.soldCount).slice(0, 50);
+  const highValueVouchers = vouchers.filter(v => v.type === 'PERCENT' && Number(v.value) >= 20);
+
+  for (const product of popularProducts) {
+    // Find a compatible voucher (Global or Same Shop)
+    const voucher = highValueVouchers.find(v => v.shopId === null || v.shopId === product.shopId);
+
+    if (voucher) {
+      const key = `${voucher.id}-${product.id}`;
+      if (!usedLinks.has(key)) {
+        usedLinks.add(key);
+        voucherProductsData.push({ voucherId: voucher.id, productId: product.id });
+      }
+    }
+  }
+
+  // Random Links for others
+  for (const voucher of vouchers) {
+    const randomProds = faker.helpers.arrayElements(products, 3);
+    for (const p of randomProds) {
+      if (voucher.shopId && voucher.shopId !== p.shopId) continue; // Skip mismatch
+      const key = `${voucher.id}-${p.id}`;
+      if (!usedLinks.has(key)) {
+        usedLinks.add(key);
+        voucherProductsData.push({ voucherId: voucher.id, productId: p.id });
+      }
+    }
+  }
+
+  await prisma.voucherProduct.createMany({ data: voucherProductsData, skipDuplicates: true });
+  console.log(`✅ Linked vouchers to products (including Top Deals)`);
+
   // ------------------------
-  // 8️⃣ ORDERS (with 2-3 items each)
+  // 7️⃣ ORDERS (Math-Aware)
   // ------------------------
-  console.log('🌱 Seeding orders and order items...');
+  console.log('🌱 Seeding Orders with valid math...');
 
   const orders = await Promise.all(
     Array.from({ length: 100 }).map(async (_, i) => {
-      // --- 1. Generate 2 or 3 items' data FIRST ---
-      const itemCount = faker.number.int({ min: 2, max: 3 });
-      const itemsData = Array.from({ length: itemCount }).map(() => {
-        const product = faker.helpers.arrayElement(products);
-        const variant = faker.helpers.arrayElement(variants);
-        // NOTE: Your OrderItem model might have different fields
-        // This is based on your original commented-out code
-        const unitPrice = faker.number.int({ min: 100000, max: 300000 });
-        const quantity = faker.number.int({ min: 1, max: 5 });
-        const total = unitPrice * quantity; // Calculate real total
-
-        return {
-          // Data for the OrderItem
-          data: {
-            id: faker.string.uuid(),
-            product: { connect: { id: product.id } },
-            variant: { connect: { id: variant.id } },
-            title: faker.commerce.productName(),
-            sku: faker.string.alphanumeric(8),
-            unitPrice,
-            quantity,
-            discount: 0,
-            total,
-          },
-          // Temporary value for calculating the order's total
-          _calculatedTotal: total,
-        };
-      });
-
-      // --- 2. Calculate real totals for the Order ---
-      const itemsTotal = itemsData.reduce(
-        (sum, item) => sum + item._calculatedTotal,
-        0
-      );
-      const shippingFee = faker.number.int({ min: 0, max: 100000 });
-      const discountTotal = faker.number.int({ min: 0, max: 50000 });
-      const taxTotal = Math.round(itemsTotal * 0.1); // Tax based on real items
-      const grandTotal = itemsTotal + shippingFee + taxTotal - discountTotal;
-
-      // --- 3. Get user, shop, and date ---
       const user = faker.helpers.arrayElement(users);
       const shop = faker.helpers.arrayElement(shops);
 
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - 180);
-      const placedAt = faker.date.between({ from: startDate, to: new Date() });
+      const placedAt = faker.date.recent({ days: 120 });
 
-      // Weighted order status
-      const statusRoll = faker.number.int({ min: 1, max: 100 });
-      const orderStatus =
-        statusRoll <= 10
-          ? OrderStatus.AWAITING_PAYMENT
-          : statusRoll <= 30
-            ? OrderStatus.PROCESSING
-            : statusRoll <= 60
-              ? OrderStatus.SHIPPED
-              : statusRoll <= 85
-                ? OrderStatus.DELIVERED
-                : OrderStatus.CANCELED;
+      // 1. Pick Items from THIS SHOP
+      const shopVariants = products
+        .filter((p) => p.shopId === shop.id)
+        .flatMap((p) => p.variants);
+      if (shopVariants.length === 0) return null; // Skip if shop has no items
 
-      // --- 4. Create the Order and its OrderItems in one transaction ---
+      const selectedVariants = faker.helpers.arrayElements(shopVariants, faker.number.int({ min: 1, max: 3 }));
+
+      const itemsData = selectedVariants.map(v => {
+        const quantity = faker.number.int({ min: 1, max: 3 });
+        const total = Number(v.price) * quantity;
+        return {
+          productId: v.productId,
+          variantId: v.id,
+          unitPrice: Number(v.price),
+          quantity,
+          total,
+          title: v.name || 'Product',
+        };
+      });
+
+      const itemsTotal = itemsData.reduce((acc, i) => acc + i.total, 0);
+      const shippingFee = 30000;
+
+      // 2. Validate Vouchers
+      const eligibleVoucher = vouchers.find(v =>
+        (v.shopId === null || v.shopId === shop.id) &&
+        itemsTotal >= Number(v.minSubtotal || 0) &&
+        placedAt >= v.startAt && placedAt <= v.endAt
+      );
+
+      // 3. Calc Discount
+      let discountTotal = 0;
+      let orderVoucherData = undefined;
+      let voucherRedemptionData = undefined;
+
+      if (eligibleVoucher) {
+        if (eligibleVoucher.type === 'PERCENT') {
+          const raw = itemsTotal * (Number(eligibleVoucher.value) / 100);
+          const max = Number(eligibleVoucher.maxDiscount);
+          discountTotal = max ? Math.min(raw, max) : raw;
+        } else if (eligibleVoucher.type === 'FIXED') {
+          discountTotal = Number(eligibleVoucher.value);
+        } else {
+          discountTotal = Math.min(shippingFee, Number(eligibleVoucher.value));
+        }
+
+        // Cap discount
+        if (discountTotal > itemsTotal + shippingFee) discountTotal = itemsTotal + shippingFee;
+
+        orderVoucherData = { create: { voucherId: eligibleVoucher.id } };
+        voucherRedemptionData = {
+          create: {
+            voucherId: eligibleVoucher.id,
+            userId: user.id,
+            usedAt: placedAt
+          }
+        };
+      }
+
+      const grandTotal = itemsTotal + shippingFee - discountTotal;
+
+      // 4. Create Order
       const order = await prisma.order.create({
         data: {
-          id: faker.string.uuid(),
-          orderNumber: `ORD-${Date.now()}-${i + 1}`,
-          user: { connect: { id: user.id } },
-          shop: { connect: { id: shop.id } },
-
-          status: orderStatus,
-          paymentStatus: faker.helpers.arrayElement(
-            Object.values(PaymentStatus)
-          ),
-          fulfillmentStatus: faker.helpers.arrayElement(
-            Object.values(FulfillmentStatus)
-          ),
-          currency: faker.helpers.arrayElement(Object.values(Currency)),
-
-          // Use the calculated totals
+          orderNumber: `ORD-${Date.now()}-${i}`,
+          userId: user.id,
+          shopId: shop.id,
+          status: OrderStatus.DELIVERED,
+          paymentStatus: PaymentStatus.PAID,
+          fulfillmentStatus: FulfillmentStatus.FULFILLED,
+          currency: Currency.VND,
           itemsTotal,
           shippingFee,
           discountTotal,
-          taxTotal,
           grandTotal,
-
-          shippingAddress: {
-            name: faker.person.fullName(),
-            address: faker.location.streetAddress(),
-            ward: faker.location.secondaryAddress(),
-            district: faker.location.city(),
-            province: faker.location.state(),
-          },
-          billingAddress: {
-            name: faker.person.fullName(),
-            address: faker.location.streetAddress(),
-            district: faker.location.city(),
-            province: faker.location.state(),
-          },
-
-          contactEmail: faker.internet.email(),
-          contactPhone: null,
-          notes: faker.lorem.sentence(),
-          placedAt: placedAt,
+          placedAt,
           updatedAt: placedAt,
-          canceledAt: null,
 
-          // --- THIS IS THE KEY ---
-          // Use the correct relation name 'items' from your schema
+          shippingAddress: { name: user.name, address: '123 Fake St' }, // Simplified
+
           items: {
-            create: itemsData.map((item) => item.data),
+            create: itemsData.map(item => ({
+              productId: item.productId,
+              variantId: item.variantId,
+              title: item.title,
+              unitPrice: item.unitPrice,
+              quantity: item.quantity,
+              total: item.total
+            }))
           },
-        },
+          vouchers: orderVoucherData,
+          VoucherRedemption: voucherRedemptionData ? {
+            // We have to link it to order, but nested write in Order for VoucherRedemption
+            // requires 'order' to exist.
+            // Easier to create separately or use `connect` if structured differently.
+            // For this schema, simple way is creating redemption AFTER order if `create` fails here.
+            // But actually, Prisma allows this reverse relation creation:
+            create: [{
+              voucherId: eligibleVoucher!.id,
+              userId: user.id,
+              usedAt: placedAt
+            }]
+          } : undefined
+        }
+      });
+
+      // Payment Record
+      await prisma.payment.create({
+        data: {
+          amount: grandTotal,
+          status: PaymentStatus.PAID,
+          provider: PaymentProvider.STRIPE,
+          orders: { create: { orderId: order.id } }
+        }
       });
 
       return order;
     })
   );
+  console.log(`✅ Created orders`);
 
-  // This log message is now accurate
-  console.log(`✅ Created ${orders.length} orders (with 2-3 items each)`);
+
+// ------------------------
+  // 8️⃣ REVIEWS (Verified Purchases)
   // ------------------------
-  // 8️⃣ ORDER ITEMS
-  // ------------------------
-  // const orderItems = await Promise.all(
-  //   Array.from({ length: 100 }).map(() => {
-  //     return prisma.orderItem.create({
-  //       data: {
-  //         id: faker.string.uuid(),
+  console.log('🌱 Seeding Reviews (Verified Purchases)...');
 
-  //         order: { connect: { id: faker.helpers.arrayElement(orders).id } },
-  //         product: { connect: { id: faker.helpers.arrayElement(products).id } },
-  //         variant: { connect: { id: faker.helpers.arrayElement(variants).id } },
-
-  //         title: faker.commerce.productName(),
-  //         sku: faker.string.alphanumeric(8),
-  //         unitPrice: faker.number.int({ min: 100000, max: 300000 }),
-  //         quantity: faker.number.int({ min: 1, max: 5 }),
-  //         discount: 0,
-  //         total: 1,
-  //         metadata: undefined,
-
-  //         review: undefined,
-  //       },
-  //     });
-  //   })
-  // );
-
-  const orderItems = await prisma.orderItem.findMany();
-  console.log(`✅ Fetched ${orderItems.length} order items (from orders)`);
-
-  // ------------------------
-  // 8️⃣ PAYMENTS
-  // ------------------------
-  const payment = await Promise.all(
-    Array.from({ length: 20 }).map(() => {
-      return prisma.payment.create({
-        data: {
-          id: faker.string.uuid(),
-          provider: faker.helpers.arrayElement(Object.values(PaymentProvider)),
-          method: null,
-          amount: faker.number.int({ min: 100000, max: 3000000 }),
-          currency: faker.helpers.arrayElement(Object.values(Currency)),
-          status: faker.helpers.arrayElement(Object.values(PaymentStatus)),
-          externalId: null,
-          reference: null,
-          rawPayload: undefined,
-          createdAt: faker.date.past(),
-          updatedAt: faker.date.recent(),
-        },
-      });
-    })
-  );
-
-  console.log(`✅ Created ${payment.length} payments`);
-
-  const orderPayments = await Promise.all(
-    orders.map((order) => {
-      const payments = faker.helpers.arrayElement(payment);
-      return prisma.orderPayment.create({
-        data: {
-          orderId: order.id,
-          paymentId: payments.id,
-        },
-      });
-    })
-  );
-
-  console.log(`✅ Created ${orderPayments.length} order-payments`);
-
-  // ------------------------
-  // 8️⃣ SHIPMENTS
-  // ------------------------
-  const shipment = await Promise.all(
-    Array.from({ length: 20 }).map(() => {
-      return prisma.shipment.create({
-        data: {
-          id: faker.string.uuid(),
-          order: { connect: { id: faker.helpers.arrayElement(orders).id } },
-
-          carrier: faker.company.name(),
-          trackingNumber: faker.string.alphanumeric(12).toUpperCase(),
-          status: faker.helpers.arrayElement([
-            'PENDING',
-            'SHIPPED',
-            'DELIVERED',
-          ]),
-          shippedAt: faker.date.recent(),
-          deliveredAt: null,
-          addressSnap: {
-            receiver: faker.person.fullName(),
-            phone: faker.phone.number(),
-            address: faker.location.streetAddress(),
-            district: faker.location.city(),
-            province: faker.location.state(),
-          },
-          createdAt: faker.date.past(),
-        },
-      });
-    })
-  );
-
-  console.log(`✅ Created ${shipment.length} shipments`);
-
-  // ------------------------
-  // ------------------------
-  // 8️⃣ REFUNDS
-  // ------------------------
-
-  const refunds = await Promise.all(
-    Array.from({ length: 10 }).map(async () => {
-      const order = faker.helpers.arrayElement(orders);
-      const maybePayment = faker.helpers.arrayElement([...payment, null]);
-
-      return prisma.refund.create({
-        data: {
-          id: faker.string.uuid(),
-          order: { connect: { id: order.id } },
-          ...(maybePayment
-            ? { payment: { connect: { id: maybePayment.id } } }
-            : {}),
-
-          amount: faker.number.int({ min: 10_000, max: 500_000 }),
-          reason: faker.helpers.arrayElement([
-            'Customer canceled order',
-            'Product defective',
-            'Wrong item delivered',
-            'Refund after return request',
-          ]),
-          status: 'PENDING',
-          createdAt: faker.date.recent({ days: 30 }),
-        },
-      });
-    })
-  );
-
-  console.log(`✅ Created ${refunds.length} shipments`);
-  // ------------------------
-  // 8️⃣ RETURN REQUESTS
-  // ------------------------
-
-  const returnRequests = await Promise.all(
-    Array.from({ length: 10 }).map(async () => {
-      const order = faker.helpers.arrayElement(orders);
-      const user = faker.helpers.arrayElement(users);
-
-      return prisma.returnRequest.create({
-        data: {
-          order: { connect: { id: order.id } },
-          user: { connect: { id: user.id } },
-          reason: faker.helpers.arrayElement([
-            'Received damaged item',
-            'Wrong product delivered',
-            'Size does not fit',
-            'Changed my mind',
-          ]),
-          status: faker.helpers.arrayElement([
-            'OPEN',
-            'APPROVED',
-            'REJECTED',
-            'CLOSED',
-          ]),
-          createdAt: faker.date.recent({ days: 20 }),
-        },
-      });
-    })
-  );
-
-  console.log(`✅ Created ${returnRequests.length} shipments`);
-
-  // ------------------------
-  // ------------------------
-  // 8️⃣ RETURN ITEMS
-  // ------------------------
-
-  const returnItems = await Promise.all(
-    Array.from({ length: 20 }).map(async () => {
-      const returnRequest = faker.helpers.arrayElement(returnRequests);
-      const orderItem = faker.helpers.arrayElement(orderItems);
-
-      return prisma.returnItem.create({
-        data: {
-          returnRequest: { connect: { id: returnRequest.id } },
-          orderItem: { connect: { id: orderItem.id } },
-          quantity: faker.number.int({ min: 1, max: 3 }),
-          reason: faker.helpers.arrayElement([
-            'Damaged item',
-            'Wrong color',
-            'Product defective',
-            'Did not match description',
-          ]),
-        },
-      });
-    })
-  );
-
-  console.log(`✅ Created ${returnItems.length} return items`);
-  // ------------------------
-  // 8️⃣ REVIEWS
-  // ------------------------
-
-  const usedReviewKeys = new Set();
-  const usedOrderItemIds = new Set();
-  const reviewsData = [];
-
-  while (reviewsData.length < 1000) {
-    // Random user
-    const user = faker.helpers.arrayElement(users);
-
-    // 50% review có orderItem
-    const useOrderItem = faker.datatype.boolean();
-    let orderItem = null;
-
-    if (useOrderItem && orderItems.length > 0) {
-      let attempts = 0;
-      do {
-        orderItem = faker.helpers.arrayElement(orderItems);
-        attempts++;
-        if (attempts > 10) break;
-      } while (usedOrderItemIds.has(orderItem.id));
-      if (orderItem && usedOrderItemIds.has(orderItem.id)) {
-        orderItem = null;
+  // 1. Fetch OrderItems to turn into reviews
+  // We only review items from orders that are not PENDING/CANCELED in this logic
+  const validOrderItems = await prisma.orderItem.findMany({
+    where: {
+      order: {
+        status: { in: [OrderStatus.DELIVERED, OrderStatus.SHIPPED, OrderStatus.FULFILLED] }
       }
-    }
-
-    // Product: nếu có orderItem thì dùng productId từ orderItem
-    const product =
-      orderItem && orderItem.productId
-        ? (products.find((p) => p.id === orderItem.productId) ??
-          faker.helpers.arrayElement(products))
-        : faker.helpers.arrayElement(products);
-
-    const key = `${user.id}_${product.id}_${orderItem ? orderItem.id : 'null'}`;
-    if (usedReviewKeys.has(key)) continue;
-
-    // Đánh dấu đã dùng
-    usedReviewKeys.add(key);
-    if (orderItem) usedOrderItemIds.add(orderItem.id);
-
-    reviewsData.push({
-      id: faker.string.uuid(),
-      productId: product.id,
-      userId: user.id,
-      orderItemId: orderItem ? orderItem.id : null,
-      rating: faker.number.int({ min: 1, max: 5 }),
-      title: faker.helpers.maybe(() => faker.commerce.productAdjective(), {
-        probability: 0.6,
-      }),
-      body: faker.lorem.sentences({ min: 1, max: 3 }),
-      likes: faker.number.int({ min: 0, max: 200 }),
-      images: faker.helpers.maybe(
-        () => [
-          `https://placehold.co/600x600?text=Review+${faker.string.alpha(3).toUpperCase()}`,
-        ],
-        { probability: 0.25 }
-      ),
-      createdAt: faker.date.past({ years: 1 }),
-      updatedAt: faker.date.recent({ days: 30 }),
-    });
-  }
-
-  // ✅ createMany (nhanh, an toàn, không vi phạm unique)
-  await prisma.review.createMany({
-    data: reviewsData.map((r) => ({
-      id: r.id,
-      productId: r.productId,
-      userId: r.userId,
-      orderItemId: r.orderItemId,
-      rating: r.rating,
-      title: r.title,
-      body: r.body,
-      likes: r.likes,
-      images: r.images,
-      createdAt: r.createdAt,
-      updatedAt: r.updatedAt,
-    })),
-    skipDuplicates: true, // tránh lỗi nếu chạy lại seed
+    },
+    include: { order: true }, // We need the userId from the order
+    take: 500 // Limit to 500 reviews
   });
 
-  console.log(`✅ Created ${reviewsData.length} reviews`);
+  const reviewData = validOrderItems.map((item) => {
+    const rating = faker.number.int({ min: 3, max: 5 }); // Skew towards positive
+    return {
+      id: faker.string.uuid(),
+      productId: item.productId,
+      userId: item.order!.userId, // The buyer
+      orderItemId: item.id, // Verified purchase link
+      rating,
+      title: rating >= 4 ? faker.word.adjective() + ' product!' : 'Just okay',
+      body: faker.lorem.sentences({ min: 1, max: 3 }),
+      likes: faker.number.int({ min: 0, max: 50 }),
+      createdAt: faker.date.between({ from: item.order!.placedAt, to: new Date() }),
+    };
+  });
 
-  console.log('🧮 Đang cập nhật ratingAvg và ratingCount cho từng product...');
+  // Bulk create reviews
+  await prisma.review.createMany({
+    data: reviewData,
+    skipDuplicates: true,
+  });
 
+  console.log(`✅ Created ${reviewData.length} reviews`);
+
+  // 2. Update Product Ratings Aggregates
+  console.log('🧮 Aggregating Product Ratings...');
   const ratingStats = await prisma.review.groupBy({
     by: ['productId'],
     _avg: { rating: true },
@@ -1424,469 +1208,172 @@ async function main() {
     await prisma.product.update({
       where: { id: stat.productId },
       data: {
-        ratingAvg: new Prisma.Decimal(stat._avg.rating?.toFixed(1) || 0),
+        ratingAvg: stat._avg.rating || 0,
         ratingCount: stat._count.rating,
       },
     });
   }
-
-  console.log(`✅ Đã cập nhật rating cho ${ratingStats.length} products`);
+  console.log(`✅ Updated ratings for ${ratingStats.length} products`);
 
   // ------------------------
-  // 8️⃣ PRODUCT QUESTIONS
+  // 9️⃣ PRODUCT QUESTIONS
   // ------------------------
-
-  const productQuestions = await Promise.all(
-    Array.from({ length: 25 }).map(async () => {
-      const product = faker.helpers.arrayElement(products);
-      const user = faker.helpers.arrayElement(users);
-      const hasAnswer = faker.datatype.boolean({ probability: 0.6 }); // 60% có trả lời
-
-      return prisma.productQuestion.create({
-        data: {
-          product: { connect: { id: product.id } },
-          user: { connect: { id: user.id } },
-          body: faker.helpers.arrayElement([
-            'Does this come with a warranty?',
-            'Is this compatible with iPhone 15?',
-            'How long is the battery life?',
-            'Does it support wireless charging?',
-            'Is this available in black color?',
-            'Can I return it if it doesn’t fit?',
-          ]),
-          ...(hasAnswer
-            ? {
-                answer: faker.helpers.arrayElement([
-                  'Yes, it comes with a 12-month warranty.',
-                  'It works perfectly with iPhone 15.',
-                  'Battery lasts about 10 hours with normal use.',
-                  'Yes, it supports Qi wireless charging.',
-                  'Currently, only white and silver colors are available.',
-                  'Yes, returns are accepted within 7 days of purchase.',
-                ]),
-                answeredAt: faker.date.recent({ days: 30 }),
-              }
-            : {}),
-          createdAt: faker.date.past({ years: 1 }),
-        },
-      });
+  // (Optional: Simple random questions)
+  const productQuestionsData = await Promise.all(
+    Array.from({ length: 30 }).map(async () => {
+      const p = faker.helpers.arrayElement(products);
+      const u = faker.helpers.arrayElement(users);
+      return {
+        productId: p.id,
+        userId: u.id,
+        body: faker.lorem.sentence() + '?',
+        answer: faker.datatype.boolean() ? faker.lorem.sentence() : null,
+        createdAt: faker.date.recent(),
+      };
     })
   );
 
-  console.log(`✅ Created ${productQuestions.length} product questions`);
+  await prisma.productQuestion.createMany({ data: productQuestionsData });
+  console.log(`✅ Created product questions`);
 
   // ------------------------
-  // 8️⃣ VOUCHERS
+  // 🔟 CONVERSATIONS
   // ------------------------
+  console.log('💬 Seeding Conversations...');
 
-  const vouchers = await Promise.all(
-    Array.from({ length: 200 }).map(async () => {
-      const type = faker.helpers.arrayElement(Object.values(VoucherType));
-      const shop = faker.helpers.maybe(
-        () => faker.helpers.arrayElement(shops),
-        { probability: 0.6 }
-      ); // 60% gắn shop
-      const startAt = faker.date.recent({ days: 15 });
-      const endAt = faker.date.soon({
-        days: faker.number.int({ min: 15, max: 45 }),
-        refDate: startAt,
-      });
-
-      // Tính giá trị voucher theo loại
-      let value;
-      switch (type) {
-        case 'PERCENT':
-          value = faker.number.int({ min: 5, max: 50 }); // %
-          break;
-        case 'FIXED':
-        case 'SHIPPING':
-          value = faker.number.int({ min: 50000, max: 500000 }); // VND
-          break;
-        default:
-          value = 0;
-      }
-
-      return prisma.voucher.create({
-        data: {
-          code: `VC-${faker.string.alphanumeric(8).toUpperCase()}`,
-          type,
-          value,
-          maxDiscount: faker.helpers.maybe(() =>
-            faker.number.int({ min: 100000, max: 300000 })
-          ),
-          minSubtotal: faker.helpers.maybe(
-            () => faker.number.int({ min: 100000, max: 500000 }),
-            { probability: 0.5 }
-          ),
-          currency: Currency.VND,
-          startAt,
-          endAt,
-          usageLimit: faker.helpers.maybe(
-            () => faker.number.int({ min: 50, max: 300 }),
-            { probability: 0.7 }
-          ),
-          perUserLimit: faker.helpers.maybe(
-            () => faker.number.int({ min: 1, max: 5 }),
-            { probability: 0.8 }
-          ),
-          shop: shop ? { connect: { id: shop.id } } : undefined,
-          isActive: faker.datatype.boolean({ probability: 0.8 }),
-          createdAt: faker.date.past({ years: 1 }),
-        },
-      });
-    })
-  );
-
-  console.log(`✅ Created ${vouchers.length} vouchers`);
-
-  // ------------------------
-  // 8️⃣ VOUCHER CATEGORIES
-  // ------------------------
-
-  const voucherCategories = [];
-
-  // Mỗi voucher sẽ áp dụng cho 1–3 category ngẫu nhiên
-  for (const voucher of vouchers) {
-    const selectedCats = faker.helpers.arrayElements(
-      categories,
-      faker.number.int({ min: 1, max: 3 })
-    );
-
-    for (const cat of selectedCats) {
-      voucherCategories.push({
-        voucherId: voucher.id,
-        categoryId: cat.id,
-      });
-    }
-  }
-
-  // Loại bỏ trùng (nếu có)
-  const voucherCategory = Array.from(
-    new Map(
-      voucherCategories.map((vc) => [`${vc.voucherId}_${vc.categoryId}`, vc])
-    ).values()
-  );
-
-  await prisma.voucherCategory.createMany({
-    data: voucherCategory,
-    skipDuplicates: true,
+  // SCENARIO A: Order Inquiries (User asks Shop about an Order)
+  const recentOrders = await prisma.order.findMany({
+    take: 20,
+    where: { shopId: { not: null } },
+    include: { shop: true, user: true }
   });
 
-  console.log(`✅ Created ${voucherCategory.length} voucher category`);
-
-  // ------------------------
-  // 8️⃣ VOUCHER PRODUCTS
-  // ------------------------
-
-  const voucherProducts = [];
-
-  // Mỗi voucher áp dụng cho 2–4 sản phẩm ngẫu nhiên
-  for (const voucher of vouchers) {
-    const selectedProducts = faker.helpers.arrayElements(
-      products,
-      faker.number.int({ min: 2, max: 4 })
-    );
-
-    for (const product of selectedProducts) {
-      voucherProducts.push({
-        voucherId: voucher.id,
-        productId: product.id,
-      });
-    }
-  }
-
-  // Loại bỏ trùng nếu có (vì @@id[voucherId, productId])
-  const voucherProduct = Array.from(
-    new Map(
-      voucherProducts.map((vp) => [`${vp.voucherId}_${vp.productId}`, vp])
-    ).values()
-  );
-
-  await prisma.voucherProduct.createMany({
-    data: voucherProduct,
-    skipDuplicates: true,
-  });
-
-  console.log(`✅ Created ${voucherProduct.length} voucher–product links`);
-
-  // ------------------------
-  // 8️⃣ VOUCHER REDENTIONS
-  // ------------------------
-
-  const redemptions = [];
-
-  // Tạo 20 lượt sử dụng voucher ngẫu nhiên
-  for (let i = 0; i < 20; i++) {
-    const voucher = faker.helpers.arrayElement(vouchers);
-    const order = faker.helpers.arrayElement(orders);
-    const user = faker.helpers.arrayElement(users);
-
-    redemptions.push({
-      voucherId: voucher.id,
-      orderId: order.id,
-      userId: user.id,
-      usedAt: faker.date.recent({ days: 60 }),
-    });
-  }
-
-  // Loại bỏ trùng cặp (voucherId, orderId, userId)
-  const voucherRedemption = Array.from(
-    new Map(
-      redemptions.map((r) => [`${r.voucherId}_${r.orderId}_${r.userId}`, r])
-    ).values()
-  );
-
-  await prisma.voucherRedemption.createMany({
-    data: voucherRedemption,
-    skipDuplicates: true,
-  });
-
-  console.log(`✅ Created ${voucherRedemption.length} voucher redemptions`);
-
-  // ------------------------
-  // 8️⃣ ORDER VOUCHERS
-  // ------------------------
-
-  const orderVouchers = [];
-
-  // Mỗi đơn hàng có thể áp dụng 0–2 voucher ngẫu nhiên
-  for (const order of orders) {
-    if (faker.datatype.boolean({ probability: 0.3 })) continue; // 30% đơn không dùng voucher
-
-    const selectedVouchers = faker.helpers.arrayElements(
-      vouchers,
-      faker.number.int({ min: 1, max: 2 })
-    );
-
-    for (const voucher of selectedVouchers) {
-      orderVouchers.push({
-        orderId: order.id,
-        voucherId: voucher.id,
-      });
-    }
-  }
-
-  // Loại bỏ trùng (vì @@id[orderId, voucherId])
-  const orderVoucher = Array.from(
-    new Map(
-      orderVouchers.map((ov) => [`${ov.orderId}_${ov.voucherId}`, ov])
-    ).values()
-  );
-
-  await prisma.orderVoucher.createMany({
-    data: orderVoucher,
-    skipDuplicates: true,
-  });
-
-  console.log(`✅ Created ${orderVoucher.length} order–voucher links`);
-
-  // ------------------------
-  // 9️⃣ CONVERSATIONS & MESSAGES (REALISTIC SCENARIO)
-  // ------------------------
-  console.log('💬 Seeding Conversations (Order Inquiries & General)...');
-
-  // SCENARIO A: ORDER INQUIRIES
-  // Pick 30 orders to have associated conversations
-  const ordersForChat = orders.slice(0, 30);
-
-  for (const order of ordersForChat) {
-    // 1. Create the Conversation
-    const conversation = await prisma.conversation.create({
-      data: {
-        type: ConversationType.ORDER_INQUIRY,
-        status: faker.helpers.arrayElement(Object.values(ConversationStatus)),
-        subject: `Inquiry about Order #${order.orderNumber}`,
-        shopId: order.shopId, // The shop receiving the inquiry
-        createdAt: faker.date.between({ from: order.placedAt, to: new Date() }),
-      },
-    });
-
-    // 2. Add Participants: The Buyer (User) and the Seller (Shop)
-    // Note: In your schema, ShopMember links User to Shop, but ConversationParticipant links Shop directly.
-
-    // Participant 1: The Buyer
-    await prisma.conversationParticipant.create({
-      data: {
-        conversationId: conversation.id,
-        userId: order.userId,
-        shopId: null,
-        joinedAt: conversation.createdAt,
-      },
-    });
-
-    // Participant 2: The Shop (represented by the Shop entity)
-    if (order.shopId) {
-      await prisma.conversationParticipant.create({
-        data: {
-          conversationId: conversation.id,
-          userId: null,
-          shopId: order.shopId,
-          joinedAt: conversation.createdAt,
-        },
-      });
-    }
-
-    // 3. Generate Messages (Back and Forth)
-    const msgCount = faker.number.int({ min: 3, max: 8 });
-    let lastMsgTime = conversation.createdAt;
-
-    for (let i = 0; i < msgCount; i++) {
-      const isBuyerSender = i % 2 === 0; // Alternate: Buyer -> Shop -> Buyer
-      lastMsgTime = faker.date.soon({ refDate: lastMsgTime, days: 1 });
-
-      // Randomly insert ORDER_CARD message
-      const messageType =
-        i === 0
-          ? MessageType.ORDER_CARD // First message is always an ORDER_CARD
-          : faker.helpers.arrayElement([
-              MessageType.TEXT,
-              MessageType.TEXT,
-              MessageType.TEXT,
-              MessageType.IMAGE,
-            ]);
-
-      await prisma.message.create({
-        data: {
-          conversationId: conversation.id,
-          type: messageType,
-          senderUserId: isBuyerSender ? order.userId : null,
-          senderShopId: isBuyerSender ? null : order.shopId,
-          senderRole: isBuyerSender ? MessageRole.USER : MessageRole.SHOP,
-          content:
-            messageType === MessageType.ORDER_CARD
-              ? `Order #${order.orderNumber}`
-              : messageType === MessageType.IMAGE
-                ? faker.image.urlPicsumPhotos({ width: 600, height: 400 })
-                : isBuyerSender
-                  ? faker.helpers.arrayElement([
-                      'When will this be shipped?',
-                      'Can I change the delivery address?',
-                      'I haven not received my tracking number yet.',
-                      'Is this item genuine?',
-                    ])
-                  : faker.helpers.arrayElement([
-                      'We will ship it tomorrow.',
-                      'Please check your email for updates.',
-                      'Yes, it is 100% authentic.',
-                      'Sorry for the delay.',
-                    ]),
-          relatedOrderId:
-            messageType === MessageType.ORDER_CARD ? order.id : null,
-          createdAt: lastMsgTime,
-        },
-      });
-    }
-  }
-
-  // SCENARIO B: GENERAL SHOP INQUIRIES (No specific Order)
-  // Create 20 random conversations
-  for (let i = 0; i < 20; i++) {
-    const randomUser = faker.helpers.arrayElement(users);
-    const randomShop = faker.helpers.arrayElement(shops);
-    const randomProduct = faker.helpers.arrayElement(products);
+  for (const order of recentOrders) {
+    if (!order.shopId) continue;
 
     // 1. Create Conversation
-    const conversation = await prisma.conversation.create({
+    const conv = await prisma.conversation.create({
       data: {
-        type: ConversationType.GENERAL,
+        type: ConversationType.ORDER_INQUIRY,
         status: ConversationStatus.OPEN,
-        subject: `Inquiry about ${randomProduct.title}`,
-        shopId: randomShop.id,
-        createdAt: faker.date.recent({ days: 60 }),
-      },
+        subject: `Inquiry: Order #${order.orderNumber}`,
+        shopId: order.shopId,
+        createdAt: faker.date.recent(),
+      }
     });
 
     // 2. Add Participants
-    await prisma.conversationParticipant.create({
-      data: {
-        conversationId: conversation.id,
-        userId: randomUser.id,
-      },
-    });
-
-    await prisma.conversationParticipant.create({
-      data: {
-        conversationId: conversation.id,
-        shopId: randomShop.id,
-      },
-    });
-
-    // 3. Create Messages with PRODUCT_CARD
-    let msgTime = conversation.createdAt;
-
-    // First message: PRODUCT_CARD
-    await prisma.message.create({
-      data: {
-        conversationId: conversation.id,
-        senderUserId: randomUser.id,
-        senderRole: MessageRole.USER,
-        type: MessageType.PRODUCT_CARD,
-        content: randomProduct.title,
-        relatedProductId: randomProduct.id,
-        createdAt: msgTime,
-      },
-    });
-
-    // Second message: User question
-    msgTime = faker.date.soon({
-      refDate: new Date(msgTime.getTime() + 5 * 60 * 1000),
-    });
-    await prisma.message.create({
-      data: {
-        conversationId: conversation.id,
-        senderUserId: randomUser.id,
-        senderRole: MessageRole.USER,
-        type: MessageType.TEXT,
-        content: faker.helpers.arrayElement([
-          'Do you have this item in Red color?',
-          'Is this still in stock?',
-          'Can you ship this internationally?',
-          'What is the return policy?',
-        ]),
-        createdAt: msgTime,
-      },
-    });
-
-    // Third message: Shop reply
-    msgTime = faker.date.soon({
-      refDate: new Date(msgTime.getTime() + 60 * 60 * 1000),
-    });
-    await prisma.message.create({
-      data: {
-        conversationId: conversation.id,
-        senderShopId: randomShop.id,
-        senderRole: MessageRole.SHOP,
-        type: MessageType.TEXT,
-        content: faker.helpers.arrayElement([
-          'Hi, unfortunately we are out of stock for Red.',
-          'Yes, we have it in stock!',
-          'We ship worldwide.',
-          '30-day return policy for all items.',
-        ]),
-        createdAt: msgTime,
-      },
-    });
-
-    // Optional: Add an image message
-    if (faker.datatype.boolean({ probability: 0.3 })) {
-      msgTime = faker.date.soon({
-        refDate: new Date(msgTime.getTime() + 30 * 60 * 1000),
-      });
-      await prisma.message.create({
-        data: {
-          conversationId: conversation.id,
-          senderShopId: randomShop.id,
-          senderRole: MessageRole.SHOP,
-          type: MessageType.IMAGE,
-          content: faker.image.urlPicsumPhotos({ width: 600, height: 400 }),
-          createdAt: msgTime,
+    await prisma.conversationParticipant.createMany({
+      data: [
+        // The Buyer
+        {
+          conversationId: conv.id,
+          userId: order.userId,
+          shopId: null,
+          joinedAt: conv.createdAt,
         },
-      });
-    }
+        // The Shop (Seller) - Note: Shop participates as an entity
+        {
+          conversationId: conv.id,
+          userId: null,
+          shopId: order.shopId,
+          joinedAt: conv.createdAt,
+        }
+      ]
+    });
+
+    // 3. Add Messages
+    // Message 1: User sends Order Card
+    await prisma.message.create({
+      data: {
+        conversationId: conv.id,
+        senderRole: MessageRole.USER,
+        senderUserId: order.userId,
+        type: MessageType.ORDER_CARD,
+        content: `Order #${order.orderNumber}`,
+        relatedOrderId: order.id,
+        createdAt: conv.createdAt,
+      }
+    });
+
+    // Message 2: User asks question
+    await prisma.message.create({
+      data: {
+        conversationId: conv.id,
+        senderRole: MessageRole.USER,
+        senderUserId: order.userId,
+        type: MessageType.TEXT,
+        content: "Hi, when will this order be shipped?",
+        createdAt: new Date(conv.createdAt.getTime() + 1000), // 1 sec later
+      }
+    });
+
+    // Message 3: Shop replies
+    await prisma.message.create({
+      data: {
+        conversationId: conv.id,
+        senderRole: MessageRole.SHOP,
+        senderShopId: order.shopId,
+        type: MessageType.TEXT,
+        content: "Hello! We are packing it right now. It goes out tomorrow.",
+        createdAt: new Date(conv.createdAt.getTime() + 1000 * 60 * 60), // 1 hour later
+      }
+    });
   }
 
-  console.log(`✅ Created Conversations and Messages`);
-  console.log('🎉 SEED HOÀN TẤT!');
+  // SCENARIO B: Product Inquiries (User asks Shop about a Product)
+  // Create 10 random product chats
+  for (let i = 0; i < 10; i++) {
+    const product = faker.helpers.arrayElement(products);
+    const user = faker.helpers.arrayElement(users);
+
+    // 1. Create Conversation
+    const conv = await prisma.conversation.create({
+      data: {
+        type: ConversationType.GENERAL,
+        status: ConversationStatus.OPEN,
+        subject: `Question about ${product.title.substring(0, 20)}...`,
+        shopId: product.shopId,
+        createdAt: faker.date.recent(),
+      }
+    });
+
+    // 2. Add Participants
+    await prisma.conversationParticipant.createMany({
+      data: [
+        { conversationId: conv.id, userId: user.id },
+        { conversationId: conv.id, shopId: product.shopId }
+      ]
+    });
+
+    // 3. Messages
+    // User sends product card
+    await prisma.message.create({
+      data: {
+        conversationId: conv.id,
+        senderRole: MessageRole.USER,
+        senderUserId: user.id,
+        type: MessageType.PRODUCT_CARD,
+        content: product.title,
+        relatedProductId: product.id,
+        createdAt: conv.createdAt,
+      }
+    });
+
+    // User asks question
+    await prisma.message.create({
+      data: {
+        conversationId: conv.id,
+        senderRole: MessageRole.USER,
+        senderUserId: user.id,
+        content: "Do you have this in size XL?",
+        createdAt: new Date(conv.createdAt.getTime() + 5000),
+      }
+    });
+  }
+
+  console.log(`✅ Created Conversations`);
+  console.log('🎉 SEED COMPLETE!');
 }
 
 main()

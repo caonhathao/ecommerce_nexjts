@@ -28,6 +28,8 @@ export async function getUserOrShopConversations(
     orderBy: { updatedAt: 'desc' },
   });
 
+  console.log(`conversations: ${JSON.stringify(conversations)}`);
+
   return conversations.map((conv) => {
     const otherParticipant = conv.participants.find((p) => {
       if (activeShopId) return p.shopId !== activeShopId;

@@ -1,54 +1,53 @@
 'use client';
+
+import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
+import { Loading } from '@/components/loading';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { fetchProductById } from '@/funcs/fetch';
-import logo from '@/public/logo.jpg';
-import { productDetailType } from '@/types/public.data-types';
-import { useParams, usePathname, useRouter } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
-import { CiCreditCard1, CiShoppingCart } from 'react-icons/ci';
-import {
-  FaBoxOpen,
-  FaCheckCircle,
-  FaMinus,
-  FaPlus,
-  FaStar,
-} from 'react-icons/fa';
-import { GrPowerCycle } from 'react-icons/gr';
-import { HiMiniCheckBadge } from 'react-icons/hi2';
-import { MdAttachMoney, MdOutlineStore } from 'react-icons/md';
-import { PiTruckLight } from 'react-icons/pi';
-import { toast } from 'sonner';
-import { formatPrice } from '@/lib/utils';
-import { Loading } from '../../../../components/loading';
-import { RatingStars } from '../../_components/rating-starts';
-import SlideImg from './_components/slide-img';
-
-import { createOrderDraft, getOrderDrafts } from '@/app/actions/order_draft';
-import { ChatButton } from '@/components/chat/chat-button';
 import { authClient } from '@/lib/auth-client';
 import { Prisma } from '@/lib/generated/prisma';
+import { paths } from '@/lib/path';
+import { formatPrice } from '@/lib/utils';
 import { AddToCartRequest } from '@/types/cart.data-types';
+import { productDetailType } from '@/types/public.data-types';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import Link from 'next/link';
-import { IoChatboxEllipsesOutline } from 'react-icons/io5';
-import { TopDealItems } from '../../(home)/_components/top-deal-items';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import { FaCheckCircle, FaMinus, FaPlus } from 'react-icons/fa';
+import { HiMiniCheckBadge } from 'react-icons/hi2';
+import { PiTruckLight } from 'react-icons/pi';
+import { toast } from 'sonner';
+
+// Icons
+import { TicketPercent } from 'lucide-react';
+
+// Components
+import { ChatButton } from '@/components/chat/chat-button';
+
 import Desc from './_components/desc';
 import { Reviews } from './_components/reviews';
+import SlideImg from './_components/slide-img';
 import { SuggestDealToday } from './_components/suggest-deal-today';
-import Decimal = Prisma.Decimal;
-import { paths } from '@/lib/path';
-import { getTwoRandomVoucherCodes } from '@/helpers/voucher-helper';
+import { VoucherSelector } from '@/features/voucher/_components/voucher-selector';
+import { VoucherDto } from '@/features/voucher/voucher.dto';
 
-interface selectedVariant {
+// Placeholder Logo (replace with your actual import)
+import logo from '@/public/logo.jpg';
+import Decimal = Prisma.Decimal;
+import { RatingStars } from '@/app/(public)/_components/rating-starts';
+import { TopDealItems } from '@/app/(public)/(home)/_components/top-deal-items';
+
+interface SelectedVariant {
   name: string;
   id: string;
   price: string;
   amount: number;
 }
-type itemType = {
+
+type ItemType = {
   productId: string;
   variantId: string;
   quantity: number;
@@ -58,229 +57,173 @@ const DetailPage = () => {
   const route = useRouter();
   const params = useParams();
   const pathname = usePathname();
+
+  // State
   const [data, setData] = useState<productDetailType | null>(null);
-  const [selVariant, setSelVariant] = useState<selectedVariant | null>(null);
+  const [selVariant, setSelVariant] = useState<SelectedVariant | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const amount: number = 1;
+  const [selectedVouchers, setSelectedVouchers] = useState<VoucherDto[]>([]);
+
   const t = useTranslations('product_detail');
   const c = useTranslations('general');
 
+  // 1. Check Auth
   useEffect(() => {
     authClient.getSession().then((session) => {
       setIsLoggedIn(!!session.data);
     });
   }, []);
 
-  const renderPriceSale = (
-    typeVoucher: string | null,
-    valueVoucher: string | null,
-    price: string
-  ) => {
-    if (!typeVoucher || !valueVoucher) {
-      return (
-        <p>
-          {formatPrice(Number(price), {
-            currency: c('t_currency'),
-            rate: Number(c('t_rate')),
-          })}
-        </p>
-      );
+  // 2. Fetch Data
+  useEffect(() => {
+    if (typeof params?.id === 'string') {
+      const loadData = async () => {
+        const res = await fetchProductById(params.id as string);
+        if (res) {
+          setData(res);
+          // Default to first variant
+          if (res.variants && res.variants.length > 0) {
+            setSelVariant({
+              name: res.variants[0].name,
+              id: res.variants[0].id,
+              price: res.variants[0].price,
+              amount: 1,
+            });
+          }
+        }
+      };
+      loadData();
     }
+  }, [params?.id]);
 
-    const numericPrice = Number(price);
-    const numericValue = Number(valueVoucher);
+  // 3. Helper: Current Variant Price
+  const currentVariantPrice = useMemo(() => {
+    return selVariant ? Number(selVariant.price) : 0;
+  }, [selVariant]);
 
-    if (typeVoucher === 'FIXED') {
-      const finalPrice = Math.max(0, numericPrice - numericValue);
-      return (
-        <div className="flex flex-col justify-start items-start gap-3">
-          <div className="flex flex-row justify-start items-center gap-3">
-            {/* price-after-sale */}
-            <p className="text-error text-3xl font-bold">
-              {formatPrice(finalPrice, {
-                currency: c('t_currency'),
-                rate: Number(c('t_rate')),
-              })}
-            </p>
-            {/* sale discount (show fixed amount) */}
-            <p className="bg-secondary rounded-lg p-1 text-xs">
-              {'-'}{' '}
-              {formatPrice(numericValue, {
-                currency: c('t_currency'),
-                rate: Number(c('t_rate')),
-              })}
-            </p>
-            {/* origin price */}
-            <p className="text-text-secondary line-through">
-              {formatPrice(numericPrice, {
-                currency: c('t_currency'),
-                rate: Number(c('t_rate')),
-              })}
-            </p>
-          </div>
-          <p className="text-text-secondary italic">{t('t_price_after')}</p>
-        </div>
-      );
-    }
-    if (typeVoucher === 'PERCENT') {
-      return (
-        <div className="flex flex-col justify-start items-start gap-3">
-          <div className="flex flex-row justify-start items-center gap-3">
-            {/* price-after-sale */}
-            <p className="text-error text-3xl font-bold">
-              {formatPrice(
-                Number(
-                  Number(price) - (Number(price) * Number(valueVoucher)) / 100
-                ),
-                {
-                  currency: c('t_currency'),
-                  rate: Number(c('t_rate')),
-                }
-              )}
-            </p>
-            {/* sale discount */}
-            <p className="bg-secondary rounded-lg p-1 text-xs">
-              {'-'} {valueVoucher} {'%'}
-            </p>
-            {/* origin price */}
-            <p className="text-text-secondary line-through">
-              {formatPrice(Number(price), {
-                currency: c('t_currency'),
-                rate: Number(c('t_rate')),
-              })}
-            </p>
-          </div>
-          <p className="text-text-secondary italic">{t('t_price_after')}</p>
-        </div>
-      );
-    }
-  };
+  // 4. Logic: Calculate Final Price with Voucher Stacking
+  const priceDetails = useMemo(() => {
+    if (!selVariant) return { original: 0, final: 0, discountAmount: 0 };
 
+    const original = currentVariantPrice;
+    let final = original;
+    let totalDiscount = 0;
+
+    // Filter Vouchers
+    const shopVouchers = selectedVouchers.filter((v) => !!v.shopId);
+    const platformVouchers = selectedVouchers.filter((v) => !v.shopId);
+
+    // Step A: Apply Shop Voucher
+    shopVouchers.forEach((v) => {
+      let discount = 0;
+      if (v.type === 'FIXED') {
+        discount = v.value;
+      } else {
+        discount = (original * v.value) / 100;
+        if (v.maxDiscount && discount > v.maxDiscount) discount = v.maxDiscount;
+      }
+      final -= discount;
+      totalDiscount += discount;
+    });
+
+    // Ensure not negative before applying platform
+    final = Math.max(0, final);
+
+    // Step B: Apply Platform Voucher
+    platformVouchers.forEach((v) => {
+      let discount = 0;
+      if (v.type === 'FIXED') {
+        discount = v.value;
+      } else {
+        // Platform percent usually applies to the intermediate price (after shop discount)
+        discount = (final * v.value) / 100;
+        if (v.maxDiscount && discount > v.maxDiscount) discount = v.maxDiscount;
+      }
+      final -= discount;
+      totalDiscount += discount;
+    });
+
+    return {
+      original,
+      final: Math.max(0, final),
+      discountAmount: totalDiscount,
+    };
+  }, [currentVariantPrice, selectedVouchers]);
+
+  // 5. Actions
   const handleSelectVariant = (
     id: string,
     name: string,
     price: string,
     amount: number = 1
   ) => {
-    const payload: selectedVariant = {
-      name: name,
-      id: id,
-      price: price,
-      amount: amount,
-    };
-    setSelVariant(payload);
+    setSelVariant({ name, id, price, amount });
   };
 
   const handleMinus = () => {
-    if (selVariant !== null && selVariant.amount > 1) {
+    if (selVariant && selVariant.amount > 1) {
       setSelVariant((prev) =>
         prev ? { ...prev, amount: prev.amount - 1 } : prev
       );
     }
   };
+
   const handlePlus = () => {
-    if (selVariant !== null) {
+    if (selVariant) {
       setSelVariant((prev) =>
         prev ? { ...prev, amount: prev.amount + 1 } : prev
       );
     }
   };
 
-  const handleOpenShop = ({ slug }: { slug: string }) => {
-    route.push(`/shop/${slug}`);
-  };
-
-  //get full product's detail
-  useEffect(() => {
-    if (typeof params?.id === 'string') {
-      // 1. Define an async function inside the effect
-      const loadData = async () => {
-        // 2. Await the data (assuming fetchProductById returns a Promise or data)
-        const res = await fetchProductById(params.id as string);
-
-        if (res) {
-          setData(res);
-          // 3. Set the variant only AFTER you have the data
-          setSelVariant({
-            name: res.variants[0].name,
-            id: res.variants[0].id,
-            price: res.variants[0].price,
-            amount: 1,
-          });
-        }
-      };
-
-      // 4. Call the async function
-      loadData();
-    }
-  }, [params?.id]);
-
-  const buyNow = async (params: itemType) => {
+  const buyNow = async (item: ItemType) => {
     const session = await authClient.getSession();
-    if (session.data == null || !session.data.user.emailVerified || !session) {
+    if (!session?.data?.user?.emailVerified) {
       const callback = encodeURIComponent(pathname ?? '/');
       route.push(`${paths.login}?callbackUrl=${callback}`);
       return;
     }
 
-    const vouchers = await getTwoRandomVoucherCodes();
-
-    console.log('vouchers:', vouchers);
-
     try {
       const existing = await getOrderDrafts();
       if (existing.success && existing.draft) {
         toast.info(
-          'Bạn có đơn hàng đang chờ xử lý. Chuyển đến trang thanh toán...',
-          {
-            duration: 4000,
-            position: 'top-right',
-          }
+          'Bạn có đơn hàng đang chờ xử lý. Chuyển đến trang thanh toán...'
         );
         route.push('/checkout');
         return;
       }
 
-      const data = {
+      const orderData = {
         notes: '',
-        items: [params],
-        voucher: [
-          {
-            code: vouchers.voucher1,
-          },
-          {
-            code: vouchers.voucher2,
-          },
-        ],
+        items: [item],
+        // Pass the actual Voucher Codes
+        voucher: selectedVouchers.map((v) => ({ code: v.code })),
       };
+
       const formData = new FormData();
-      formData.append('data', JSON.stringify(data));
+      formData.append('data', JSON.stringify(orderData));
 
       const res = await createOrderDraft(formData);
 
       if (res.success) {
         toast.success('Đang chuyển đến trang thanh toán...');
-        console.log('create Draft' + res.draft?.id);
         route.push('/checkout');
       } else if (!res.success && res.redirectTo) {
-        toast.error(res.message, {
-          position: 'top-right',
-          duration: 3000,
-        });
+        toast.error(res.message);
         route.push(res.redirectTo);
       } else {
         toast.error('Lỗi: ' + res.error);
-        console.error(res.error);
       }
     } catch (e) {
-      console.error('Lỗi khi tạo đơn hàng nháp:', e);
+      console.error(e);
       toast.error(`Lỗi: ${e}`);
     }
   };
 
   const addProductToCart = async (params: AddToCartRequest) => {
     const session = await authClient.getSession();
-    if (session.data == null || !session.data.user.emailVerified || !session) {
+    if (!session?.data?.user?.emailVerified) {
       const callback = encodeURIComponent(pathname ?? '/');
       route.push(`${paths.login}?callbackUrl=${callback}`);
       return;
@@ -289,59 +232,91 @@ const DetailPage = () => {
     try {
       const response = await fetch('/api/cart', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(params),
       });
 
       if (response.ok) {
-        toast.success('Thêm vào giỏ hàng thành công', {
-          duration: 3000,
-          position: 'top-right',
-          style: { color: 'var(--chart-2)' },
-        });
+        toast.success('Thêm vào giỏ hàng thành công');
       } else {
-        let errorMessage = `Lỗi: ${response.status} ${response.statusText}`;
-        try {
-          const errorText = await response.json();
-          if (errorText) {
-            errorMessage = errorText;
-          }
-        } catch (e) {
-          console.error(e);
-        }
-
-        console.log(errorMessage);
-        let errNotice = '';
-        if (response.status === 401) errNotice = 'Bạn chưa đăng nhập';
-
-        toast.error(`Thêm vào giỏ hàng thất bại: ${errNotice}`, {
-          duration: 3000,
-          position: 'top-right',
-          style: { color: 'var(--chart-1)' },
-        });
+        const errorText = await response
+          .json()
+          .catch(() => response.statusText);
+        const errNotice =
+          response.status === 401 ? 'Bạn chưa đăng nhập' : errorText;
+        toast.error(`Thêm vào giỏ hàng thất bại: ${errNotice}`);
       }
-      // ------------------------------------
     } catch (error) {
-      // This catch block will now *only* handle network failures
       const message = error instanceof Error ? error.message : 'Có lỗi xảy ra';
-      console.log(message);
-      toast.error(`Thêm vào giỏ hàng thất bại: ${message}`, {
-        duration: 3000,
-        position: 'top-right',
-        style: { color: 'var(--chart-1)' },
-      });
+      toast.error(`Thêm vào giỏ hàng thất bại: ${message}`);
     }
   };
 
+  // 6. UI Renderers
+  const renderPriceSection = () => {
+    if (!selVariant) return null;
+
+    const { original, final, discountAmount } = priceDetails;
+
+    if (discountAmount <= 0) {
+      return (
+        <p className="text-3xl font-bold text-error">
+          {formatPrice(original, {
+            currency: c('t_currency'),
+            rate: Number(c('t_rate')),
+          })}
+        </p>
+      );
+    }
+
+    const percentageDrop = Math.round((discountAmount / original) * 100);
+
+    return (
+      <div className="flex flex-col gap-2 p-4 bg-gradient-to-r from-destructive/10 to-transparent rounded-xl border border-destructive">
+        <div className="flex items-end gap-3">
+          <p className="text-3xl font-bold text-destructive leading-none">
+            {formatPrice(final, {
+              currency: c('t_currency'),
+              rate: Number(c('t_rate')),
+            })}
+          </p>
+          <div className="flex flex-col mb-0.5">
+            <span className="text-sm text-muted-foreground line-through decoration-destructive/50">
+              {formatPrice(original, {
+                currency: c('t_currency'),
+                rate: Number(c('t_rate')),
+              })}
+            </span>
+          </div>
+          <Badge className="mb-1 bg-destructive/70 hover:bg-destructive">
+            -{percentageDrop}%
+          </Badge>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {selectedVouchers.map((v) => (
+            <Badge
+              key={v.code}
+              variant="outline"
+              className="text-xs font-medium text-destructive border-destructive bg-foreground  flex items-center gap-1"
+            >
+              <TicketPercent size={12} /> {v.code}
+            </Badge>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // Loading State
   if (!data)
     return (
       <div className="w-full h-screen max-h-2/3 flex justify-center items-center">
         <Loading size={100} color="var(--primary)" />
       </div>
     );
-  if (selVariant === null) {
+
+  if (!selVariant) {
     return <Loading />;
   }
 
@@ -350,223 +325,138 @@ const DetailPage = () => {
       <div className="w-full flex flex-row justify-center items-start gap-2">
         <section className="w-[70%] flex flex-col justify-start items-start gap-2">
           <div className="w-full flex flex-row gap-2">
-            {/* product's image */}
+            {/* LEFT: IMAGES */}
             <div className="w-[40%] h-fit bg-background-secondary rounded-lg flex flex-col p-2 sticky top-3">
-              {/* slider */}
               <div className="w-full p-2">
                 <SlideImg data={data.images} />
               </div>
               <Separator />
-
-              {/* desc */}
-              <div className="flex flex-col justify-start items-start p-2">
-                {/*<p className="text-xl font-bold mb-2">Đặc điểm nổi bậc</p>*/}
-                <div className="flex flex-row justify-start items-center gap-1">
-                  <FaCheckCircle color="var(--priamry)" size={15} />
-                  Ôi holy cái này làm thế nào z?
+              <div className="flex flex-col justify-start items-start p-2 gap-1 text-sm text-muted-foreground">
+                <div className="flex flex-row justify-start items-center gap-2">
+                  <FaCheckCircle className="text-primary" size={15} />
+                  <span>100% Chính hãng</span>
                 </div>
-                <div className="flex flex-row justify-start items-center gap-1">
-                  <FaCheckCircle color="var(--priamry)" size={15} />
-                  Dù là 1 coder nhưng t thích là 1 wibu
-                </div>
-                <div className="flex flex-row justify-start items-center gap-1">
-                  <FaCheckCircle color="var(--priamry)" size={15} />
-                  Vợ ta cũng sẽ là wifu tương lai của ta
+                <div className="flex flex-row justify-start items-center gap-2">
+                  <FaCheckCircle className="text-primary" size={15} />
+                  <span>Hoàn tiền 111% nếu hàng giả</span>
                 </div>
               </div>
             </div>
-            {/* name and variants, shipping info, suggestions and description  */}
+
+            {/* CENTER: PRODUCT INFO */}
             <div className="w-[60%] flex flex-col gap-4">
-              {/* name and variants*/}
               <div className="relative bg-background-secondary rounded-lg p-3 flex flex-col justify-start items-start">
-                {/* badges */}
-                <div className="absolute top-0 left-3 flex gap-2">
-                  {[
-                    'https://salt.tikicdn.com/ts/upload/be/67/48/04a82ab8df178e1a13bde38316081865.png',
-                    'https://salt.tikicdn.com/ts/ta/b1/3f/4e/cc3d0a2dd751a7b06dd97d868d6afa56.png',
-                    'https://salt.tikicdn.com/ts/upload/d7/56/04/b93b8c666e13f49971483596ef14800f.png',
-                  ].map((src, i) => (
-                    <div key={i} className="relative w-20 h-10">
-                      <Image
-                        src={src}
-                        alt={`banner-${i}`}
-                        fill
-                        className="object-contain rounded-md"
-                      />
-                    </div>
-                  ))}
+                {/* Promo Banners */}
+                <div className="flex gap-2 mb-2">
+                  <Badge variant="secondary" className="bg-info hover:bg-info">
+                    <HiMiniCheckBadge className="mr-1" /> Official
+                  </Badge>
                 </div>
 
-                {/* title */}
-                <div className="text-xl font-medium mt-5 text-text">
+                <div className="text-xl font-medium text-text mt-1">
                   {data.title}
                 </div>
-                {/* ratingAvg, ratingCount, sold */}
+
+                {/* Ratings */}
                 <div className="flex flex-row justify-start items-center gap-2 text-text text-sm mt-2">
-                  {data.ratingAvg} <RatingStars value={data.ratingAvg} />
-                  {'(' + data.ratingCount + ')'} |
-                  <p className="text-text">
+                  <span className="font-bold border-b border-primary text-primary">
+                    {data.ratingAvg}
+                  </span>
+                  <RatingStars value={data.ratingAvg} />
+                  <Separator orientation="vertical" className="h-4" />
+                  <span className="text-muted-foreground">
+                    ({data.ratingCount} đánh giá)
+                  </span>
+                  <Separator orientation="vertical" className="h-4" />
+                  <span className="text-text">
                     {t('t_sold')} {data.soldCount}
-                  </p>
+                  </span>
                 </div>
-                {/* price-after-sale, sale-value, origin-price */}
-                <div className="flex flex-row">
-                  {renderPriceSale(
-                    // VoucherProduct is an array; use the first item's voucher (if present)
-                    data.VoucherProduct?.[0]?.voucher?.type ?? null,
-                    data.VoucherProduct?.[0]?.voucher?.value ?? null,
-                    data.minPrice
-                  )}
-                </div>
-                <div className="mt-2">
-                  <p className="font-semibold text-text">
+
+                {/* --- PRICE SECTION --- */}
+                <div className="w-full mt-4 mb-2">{renderPriceSection()}</div>
+
+                {/* Variants */}
+                <div className="mt-2 w-full">
+                  <p className="font-semibold text-text mb-2">
                     {t('t_variant_type')}
                   </p>
-                  <div className="flex">
-                    <div className="flex flex-row flex-wrap justify-start items-start gap-2 mt-2">
-                      {data.variants.map((value, index) => (
-                        <div
-                          key={index}
-                          className="p-1 rounded-sm bg-border cursor-pointer border-2 hover:border-secondary hover:bg-transparent border-border transition duration-700"
-                          onClick={() =>
-                            handleSelectVariant(
-                              value.id,
-                              value.name,
-                              value.price,
-                              1
-                            )
-                          }
-                        >
-                          {value.name}
-                        </div>
-                      ))}
-                    </div>
+                  <div className="flex flex-row flex-wrap gap-2">
+                    {data.variants.map((value, index) => (
+                      <button
+                        key={index}
+                        className={`px-3 py-1.5 rounded-md border text-sm font-medium transition-all duration-200 
+                          ${
+                            selVariant.id === value.id
+                              ? 'border-primary bg-primary/5 text-primary shadow-sm'
+                              : 'border-input hover:border-primary/50 hover:bg-muted/50'
+                          }`}
+                        onClick={() =>
+                          handleSelectVariant(
+                            value.id,
+                            value.name,
+                            value.price,
+                            1
+                          )
+                        }
+                      >
+                        {value.name}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
-              {/* shipping info */}
-              <div className="bg-background-secondary p-3 rounded-lg flex flex-col justify-start items-start gap-1">
-                <p className="font-semibold text-xl">{t('t_delivery_info')}</p>
-                <p>Giao đến thị trấn Teyvalt</p>
-                <Separator />
-                <div className="flex flex-row justify-start items-center gap-1">
-                  <PiTruckLight className="text-success" size={15} />
-                  Giao Thứ Sáu
-                </div>
-                <p>
-                  Trước 19h, 31/10:{' '}
-                  <strong className="text-chart-2">Miễn phí</strong>
-                </p>
-                <Separator />
-                <div className="flex flex-row justify-start items-center gap-1">
-                  <PiTruckLight className="text-success" size={15} /> Freeship
-                  10k đơn 45k, Freeship 25k đơn từ 100k
-                </div>
-              </div>
-              {/* vouchers (if has) */}
-              {data.VoucherProduct.length !== 0 ? (
-                <div className="flex flex-col p-2 gap-2 bg-background-secondary rounded-lg">
-                  <p className="text-xl font-semibold">
-                    {t('t_other_promotion')}
-                  </p>
-                  <div className="w-full flex justify-between items-center">
-                    <p>
-                      {data.VoucherProduct.length} {t('t_discount_code')}
-                    </p>
-                    <Button
-                      variant="outline"
-                      className="hover: cursor-pointer border border-border text-primary"
-                    >
-                      {t('t_more_action')}
-                    </Button>
-                  </div>
-                </div>
-              ) : null}
 
-              {/* others services */}
-              <div className="bg-background-secondary p-2 rounded-lg">
-                <p className="font-semibold text-xl mb-2">
-                  {t('t_more_services')}
+              {/* Shipping Info */}
+              <div className="bg-background-secondary p-3 rounded-lg flex flex-col gap-2">
+                <p className="font-semibold text-base">
+                  {t('t_delivery_info')}
                 </p>
-                <div className="flex flex-row justify-start items-center gap-2">
-                  <CiCreditCard1 color="var(--primary)" size={25} />
-                  {t('t_tiki_card')}
+                <div className="flex items-center gap-2 text-sm">
+                  <PiTruckLight className="text-success" size={20} />
+                  <span>
+                    Giao đến{' '}
+                    <span className="font-medium underline decoration-dashed">
+                      Bạn chưa nhập địa chỉ
+                    </span>
+                  </span>
                 </div>
-                <Separator />
-                <div className="flex flex-row justify-start items-center gap-2">
-                  <CiShoppingCart color="var(--primary)" size={25} />
-                  {t('t_pay_later')}
+                <Separator className="my-1" />
+                <div className="flex items-center gap-2 text-sm">
+                  <Badge
+                    variant="outline"
+                    className="text-success border-success/20 bg-success/50"
+                  >
+                    FREESHIP
+                  </Badge>
+                  <span className="text-muted-foreground text-xs">
+                    cho đơn hàng từ 150k
+                  </span>
                 </div>
               </div>
 
-              {/* top deals */}
+              {/* --- VOUCHER SELECTOR --- */}
+              {data.shop && (
+                <div className="bg-background-secondary rounded-lg">
+                  <VoucherSelector
+                    shopId={data.shop.id}
+                    productId={data.id}
+                    currentPrice={currentVariantPrice}
+                    selectedVouchers={selectedVouchers}
+                    onApply={setSelectedVouchers}
+                  />
+                </div>
+              )}
+
+              {/* Related/Top Deals */}
               <TopDealItems size="4" renderSaleValue={false} />
-              {/* slo-gan */}
-              <div className="bg-background-secondary p-3 rounded-lg">
-                <p className="font-semibold text-xl">{t('t_slogan_1')}</p>
-                <div className="flex flex-row justify-start items-center gap-2 py-1">
-                  <FaBoxOpen color="var(--primary)" size={15} />
-                  {t('t_slogan_2')}
-                </div>
-                <Separator />
-                <div className="flex flex-row justify-start items-center gap-2 py-1">
-                  <MdAttachMoney color="var(--primary)" size={15} />
-                  {t('t_slogan_3')}
-                </div>
-                <Separator />
-                <div className="flex flex-col justify-center items-start gap-2 py-1">
-                  <div className="flex flex-row justify-start items-center gap-2">
-                    <GrPowerCycle color="var(--primary)" size={15} />
-                    {t('t_slogan_4')}
-                  </div>
-                  <Link href={'/'} className="underline text-sm text-primary">
-                    {t('t_more_action')}
-                  </Link>
-                </div>
-              </div>
 
-              {/* description */}
+              {/* Product Description */}
               <Desc data={data.description} />
             </div>
           </div>
-          {/* show shop info */}
-          <div className="w-full bg-background-secondary p-3 rounded-lg mt-2 border border-border">
-            {/* logo and name */}
-            <div className="flex flex-row items-center justify-between gap-3">
-              <div className="flex flex-row items-center gap-3">
-                <Image
-                  src={data.shop.logoUrl}
-                  width={50}
-                  height={50}
-                  alt="shop-logo"
-                  className="rounded-lg"
-                />
-                <div className="flex flex-col">
-                  <p>{data.shop.name}</p>
-                  <div className="flex flex-row items-center gap-0.5">
-                    {data.shop.ratingAvg} <FaStar color="orange" size={15} />
-                    <div>
-                      {'('} {data.shop.ratingCount} {t('t_review')} {')'}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-row items-center gap-3">
-                <Button variant={'outline'} className="hover:cursor-pointer">
-                  <IoChatboxEllipsesOutline color="var(--primary)" />
-                  {t('t_chat')}
-                </Button>
-                <Button
-                  variant={'outline'}
-                  onClick={() => handleOpenShop({ slug: data.shop.slug })}
-                  className="hover:cursor-pointer"
-                >
-                  <MdOutlineStore color="var(--primary)" />
-                  {t('t_visit')}
-                </Button>
-              </div>
-            </div>
-          </div>
+
+          {/* Reviews Section */}
           <Suspense fallback={<Loading size={40} />}>
             <Reviews
               key={data.id}
@@ -577,130 +467,150 @@ const DetailPage = () => {
           </Suspense>
         </section>
 
-        {/* payment methods */}
-        <section className="w-[30%] sticky top-3">
-          <div className="w-full bg-background-secondary rounded-lg p-2 flex flex-col gap-3">
-            {/* title */}
-            <div className="flex flex-row justify-start items-center gap-4 h-15 w-full">
-              <Image src={logo} width={40} height={40} alt="logo" />
-              <div className="flex flex-row justify-between items-center gap-2">
-                <div className="flex flex-col justify-center items-start gap-2">
-                  <p className="font-semibold text-sm whitespace-nowrap text-primary">
-                    2T3H Trading
-                  </p>
-                  <Badge className="flex flex-row gap-2 justify-start items-center bg-primary/20 text-primary font-semibold">
-                    <HiMiniCheckBadge color="var(--primary)" size={20} />
-                    OFFICAL
-                  </Badge>
-                </div>
+        {/* RIGHT: CART & PAYMENT ACTIONS */}
+        <section className="w-[30%] sticky top-3 h-fit">
+          <div className="w-full bg-background-secondary rounded-lg p-4 flex flex-col gap-4 shadow-sm border border-border">
+            {/* Shop Info */}
+            <div className="flex items-center gap-3">
+              <div className="relative w-12 h-12 rounded-full border overflow-hidden">
+                <Image
+                  src={data.shop?.logoUrl || logo}
+                  fill
+                  alt="shop-logo"
+                  className="object-cover"
+                />
               </div>
-              <div className="flex flex-row gap-2 justify-start items-center h-15 w-full">
-                <p className="flex flex-row justify-center items-center gap-0.5">
-                  {'4.7'}
-                  <FaStar color="var(--warning)" size={15} />
+              <div className="flex flex-col">
+                <p className="font-semibold text-sm text-foreground line-clamp-1">
+                  {data.shop?.name || 'Shop Name'}
                 </p>
-                <Separator orientation="vertical" />
-                <p>
-                  {'5.5tr+ '}
-                  {t('t_review')}
-                </p>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <Badge
+                    variant="secondary"
+                    className="text-[10px] bg-primary/10 text-primary px-1.5 py-0 h-5"
+                  >
+                    <HiMiniCheckBadge className="mr-0.5" /> OFFICIAL
+                  </Badge>
+                  <span className="text-[10px] text-muted-foreground">
+                    | {data.shop?.ratingAvg} ★
+                  </span>
+                </div>
               </div>
             </div>
             <Separator />
-            {/* payment info */}
-            <div className="flex flex-col justify-start items-start gap-2">
-              <div className="p-2 rounded-sm bg-secondary text-secondary-foreground text-center">
+
+            {/* Selection Summary */}
+            <div className="flex flex-col gap-3">
+              <div className="p-2.5 rounded-md bg-muted/40 text-center font-medium text-sm border border-dashed">
                 {selVariant?.name}
               </div>
-              <div className="w-full flex flex-row justify-between items-center gap-2">
-                <p className="font-semibold">{t('t_quantity')}</p>
-                <div className="flex flex-row gap-2 justify-start items-start">
-                  <button
-                    className={`w-10 h-10 border border-muted-foreground rounded-lg font-bold flex justify-center items-center ${
-                      selVariant.amount == 1
-                        ? 'opacity-50 cursor-not-allowed'
-                        : 'cursor-pointer '
-                    }`}
-                    onClick={() => handleMinus()}
+
+              {/* Quantity */}
+              <div className="flex justify-between items-center">
+                <p className="font-medium text-sm text-muted-foreground">
+                  {t('t_quantity')}
+                </p>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8 rounded-full"
+                    onClick={handleMinus}
+                    disabled={selVariant.amount <= 1}
                   >
                     <FaMinus size={10} />
-                  </button>
-                  <button className="w-10 h-10 border border-muted-foreground rounded-lg flex justify-center items-center">
-                    {selVariant?.amount}
-                  </button>
-                  <button
-                    className="w-10 h-10 border border-muted-foreground rounded-lg font-bold flex justify-center items-center cursor-pointer"
-                    onClick={() => handlePlus()}
+                  </Button>
+                  <span className="w-6 text-center font-bold text-sm">
+                    {selVariant.amount}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8 rounded-full"
+                    onClick={handlePlus}
                   >
                     <FaPlus size={10} />
-                  </button>
+                  </Button>
                 </div>
               </div>
-              <div className="w-full flex flex-row justify-between items-center">
-                <p className="font-semibold">{t('t_total')}</p>
-                <p className="text-lg font-medium text-text">
-                  {formatPrice(
-                    Number(selVariant.amount * Number(selVariant.price)),
-                    {
+
+              <Separator />
+
+              {/* Total Price */}
+              <div className="flex justify-between items-end">
+                <p className="font-bold text-sm">{t('t_total')}</p>
+                <div className="flex flex-col items-end">
+                  <p className="text-xl font-bold text-primary">
+                    {formatPrice(priceDetails.final * selVariant.amount, {
                       currency: c('t_currency'),
                       rate: Number(c('t_rate')),
-                    }
+                    })}
+                  </p>
+                  {priceDetails.discountAmount > 0 && (
+                    <span className="text-xs text-success font-medium">
+                      Saved:{' '}
+                      {formatPrice(
+                        priceDetails.discountAmount * selVariant.amount
+                      )}
+                    </span>
                   )}
-                </p>
+                </div>
               </div>
             </div>
-            {/* payment buttons */}
-            <div className="flex flex-col justify-start items-start gap-2 w-full">
+
+            {/* Buttons */}
+            <div className="flex flex-col gap-2.5 w-full mt-2">
               <Button
-                variant={'destructive'}
-                className="w-full hover:cursor-pointer hover:bg-primary transition-colors duration-750"
-                onClick={() => {
-                  if (selVariant) {
-                    const payload: itemType = {
-                      variantId: selVariant.id,
-                      productId: data.id,
-                      quantity: selVariant.amount,
-                    };
-                    buyNow(payload);
-                  }
-                }}
+                size="lg"
+                className="w-full bg-destructive hover:bg-destructive/80 cursor-pointer  font-bold shadow-md shadow-red-200"
+                onClick={() =>
+                  buyNow({
+                    variantId: selVariant.id,
+                    productId: data.id,
+                    quantity: selVariant.amount,
+                  })
+                }
               >
                 {t('t_buy_action')}
               </Button>
+
               <Button
-                variant={'outline'}
-                className="border border-primary text-primary w-full cursor-pointer"
-                onClick={() => {
-                  if (selVariant) {
-                    const payload: AddToCartRequest = {
-                      variantId: selVariant.id,
-                      quantity: selVariant.amount,
-                      priceSnap: Decimal(selVariant.price),
-                      currency: 'VND',
-                    };
-                    addProductToCart(payload);
-                  }
-                }}
+                variant="outline"
+                size="lg"
+                className="w-full border-primary text-primary hover:bg-primary/5"
+                onClick={() =>
+                  addProductToCart({
+                    variantId: selVariant.id,
+                    quantity: selVariant.amount,
+                    priceSnap: new Decimal(selVariant.price),
+                    currency: 'VND',
+                  })
+                }
               >
                 {t('t_add_action')}
               </Button>
+
               <Button
-                variant={'outline'}
-                className="border border-primary text-primary w-full cursor-pointer"
+                variant="ghost"
+                className="w-full text-xs h-9 border text-muted-foreground"
               >
                 {t('t_pay_later')}
               </Button>
-              {isLoggedIn && (
-                <ChatButton shopId={data.shop.id} product={{ id: data.id }} />
+              {isLoggedIn && data.shop && (
+                <div className="col-span-2">
+                  <ChatButton shopId={data.shop.id} product={{ id: data.id }} />
+                </div>
               )}
             </div>
           </div>
         </section>
       </div>
-      <div className="w-full">
+
+      <div className="w-full mt-10">
         <SuggestDealToday />
       </div>
     </div>
   );
 };
+
 export default DetailPage;

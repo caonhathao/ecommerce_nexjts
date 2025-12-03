@@ -1,49 +1,29 @@
-import { prisma } from '@/lib/db';
+import { NextRequest } from 'next/server';
 import { ActionResponse } from '@/lib/service-response';
+import { getAvailableVouchersService } from '@/features/voucher/voucher.service';
 
-export const GET = async () => {
+export async function GET(req: NextRequest) {
   try {
-    const percentVoucher = await prisma.voucher.findMany({
-      where: {
-        type: 'PERCENT',
-      },
-      orderBy: {
-        value: 'asc',
-      },
-      take: 20,
-      select: {
-        id: true,
-        code: true,
-        type: true,
-        value: true,
-      },
-    });
+    const { searchParams } = new URL(req.url);
+    const shopId = searchParams.get('shopId');
+    const productId = searchParams.get('productId');
 
-    const shippingVoucher = await prisma.voucher.findMany({
-      where: {
-        type: 'SHIPPING',
-      },
-      orderBy: {
-        value: 'asc',
-      },
-      take: 20,
-      select: {
-        id: true,
-        code: true,
-        type: true,
-        value: true,
-      },
-    });
+    if (!shopId) {
+      return ActionResponse.toNextResponse(
+        ActionResponse.error('Missing shopId parameter', 400)
+      );
+    }
 
-    const combinedVouchers = [...percentVoucher, ...shippingVoucher];
-    return ActionResponse.toNextResponse(
-      ActionResponse.success(combinedVouchers, 'successful', 200)
+    const vouchers = await getAvailableVouchersService(
+      shopId,
+      productId || undefined
     );
-  } catch (err) {
+
+    return ActionResponse.toNextResponse(ActionResponse.success(vouchers));
+  } catch (error: any) {
+    console.error('API Error fetching vouchers:', error);
     return ActionResponse.toNextResponse(
-      ActionResponse.error('Failed when get voucher', 404, {
-        errorDetail: [String(err)],
-      })
+      ActionResponse.error(error.message || 'Internal Server Error', 500)
     );
   }
-};
+}

@@ -58,7 +58,11 @@ export function OrderCardItem({ o, t }: { o: OrderDTO; t: any }) {
               </span>
             </div>
             <div className="flex flex-col justify-start items-end min-w-[120px] text-right space-y-1">
-              <p className="font-medium">{item.product.name}</p>
+              <p className="font-medium">
+                <Link href={paths.products.detail_id(item.product.id)}>
+                  {item.product.title}
+                </Link>
+              </p>
               <p className="text-sm text-muted-foreground">
                 {t('card.items')}:{' '}
                 <span className="font-semibold">{item.quantity}</span>

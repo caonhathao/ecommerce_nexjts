@@ -10,7 +10,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Loading } from '../../../../components/loading';
 import { ProductItem } from '../../_components/product-item';
 
-type TopDealItemsProps = {
+type NewArrivalsProps = {
   size: string;
 };
 
@@ -23,15 +23,16 @@ const sizeClasses = {
   '6': 'grid-cols-6',
 };
 
-export const HotForeign = ({ size }: TopDealItemsProps) => {
-  const t = useTranslations('home_layout.hot_foreign');
+export const NewArrivals = ({ size }: NewArrivalsProps) => {
+  const t = useTranslations('home_layout.new_arrivals');
   const [response, setResponse] = useState<productDataResponse | null>(null);
   const gridClass =
-    sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4'; // Cung cấp giá trị mặc định
+    sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4';
+
   useEffect(() => {
     fetchData({
       baseUrl: '/api/product',
-      params: { page: 1, limit: size },
+      params: { page: 1, limit: size, type: 'new' },
       setData: setResponse,
     });
   }, [size]);
