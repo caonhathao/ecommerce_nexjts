@@ -912,7 +912,8 @@
       "t_months": "12 tháng",
       "t_data_from": "Số liệu từ",
       "t_most_recent": "gần nhất",
-      "t_label_1": "Số lượng"
+      "t_label_1": "Số lượng",
+      "t_empty": "Không có dữ liệu"
     },
     "product_tab": {
       "t_no_product_found": "Không có sản phẩm nào",

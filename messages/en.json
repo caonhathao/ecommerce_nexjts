@@ -887,7 +887,8 @@
       "t_3months": "90 days",
       "t_months": "12 months",
       "t_data_from": "Data from",
-      "t_most_recent": "most recent"
+      "t_most_recent": "most recent",
+      "t_empty": "No data"
     },
     "chart_order_state_rate": {
       "t_title": "Order Status Rate",

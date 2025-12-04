@@ -825,7 +825,8 @@
       "t_3months": "90日間",
       "t_months": "12ヶ月",
       "t_data_from": "データ期間:",
-      "t_most_recent": "直近"
+      "t_most_recent": "直近",
+      "t_empty": "データなし"
     },
     "chart_order_state_rate": {
       "t_title": "注文ステータス比率",
