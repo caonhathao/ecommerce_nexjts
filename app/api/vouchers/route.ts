@@ -77,13 +77,15 @@ export async function POST(req: NextRequest) {
     if (currentUser!.role === Role.seller) {
       if (!data.productIds || data.productIds.length === 0) {
         //console.log('--- [DEBUG] 6. Seller Error: No Products');
-        return ActionResponse.error('validation role', 401, {
-          errors: {
-            message:
-              'Voucher của Shop bắt buộc phải áp dụng cho ít nhất 1 sản phẩm.',
-            path: ['productIds'],
-          },
-        });
+        return ActionResponse.toNextResponse(
+          ActionResponse.error('validation role', 401, {
+            errors: {
+              message:
+                'Voucher của Shop bắt buộc phải áp dụng cho ít nhất 1 sản phẩm.',
+              path: ['productIds'],
+            },
+          })
+        );
       }
       if (data.categoryIds && data.categoryIds!.length > 0) {
         data.categoryIds = undefined;
