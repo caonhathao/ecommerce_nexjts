@@ -61,37 +61,58 @@ export function SearchFiltersPanel({
       <Separator />
 
       <div className="space-y-3">
-        <h4 className="text-sm font-semibold text-text">{c('category')}</h4>
-        <div className="flex flex-col space-y-2">
-          <button
-            onClick={() => onFilterChange({ category: undefined })}
-            className={`text-sm text-left px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
-              !filters.category
-                ? 'bg-secondary font-medium text-primary'
-                : 'text-text hover:bg-secondary/50'
-            }`}
-          >
-            {t('t_all_cate')}
-          </button>
-          {categories.map((cat) => (
+        {/* Title only search toggle */}
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <h4 className="text-sm font-semibold text-text">
+              {t('t_title_only_label_name')}
+            </h4>
+            <p className="text-xs text-text-secondary">
+              {t('t_title_only_desc_name')}
+            </p>
+          </div>
+          <input
+            type="checkbox"
+            className="w-4 h-4 accent-primary cursor-pointer"
+            checked={!!filters.titleOnly}
+            onChange={(e) => onFilterChange({ titleOnly: e.target.checked })}
+          />
+        </div>
+
+        <Separator />
+
+        <div className="space-y-3">
+          <h4 className="text-sm font-semibold text-text">{c('category')}</h4>
+          <div className="flex flex-col space-y-2">
             <button
-              key={cat.id}
-              onClick={() => onFilterChange({ query: '', category: cat.slug })}
+              onClick={() => onFilterChange({ category: undefined })}
               className={`text-sm text-left px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
-                filters.category === cat.slug
+                !filters.category
                   ? 'bg-secondary font-medium text-primary'
                   : 'text-text hover:bg-secondary/50'
               }`}
             >
-              {c(cat.slug)}
+              {t('t_all_cate')}
             </button>
-          ))}
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => onFilterChange({ category: cat.slug })}
+                className={`text-sm text-left px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
+                  filters.category === cat.slug
+                    ? 'bg-secondary font-medium text-primary'
+                    : 'text-text hover:bg-secondary/50'
+                }`}
+              >
+                {c(cat.slug)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       <Separator />
 
-      {/* Price Range */}
       <div className="space-y-3">
         <h4 className="text-sm font-semibold text-text">{t('t_price')}</h4>
         <div className="text-xs text-text-secondary mb-2">

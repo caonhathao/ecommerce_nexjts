@@ -40,25 +40,31 @@ export default function SearchPage() {
   type sortByType = 'createdAt' | 'price' | 'rating' | 'name';
   type sortOrderType = 'asc' | 'desc';
 
-  const [filters, setFilters] = useState<SearchFilters>({
+  const [filters, setFilters] = useState<SearchFilters>(() => ({
     query: searchParams.get('q') || '',
+    ai: searchParams.get('ai') === 'true',
     category: searchParams.get('category') || undefined,
     shopId: searchParams.get('shopId') || undefined,
     minPrice: searchParams.get('minPrice') || undefined,
     maxPrice: searchParams.get('maxPrice') || undefined,
+    titleOnly:
+      searchParams.get('titleOnly') === '1' ||
+      searchParams.get('titleOnly') === 'true',
     sortBy: (searchParams.get('sortBy') as sortByType) || 'createdAt',
     sortOrder: (searchParams.get('sortOrder') as sortOrderType) || 'desc',
     page: Number(searchParams.get('page')) || 1,
     limit: Number(searchParams.get('limit')) || 20,
-  });
+  }));
 
   const buildSearchParams = (filters: SearchFilters) => {
     const params = new URLSearchParams();
     if (filters.query) params.set('q', filters.query);
+    if (filters.ai) params.set('ai', 'true');
     if (filters.category) params.set('category', filters.category);
     if (filters.shopId) params.set('shopId', filters.shopId);
     if (filters.minPrice) params.set('minPrice', filters.minPrice);
     if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
+    if (filters.titleOnly) params.set('titleOnly', '1');
     params.set('sortBy', filters.sortBy);
     params.set('sortOrder', filters.sortOrder);
     params.set('page', String(filters.page));
@@ -73,7 +79,6 @@ export default function SearchPage() {
         const params = buildSearchParams(filters);
         const res = await fetch(`/api/search?${params.toString()}`);
 
-        //if !res.ok, show toast with failed desc
         if (!res.ok) {
           toast.error(t('t_search_failed'), {
             description: t('t_search_failed_desc'),
@@ -85,12 +90,10 @@ export default function SearchPage() {
           throw new Error('Failed to fetch products');
         }
         const data = await res.json();
-        //console.log('Fetched products:', data);
         setProducts(data.products);
         setPagination(data.pagination);
       } catch (error) {
         console.error('Error fetching products:', error);
-        //when connecton failed
         toast.error(t('t_connect_failed'), {
           description: t('t_connect_failed_desc'),
           action: {
@@ -106,21 +109,22 @@ export default function SearchPage() {
   }, [filters, pathname]);
 
   useEffect(() => {
-    //const url = `${pathname}?${searchParams}`;
-    //console.log('Route changed to:', url);
-
     setFilters({
       query: searchParams.get('q') || '',
+      ai: searchParams.get('ai') === 'true',
       category: searchParams.get('category') || undefined,
       shopId: searchParams.get('shopId') || undefined,
       minPrice: searchParams.get('minPrice') || undefined,
       maxPrice: searchParams.get('maxPrice') || undefined,
-      sortBy: (searchParams.get('sortBy') as any) || 'createdAt',
-      sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
+      titleOnly:
+        searchParams.get('titleOnly') === '1' ||
+        searchParams.get('titleOnly') === 'true',
+      sortBy: (searchParams.get('sortBy') as sortByType) || 'createdAt',
+      sortOrder: (searchParams.get('sortOrder') as sortOrderType) || 'desc',
       page: Number(searchParams.get('page')) || 1,
       limit: Number(searchParams.get('limit')) || 20,
     });
-  }, [pathname, searchParams]); // Re-run this effect when path or params change
+  }, [pathname, searchParams]);
 
   const handleFilterChange = (newFilters: Partial<SearchFilters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }));
@@ -136,7 +140,6 @@ export default function SearchPage() {
   };
 
   return (
-    // Tiki Background Color: #F5F5FA
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6">
         {/* Breadcrumb / Header Area */}
@@ -194,7 +197,7 @@ export default function SearchPage() {
               </Card>
             ) : (
               <>
-                {/* Product Grid - Reduced Gap to match Tiki's compact look */}
+                {/* Product Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
                   {products.map((product) => (
                     <ProductItem
@@ -204,7 +207,8 @@ export default function SearchPage() {
                         title: product.title,
                         description: product.description || 'no desctiption',
                         minPrice: Number(product.minPrice),
-                        ratingAvg: product.ratingAvg,
+                        ratingAvg: product.ratingAvg.toString(),
+                        ratingCount: product.ratingCount,
                         imageUrl: product.imageUrl || '',
                         voucher: product.voucher,
                         origin: product.origin || '',

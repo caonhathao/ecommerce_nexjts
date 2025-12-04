@@ -24,7 +24,9 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   // IMPROVEMENT: We remove 'status: "PAID"' here so we can
   // query for all 5 statuses in our new query.
   const whereClause: Prisma.OrderWhereInput = {
-    status: 'PAID',
+    status: 'DELIVERED',
+    fulfillmentStatus: 'FULFILLED',
+    paymentStatus: 'PAID',
   };
 
   try {

@@ -27,6 +27,7 @@ export interface SearchProduct {
   maxPrice: string;
   currency: string;
   ratingAvg: number;
+  ratingCount: number;
   origin: string | null;
   imageUrl: string | null;
   imageAlt: string | null;
@@ -48,10 +49,12 @@ export interface SearchProduct {
 
 export interface SearchFilters {
   query: string;
+  ai?: boolean;
   category?: string;
   shopId?: string;
   minPrice?: string;
   maxPrice?: string;
+  titleOnly?: boolean;
   sortBy: 'createdAt' | 'price' | 'rating' | 'name';
   sortOrder: 'asc' | 'desc';
   page: number;

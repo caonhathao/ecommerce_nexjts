@@ -1,5 +1,4 @@
 'use client';
-import { ProductItemSm } from '@/app/(public)/_components/product-item-sm';
 import { fetchData } from '@/funcs/fetch';
 import {
   productDataResponse,
@@ -10,10 +9,14 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { AiFillLike } from 'react-icons/ai';
 import { Loading } from '../../../../components/loading';
+import { ProductItem } from '../../_components/product-item';
 
 type TopDealItemsProps = {
   size: string;
-  renderSaleValue?: boolean;
+  limitItem?: number;
+  showDesc?: boolean;
+  showRating?: boolean;
+  showFooter?: boolean;
 };
 
 const sizeClasses = {
@@ -27,7 +30,10 @@ const sizeClasses = {
 
 export const TopDealItems = ({
   size,
-  renderSaleValue = true,
+  limitItem = 5,
+  showDesc,
+  showRating,
+  showFooter,
 }: TopDealItemsProps) => {
   const t = useTranslations('home_layout.top_deal_items');
   const [response, setResponse] = useState<productDataResponse | null>(null);
@@ -38,7 +44,7 @@ export const TopDealItems = ({
   useEffect(() => {
     fetchData({
       baseUrl: '/api/product',
-      params: { page: 1, limit: size, type: 'deal' },
+      params: { page: 1, limit: limitItem, type: 'deal' },
       setData: setResponse,
     });
   }, [size]);
@@ -69,7 +75,12 @@ export const TopDealItems = ({
       >
         {data.map((item: productItemType, index) => (
           <div key={index}>
-            <ProductItemSm item={item} renderSaleValue={renderSaleValue} />
+            <ProductItem
+              item={item}
+              showDesc={showDesc}
+              showRating={showRating}
+              showFooter={showFooter}
+            />
           </div>
         ))}
       </div>

@@ -379,6 +379,8 @@
     "t_not_found": "Không tìm thấy sản phẩm",
     "t_not_found_desc": "Hãy thử tìm lại hoặc thay đổi bộ lọc",
     "search_filter_panel": {
+      "t_title_only_label_name": "Tìm kiếm bằng tên",
+      "t_title_only_desc_name": "Chỉ tìm kiếm sản phẩm theo tên",
       "t_filter": "Bộ lọc",
       "t_reset": "Đặt lại",
       "t_all_cate": "Tất cả danh mục",
@@ -899,7 +901,7 @@
       "t_most_recent": "gần nhất",
       "t_label_1": "Trạng thái",
       "t_label_2": "Đang chờ",
-      "t_label_3": "Đã thanh toán",
+      "t_label_3": "Đã vận chuyển",
       "t_label_4": "Đang xử lí",
       "t_label_5": "Đã hủy",
       "t_label_6": "Đã hoàn tiền"

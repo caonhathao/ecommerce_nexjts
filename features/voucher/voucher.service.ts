@@ -20,7 +20,7 @@ export const getAvailableVouchersService = async (
   };
 
   if (productId) {
-    // 1. Get product category to check category-specific vouchers
+    // Get product category to check category-specific vouchers
     const product = await prisma.product.findUnique({
       where: { id: productId },
       select: { categoryId: true },
@@ -69,7 +69,6 @@ export const getAvailableVouchersService = async (
     },
   });
 
-  // Transform Decimal to Number for frontend safety
   return vouchers.map((v) => ({
     ...v,
     value: Number(v.value),

@@ -1,3 +1,4 @@
+import { parseSearchQueryWithAI } from '@/features/search/gemini-search';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
 import { ActionResponse } from '@/lib/service-response';
@@ -10,6 +11,7 @@ async function getCategoryWithChildren(
   rootId: string,
   maxDepth = 6
 ): Promise<string[]> {
+  // BFS
   const allIds: string[] = [];
   const visited = new Set<string>();
   let currentLevelIds = [rootId];
@@ -49,13 +51,47 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const query = searchParams.get('q') || '';
-    const category = searchParams.get('category');
+    let query = searchParams.get('q') || '';
+    const useAI = searchParams.get('ai') === 'true';
+
+    const aiParams: any = {};
+    if (useAI && query) {
+      try {
+        // Fetch valid category slugs for Gemini to match against
+        const categories = await prisma.category.findMany({
+          select: { slug: true },
+        });
+        const categorySlugs = categories.map((c) => c.slug);
+
+        const aiResult = await parseSearchQueryWithAI(query, categorySlugs);
+
+        if (aiResult) {
+          // Use AI's cleaned keywords (e.g., "laptop" instead of "show me cheap laptops")
+          if (aiResult.query) query = aiResult.query;
+
+          // Map AI findings to filters
+          if (aiResult.minPrice) aiParams.minPrice = String(aiResult.minPrice);
+          if (aiResult.maxPrice) aiParams.maxPrice = String(aiResult.maxPrice);
+          if (aiResult.category) aiParams.category = aiResult.category;
+          if (aiResult.sortBy) aiParams.sortBy = aiResult.sortBy;
+          if (aiResult.sortOrder) aiParams.sortOrder = aiResult.sortOrder;
+        }
+      } catch (err) {
+        console.error('AI Search Failed, falling back to standard', err);
+      }
+    }
+
+    const titleOnly =
+      searchParams.get('titleOnly') === '1' ||
+      searchParams.get('titleOnly') === 'true';
+    const category = searchParams.get('category') || aiParams.category;
     const shopId = searchParams.get('shopId');
-    const minPrice = searchParams.get('minPrice');
-    const maxPrice = searchParams.get('maxPrice');
-    const sortBy = searchParams.get('sortBy') || 'createdAt';
-    const sortOrder = searchParams.get('sortOrder') || 'desc';
+    const minPrice = searchParams.get('minPrice') || aiParams.minPrice;
+    const maxPrice = searchParams.get('maxPrice') || aiParams.maxPrice;
+    const sortBy = searchParams.get('sortBy') || aiParams.sortBy || 'createdAt';
+    const sortOrder =
+      searchParams.get('sortOrder') || aiParams.sortOrder || 'desc';
+
     const page = Number(searchParams.get('page')) || 1;
     const limit = Number(searchParams.get('limit')) || 20;
     const skip = (page - 1) * limit;
@@ -68,11 +104,17 @@ export async function GET(req: NextRequest) {
 
     // Search by product name or seller shop name
     if (query) {
-      whereClause.OR = [
-        { title: { contains: query, mode: 'insensitive' } },
-        { description: { contains: query, mode: 'insensitive' } },
-        { shop: { name: { contains: query, mode: 'insensitive' } } },
-      ];
+      if (titleOnly) {
+        // Only search in product title
+        whereClause.OR = [{ title: { contains: query, mode: 'insensitive' } }];
+      } else {
+        // Default behavior: search in title, description, and shop name
+        whereClause.OR = [
+          { title: { contains: query, mode: 'insensitive' } },
+          { description: { contains: query, mode: 'insensitive' } },
+          { shop: { name: { contains: query, mode: 'insensitive' } } },
+        ];
+      }
     }
 
     if (category) {
@@ -85,12 +127,13 @@ export async function GET(req: NextRequest) {
         },
       });
 
-      if (!data)
+      if (!data) {
         return ActionResponse.toNextResponse({
           success: false,
           message: 't_category_not_found',
           code: 403,
         } as ServiceResponse);
+      }
 
       const categoryIds = await getCategoryWithChildren(data.id);
       whereClause.categoryId = { in: categoryIds };
@@ -102,13 +145,13 @@ export async function GET(req: NextRequest) {
 
     if (minPrice) {
       whereClause.minPrice = {
-        gte: minPrice,
+        gte: Number(minPrice),
       };
     }
 
     if (maxPrice) {
       whereClause.maxPrice = {
-        lte: maxPrice,
+        lte: Number(maxPrice),
       };
     }
 
@@ -134,6 +177,7 @@ export async function GET(req: NextRequest) {
           maxPrice: true,
           currency: true,
           ratingAvg: true,
+          ratingCount: true,
           origin: true,
           images: {
             take: 1,
@@ -180,6 +224,7 @@ export async function GET(req: NextRequest) {
       maxPrice: p.maxPrice,
       currency: p.currency,
       ratingAvg: p.ratingAvg,
+      ratingCount: p.ratingCount,
       origin: p.origin,
       imageUrl: p.images[0]?.url ?? null,
       imageAlt: p.images[0]?.alt ?? null,

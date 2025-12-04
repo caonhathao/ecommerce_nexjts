@@ -25,17 +25,18 @@ import { TicketPercent } from 'lucide-react';
 
 import { ChatButton } from '@/components/chat/chat-button';
 
+import { VoucherSelector } from '@/features/voucher/_components/voucher-selector';
+import { VoucherDto } from '@/features/voucher/voucher.dto';
 import Desc from './_components/desc';
 import { Reviews } from './_components/reviews';
 import SlideImg from './_components/slide-img';
 import { SuggestDealToday } from './_components/suggest-deal-today';
-import { VoucherSelector } from '@/features/voucher/_components/voucher-selector';
-import { VoucherDto } from '@/features/voucher/voucher.dto';
 
-import logo from '@/public/logo.jpg';
-import Decimal = Prisma.Decimal;
-import { RatingStars } from '@/app/(public)/_components/rating-starts';
 import { TopDealItems } from '@/app/(public)/(home)/_components/top-deal-items';
+import { RatingStars } from '@/app/(public)/_components/rating-starts';
+import logo from '@/public/logo.jpg';
+import Link from 'next/link';
+import Decimal = Prisma.Decimal;
 
 interface SelectedVariant {
   name: string;
@@ -142,7 +143,6 @@ const DetailPage = () => {
     };
   }, [currentVariantPrice, selectedVouchers]);
 
-  // Actions
   const handleSelectVariant = (
     id: string,
     name: string,
@@ -189,7 +189,6 @@ const DetailPage = () => {
       const orderData = {
         notes: '',
         items: [item],
-        // Pass the actual Voucher Codes
         voucher: selectedVouchers.map((v) => ({ code: v.code })),
       };
 
@@ -264,7 +263,7 @@ const DetailPage = () => {
     const percentageDrop = Math.round((discountAmount / original) * 100);
 
     return (
-      <div className="flex flex-col gap-2 p-4 bg-gradient-to-r from-destructive/10 to-transparent rounded-xl border border-destructive">
+      <div className="flex flex-col gap-2 p-4 bg-linear-to-r from-destructive/10 to-transparent rounded-xl border border-destructive">
         <div className="flex items-end gap-3">
           <p className="text-3xl font-bold text-destructive leading-none">
             {formatPrice(final, {
@@ -339,8 +338,10 @@ const DetailPage = () => {
               <div className="relative bg-background-secondary rounded-lg p-3 flex flex-col justify-start items-start">
                 {/* Promo Banners */}
                 <div className="flex gap-2 mb-2">
-                  <Badge variant="secondary" className="bg-info hover:bg-info">
-                    <HiMiniCheckBadge className="mr-1" /> Official
+                  <Badge variant="secondary">
+                    <div className=" flex flex-row items-center text-center">
+                      <HiMiniCheckBadge className="mr-1" /> Official
+                    </div>
                   </Badge>
                 </div>
 
@@ -440,7 +441,12 @@ const DetailPage = () => {
               )}
 
               {/* Related/Top Deals */}
-              <TopDealItems size="4" renderSaleValue={false} />
+              <TopDealItems
+                size="3"
+                limitItem={3}
+                showRating={false}
+                showFooter={false}
+              />
 
               {/* Product Description */}
               <Desc data={data.description} />
@@ -464,12 +470,14 @@ const DetailPage = () => {
             {/* Shop Info */}
             <div className="flex items-center gap-3">
               <div className="relative w-12 h-12 rounded-full border overflow-hidden">
-                <Image
-                  src={data.shop?.logoUrl || logo}
-                  fill
-                  alt="shop-logo"
-                  className="object-cover"
-                />
+                <Link href={`/shop/${data.shop?.slug}`}>
+                  <Image
+                    src={data.shop?.logoUrl || logo}
+                    fill
+                    alt="shop-logo"
+                    className="object-cover"
+                  />
+                </Link>
               </div>
               <div className="flex flex-col">
                 <p className="font-semibold text-sm text-foreground line-clamp-1">
