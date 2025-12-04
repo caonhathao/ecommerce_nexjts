@@ -42,6 +42,7 @@ export default function SearchPage() {
 
   const [filters, setFilters] = useState<SearchFilters>(() => ({
     query: searchParams.get('q') || '',
+    ai: searchParams.get('ai') === 'true',
     category: searchParams.get('category') || undefined,
     shopId: searchParams.get('shopId') || undefined,
     minPrice: searchParams.get('minPrice') || undefined,
@@ -58,6 +59,7 @@ export default function SearchPage() {
   const buildSearchParams = (filters: SearchFilters) => {
     const params = new URLSearchParams();
     if (filters.query) params.set('q', filters.query);
+    if (filters.ai) params.set('ai', 'true');
     if (filters.category) params.set('category', filters.category);
     if (filters.shopId) params.set('shopId', filters.shopId);
     if (filters.minPrice) params.set('minPrice', filters.minPrice);
@@ -77,7 +79,6 @@ export default function SearchPage() {
         const params = buildSearchParams(filters);
         const res = await fetch(`/api/search?${params.toString()}`);
 
-        //if !res.ok, show toast with failed desc
         if (!res.ok) {
           toast.error(t('t_search_failed'), {
             description: t('t_search_failed_desc'),
@@ -89,12 +90,10 @@ export default function SearchPage() {
           throw new Error('Failed to fetch products');
         }
         const data = await res.json();
-        //console.log('Fetched products:', data);
         setProducts(data.products);
         setPagination(data.pagination);
       } catch (error) {
         console.error('Error fetching products:', error);
-        //when connecton failed
         toast.error(t('t_connect_failed'), {
           description: t('t_connect_failed_desc'),
           action: {
@@ -110,11 +109,9 @@ export default function SearchPage() {
   }, [filters, pathname]);
 
   useEffect(() => {
-    //const url = `${pathname}?${searchParams}`;
-    //console.log('Route changed to:', url);
-
     setFilters({
       query: searchParams.get('q') || '',
+      ai: searchParams.get('ai') === 'true',
       category: searchParams.get('category') || undefined,
       shopId: searchParams.get('shopId') || undefined,
       minPrice: searchParams.get('minPrice') || undefined,
@@ -127,7 +124,7 @@ export default function SearchPage() {
       page: Number(searchParams.get('page')) || 1,
       limit: Number(searchParams.get('limit')) || 20,
     });
-  }, [pathname, searchParams]); // Re-run this effect when path or params change
+  }, [pathname, searchParams]);
 
   const handleFilterChange = (newFilters: Partial<SearchFilters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }));

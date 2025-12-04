@@ -48,6 +48,7 @@ export interface SearchProduct {
 
 export interface SearchFilters {
   query: string;
+  ai?: boolean;
   category?: string;
   shopId?: string;
   minPrice?: string;
