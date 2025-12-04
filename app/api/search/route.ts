@@ -50,6 +50,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
 
     const query = searchParams.get('q') || '';
+    const titleOnlyParam = searchParams.get('titleOnly');
+    const titleOnly = titleOnlyParam === '1' || titleOnlyParam === 'true';
     const category = searchParams.get('category');
     const shopId = searchParams.get('shopId');
     const minPrice = searchParams.get('minPrice');
@@ -68,11 +70,17 @@ export async function GET(req: NextRequest) {
 
     // Search by product name or seller shop name
     if (query) {
-      whereClause.OR = [
-        { title: { contains: query, mode: 'insensitive' } },
-        { description: { contains: query, mode: 'insensitive' } },
-        { shop: { name: { contains: query, mode: 'insensitive' } } },
-      ];
+      if (titleOnly) {
+        // Only search in product title
+        whereClause.OR = [{ title: { contains: query, mode: 'insensitive' } }];
+      } else {
+        // Default behavior: search in title, description, and shop name
+        whereClause.OR = [
+          { title: { contains: query, mode: 'insensitive' } },
+          { description: { contains: query, mode: 'insensitive' } },
+          { shop: { name: { contains: query, mode: 'insensitive' } } },
+        ];
+      }
     }
 
     if (category) {
