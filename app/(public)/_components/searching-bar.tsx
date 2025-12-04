@@ -3,13 +3,13 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import { Camera, Loader2, Search, Sparkles, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState, KeyboardEvent, ChangeEvent } from 'react';
-import { useDebounce } from 'use-debounce';
-import { Camera, Loader2, Search, Sparkles, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { useDebounce } from 'use-debounce';
 
 interface Suggestion {
   id: string;
@@ -196,7 +196,7 @@ const SearchingBar = () => {
 
       <div
         className={cn(
-          'flex flex-row items-center gap-0 w-[85%] h-10 border rounded-lg pl-4 bg-card m-0 transition-all duration-300',
+          'flex flex-row items-center gap-0 w-full h-10 border rounded-lg pl-4 bg-card m-0 transition-all duration-300',
           isAiMode
             ? 'border-purple-500 ring-1 ring-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.15)]'
             : 'border-secondary'

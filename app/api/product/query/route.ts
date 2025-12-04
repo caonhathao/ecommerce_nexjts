@@ -37,6 +37,7 @@ export async function GET(req: Request) {
         title: true,
         minPrice: true,
         ratingAvg: true,
+        ratingCount: true,
         description: true,
         images: {
           take: 1,
@@ -74,6 +75,7 @@ export async function GET(req: Request) {
       title: p.title,
       minPrice: p.minPrice,
       ratingAvg: p.ratingAvg,
+      ratingCount: p.ratingCount,
       imageUrl: p.images[0]?.url ?? null,
       voucher: p.VoucherProduct[0]?.voucher ?? null,
       origin: p.origin,
