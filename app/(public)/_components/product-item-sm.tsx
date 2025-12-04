@@ -5,12 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { formatPrice } from '@/lib/utils';
 import { productItemType } from '@/types/public.data-types';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { RatingStars } from './rating-starts';
-import { formatPrice } from '@/lib/utils';
-import { useTranslations } from 'next-intl';
 
 interface ProductItemProps {
   item: productItemType;
@@ -93,7 +92,7 @@ export const ProductItemSm = ({
       className={`flex flex-col justify-start items-start flex-1 border border-border border-2 rounded-lg hover:cursor-pointer`}
       onClick={() => handleOpenDetail(item.id)}
     >
-      <div className="relative w-full flex-shrink-0 aspect-square overflow-hidden rounded-t-lg">
+      <div className="relative w-full shrink-0 aspect-square overflow-hidden rounded-t-lg">
         <Image
           src={item.imageUrl}
           alt="thumbnail"
@@ -102,7 +101,7 @@ export const ProductItemSm = ({
           className="object-cover"
         />
       </div>
-      <Card className="w-full gap-2 p-0 max-w-sm shadow-none border-none rounded-t-none flex-shrink-0">
+      <Card className="w-full gap-2 p-0 max-w-sm shadow-none border-none rounded-t-none shrink-0">
         <CardHeader className="p-2">
           <CardTitle className="overflow-hidden">
             <p className="text-base font-normal line-clamp-1">{item.title}</p>
@@ -115,7 +114,7 @@ export const ProductItemSm = ({
                   : 'Sản phẩm này là độc nhất chỉ có 1 không 2  mà giá lại rẻ hãy mua ngay hôm nay'}
               </p>
             </div>
-            <RatingStars value={item.ratingAvg} size={10} />
+            {/* <RatingStars value={Number(item.ratingAvg)} size={10} /> */}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col justify-start items-start px-2 py-1">

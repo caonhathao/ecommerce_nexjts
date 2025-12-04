@@ -6,12 +6,13 @@ import {
 } from '@/types/public.data-types';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Loading } from '../../../../components/loading';
 import { ProductItem } from '../../_components/product-item';
-import { toast } from 'sonner';
 
 type TopDealItemsProps = {
   size: string; // This acts as the "Limit" per page
+  limitItem?: string;
 };
 
 const sizeClasses = {
@@ -23,7 +24,7 @@ const sizeClasses = {
   '6': 'grid-cols-6',
 };
 
-export const SuggestDealToday = ({ size }: TopDealItemsProps) => {
+export const SuggestDealToday = ({ size, limitItem }: TopDealItemsProps) => {
   const t = useTranslations('home_layout.suggest_deal_today');
   const [products, setProducts] = useState<productItemType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ export const SuggestDealToday = ({ size }: TopDealItemsProps) => {
 
   const gridClass =
     sizeClasses[size as keyof typeof sizeClasses] || 'grid-cols-4';
-  const limit = parseInt(size) || 10;
+  const limit = limitItem ? parseInt(limitItem) : 10;
 
   const loadProducts = async (currentPage: number) => {
     setLoading(true);

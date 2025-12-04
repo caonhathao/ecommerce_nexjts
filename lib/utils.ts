@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import dayjs from 'dayjs';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -52,7 +52,7 @@ export function formatPrice(
   // Nếu tỷ giá khác 1, ta thực hiện chia (hoặc nhân tùy logic lưu DB của bạn)
   // Ví dụ: DB lưu 25000 (VND), muốn ra USD (rate 25000) => 25000 / 25000 = 1
   if (rate && rate > 0 && currency !== 'VND') {
-    numValue = numValue / rate;
+    numValue = Math.ceil(numValue / rate);
   }
 
   // 3. Tự động chọn locale nếu không truyền vào
@@ -64,7 +64,7 @@ export function formatPrice(
       style: 'currency',
       currency: currency,
       // Với tiền Việt/Yên Nhật thì thường không cần số thập phân, còn USD thì cần 2 số
-      maximumFractionDigits: ['VND', 'JPY'].includes(currency) ? 2 : 2,
+      maximumFractionDigits: ['VND', 'JPY'].includes(currency) ? 0 : 2,
     });
   } catch (error) {
     console.error(error);
