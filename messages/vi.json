@@ -379,6 +379,8 @@
     "t_not_found": "Không tìm thấy sản phẩm",
     "t_not_found_desc": "Hãy thử tìm lại hoặc thay đổi bộ lọc",
     "search_filter_panel": {
+      "t_title_only_label_name": "Tìm kiếm bằng tên",
+      "t_title_only_desc_name": "Chỉ tìm kiếm sản phẩm theo tên",
       "t_filter": "Bộ lọc",
       "t_reset": "Đặt lại",
       "t_all_cate": "Tất cả danh mục",
