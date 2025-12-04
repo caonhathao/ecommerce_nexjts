@@ -379,6 +379,8 @@
     "t_not_found": "No products found",
     "t_not_found_desc": "Try searching again or changing the filters",
     "search_filter_panel": {
+      "t_title_only_label_name": "Search in title only",
+      "t_title_only_desc_name": "Keywords must appear in the product title.",
       "t_filter": "Filters",
       "t_reset": "Reset",
       "t_all_cate": "All Categories",

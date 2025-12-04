@@ -52,6 +52,7 @@ export interface SearchFilters {
   shopId?: string;
   minPrice?: string;
   maxPrice?: string;
+  titleOnly?: boolean;
   sortBy: 'createdAt' | 'price' | 'rating' | 'name';
   sortOrder: 'asc' | 'desc';
   page: number;

@@ -40,17 +40,20 @@ export default function SearchPage() {
   type sortByType = 'createdAt' | 'price' | 'rating' | 'name';
   type sortOrderType = 'asc' | 'desc';
 
-  const [filters, setFilters] = useState<SearchFilters>({
+  const [filters, setFilters] = useState<SearchFilters>(() => ({
     query: searchParams.get('q') || '',
     category: searchParams.get('category') || undefined,
     shopId: searchParams.get('shopId') || undefined,
     minPrice: searchParams.get('minPrice') || undefined,
     maxPrice: searchParams.get('maxPrice') || undefined,
+    titleOnly:
+      searchParams.get('titleOnly') === '1' ||
+      searchParams.get('titleOnly') === 'true',
     sortBy: (searchParams.get('sortBy') as sortByType) || 'createdAt',
     sortOrder: (searchParams.get('sortOrder') as sortOrderType) || 'desc',
     page: Number(searchParams.get('page')) || 1,
     limit: Number(searchParams.get('limit')) || 20,
-  });
+  }));
 
   const buildSearchParams = (filters: SearchFilters) => {
     const params = new URLSearchParams();
@@ -59,6 +62,7 @@ export default function SearchPage() {
     if (filters.shopId) params.set('shopId', filters.shopId);
     if (filters.minPrice) params.set('minPrice', filters.minPrice);
     if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
+    if (filters.titleOnly) params.set('titleOnly', '1');
     params.set('sortBy', filters.sortBy);
     params.set('sortOrder', filters.sortOrder);
     params.set('page', String(filters.page));
@@ -115,8 +119,11 @@ export default function SearchPage() {
       shopId: searchParams.get('shopId') || undefined,
       minPrice: searchParams.get('minPrice') || undefined,
       maxPrice: searchParams.get('maxPrice') || undefined,
-      sortBy: (searchParams.get('sortBy') as any) || 'createdAt',
-      sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
+      titleOnly:
+        searchParams.get('titleOnly') === '1' ||
+        searchParams.get('titleOnly') === 'true',
+      sortBy: (searchParams.get('sortBy') as sortByType) || 'createdAt',
+      sortOrder: (searchParams.get('sortOrder') as sortOrderType) || 'desc',
       page: Number(searchParams.get('page')) || 1,
       limit: Number(searchParams.get('limit')) || 20,
     });
@@ -136,7 +143,6 @@ export default function SearchPage() {
   };
 
   return (
-    // Tiki Background Color: #F5F5FA
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6">
         {/* Breadcrumb / Header Area */}
@@ -194,7 +200,7 @@ export default function SearchPage() {
               </Card>
             ) : (
               <>
-                {/* Product Grid - Reduced Gap to match Tiki's compact look */}
+                {/* Product Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
                   {products.map((product) => (
                     <ProductItem
