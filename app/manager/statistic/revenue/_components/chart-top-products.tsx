@@ -70,7 +70,7 @@ const TopProduct = () => {
         cacheType: 'default',
       });
       if (res) {
-        //console.log(res.data);
+        console.log(res);
         setData(res.data);
       }
     };
@@ -83,8 +83,8 @@ const TopProduct = () => {
 
   if (!data) return <Loading />;
   return (
-    <div className="w-[50%]">
-      <Card className="@container/card">
+    <div className="w-full h-full">
+      <Card className="@container/card w-full h-full">
         <CardHeader>
           <CardTitle>{t('t_title')}</CardTitle>
           <CardDescription>
@@ -135,38 +135,44 @@ const TopProduct = () => {
             </Select>
           </CardAction>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <BarChart
-              accessibilityLayer
-              data={data ?? undefined}
-              layout="vertical"
-              margin={{
-                left: -20,
-              }}
-            >
-              <XAxis type="number" dataKey="totalQuantity" hide />
-              <YAxis
-                dataKey="title"
-                type="category"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Bar
-                dataKey="totalQuantity"
-                fill="var(--chart-2)"
-                radius={5}
-                onClick={(data) => handleOpenDetail(data.productId)}
-                className="hover:cursor-pointer"
-              />
-            </BarChart>
-          </ChartContainer>
+        <CardContent className="w-full h-full">
+          {data.length !== 0 ? (
+            <ChartContainer config={chartConfig}>
+              <BarChart
+                accessibilityLayer
+                data={data ?? undefined}
+                layout="vertical"
+                margin={{
+                  left: -20,
+                }}
+              >
+                <XAxis type="number" dataKey="totalQuantity" hide />
+                <YAxis
+                  dataKey="title"
+                  type="category"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) => value.slice(0, 3)}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Bar
+                  dataKey="totalQuantity"
+                  fill="var(--chart-2)"
+                  radius={5}
+                  onClick={(data) => handleOpenDetail(data.productId)}
+                  className="hover:cursor-pointer"
+                />
+              </BarChart>
+            </ChartContainer>
+          ) : (
+            <div className="w-full h-full flex justify-center items-center italic">
+              {t('t_empty')}
+            </div>
+          )}
         </CardContent>
       </Card>
       <TableCellViewer

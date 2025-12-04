@@ -100,7 +100,7 @@ const OrderStatusRate = () => {
   if (!data) return <Loading />;
 
   return (
-    <div className="w-[50%]">
+    <div className="w-full h-full">
       <Card className="@container/card">
         <CardHeader>
           <CardTitle>{t('t_title')}</CardTitle>

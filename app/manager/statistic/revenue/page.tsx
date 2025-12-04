@@ -9,7 +9,7 @@ const RevenuePage = () => {
   return (
     <div className="w-full flex flex-col p-3 gap-3">
       <ChartAreaRevenue />
-      <div className="w-full flex flex-row gap-3 justify-between items-start">
+      <div className="w-full grid grid-cols-2 gap-3 ">
         <OrderStatusRate />
         <TopProduct />
       </div>
