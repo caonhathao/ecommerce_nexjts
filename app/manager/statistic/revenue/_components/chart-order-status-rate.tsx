@@ -42,7 +42,7 @@ const OrderStatusRate = () => {
       label: t('t_label_2'),
       color: 'var(--chart-5)',
     },
-    PAID: {
+    DELIVERED: {
       label: t('t_label_3'),
       color: 'var(--chart-2)',
     },

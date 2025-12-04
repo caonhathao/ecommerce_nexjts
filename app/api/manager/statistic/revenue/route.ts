@@ -19,7 +19,9 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const monthParam = searchParams.get('month')?.toString();
 
   const whereClause: Prisma.OrderWhereInput = {
-    status: 'PAID',
+    fulfillmentStatus: 'FULFILLED',
+    status: 'DELIVERED',
+    paymentStatus: 'PAID',
   };
 
   // --- 2. Add date logic based on params ---
