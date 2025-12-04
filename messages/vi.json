@@ -1047,6 +1047,18 @@
           "canceled": "Đã hủy"
         }
       }
+    },
+    "voucher_page": {
+      "filter": {
+        "choose_shop": "Chọn cửa hàng",
+        "placeholder": "Thời gian",
+        "select": {
+          "all": "Tất cả",
+          "shipping": "Vận chuyển",
+          "fix": "Cố định",
+          "percent": "Phần trăm"
+        }
+      }
     }
   }
 }

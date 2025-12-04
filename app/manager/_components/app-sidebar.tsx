@@ -6,6 +6,7 @@ import {
   GalleryVerticalEnd,
   Settings2,
   SquareTerminal,
+  Ticket,
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -161,6 +162,17 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
           {
             title: t('t_shop'),
             url: '#',
+          },
+        ],
+      },
+      {
+        title: 'Vouchers',
+        url: '#',
+        icon: Ticket,
+        items: [
+          {
+            title: 'View vouchers',
+            url: '/manager/vouchers',
           },
         ],
       },
