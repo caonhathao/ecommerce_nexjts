@@ -1,3 +1,4 @@
+import { parseSearchQueryWithAI } from '@/features/search/gemini-search';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
 import { ActionResponse } from '@/lib/service-response';
@@ -5,7 +6,6 @@ import { ServiceResponse } from '@/types/api-response';
 import { NextRequest, NextResponse } from 'next/server';
 import ProductWhereInput = Prisma.ProductWhereInput;
 import ProductOrderByWithRelationInput = Prisma.ProductOrderByWithRelationInput;
-import { parseSearchQueryWithAI } from '@/features/search/gemini-search';
 
 async function getCategoryWithChildren(
   rootId: string,
@@ -177,6 +177,7 @@ export async function GET(req: NextRequest) {
           maxPrice: true,
           currency: true,
           ratingAvg: true,
+          ratingCount: true,
           origin: true,
           images: {
             take: 1,
@@ -223,6 +224,7 @@ export async function GET(req: NextRequest) {
       maxPrice: p.maxPrice,
       currency: p.currency,
       ratingAvg: p.ratingAvg,
+      ratingCount: p.ratingCount,
       origin: p.origin,
       imageUrl: p.images[0]?.url ?? null,
       imageAlt: p.images[0]?.alt ?? null,

@@ -27,6 +27,7 @@ export interface SearchProduct {
   maxPrice: string;
   currency: string;
   ratingAvg: number;
+  ratingCount: number;
   origin: string | null;
   imageUrl: string | null;
   imageAlt: string | null;

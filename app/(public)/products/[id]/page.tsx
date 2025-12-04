@@ -263,7 +263,7 @@ const DetailPage = () => {
     const percentageDrop = Math.round((discountAmount / original) * 100);
 
     return (
-      <div className="flex flex-col gap-2 p-4 bg-gradient-to-r from-destructive/10 to-transparent rounded-xl border border-destructive">
+      <div className="flex flex-col gap-2 p-4 bg-linear-to-r from-destructive/10 to-transparent rounded-xl border border-destructive">
         <div className="flex items-end gap-3">
           <p className="text-3xl font-bold text-destructive leading-none">
             {formatPrice(final, {

@@ -1,4 +1,6 @@
 'use client';
+import SearchingBar from '@/app/(public)/_components/searching-bar';
+import { Loading } from '@/components/loading';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
@@ -19,8 +21,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { IoChatboxEllipsesOutline } from 'react-icons/io5';
 import { MdOutlineRateReview } from 'react-icons/md';
-import { Loading } from '@/components/loading';
-import SearchingBar from '@/app/(public)/_components/searching-bar';
 
 const ShopPage = ({ children }: { children: React.ReactNode }) => {
   const params = useParams();
@@ -55,9 +55,9 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
     );
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-3 bg-background-secondary my-3">
+    <div className="w-full flex flex-col justify-center items-center gap-3 bg-background">
       {/* show shop info */}
-      <div className="w-full h-fit bg-background flex justify-center items-center">
+      <div className="w-full h-fit bg-primary/60 flex justify-center items-center">
         <div className="relative w-fit h-fit">
           {/* show cover phto */}
           <Image
@@ -67,7 +67,7 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
             alt="cover-photo"
           />
           {/* show a box with logo and others info */}
-          <div className=" rounded-lg bg-background-secondary absolute left-5 bottom-5 p-3 flex flex-row justify-between items-center gap-5 drop-shadow-md drop-shadow-primary border-2 broder-primary">
+          <div className=" rounded-lg bg-background-secondary absolute left-2 bottom-2 p-3 flex flex-row justify-between items-center gap-5 drop-shadow-xs drop-shadow-primary border-2 broder-primary">
             {/* logo */}
             <Image
               src={shopData.logoUrl}
@@ -105,7 +105,7 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
         </div>
       </div>
       {/* navigator bar: will navigate to store page (home page), products, to-sale and one search bar */}
-      <div className="w-[70%] flex flex-row justify-between items-center bg-background-secondary">
+      <div className="w-[70%] flex flex-row justify-between items-center bg-background-secondary p-2 rounded-lg">
         <NavigationMenu viewport={isMobile}>
           <NavigationMenuList>
             <NavigationMenuItem>
