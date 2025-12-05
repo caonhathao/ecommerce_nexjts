@@ -10,7 +10,7 @@ import {
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import Pagination from '../../_components/pagination';
+import Pagination from '../../../../../components/custom/pagination';
 
 const ShopProduct = () => {
   const searchParams = useSearchParams();

@@ -5,7 +5,7 @@ import Currency = $Enums.Currency;
 export interface VoucherDto {
   id: string;
   code: string;
-  type: string;
+  type: VoucherType;
   value: number;
   minSubtotal: number;
   maxDiscount: number;

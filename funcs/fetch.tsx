@@ -1,4 +1,4 @@
-import { reviewsType } from '@/types/public.data-types';
+import { reviewsItemType } from '@/types/public.data-types';
 import React, { SetStateAction } from 'react';
 
 /**
@@ -70,7 +70,7 @@ export const fetchData = async <T,>({
 };
 
 export const fetchReviews = async (
-  setData: React.Dispatch<SetStateAction<reviewsType[]>>,
+  setData: React.Dispatch<SetStateAction<reviewsItemType[]>>,
   id: string,
   page?: number,
   limit?: number
