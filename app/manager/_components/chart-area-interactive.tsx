@@ -143,7 +143,6 @@ export function ChartAreaInteractive() {
 
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = React.useState('90d');
-  const [desc, setDesc] = React.useState<string>(t('t_3m') || '');
 
   React.useEffect(() => {
     if (isMobile) {
@@ -151,15 +150,25 @@ export function ChartAreaInteractive() {
     }
   }, [isMobile]);
 
+  const rangeConfig = React.useMemo(() => {
+    switch (timeRange) {
+      case '30d':
+        return { days: 30, label: t('t_30d') };
+      case '7d':
+        return { days: 7, label: t('t_7d') };
+      case '90d':
+      default:
+        return { days: 90, label: t('t_3m') };
+    }
+  }, [timeRange, t]);
+
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date);
     const referenceDate = new Date('2024-06-30');
     let daysToSubtract = 90;
     if (timeRange === '30d') {
-      setDesc(t('t_30d'));
       daysToSubtract = 30;
     } else if (timeRange === '7d') {
-      setDesc(t('t_7d'));
       daysToSubtract = 7;
     }
     const startDate = new Date(referenceDate);
@@ -172,8 +181,10 @@ export function ChartAreaInteractive() {
       <CardHeader>
         <CardTitle>{t('t_total_customer')}</CardTitle>
         <CardDescription>
-          <span className="hidden @[540px]/card:block">{desc}</span>
-          <span className="@[540px]/card:hidden">{desc}</span>
+          <span className="hidden @[540px]/card:block">
+            {rangeConfig.label}
+          </span>
+          <span className="@[540px]/card:hidden">{rangeConfig.label}</span>
         </CardDescription>
         <CardAction>
           <ToggleGroup
