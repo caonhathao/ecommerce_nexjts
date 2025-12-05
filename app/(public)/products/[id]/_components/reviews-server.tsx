@@ -62,7 +62,7 @@ export function ReviewsServer({ id, ratingAvg, ratingCount }: props) {
     return <Loading />;
   }
 
-  const OpenImage = ({ list }: { list: string[] }) => {
+  const OpenImage = ({ list }: { list: { url: string }[] }) => {
     return (
       <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-black/80 backdrop-blur-sm">
         <div className="absolute top-5 right-5">
@@ -89,7 +89,7 @@ export function ReviewsServer({ id, ratingAvg, ratingCount }: props) {
                     {/* Bỏ viền card cho đẹp */}
                     <CardContent className="flex aspect-square items-center justify-center p-0">
                       <Image
-                        src={value}
+                        src={value.url}
                         width={1000}
                         height={1000}
                         alt="image-review"
@@ -166,7 +166,7 @@ export function ReviewsServer({ id, ratingAvg, ratingCount }: props) {
                 .map((value, index) => (
                   <Image
                     key={index}
-                    src={value}
+                    src={value.url}
                     width={200}
                     height={200}
                     alt="image-review"
