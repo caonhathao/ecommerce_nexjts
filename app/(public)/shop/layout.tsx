@@ -62,8 +62,9 @@ const ShopPage = ({ children }: { children: React.ReactNode }) => {
           {/* show cover phto */}
           <Image
             src={shopData.coverUrl}
-            width={800}
-            height={300}
+            width={1200}
+            height={450}
+            quality={90}
             alt="cover-photo"
           />
           {/* show a box with logo and others info */}
