@@ -40,13 +40,13 @@ export async function POST() {
 
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { stripeAccount: account.id },
+      data: { stripeAccount: account.id, role: 'seller' },
     });
 
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: `${process.env.NEXT_PUBLIC_BASE_URL}/seller/onboarding`,
-      return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/seller/dashboard`,
+      refresh_url: `${process.env.NEXT_PUBLIC_BASE_URL}/seller/`,
+      return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/seller/`,
       type: 'account_onboarding',
     });
 
