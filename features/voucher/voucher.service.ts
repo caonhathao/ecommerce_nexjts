@@ -277,3 +277,43 @@ export const getShopVouchersService = async (params: GetVoucherParams) => {
     },
   };
 };
+
+export const disableVoucherService = async (
+  voucherId: string,
+  userId: string,
+  isAdmin = false
+) => {
+  const voucher = await prisma.voucher.findUnique({
+    where: { id: voucherId },
+    include: {
+      shop: {
+        select: {
+          id: true,
+          members: {
+            where: { userId: userId },
+            select: { id: true },
+          },
+        },
+      },
+    },
+  });
+
+  if (!voucher) {
+    throw new Error('Voucher not found');
+  }
+
+  const isOwner = voucher.shopId === null;
+  const isMember =
+    voucher.shop && voucher.shop.members && voucher.shop.members.length > 0;
+
+  if (!isAdmin && !isOwner && !isMember) {
+    throw new Error('You do not have permission to disable this voucher');
+  }
+
+  await prisma.voucher.update({
+    where: { id: voucherId },
+    data: { isActive: false },
+  });
+
+  return { success: true };
+};

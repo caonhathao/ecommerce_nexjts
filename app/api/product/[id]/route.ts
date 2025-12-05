@@ -53,6 +53,7 @@ export async function GET(
           select: {
             id: true,
             productId: true,
+            image: true,
             sku: true,
             price: true,
             stock: true,

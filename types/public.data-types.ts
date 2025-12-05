@@ -54,6 +54,7 @@ export interface productDetailType {
   variants: {
     attributes: string | null;
     id: string;
+    image: string;
     price: string;
     productId: string;
     sku: string;

@@ -16,6 +16,9 @@ import { $Enums } from '@/lib/generated/prisma';
 import { useTranslations } from 'next-intl';
 import { VoucherResponseDTO } from '@/features/voucher/voucher.dto';
 import VoucherType = $Enums.VoucherType;
+import { disableVoucherAction } from '@/features/voucher/action';
+import { useTransition } from 'react';
+import { toast } from 'sonner';
 
 const statusColor: Record<string, string> = {
   FIXED: 'bg-info/15 text-info border-info border-2',
@@ -99,6 +102,22 @@ export const columns = (
     header: 'actions',
     id: 'actions',
     cell: ({ row }) => {
+      const voucher = row.original;
+      const [isPending, startTransition] = useTransition();
+
+      const handleDisable = () => {
+        startTransition(async () => {
+          const result = await disableVoucherAction(voucher.id);
+
+          if (result.success) {
+            toast.success(result.message || 'Voucher disabled successfully');
+            onUpdateSuccess();
+          } else {
+            toast.error(result.message || 'Failed to disable voucher');
+          }
+        });
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -109,14 +128,18 @@ export const columns = (
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
-            ></DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
-            ></DropdownMenuItem>
-            <DropdownMenuItem>Refund</DropdownMenuItem>
+            {voucher.isActive && (
+              <>
+                <DropdownMenuItem onClick={handleDisable} disabled={isPending}>
+                  {isPending ? 'Disabling...' : 'Disable'}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              {' '}
+              View Details
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
