@@ -1,3 +1,8 @@
+export interface baseDataResponse<T> {
+  data: T[];
+  pagination: pagination;
+}
+
 interface pagination {
   page: number;
   limit: number;
@@ -14,6 +19,7 @@ export interface productItemData {
     id: string;
     logoUrl: string;
     name: string;
+    slug: string;
   };
   _count: {
     variants: number;
@@ -46,6 +52,7 @@ export interface productDetail {
     id: string;
     name: string;
     logoUrl: string;
+    slug: string;
   };
   title: string;
   slug: string;

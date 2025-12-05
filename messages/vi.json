@@ -596,6 +596,13 @@
     "t_ownerId": "Mã chủ cửa hàng",
     "t_email": "Email"
   },
+  "admin_tab_table_view": {
+    "t_no_product_found": "Không có sản phẩm nào",
+    "t_of": "của",
+    "t_rows_selected": "số dòng đã chọn.",
+    "t_rows_per_page": "Dòng mỗi trang",
+    "t_page": "Trang"
+  },
   "admin_category_page": {
     "t_search_placeholder": "Nhập từ khóa tìm kiếm...",
     "t_action_noti": "Hành động",
@@ -617,13 +624,6 @@
     "t_tab_inactive": "Không hoạt động",
     "t_showing": "Hiển thị",
     "t_column": "Cột",
-    "category_tab": {
-      "t_no_category_found": "Không có danh mục nào",
-      "t_of": "của",
-      "t_rows_selected": "số dòng đã chọn.",
-      "t_rows_per_page": "Dòng mỗi trang",
-      "t_page": "Trang"
-    },
     "category_drawer": {
       "t_action_noti": "Hành động",
       "t_update_desc_noti": "Cập nhật thông tin danh mục thành công!",
@@ -700,13 +700,6 @@
     "t_tab_unlisted": "Bị cấm",
     "t_showing": "Hiển thị",
     "t_column": "Cột",
-    "product_tab": {
-      "t_no_product_found": "Không có sản phẩm nào",
-      "t_of": "của",
-      "t_rows_selected": "số dòng đã chọn.",
-      "t_rows_per_page": "Dòng mỗi trang",
-      "t_page": "Trang"
-    },
     "product_drawer": {
       "t_process_failed_noti": "Tiến trình thất bại",
       "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
@@ -763,13 +756,6 @@
     "t_tab_closed": "Đóng cửa",
     "t_showing": "Hiển thị",
     "t_column": "Cột",
-    "shop_tab": {
-      "t_no_shop_found": "Không có sản phẩm nào",
-      "t_of": "của",
-      "t_rows_selected": "số dòng đã chọn.",
-      "t_rows_per_page": "Dòng mỗi trang",
-      "t_page": "Trang"
-    },
     "shop_drawer": {
       "t_process_failed_noti": "Tiến trình thất bại",
       "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
@@ -830,13 +816,6 @@
     "t_tab_banned": "Bị khóa",
     "t_showing": "Hiển thị",
     "t_column": "Cột",
-    "user_tab": {
-      "t_no_shop_found": "Không có kết quả",
-      "t_of": "của",
-      "t_rows_selected": "số dòng đã chọn.",
-      "t_rows_per_page": "Dòng mỗi trang",
-      "t_page": "Trang"
-    },
     "user_drawer": {
       "t_process_failed_noti": "Tiến trình thất bại",
       "t_conn_failed_desc_noti": "Không thể kết nối đến server!",
@@ -914,14 +893,6 @@
       "t_most_recent": "gần nhất",
       "t_label_1": "Số lượng",
       "t_empty": "Không có dữ liệu"
-    },
-    "product_tab": {
-      "t_no_product_found": "Không có sản phẩm nào",
-      "t_of": "của",
-      "t_rows_selected": "số dòng đã chọn.",
-      "t_rows_per_page": "Dòng mỗi trang",
-      "t_page": "Trang",
-      "t_signin_success": "Login successful"
     },
     "product_drawer": {
       "t_process_failed_noti": "Tiến trình thất bại",

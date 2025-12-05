@@ -38,6 +38,7 @@ import { fetchData } from '@/funcs/fetch';
 import { putData } from '@/funcs/put';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
+import { formatPrice } from '@/lib/utils';
 import {
   productDetail,
   productItemData,
@@ -49,7 +50,6 @@ import React, { useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
-import { formatPrice } from '@/lib/utils';
 
 export function TableCellViewer({
   item,
@@ -211,7 +211,7 @@ export function TableCellViewer({
       <DrawerTrigger asChild>
         <Button
           variant="link"
-          className="text-foreground w-fit px-0 text-left"
+          className="text-foreground w-fit px-0 text-left hover:cursor-pointer"
           onClick={() => {
             fetchDetail();
           }}

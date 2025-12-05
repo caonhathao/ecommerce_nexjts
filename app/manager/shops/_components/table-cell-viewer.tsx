@@ -104,7 +104,7 @@ export function TableCellViewer({
       <DrawerTrigger asChild>
         <Button
           variant="link"
-          className="text-foreground w-fit px-0 text-left"
+          className="text-foreground w-fit px-0 text-left hover:cursor-pointer"
           onClick={() => fetchDetail()}
         >
           {item.name}
@@ -158,6 +158,7 @@ export function TableCellViewer({
                   variant={'outline'}
                   type="button"
                   onClick={() => handleCopy(detail?.owner.id ?? '')}
+                  className="hover:cursor-pointer"
                 >
                   {t('t_copy_action')}
                   <MdOutlineCopyAll />
@@ -179,6 +180,7 @@ export function TableCellViewer({
                   variant={'outline'}
                   type="button"
                   onClick={() => handleCopy(detail?.owner.id ?? '')}
+                  className="hover:cursor-pointer"
                 >
                   <MdOutlineCopyAll />
                 </Button>
@@ -226,14 +228,28 @@ export function TableCellViewer({
                 defaultValue={defaultStatus}
                 onValueChange={(value) => setValue(value)}
               >
-                <SelectTrigger id="visibility" className="w-full">
+                <SelectTrigger
+                  id="visibility"
+                  className="w-full hover:cursor-pointer"
+                >
                   <SelectValue placeholder="Select a type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ACTIVE">{t('c_active')}</SelectItem>
-                  <SelectItem value="PENDING">{t('c_pending')}</SelectItem>
-                  <SelectItem value="SUSPENDED">{t('c_suspended')}</SelectItem>
-                  <SelectItem value="CLOSED">{t('c_closed')}</SelectItem>
+                  <SelectItem value="ACTIVE" className="hover:cursor-pointer">
+                    {t('c_active')}
+                  </SelectItem>
+                  <SelectItem value="PENDING" className="hover:cursor-pointer">
+                    {t('c_pending')}
+                  </SelectItem>
+                  <SelectItem
+                    value="SUSPENDED"
+                    className="hover:cursor-pointer"
+                  >
+                    {t('c_suspended')}
+                  </SelectItem>
+                  <SelectItem value="CLOSED" className="hover:cursor-pointer">
+                    {t('c_closed')}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -273,6 +289,7 @@ export function TableCellViewer({
                           variant={'outline'}
                           type="button"
                           onClick={() => handleCopy(value.id)}
+                          className="hover:cursor-pointer"
                         >
                           <MdOutlineCopyAll />
                         </Button>
@@ -286,11 +303,16 @@ export function TableCellViewer({
           </form>
         </div>
         <DrawerFooter>
-          <Button onClick={() => handleSubmit(value)}>
+          <Button
+            onClick={() => handleSubmit(value)}
+            className="hover:cursor-pointer"
+          >
             {t('t_submit_action')}
           </Button>
           <DrawerClose asChild>
-            <Button variant="outline">{t('t_cancel_action')}</Button>
+            <Button variant="outline" className="hover:cursor-pointer">
+              {t('t_cancel_action')}
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

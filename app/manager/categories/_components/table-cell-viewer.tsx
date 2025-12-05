@@ -270,7 +270,7 @@ function TableCellViewer({
       <DrawerTrigger asChild>
         <Button
           variant="link"
-          className="text-foreground w-fit px-0 text-left"
+          className="text-foreground w-fit px-0 text-left hover:cursor-pointer"
           onClick={fetchDetail}
         >
           {item.name}
