@@ -33,7 +33,6 @@ export const getAvailableVouchersService = async (
       OR: [{ products: { none: {} } }, { products: { some: { productId } } }],
     });
 
-    // Category restrictions: handle nullable categoryId
     if (product?.categoryId) {
       andClauses.push({
         OR: [
@@ -42,7 +41,6 @@ export const getAvailableVouchersService = async (
         ],
       });
     } else {
-      // If product has no category, only allow vouchers without category restrictions
       andClauses.push({
         categories: { none: {} },
       });

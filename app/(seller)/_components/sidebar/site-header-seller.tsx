@@ -2,6 +2,7 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { env } from '@/lib/env';
 import { ModeToogle } from '@/components/custom/mode-toogle';
+import { SelectLanguage } from '@/components/custom/select-language';
 
 const WEB_NAME = env.NEXT_PUBLIC_WEB_NAME;
 export function SiteHeaderSeller() {
@@ -15,6 +16,7 @@ export function SiteHeaderSeller() {
         />
         <h1 className="text-base font-medium">{WEB_NAME}</h1>
         <div className="ml-auto flex items-center gap-2">
+          <SelectLanguage />
           <ModeToogle />
         </div>
       </div>
