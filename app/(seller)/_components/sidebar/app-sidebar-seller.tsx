@@ -34,7 +34,7 @@ import { AppLoader } from '@/components/ui/loader';
 import { NavMainSeller } from '@/app/(seller)/_components/sidebar/nav-main-seller';
 import { NavSecondarySeller } from '@/app/(seller)/_components/sidebar/nav-secondary-seller';
 import { NavSeller } from '@/app/(seller)/_components/sidebar/nav-seller';
-import { ListOrdered, Wallet } from 'lucide-react';
+import { ListOrdered, Ticket, Wallet } from 'lucide-react';
 import { paths } from '@/lib/path';
 
 const WEB_NAME = env.NEXT_PUBLIC_WEB_NAME;
@@ -84,6 +84,11 @@ const data = {
       title: 'Orders',
       url: '/seller/orders',
       icon: ListOrdered,
+    },
+    {
+      title: 'Voucher',
+      url: '/seller/voucher',
+      icon: Ticket,
     },
     {
       title: 'Transaction',

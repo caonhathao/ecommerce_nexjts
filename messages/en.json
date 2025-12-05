@@ -984,5 +984,73 @@
       "t_showing": "Showing",
       "t_column": "Columns"
     }
+  },
+  "seller": {
+    "order_page": {
+      "details": {
+        "title": "Order Details",
+        "placed_at": "Order Placed At"
+      },
+      "sections": {
+        "summary": "Order Summary",
+        "items": "Product List",
+        "shipping": "Shipping Information",
+        "pricing": "Pricing Details"
+      },
+      "labels": {
+        "status": "Status",
+        "total_items": "Total Items",
+        "order_placed": "Order Time",
+        "item_total": "Item Total",
+        "recipient": "Recipient",
+        "phone": "Phone Number",
+        "address": "Shipping Address",
+        "not_specified": "Not Specified",
+        "subtotal": "Subtotal",
+        "shipping_fee": "Shipping Fee",
+        "discount": "Discount",
+        "grand_total": "Grand Total"
+      },
+      "actions": {
+        "view_detail": "View Details",
+        "print_invoice": "Print Invoice",
+        "close": "Close",
+        "change_status": "Change Status",
+        "refund": "Refund"
+      },
+      "table": {
+        "order_id": "Order ID",
+        "status": "Status",
+        "amount": "Amount",
+        "date": "Updated At",
+        "actions": "Actions"
+      },
+      "order_update": {
+        "actions": {
+          "change_status": "Change Status",
+          "save_changes": "Save Changes",
+          "saving": "Saving...",
+          "cancel": "Cancel",
+          "update_success": "Order updated successfully!",
+          "update_failed": "Update failed."
+        },
+        "dialog": {
+          "title": "Update Order Status",
+          "current_status": "Current Status",
+          "select_new_status": "Select New Status",
+          "select_placeholder": "Choose a status"
+        },
+        "status": {
+          "awaiting_payment": "Awaiting Payment",
+          "processing": "Processing",
+          "shipped": "Shipped",
+          "delivered": "Delivered",
+          "canceled": "Canceled"
+        }
+      }
+    },
+    "voucher_page": {
+      "filter": {}
+    }
   }
 }

@@ -5,5 +5,5 @@ export interface ServiceResponse<T = null> {
   message: string;
   code: StatusCode;
   data?: T;
-  errors?: Record<string, string[] | undefined> | null;
+  errors?: Record<string, string[] | undefined> | null | object;
 }
