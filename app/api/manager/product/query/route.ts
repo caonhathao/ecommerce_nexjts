@@ -28,7 +28,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       createdAt: true,
       updatedAt: true,
       shop: {
-        select: { id: true, name: true, logoUrl: true },
+        select: { id: true, name: true, logoUrl: true, slug: true },
       },
       images: {
         select: { url: true, alt: true },

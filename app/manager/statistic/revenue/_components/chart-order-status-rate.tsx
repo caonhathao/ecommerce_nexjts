@@ -101,7 +101,7 @@ const OrderStatusRate = () => {
 
   return (
     <div className="w-full h-full">
-      <Card className="@container/card">
+      <Card className="@container/card w-full h-full">
         <CardHeader>
           <CardTitle>{t('t_title')}</CardTitle>
           <CardDescription>
@@ -152,7 +152,7 @@ const OrderStatusRate = () => {
             </Select>
           </CardAction>
         </CardHeader>
-        <CardContent className="flex-1 pb-0">
+        <CardContent className="flex-1 pb-0 flex justify-center items-center">
           <ChartContainer
             config={chartConfig}
             className="mx-auto aspect-square max-h-[300px]"

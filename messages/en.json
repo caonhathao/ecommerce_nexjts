@@ -586,6 +586,13 @@
       "t_7d_toggle": "Last 7 days"
     }
   },
+  "admin_tab_table_view": {
+    "t_no_category_found": "No categories found",
+    "t_of": "of",
+    "t_rows_selected": "rows selected.",
+    "t_rows_per_page": "Rows per page",
+    "t_page": "Page"
+  },
   "admin_search_bar": {
     "t_search_action": "Search",
     "t_filter_by": "Filter by",
@@ -617,13 +624,7 @@
     "t_tab_inactive": "Inactive",
     "t_showing": "Showing",
     "t_column": "Columns",
-    "category_tab": {
-      "t_no_category_found": "No categories found",
-      "t_of": "of",
-      "t_rows_selected": "rows selected.",
-      "t_rows_per_page": "Rows per page",
-      "t_page": "Page"
-    },
+
     "category_drawer": {
       "t_action_noti": "Action",
       "t_update_desc_noti": "Updated category information successfully!",
@@ -700,13 +701,7 @@
     "t_tab_unlisted": "Banned",
     "t_showing": "Showing",
     "t_column": "Columns",
-    "product_tab": {
-      "t_no_product_found": "No products found",
-      "t_of": "of",
-      "t_rows_selected": "row(s) selected.",
-      "t_rows_per_page": "Rows per page",
-      "t_page": "Page"
-    },
+
     "product_drawer": {
       "t_process_failed_noti": "Process Failed",
       "t_conn_failed_desc_noti": "Cannot connect to server!",
@@ -763,13 +758,7 @@
     "t_tab_closed": "Closed",
     "t_showing": "Showing",
     "t_column": "Columns",
-    "shop_tab": {
-      "t_no_shop_found": "No shops found",
-      "t_of": "of",
-      "t_rows_selected": "row(s) selected.",
-      "t_rows_per_page": "Rows per page",
-      "t_page": "Page"
-    },
+
     "shop_drawer": {
       "t_process_failed_noti": "Process Failed",
       "t_conn_failed_desc_noti": "Cannot connect to server!",
@@ -830,13 +819,7 @@
     "t_tab_banned": "Banned",
     "t_showing": "Showing",
     "t_column": "Columns",
-    "user_tab": {
-      "t_no_shop_found": "No results found",
-      "t_of": "of",
-      "t_rows_selected": "row(s) selected.",
-      "t_rows_per_page": "Rows per page",
-      "t_page": "Page"
-    },
+
     "user_drawer": {
       "t_process_failed_noti": "Process Failed",
       "t_conn_failed_desc_noti": "Could not connect to the server!",
@@ -915,13 +898,7 @@
       "t_most_recent": "most recent",
       "t_label_1": "Quantity"
     },
-    "product_tab": {
-      "t_no_product_found": "No products found",
-      "t_of": "of",
-      "t_rows_selected": "row(s) selected.",
-      "t_rows_per_page": "Rows per page",
-      "t_page": "Page"
-    },
+
     "product_drawer": {
       "t_process_failed_noti": "Process Failed",
       "t_conn_failed_desc_noti": "Cannot connect to server!",

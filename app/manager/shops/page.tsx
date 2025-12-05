@@ -22,6 +22,7 @@ import {
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { paths } from '@/lib/path';
+import { formatDay } from '@/lib/utils';
 import { shopDataResponse, shopItemData } from '@/types/manager.data-types';
 import {
   DragEndEvent,
@@ -60,12 +61,11 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
+import { IoMdCloseCircle } from 'react-icons/io';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
-import TabShop from './_components/tab-shop';
+import TabTableView from '../_components/tab-table-view';
 import { TableCellViewer } from './_components/table-cell-viewer';
-import { formatDay } from '@/lib/utils';
-import { IoMdCloseCircle } from 'react-icons/io';
 
 const ShopsPage = () => {
   const [data, setData] = React.useState<shopDataResponse | null>(null);
@@ -404,7 +404,11 @@ const ShopsPage = () => {
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hover:cursor-pointer"
+                >
                   <IconLayoutColumns />
                   <span className="hidden lg:inline">{t('t_showing')}</span>
                   <span className="lg:hidden">{t('t_column')}</span>
@@ -423,7 +427,7 @@ const ShopsPage = () => {
                     return (
                       <DropdownMenuCheckboxItem
                         key={column.id}
-                        className="capitalize"
+                        className="capitalize hover:cursor-pointer"
                         checked={column.getIsVisible()}
                         onCheckedChange={(value) =>
                           column.toggleVisibility(!!value)
@@ -441,8 +445,9 @@ const ShopsPage = () => {
           value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <TabShop
-            statusFilter=""
+          <TabTableView<shopItemData>
+            filter=""
+            baseUrl={paths.manager.shop.fetch_all}
             isReset={isReset}
             sensors={sensors}
             sortableId={sortableId}
@@ -450,8 +455,8 @@ const ShopsPage = () => {
             columns={columns}
             data={data}
             setData={setData}
-            shopList={shopList}
-            setShopList={setShopList}
+            list={shopList}
+            setList={setShopList}
             isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
@@ -460,8 +465,9 @@ const ShopsPage = () => {
         </TabsContent>
         <TabsContent value="all-active" className="flex flex-col px-4 lg:px-6">
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabShop
-              statusFilter="ACTIVE"
+            <TabTableView<shopItemData>
+              filter="ACTIVE"
+              baseUrl={paths.manager.shop.fetch_all}
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -469,8 +475,8 @@ const ShopsPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              shopList={shopList}
-              setShopList={setShopList}
+              list={shopList}
+              setList={setShopList}
               isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
@@ -480,8 +486,9 @@ const ShopsPage = () => {
         </TabsContent>
         <TabsContent value="all-pending" className="flex flex-col px-4 lg:px-6">
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabShop
-              statusFilter="PENDING"
+            <TabTableView<shopItemData>
+              filter="PENDING"
+              baseUrl={paths.manager.shop.fetch_all}
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -489,8 +496,8 @@ const ShopsPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              shopList={shopList}
-              setShopList={setShopList}
+              list={shopList}
+              setList={setShopList}
               isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
@@ -503,8 +510,9 @@ const ShopsPage = () => {
           className="flex flex-col px-4 lg:px-6"
         >
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabShop
-              statusFilter="SUSPENDED"
+            <TabTableView<shopItemData>
+              filter="SUSPENDED"
+              baseUrl={paths.manager.shop.fetch_all}
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -512,8 +520,8 @@ const ShopsPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              shopList={shopList}
-              setShopList={setShopList}
+              list={shopList}
+              setList={setShopList}
               isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
@@ -523,8 +531,9 @@ const ShopsPage = () => {
         </TabsContent>
         <TabsContent value="all-closed" className="flex flex-col px-4 lg:px-6">
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabShop
-              statusFilter="CLOSED"
+            <TabTableView<shopItemData>
+              filter="CLOSED"
+              baseUrl={paths.manager.shop.fetch_all}
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -532,8 +541,8 @@ const ShopsPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              shopList={shopList}
-              setShopList={setShopList}
+              list={shopList}
+              setList={setShopList}
               isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}

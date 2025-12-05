@@ -106,6 +106,7 @@ const SearchBar = <T,>({
                         setIsReset(!isReset);
                         setIsFalse(false);
                       }}
+                      className="hover:cursor-pointer"
                     >
                       <RiResetRightLine />
                     </InputGroupButton>
@@ -127,7 +128,7 @@ const SearchBar = <T,>({
       <div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
+            <Button variant="outline" className="hover:cursor-pointer">
               <IoFilterOutline />
             </Button>
           </DropdownMenuTrigger>
@@ -139,7 +140,11 @@ const SearchBar = <T,>({
               onValueChange={setKeyQuery}
             >
               {keyQueryList.map((value, key) => (
-                <DropdownMenuRadioItem key={key} value={value}>
+                <DropdownMenuRadioItem
+                  key={key}
+                  value={value}
+                  className="hover:cursor-pointer"
+                >
                   {t(`t_${value}`)}
                 </DropdownMenuRadioItem>
               ))}

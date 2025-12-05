@@ -12,7 +12,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const search = searchParams.get('search') || '';
-    const isActiveParam = searchParams.get('isActive');
+    const isActiveParam = searchParams.get('filter');
 
     // specific filter for parentId (e.g., fetch only root categories with "null")
     const parentId = searchParams.get('parentId');

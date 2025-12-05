@@ -28,6 +28,7 @@ import {
 import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
+import { formatDay } from '@/lib/utils';
 import { userDetail, userItemData } from '@/types/manager.data-types';
 import { useTranslations } from 'next-intl';
 import React, { SetStateAction, useEffect, useMemo } from 'react';
@@ -36,7 +37,6 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { MdOutlineCopyAll } from 'react-icons/md';
 import { toast } from 'sonner';
-import { formatDay } from '@/lib/utils';
 
 export function TableCellViewer({
   item,
@@ -102,7 +102,7 @@ export function TableCellViewer({
       <DrawerTrigger asChild>
         <Button
           variant="link"
-          className="text-foreground w-fit px-0 text-left"
+          className="text-foreground w-fit px-0 text-left hover:cursor-pointer"
           onClick={fetchDetail}
         >
           {item.name}
@@ -136,6 +136,7 @@ export function TableCellViewer({
                   variant={'outline'}
                   type="button"
                   onClick={() => handleCopy(detail?.id ?? '')}
+                  className="hover:cursor-pointer"
                 >
                   <MdOutlineCopyAll />
                 </Button>
@@ -162,7 +163,10 @@ export function TableCellViewer({
                         </div>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant={'outline'}>
+                            <Button
+                              variant={'outline'}
+                              className="hover:cursor-pointer"
+                            >
                               <BsThreeDotsVertical />
                             </Button>
                           </DropdownMenuTrigger>
@@ -172,6 +176,7 @@ export function TableCellViewer({
                                 type="button"
                                 variant={'ghost'}
                                 onClick={() => handleCopy(value.id ?? '')}
+                                className="hover:cursor-pointer"
                               >
                                 {t('t_copy_action')}
                               </Button>
@@ -210,7 +215,10 @@ export function TableCellViewer({
                         </div>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant={'outline'}>
+                            <Button
+                              variant={'outline'}
+                              className="hover:cursor-pointer"
+                            >
                               <BsThreeDotsVertical />
                             </Button>
                           </DropdownMenuTrigger>
@@ -220,6 +228,7 @@ export function TableCellViewer({
                                 type="button"
                                 variant={'ghost'}
                                 onClick={() => handleCopy(value.shop.id ?? '')}
+                                className="hover:cursor-pointer"
                               >
                                 {t('t_copy_action')}
                               </Button>
@@ -279,12 +288,19 @@ export function TableCellViewer({
             <div className="flex flex-col gap-3">
               <Label htmlFor="bannedStatus">{t('t_banned_status')}</Label>
               <Select value={defaultBanned}>
-                <SelectTrigger id="bannedStatus" className="w-full">
+                <SelectTrigger
+                  id="bannedStatus"
+                  className="w-full hover:cursor-pointer"
+                >
                   <SelectValue placeholder={t('t_status_placeholder')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="false">{t('c_no_banned')}</SelectItem>
-                  <SelectItem value="true">{t('c_banned')}</SelectItem>
+                  <SelectItem value="false" className="hover:cursor-pointer">
+                    {t('c_no_banned')}
+                  </SelectItem>
+                  <SelectItem value="true" className="hover:cursor-pointer">
+                    {t('c_banned')}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -305,11 +321,17 @@ export function TableCellViewer({
           </form>
         </div>
         <DrawerFooter>
-          <Button type="submit" form="form-edit-user">
+          <Button
+            type="submit"
+            form="form-edit-user"
+            className="hover:cursor-pointer"
+          >
             {t('t_submit_action')}
           </Button>
           <DrawerClose asChild>
-            <Button variant="outline">{t('t_cancel_action')}</Button>
+            <Button variant="outline" className="hover:cursor-pointer">
+              {t('t_cancel_action')}
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
