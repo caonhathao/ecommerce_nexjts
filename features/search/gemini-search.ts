@@ -22,7 +22,7 @@ export async function parseSearchQueryWithAI(
       query: {
         type: 'STRING',
         description:
-          "The cleaned search keywords, removing 'show me', 'looking for', etc.",
+          "The cleaned search keywords in the original language, removing polite phrases like 'show me', 'tìm cho tôi', etc.",
       },
       minPrice: {
         type: 'NUMBER',
@@ -57,15 +57,36 @@ export async function parseSearchQueryWithAI(
   };
 
   const prompt = `
-    You are an e-commerce search assistant.
+    You are a smart bilingual e-commerce search assistant (English & Vietnamese).
     
     CONTEXT - AVAILABLE CATEGORY SLUGS:
     [${categories.join(', ')}]
 
     INSTRUCTIONS:
-    1. Analyze the User Query: "${userQuery}"
-    2. Extract the search intent into the defined JSON structure.
-    3. For 'category', you MUST pick exactly one slug from the available list above that best matches the item. If the user query is generic or doesn't match a category, return null.
+    1. Analyze the User Query: "${userQuery}" (Detect language: English or Vietnamese).
+    2. Extract search intent into the JSON structure.
+
+    3. QUERY CLEANING:
+       - English: Remove "show me", "looking for", "buy", "cheap", "best".
+       - Vietnamese: Remove "tìm", "cho tôi", "muốn mua", "xem", "cần tìm", "giá rẻ", "xịn".
+       - Keep the core product keyword (e.g., "iphone 15", "giày thể thao").
+
+    4. CATEGORY MAPPING:
+       - Understand Vietnamese category terms and map them to the closest English slug provided in the context.
+       - Example: "Điện thoại" -> slug "smartphones".
+       - Example: "Đồ gia dụng" -> slug "home-appliances".
+       - If no semantic match exists, return null for category.
+
+    5. PRICE PARSING (Vietnamese currency logic):
+       - "k" = thousand (e.g., "500k" = 500000).
+       - "tr", "triệu", "m" = million (e.g., "20tr", "20 triệu" = 20000000).
+       - "dưới", "under" -> maxPrice.
+       - "trên", "over" -> minPrice.
+
+    6. SORTING INTENT:
+       - "giá rẻ", "thấp nhất", "cheapest" -> sortBy: "price", sortOrder: "asc".
+       - "xịn nhất", "tốt nhất", "best", "top rated" -> sortBy: "rating", sortOrder: "desc".
+       - "mới nhất", "newest" -> sortBy: "createdAt", sortOrder: "desc".
   `;
 
   try {
