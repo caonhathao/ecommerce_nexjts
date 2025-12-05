@@ -316,6 +316,22 @@ export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
         { status: 404 }
       );
     }
+
+    const product = await prisma.product.findMany({
+      where: {
+        categoryId: category.id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (product.length !== 0)
+      return NextResponse.json(
+        { error: 'Deleted failed, this category is using by others' },
+        { status: 404 }
+      );
+
     //delete from cloudinary first
     if (category.publicId !== '' && category.publicId)
       await deleteFromCloudinary(category.publicId, {
