@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { Stripe } from 'stripe';
-import { getSessionUser } from '@/lib/auth';
+import { auth, getSessionUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { headers } from 'next/headers';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -48,6 +49,11 @@ export async function POST() {
       refresh_url: `${process.env.NEXT_PUBLIC_BASE_URL}/seller/onboarding`,
       return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/seller/dashboard`,
       type: 'account_onboarding',
+    });
+
+    await auth.api.getSession({
+      headers: await headers(),
+      query: { disableCookieCache: true },
     });
 
     return NextResponse.json(

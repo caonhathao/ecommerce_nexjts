@@ -17,22 +17,23 @@ export async function POST(req: NextRequest) {
     const base64String = Buffer.from(arrayBuffer).toString('base64');
 
     const prompt = `
-        You are an image labeling system.
-        
-        Your task:
-        - Identify the product shown in the image.
-        - Return ONLY the shortest, simplest name possible.
-        - Do NOT guess beyond what is clearly visible.
-        - Do NOT improve or rephrase the label.
-        - Do NOT generate marketing names or descriptions.
-        - If the item is a keyboard → return "keyboard".
-        - If the item is a coat → return "coat".
-        - If the item is a mouse → return "mouse".
-        - If text or brand is visible (e.g., "ek keyboard"), return it EXACTLY.
-        - Maximum length: 1–3 words.
-        - No sentences. No punctuation. No quotes.
-        
-        Return ONLY the label:`;
+    You are an image labeling system.
+    
+    Your task:
+    - Identify the product shown in the image.
+    - Return ONLY the shortest, simplest name possible.
+    - Do NOT guess beyond what is clearly visible.
+    - Do NOT improve or rephrase the label.
+    - Do NOT generate marketing names or descriptions.
+    - If the item is a keyboard → return "keyboard".
+    - If the item is a coat → return "coat".
+    - If the item is a mouse → return "mouse".
+    - If text or brand is visible (e.g., "ek keyboard"), return it EXACTLY.
+    - Maximum length: 1–3 words.
+    - No sentences. No punctuation. No quotes.
+    - Output language: English or Vietnamese (match the product text if visible, otherwise default to Vietnamese).
+    
+    Return ONLY the label:`;
 
     const result = await genai.models.generateContent({
       model: 'gemini-2.5-flash',

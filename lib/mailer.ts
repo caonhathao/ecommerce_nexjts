@@ -30,24 +30,32 @@ function createTransporter() {
 }
 
 export async function sendVerificationEmail(to: string, otp: string) {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('----------------------------------------------');
-    console.log(`📧 MOCK EMAIL TO: ${to}`);
-    console.log(`🔑 OTP CODE: ${otp}`);
-    console.log('----------------------------------------------');
-    return;
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  console.log('----------------------------------------------');
+  console.log(`📧 MOCK EMAIL TO: ${to}`);
+  console.log(`🔑 OTP CODE: ${otp}`);
+  console.log('----------------------------------------------');
+  // return;
+  // }
   const transporter = createTransporter();
   const fromAddress = `${webName} <no-reply@localhost>`;
   const html = renderOtpEmail(otp);
 
   try {
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: fromAddress,
       to,
       subject: `${webName} - Verify your email`,
       html,
     });
+
+    if (info.accepted.includes(to)) {
+      console.log(`✅ Email sent successfully. Message ID: ${info.messageId}`);
+      return { success: true, messageId: info.messageId };
+    } else {
+      console.warn(`⚠️ Email sent but not accepted by: ${to}`);
+      return { success: false, error: 'Recipient rejected by SMTP server' };
+    }
   } catch (err) {
     console.error('Error sending email via SMTP:', err);
     throw new Error('Error sending email');
@@ -59,14 +67,14 @@ export async function sendPasswordResetEmail(
   resetLink: string,
   userName?: string
 ) {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('----------------------------------------------');
-    console.log(`📧 MOCK PASSWORD RESET EMAIL TO: ${to}`);
-    console.log(`👤 USER: ${userName || 'Unknown'}`);
-    console.log(`🔗 RESET LINK: ${resetLink}`);
-    console.log('----------------------------------------------');
-    return;
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  console.log('----------------------------------------------');
+  console.log(`📧 MOCK PASSWORD RESET EMAIL TO: ${to}`);
+  console.log(`👤 USER: ${userName || 'Unknown'}`);
+  console.log(`🔗 RESET LINK: ${resetLink}`);
+  console.log('----------------------------------------------');
+  //   return;
+  // }
 
   const transporter = createTransporter();
   const fromAddress = `${webName} <no-reply@localhost>`;
@@ -91,15 +99,15 @@ export async function sendShopInvitationEmail(
   inviterName: string,
   invitationLink: string
 ) {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('----------------------------------------------');
-    console.log(`📧 MOCK SHOP INVITATION EMAIL TO: ${to}`);
-    console.log(`🏪 SHOP: ${shopName}`);
-    console.log(`👤 INVITER: ${inviterName}`);
-    console.log(`🔗 LINK: ${invitationLink}`);
-    console.log('----------------------------------------------');
-    return;
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  console.log('----------------------------------------------');
+  console.log(`📧 MOCK SHOP INVITATION EMAIL TO: ${to}`);
+  console.log(`🏪 SHOP: ${shopName}`);
+  console.log(`👤 INVITER: ${inviterName}`);
+  console.log(`🔗 LINK: ${invitationLink}`);
+  console.log('----------------------------------------------');
+  //   return;
+  // }
 
   const transporter = createTransporter();
   const fromAddress = `${webName} <no-reply@localhost>`;
@@ -124,15 +132,15 @@ export async function sendShopStatusChangeEmail(
   ownerName: string,
   newStatus: string
 ) {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('----------------------------------------------');
-    console.log(`📧 MOCK SHOP STATUS CHANGE EMAIL TO: ${to}`);
-    console.log(`🏪 SHOP: ${shopName}`);
-    console.log(`👤 OWNER: ${ownerName}`);
-    console.log(`📊 NEW STATUS: ${newStatus}`);
-    console.log('----------------------------------------------');
-    return;
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  console.log('----------------------------------------------');
+  console.log(`📧 MOCK SHOP STATUS CHANGE EMAIL TO: ${to}`);
+  console.log(`🏪 SHOP: ${shopName}`);
+  console.log(`👤 OWNER: ${ownerName}`);
+  console.log(`📊 NEW STATUS: ${newStatus}`);
+  console.log('----------------------------------------------');
+  //   return;
+  // }
 
   const transporter = createTransporter();
   const fromAddress = `${webName} <no-reply@localhost>`;

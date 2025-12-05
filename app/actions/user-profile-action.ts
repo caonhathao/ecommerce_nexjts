@@ -1,9 +1,10 @@
 'use server';
 
-import { getCurrentUserId } from '@/lib/auth';
+import { auth, getCurrentUserId } from '@/lib/auth';
 import { UpdateUserProfileRequestDTO } from '@/types/dtos/user.dto';
 import { updateUserProfile } from '@/app/data/user.data';
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 
 export async function updateProfileAction(formData: FormData) {
   const userId = await getCurrentUserId();
@@ -22,6 +23,10 @@ export async function updateProfileAction(formData: FormData) {
   };
 
   await updateUserProfile(userId, data);
+  await auth.api.getSession({
+    headers: await headers(),
+    query: { disableCookieCache: true },
+  });
 
   revalidatePath('/customer/account/edit');
 }

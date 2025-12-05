@@ -158,14 +158,13 @@ export default function SellerProductsDashboard() {
       accessorKey: 'image',
       header: 'Image',
       cell: ({ row }) => (
-        <div className="w-12 h-12 relative">
+        <div className="w-16 h-18 relative rounded overflow-hidden border border-muted/50 bg-muted">
           {row.original.images?.[0]?.url ? (
             <Image
               src={row.original.images[0].url}
               alt={row.original.images[0].alt || row.original.title}
-              width={48}
-              height={48}
-              className="rounded object-cover"
+              fill
+              className="object-cover"
             />
           ) : (
             <div className="w-12 h-12 bg-muted rounded flex items-center justify-center text-xs text-muted-foreground">
