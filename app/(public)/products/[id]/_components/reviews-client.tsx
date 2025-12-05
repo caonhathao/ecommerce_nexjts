@@ -7,6 +7,8 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useMemo } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User2 } from 'lucide-react';
 
 interface props {
   initialResponse: reviewDataResponse;
@@ -24,13 +26,15 @@ export function ReviewsClient({ initialResponse }: props) {
           className="w-[25%] flex flex-row gap-2 justify-start items-center"
           key={reviewData.user.id}
         >
-          <Image
-            src={reviewData.user.image}
-            alt="user-avatar"
-            width={30}
-            height={30}
-            className="rounded-full"
-          />
+          <Avatar className="w-9 h-9">
+            <AvatarImage
+              src={reviewData.user.image}
+              alt={reviewData.user.name}
+            />
+            <AvatarFallback>
+              <User2 className="w-5 h-5" />
+            </AvatarFallback>
+          </Avatar>
           <p>{reviewData.user.name}</p>
         </div>
         <div className="w-[75%] flex flex-col gap-2">
