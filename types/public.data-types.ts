@@ -66,7 +66,9 @@ export interface reviewDataResponse {
   data: {
     reviews: reviewsItemType[];
     summary: {
-      allImages: string[];
+      allImages: {
+        url: string;
+      }[];
       ratingBreakdown: {
         1: number;
         2: number;

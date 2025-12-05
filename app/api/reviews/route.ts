@@ -103,12 +103,15 @@ export async function GET(req: Request) {
     });
 
     // --- Process Images data (Combine all sub-arrays into one large array) ---
-    // imagesResult is an array of objects: [{ images: ["url1", "url2"] }, { images: ["url3"] }]
-    // Need to convert to: ["url1", "url2", "url3"]
+    // imagesResult is an array of objects: item.images = [{ url: "...", publicId: "..." }, ...]
+    // Need to convert to: allImages = [{ url: "..." }, { url: "..." }, ...]
     const allImages = imagesResult
-      .map((item) => item.images) // Get the value of the images field (json array or undefined)
-      .flat() // Làm phẳng mảng lồng nhau
-      .filter((img) => img !== null && img !== undefined); // filter trash values
+      .map((item) => item.images) // 1. get field images (type Json)
+      .flat() // 2. Flatten nested arrays
+      .filter((img) => img && typeof img === 'object' && 'url' in img) // 3. filter
+      .map((img: any) => ({
+        url: img.url, // 4. get field url obly
+      }));
 
     return NextResponse.json({
       success: true,
