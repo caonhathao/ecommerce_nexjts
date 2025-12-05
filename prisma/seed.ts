@@ -1170,17 +1170,19 @@ async function main() {
       }
     },
     include: { order: true }, // We need the userId from the order
-    take: 500 // Limit to 500 reviews
+    take: 1500 // Limit to 500 reviews
   });
 
   const reviewData = validOrderItems.map((item) => {
     const rating = faker.number.int({ min: 3, max: 5 }); // Skew towards positive
+    const images=faker.image.urlPicsumPhotos({ width: 200, height: 200 });
     return {
       id: faker.string.uuid(),
       productId: item.productId,
       userId: item.order!.userId, // The buyer
       orderItemId: item.id, // Verified purchase link
       rating,
+      images,
       title: rating >= 4 ? faker.word.adjective() + ' product!' : 'Just okay',
       body: faker.lorem.sentences({ min: 1, max: 3 }),
       likes: faker.number.int({ min: 0, max: 50 }),

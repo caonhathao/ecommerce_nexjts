@@ -28,7 +28,7 @@ import { ChatButton } from '@/components/chat/chat-button';
 import { VoucherSelector } from '@/features/voucher/_components/voucher-selector';
 import { VoucherDto } from '@/features/voucher/voucher.dto';
 import Desc from './_components/desc';
-import { Reviews } from './_components/reviews';
+import { ReviewsServer } from './_components/reviews-server';
 import SlideImg from './_components/slide-img';
 import { SuggestDealToday } from './_components/suggest-deal-today';
 
@@ -455,7 +455,7 @@ const DetailPage = () => {
 
           {/* Reviews Section */}
           <Suspense fallback={<Loading size={40} />}>
-            <Reviews
+            <ReviewsServer
               key={data.id}
               id={data.id}
               ratingAvg={data.ratingAvg}

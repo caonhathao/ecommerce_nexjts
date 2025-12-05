@@ -62,8 +62,21 @@ export interface productDetailType {
   }[];
 }
 
-export interface reviewResponse {
-  data: reviewsType[];
+export interface reviewDataResponse {
+  data: {
+    reviews: reviewsItemType[];
+    summary: {
+      allImages: string[];
+      ratingBreakdown: {
+        1: number;
+        2: number;
+        3: number;
+        4: number;
+        5: number;
+      };
+      totalImages: number;
+    };
+  };
   pagination: {
     page: number;
     limit: number;
@@ -72,7 +85,7 @@ export interface reviewResponse {
   };
 }
 
-export interface reviewsType {
+export interface reviewsItemType {
   body: string;
   createdAt: string;
   id: string;
