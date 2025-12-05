@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { TicketPercent, Loader2, Store, Globe } from 'lucide-react'; // Added Icons
+import { TicketPercent, Loader2, Store, Globe, Truck } from 'lucide-react'; // Added Icons
 import { formatPrice } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -83,16 +83,19 @@ export function VoucherSelector({
         return prev.filter((v) => v.code !== voucher.code);
       }
 
-      // 2. Logic: Select One Voucher Per Type (Scope)
-      // Scope Definition:
-      // - If voucher.shopId exists -> Shop Voucher
-      // - If voucher.shopId is null -> Platform Voucher
-      const isShopVoucher = !!voucher.shopId;
+      // Determine scope for voucher selection: SHOP | SHIPPING | PLATFORM
+      const scope =
+        voucher.type === 'SHIPPING'
+          ? 'SHIPPING'
+          : voucher.shopId
+            ? 'SHOP'
+            : 'PLATFORM';
 
       // Filter out any existing voucher of the same scope
       const others = prev.filter((v) => {
-        const currentIsShop = !!v.shopId;
-        return currentIsShop !== isShopVoucher;
+        const vScope =
+          v.type === 'SHIPPING' ? 'SHIPPING' : v.shopId ? 'SHOP' : 'PLATFORM';
+        return vScope !== scope;
       });
 
       // Return others + new selection
@@ -183,13 +186,20 @@ export function VoucherSelector({
   };
 
   // Group vouchers
-  const shopVouchers = availableVouchers.filter((v) => !!v.shopId);
-  const platformVouchers = availableVouchers.filter((v) => !v.shopId);
+  const shippingVouchers = availableVouchers.filter(
+    (v) => v.type === 'SHIPPING'
+  );
+  const shopVouchers = availableVouchers.filter(
+    (v) => !!v.shopId && v.type !== 'SHIPPING'
+  );
+  const platformVouchers = availableVouchers.filter(
+    (v) => !v.shopId && v.type !== 'SHIPPING'
+  );
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <div className="flex flex-row justify-between items-center w-full bg-background-secondary p-3 rounded-lg cursor-pointer border border-transparent hover:border-primary/20 transition-all">
+        <div className="flex flex-row justify-between items-center w-full bg-background-secondary p-4 rounded-lg cursor-pointer border border-transparent hover:border-primary/20 transition-all">
           <div className="flex items-center gap-3">
             <div className="bg-primary/10 p-2 rounded-full">
               <TicketPercent className="text-primary" size={20} />
@@ -232,20 +242,35 @@ export function VoucherSelector({
               </div>
             ) : (
               <>
-                {renderVoucherList(
-                  'Shop Vouchers',
-                  shopVouchers,
-                  <Store size={14} />
-                )}
-                {shopVouchers.length > 0 && platformVouchers.length > 0 && (
-                  <Separator className="my-4" />
-                )}
-                {renderVoucherList(
-                  'Platform Vouchers',
-                  platformVouchers,
-                  <Globe size={14} />
+                <div className="px-3">
+                  {renderVoucherList(
+                    'Shop Vouchers',
+                    shopVouchers,
+                    <Store size={14} />
+                  )}
+                </div>
+                {shippingVouchers.length > 0 && (
+                  <>
+                    <Separator className="my-4" />
+                    <div className="px-3">
+                      {renderVoucherList(
+                        'Shipping Vouchers',
+                        shippingVouchers,
+                        <Truck size={14} />
+                      )}
+                    </div>
+                  </>
                 )}
 
+                {(shopVouchers.length > 0 || shippingVouchers.length > 0) &&
+                  platformVouchers.length > 0 && <Separator className="my-4" />}
+                <div className="px-3">
+                  {renderVoucherList(
+                    'Platform Vouchers',
+                    platformVouchers,
+                    <Globe size={14} />
+                  )}
+                </div>
                 {shopVouchers.length === 0 && platformVouchers.length === 0 && (
                   <div className="text-center text-muted-foreground py-8">
                     No vouchers available

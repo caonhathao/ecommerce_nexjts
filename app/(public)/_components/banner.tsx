@@ -5,7 +5,7 @@ const Banner = ({ banner }: { banner: any }) => {
     <div className="w-full">
       <Image
         src={banner}
-        width={1200}
+        width={1400}
         height={400}
         alt="banner"
         className="rounded-lg"
