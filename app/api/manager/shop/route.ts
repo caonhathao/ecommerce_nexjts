@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/db';
 import { Prisma, ShopStatus } from '@/lib/generated/prisma';
+import { sendShopStatusChangeEmail } from '@/lib/mailer';
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { sendShopStatusChangeEmail } from '@/lib/mailer';
 
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
@@ -11,7 +11,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const limit = Number(searchParams.get('limit')) || 10;
   const skip = (page - 1) * limit;
 
-  const status = searchParams.get('status')?.toString();
+  const status = searchParams.get('filter')?.toString();
 
   const whereClause: Prisma.ShopWhereInput = {};
 
