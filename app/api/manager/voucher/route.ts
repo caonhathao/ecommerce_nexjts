@@ -1,9 +1,8 @@
 import { NextRequest } from 'next/server';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { getAdminVouchersService } from '@/features/voucher/voucher.service';
-import { $Enums } from '@/lib/generated/prisma';
 
 export async function GET(req: NextRequest) {
   try {
@@ -11,8 +10,8 @@ export async function GET(req: NextRequest) {
       headers: await headers(),
     });
     if (!session || session.user.role !== 'admin') {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Unathorized', 401)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Unathorized', 401)
       );
     }
 
@@ -33,8 +32,8 @@ export async function GET(req: NextRequest) {
       type,
     });
 
-    return ActionResponse.toNextResponse(ActionResponse.success(result));
+    return ResponseFactory.toNextResponse(ResponseFactory.success(result));
   } catch (error: any) {
-    return ActionResponse.toNextResponse(ActionResponse.error(error));
+    return ResponseFactory.toNextResponse(ResponseFactory.error(error));
   }
 }

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireSeller } from '@/lib/require-role';
 import { manageProductSchema } from '@/app/(seller)/seller/products/_components/productSchema';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 
 export async function GET(req: NextRequest) {
   const sellerSession = await requireSeller();
@@ -17,8 +17,8 @@ export async function GET(req: NextRequest) {
     : { productId: req.url.split('/').pop() };
 
   if (!productId) {
-    return ActionResponse.toNextResponse(
-      ActionResponse.error('Missing productId', 400)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error('Missing productId', 400)
     );
   }
 
@@ -34,8 +34,8 @@ export async function GET(req: NextRequest) {
   });
 
   if (!product) {
-    return ActionResponse.toNextResponse(
-      ActionResponse.error('Product not found', 404)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error('Product not found', 404)
     );
   }
 
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
     keywords: product.keywords ?? [],
   };
 
-  return ActionResponse.toNextResponse(ActionResponse.success(normalized));
+  return ResponseFactory.toNextResponse(ResponseFactory.success(normalized));
 }
 
 export async function PUT(
@@ -116,10 +116,10 @@ export async function PUT(
       data: updateData,
     });
 
-    return ActionResponse.toNextResponse(ActionResponse.success(product));
+    return ResponseFactory.toNextResponse(ResponseFactory.success(product));
   } catch (error: any) {
-    return ActionResponse.toNextResponse(
-      ActionResponse.error(error.message, 400)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(error.message, 400)
     );
   }
 }

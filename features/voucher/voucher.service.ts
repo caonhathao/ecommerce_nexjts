@@ -1,10 +1,7 @@
 import { $Enums, Prisma } from '@/lib/generated/prisma';
 import { prisma } from '@/lib/db';
-import { requireSeller } from '@/lib/require-role';
-import { ActionResponse } from '@/lib/service-response';
 import { CreateVoucherInput } from '@/lib/validation/voucher';
-import VoucherType = $Enums.VoucherType;
-import { VoucherResponseDTO } from '@/features/voucher/voucher.dto';
+import { ServiceError } from '@/lib/service-error';
 
 export const getAvailableVouchersService = async (
   shopId: string,
@@ -20,7 +17,6 @@ export const getAvailableVouchersService = async (
   };
 
   if (productId) {
-    // Get product category to check category-specific vouchers
     const product = await prisma.product.findUnique({
       where: { id: productId },
       select: { categoryId: true },
@@ -28,7 +24,6 @@ export const getAvailableVouchersService = async (
 
     const andClauses: Prisma.VoucherWhereInput[] = [];
 
-    // Product restrictions: either none or includes this product
     andClauses.push({
       OR: [{ products: { none: {} } }, { products: { some: { productId } } }],
     });
@@ -79,115 +74,85 @@ export const createProductVoucherService = async (
   productId: string,
   voucherId: string
 ) => {
-  try {
-    await prisma.voucherProduct.create({
-      data: {
-        voucherId: voucherId,
-        productId: productId,
-      },
-    });
-  } catch (error: any) {
-    if (error.code === 'P2002') {
-      return;
-    }
-    throw error;
-  }
+  await prisma.voucherProduct.create({
+    data: {
+      voucherId: voucherId,
+      productId: productId,
+    },
+  });
 };
 
 export const createCategoryVoucherService = async (
   voucherId: string,
   categoryId: string
 ) => {
-  try {
-    await prisma.voucherCategory.create({
-      data: {
-        voucherId: voucherId,
-        categoryId: categoryId,
-      },
-    });
-  } catch (error: any) {
-    if (error.code === 'P2002') {
-      return;
-    }
-    throw error;
-  }
+  await prisma.voucherCategory.create({
+    data: {
+      voucherId: voucherId,
+      categoryId: categoryId,
+    },
+  });
 };
 
 export const createVoucherService = async (params: CreateVoucherInput) => {
-  try {
-    let validProductIds: string[] = [];
-    let validCategoryIds: string[] = [];
+  let validProductIds: string[] = [];
+  let validCategoryIds: string[] = [];
 
-    if (params.productIds && params.productIds.length > 0) {
-      const existingProducts = await prisma.product.findMany({
-        where: { id: { in: params.productIds } },
-        select: { id: true },
-      });
-      validProductIds = existingProducts.map((p) => p.id);
-      if (validProductIds.length !== params.productIds.length) {
-        console.warn('Một số ID sản phẩm không hợp lệ và sẽ bị bỏ qua.');
-      }
-    }
-
-    if (params.categoryIds && params.categoryIds.length > 0) {
-      const existingCategory = await prisma.category.findMany({
-        where: { id: { in: params.categoryIds } },
-        select: { id: true },
-      });
-      validCategoryIds = existingCategory.map((p) => p.id);
-      if (validCategoryIds.length !== params.categoryIds.length) {
-        console.warn('Một số ID sản phẩm không hợp lệ và sẽ bị bỏ qua.');
-      }
-    }
-
-    const voucher = await prisma.voucher.create({
-      data: {
-        code: params.code,
-        type: params.type,
-        value: params.value,
-        maxDiscount: params.type === 'PERCENT' ? params.maxDiscount : null,
-        minSubtotal: params.minSubtotal,
-        currency: params.currency,
-        startAt: params.startAt,
-        endAt: params.endAt,
-        usageLimit: params.usageLimit,
-        perUserLimit: params.perUserLimit,
-        shopId: params.shopId,
-        isActive: params.isActive,
-
-        products:
-          validProductIds.length > 0
-            ? {
-                create: validProductIds.map((productId) => ({
-                  productId: productId,
-                })),
-              }
-            : undefined,
-
-        categories:
-          validCategoryIds.length > 0
-            ? {
-                create: validCategoryIds.map((categoryId) => ({
-                  categoryId: categoryId,
-                })),
-              }
-            : undefined,
-      },
-      include: {
-        products: true,
-        categories: true,
-      },
+  if (params.productIds && params.productIds.length > 0) {
+    const existingProducts = await prisma.product.findMany({
+      where: { id: { in: params.productIds } },
+      select: { id: true },
     });
-    return voucher;
-  } catch (error: any) {
-    if (error.code === 'P2003') {
-      throw new Error('Một hoặc nhiều sản phẩm/danh mục không tồn tại.');
-    }
-    if (error.code === 'P2002') {
-      throw new Error('Mã voucher đã tồn tại.');
-    }
-    throw error;
+    validProductIds = existingProducts.map((p) => p.id);
   }
+
+  if (params.categoryIds && params.categoryIds.length > 0) {
+    const existingCategory = await prisma.category.findMany({
+      where: { id: { in: params.categoryIds } },
+      select: { id: true },
+    });
+    validCategoryIds = existingCategory.map((p) => p.id);
+  }
+
+  const voucher = await prisma.voucher.create({
+    data: {
+      code: params.code,
+      type: params.type,
+      value: params.value,
+      maxDiscount: params.type === 'PERCENT' ? params.maxDiscount : null,
+      minSubtotal: params.minSubtotal,
+      currency: params.currency,
+      startAt: params.startAt,
+      endAt: params.endAt,
+      usageLimit: params.usageLimit,
+      perUserLimit: params.perUserLimit,
+      shopId: params.shopId,
+      isActive: params.isActive,
+
+      products:
+        validProductIds.length > 0
+          ? {
+              create: validProductIds.map((productId) => ({
+                productId: productId,
+              })),
+            }
+          : undefined,
+
+      categories:
+        validCategoryIds.length > 0
+          ? {
+              create: validCategoryIds.map((categoryId) => ({
+                categoryId: categoryId,
+              })),
+            }
+          : undefined,
+    },
+    include: {
+      products: true,
+      categories: true,
+    },
+  });
+  return voucher;
 };
 
 type GetVoucherParams = {
@@ -299,7 +264,7 @@ export const disableVoucherService = async (
   });
 
   if (!voucher) {
-    throw new Error('Voucher not found');
+    throw new ServiceError('Voucher not found', 404);
   }
 
   const isOwner = voucher.shopId === null;
@@ -307,7 +272,10 @@ export const disableVoucherService = async (
     voucher.shop && voucher.shop.members && voucher.shop.members.length > 0;
 
   if (!isAdmin && !isOwner && !isMember) {
-    throw new Error('You do not have permission to disable this voucher');
+    throw new ServiceError(
+      'You do not have permission to disable this voucher',
+      403
+    );
   }
 
   await prisma.voucher.update({

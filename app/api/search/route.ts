@@ -1,8 +1,8 @@
 import { parseSearchQueryWithAI } from '@/features/search/gemini-search';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
-import { ActionResponse } from '@/lib/service-response';
-import { ServiceResponse } from '@/types/api-response';
+import { ResponseFactory } from '@/lib/api-response';
+import { ApiResponse } from '@/types/api';
 import { NextRequest, NextResponse } from 'next/server';
 import ProductWhereInput = Prisma.ProductWhereInput;
 import ProductOrderByWithRelationInput = Prisma.ProductOrderByWithRelationInput;
@@ -128,11 +128,11 @@ export async function GET(req: NextRequest) {
       });
 
       if (!data) {
-        return ActionResponse.toNextResponse({
+        return ResponseFactory.toNextResponse({
           success: false,
           message: 't_category_not_found',
           code: 403,
-        } as ServiceResponse);
+        } as ApiResponse);
       }
 
       const categoryIds = await getCategoryWithChildren(data.id);

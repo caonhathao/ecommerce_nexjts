@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { requireSeller } from '@/lib/require-role';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { getShopVouchersService } from '@/features/voucher/voucher.service';
 
@@ -9,8 +9,8 @@ export async function GET(req: NextRequest) {
     const sellerSession = await requireSeller();
 
     if (!sellerSession) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Unauthorized', 401)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Unauthorized', 401)
       );
     }
 
@@ -46,10 +46,11 @@ export async function GET(req: NextRequest) {
       shop: shopIds,
     });
 
-    return ActionResponse.toNextResponse(
-      ActionResponse.success(result, 'fetchSuccesful', 200)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(result, 'fetchSuccesful', 200)
     );
-  } catch (error: any) {
-    return ActionResponse.toNextResponse(ActionResponse.error(error));
+  } catch (error) {
+    const errorResponse = ResponseFactory.handleError(error);
+    return ResponseFactory.toNextResponse(errorResponse);
   }
 }

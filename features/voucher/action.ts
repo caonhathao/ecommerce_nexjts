@@ -1,19 +1,19 @@
 'use server';
 
 import { requireRole, requireSeller } from '@/lib/require-role';
-import { ActionResponse } from '@/lib/service-response';
-import { ServiceResponse } from '@/types/api-response';
+import { ResponseFactory } from '@/lib/api-response';
+import { ApiResponse } from '@/types/api';
 import { disableVoucherService } from '@/features/voucher/voucher.service';
 
 export const disableVoucherAction = async (
   voucherId: string
-): Promise<ServiceResponse<{ success: boolean }>> => {
+): Promise<ApiResponse<{ success: boolean }>> => {
   try {
     // Get the usr session
     const session = await requireSeller();
 
     if (!session?.user?.id) {
-      return ActionResponse.error('Unauthorized', 401);
+      return ResponseFactory.error('Unauthorized', 401);
     }
 
     const result = await disableVoucherService(
@@ -22,30 +22,20 @@ export const disableVoucherAction = async (
       false
     );
 
-    return ActionResponse.success(result, 'Voucher disabled successfully');
-  } catch (error: any) {
-    console.error('Error disabling voucher:', error);
-
-    if (error.message === 'Voucher not found') {
-      return ActionResponse.error(error.message, 404);
-    }
-
-    if (error.message.includes('permission')) {
-      return ActionResponse.error(error.message, 403);
-    }
-
-    return ActionResponse.error('Failed to disable voucher', 500);
+    return ResponseFactory.success(result, 'Voucher disabled successfully');
+  } catch (error) {
+    return ResponseFactory.handleError(error);
   }
 };
 
 export const disableVoucherByAdminAction = async (
   voucherId: string
-): Promise<ServiceResponse<{ success: boolean }>> => {
+): Promise<ApiResponse<{ success: boolean }>> => {
   try {
     const session = await requireRole();
 
     if (!session?.user?.id) {
-      return ActionResponse.error('Unauthorized', 401);
+      return ResponseFactory.error('Unauthorized', 401);
     }
 
     const result = await disableVoucherService(
@@ -54,18 +44,8 @@ export const disableVoucherByAdminAction = async (
       true
     );
 
-    return ActionResponse.success(result, 'Voucher disabled successfully');
-  } catch (error: any) {
-    console.error('Error disabling voucher by admin:', error);
-
-    if (error.message === 'Voucher not found') {
-      return ActionResponse.error(error.message, 404);
-    }
-
-    if (error.message.includes('permission')) {
-      return ActionResponse.error(error.message, 403);
-    }
-
-    return ActionResponse.error('Failed to disable voucher', 500);
+    return ResponseFactory.success(result, 'Voucher disabled successfully');
+  } catch (error) {
+    return ResponseFactory.handleError(error);
   }
 };
