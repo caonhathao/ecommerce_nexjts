@@ -1,4 +1,4 @@
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 import { getOrderStats } from '@/features/order/order.service';
 import { requireSeller } from '@/lib/require-role';
 import { GetOrderStatsSchema } from '@/features/order/order.dto';
@@ -7,8 +7,8 @@ export async function GET(req: Request) {
   try {
     const session = await requireSeller();
     if (!session?.user?.id) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Unauthorized', 401)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Unauthorized', 401)
       );
     }
 
@@ -22,8 +22,8 @@ export async function GET(req: Request) {
     const validation = GetOrderStatsSchema.safeParse(rawInput);
 
     if (!validation.success) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error(
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error(
           'Invalid parameters',
           400,
           validation.error.flatten().fieldErrors
@@ -33,11 +33,11 @@ export async function GET(req: Request) {
 
     const stats = await getOrderStats(session.user.id, validation.data);
 
-    return ActionResponse.toNextResponse(ActionResponse.success(stats));
+    return ResponseFactory.toNextResponse(ResponseFactory.success(stats));
   } catch (err: any) {
     const status = err?.message === 'Unauthorized' ? 401 : 500;
-    return ActionResponse.toNextResponse(
-      ActionResponse.error(err.message, status)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(err.message, status)
     );
   }
 }

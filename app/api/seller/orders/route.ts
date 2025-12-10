@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db';
 import { $Enums, Prisma } from '@/lib/generated/prisma';
 import OrderStatus = $Enums.OrderStatus;
 import { OrderDTO } from '@/types/dtos/order.dto';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 import QueryMode = Prisma.QueryMode;
 
 export async function GET(req: NextRequest) {
@@ -122,8 +122,8 @@ export async function GET(req: NextRequest) {
   //   nextCursor = orders[orders.length - 1].id;
   // }
 
-  return ActionResponse.toNextResponse(
-    ActionResponse.success(
+  return ResponseFactory.toNextResponse(
+    ResponseFactory.success(
       {
         orders: orders,
         pagination: { page, limit, total, totalPages },

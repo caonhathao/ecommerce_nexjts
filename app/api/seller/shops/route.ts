@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
 import { requireSeller } from '@/lib/require-role';
 import { ShopMemberRole } from '@/lib/generated/prisma';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 
 const createShopSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -34,8 +34,8 @@ export async function GET() {
   try {
     const session = await requireSeller();
     if (!session?.user?.id) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Unauthenticated', 401)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Unauthenticated', 401)
       );
     }
     const sellerId = session.user.id;
@@ -70,10 +70,10 @@ export async function GET() {
       ratingAvg: Number(s.ratingAvg),
     }));
 
-    return ActionResponse.toNextResponse(ActionResponse.success(normalized));
+    return ResponseFactory.toNextResponse(ResponseFactory.success(normalized));
   } catch (err: any) {
-    return ActionResponse.toNextResponse(
-      ActionResponse.error(err?.message ?? 'Server error', 500)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(err?.message ?? 'Server error', 500)
     );
   }
 }
@@ -87,8 +87,11 @@ export async function POST(req: Request) {
 
     const parse = createShopSchema.safeParse(body);
     if (!parse.success) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Validation failed: ' + parse.error.flatten(), 400)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error(
+          'Validation failed: ' + parse.error.flatten(),
+          400
+        )
       );
     }
     const payload = parse.data;
@@ -103,8 +106,8 @@ export async function POST(req: Request) {
       where: { slug: payload.slug },
     });
     if (existing) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Slug already taken', 409)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Slug already taken', 409)
       );
     }
 
@@ -132,8 +135,8 @@ export async function POST(req: Request) {
       },
     });
 
-    return ActionResponse.toNextResponse(
-      ActionResponse.success(
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(
         shop,
         `Shop ${shop.name} created successfully`,
         201
@@ -141,8 +144,8 @@ export async function POST(req: Request) {
     );
   } catch (err: any) {
     console.error('create shop error', err);
-    return ActionResponse.toNextResponse(
-      ActionResponse.error(err?.message ?? 'Server error', 500)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(err?.message ?? 'Server error', 500)
     );
   }
 }

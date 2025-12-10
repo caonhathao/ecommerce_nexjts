@@ -8,7 +8,7 @@ import { env } from '@/lib/env';
 import { paths } from '@/lib/path';
 import { sendShopInvitationEmail } from '@/lib/mailer';
 import { InviteMemberSchema } from '@/app/(seller)/seller/shops/[shopId]/members/schema';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 import { revalidatePath } from 'next/cache';
 
 export async function inviteMember({
@@ -23,12 +23,12 @@ export async function inviteMember({
   const parsed = InviteMemberSchema.safeParse({ email, shopId, role });
   if (!parsed.success) {
     const errors = parsed.error.flatten().fieldErrors;
-    return ActionResponse.error('Validation failed', 400, errors);
+    return ResponseFactory.error('Validation failed', 400, errors);
   }
 
   const session = await requireSeller();
   if (!session) {
-    return ActionResponse.error('Unauthorized', 401);
+    return ResponseFactory.error('Unauthorized', 401);
   }
 
   const shop = await prisma.shop.findFirst({
@@ -36,7 +36,7 @@ export async function inviteMember({
   });
 
   if (!shop) {
-    return ActionResponse.error('Shop not found or permission denied', 403);
+    return ResponseFactory.error('Shop not found or permission denied', 403);
   }
 
   const existingMember = await prisma.shopMember.findFirst({
@@ -46,7 +46,7 @@ export async function inviteMember({
     },
   });
   if (existingMember) {
-    return ActionResponse.error('User is already a member of this shop', 400);
+    return ResponseFactory.error('User is already a member of this shop', 400);
   }
 
   try {
@@ -79,21 +79,21 @@ export async function inviteMember({
 
     revalidatePath(`/seller/shops/${shopId}/members`);
 
-    return ActionResponse.success(null, 'Invitation sent successfully', 200);
+    return ResponseFactory.success(null, 'Invitation sent successfully', 200);
   } catch (err) {
     console.error('inviteMember error', err);
-    return ActionResponse.error('Failed to send invitation', 500);
+    return ResponseFactory.error('Failed to send invitation', 500);
   }
 }
 
 export async function removeMember(shopId: string, memberId: string) {
   const session = await requireSeller();
-  if (!session) return ActionResponse.error('Unauthorized', 401);
+  if (!session) return ResponseFactory.error('Unauthorized', 401);
 
   const shop = await prisma.shop.findFirst({
     where: { id: shopId, ownerId: session.user.id },
   });
-  if (!shop) return ActionResponse.error('Permission denied', 403);
+  if (!shop) return ResponseFactory.error('Permission denied', 403);
 
   try {
     await prisma.shopMember.delete({
@@ -101,8 +101,8 @@ export async function removeMember(shopId: string, memberId: string) {
     });
 
     revalidatePath(`/seller/shops/${shopId}/members`);
-    return ActionResponse.success(null, 'Member removed successfully');
+    return ResponseFactory.success(null, 'Member removed successfully');
   } catch (error) {
-    return ActionResponse.error('Failed to remove member', 500);
+    return ResponseFactory.error('Failed to remove member', 500);
   }
 }

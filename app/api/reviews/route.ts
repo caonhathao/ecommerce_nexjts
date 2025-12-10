@@ -1,7 +1,7 @@
 import { getCurrentUserId } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
@@ -143,8 +143,8 @@ export async function POST(req: NextRequest) {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Unauthorized', 401)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Unauthorized', 401)
       );
     }
     const data = await req.json();
@@ -168,13 +168,13 @@ export async function POST(req: NextRequest) {
             : null,
       },
     });
-    return ActionResponse.toNextResponse(
-      ActionResponse.success(review, 'Review successful', 201)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(review, 'Review successful', 201)
     );
   } catch (error) {
     console.error('POST /api/reviews error:', error);
-    return ActionResponse.toNextResponse(
-      ActionResponse.error('failed', 400, { errorDetail: [String(error)] })
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error('failed', 400, { errorDetail: [String(error)] })
     );
   }
 }
