@@ -16,7 +16,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CiShoppingBasket } from 'react-icons/ci';
 import { toast } from 'sonner';
 import { formatPrice } from '@/lib/utils';
-import { getTwoRandomVoucherCodes } from '@/helpers/voucher-helper';
+import { getTwoRandomVoucherCodes } from '@/features/voucher/voucher-helper';
 
 const emptyCart: CartType = {
   id: '',

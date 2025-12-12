@@ -26,7 +26,7 @@ import { TicketPercent } from 'lucide-react';
 import { ChatButton } from '@/components/chat/chat-button';
 
 import { VoucherSelector } from '@/features/voucher/_components/voucher-selector';
-import { VoucherDto } from '@/features/voucher/voucher.dto';
+import { VoucherDTO } from '@/features/voucher/voucher.dto';
 import Desc from './_components/desc';
 import { ReviewsServer } from './_components/reviews-server';
 import SlideImg from './_components/slide-img';
@@ -60,7 +60,7 @@ const DetailPage = () => {
   const [data, setData] = useState<productDetailType | null>(null);
   const [selVariant, setSelVariant] = useState<SelectedVariant | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [selectedVouchers, setSelectedVouchers] = useState<VoucherDto[]>([]);
+  const [selectedVouchers, setSelectedVouchers] = useState<VoucherDTO[]>([]);
 
   const t = useTranslations('product_detail');
   const c = useTranslations('general');

@@ -1,5 +1,5 @@
-import { UserProfileResponseDTO } from '@/types/dtos/user.dto';
-import { UserProfileFormValues } from '@/app/(public)/(customer)/customer/account/_components/makeUserSchema';
+import { UserProfileResponseDTO } from '@/features/account/profile/profile.dto';
+import { UserProfileFormValues } from '@/features/account/components/makeUserSchema';
 
 export function splitBirthDate(iso: string | null | undefined) {
   if (!iso) return { day: '', month: '', year: '' };

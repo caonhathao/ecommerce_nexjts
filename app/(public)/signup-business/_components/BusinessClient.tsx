@@ -1,12 +1,11 @@
 'use client';
 
-import { UserProfileResponseDTO } from '@/types/dtos/user.dto';
-import { delay } from 'effect/Micro';
 import { DollarSign, Loader2, ShieldCheck, Store } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { UserProfileResponseDTO } from '@/features/account/profile/profile.dto';
 
 interface BusinessClientProps {
   user: UserProfileResponseDTO | null;
