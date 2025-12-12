@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { getSessionUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import UserNav from '@/app/(public)/(customer)/_components/user-nav';
+import UserNav from '@/features/account/components/user-nav';
 
 export default async function UserLayout({
   children,

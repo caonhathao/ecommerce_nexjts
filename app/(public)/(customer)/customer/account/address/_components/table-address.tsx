@@ -1,4 +1,4 @@
-'use client'; // Bắt buộc
+'use client';
 
 import { Button } from '@/components/ui/button';
 import {

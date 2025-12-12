@@ -13,23 +13,24 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { UserProfileResponseDTO } from '@/types/dtos/user.dto';
 import { useMemo } from 'react';
 import {
   buildBirthDateString,
   mapDtoToFormValues,
   splitBirthDate,
-} from '@/helpers/user-profile-helper';
-import { updateProfileAction } from '@/app/actions/user-profile-action';
+} from '@/features/account/profile/user-profile-helper';
 import { Button } from '@/components/ui/button';
-import {
-  makeUserProfileSchema,
-  UserProfileFormValues,
-} from '@/app/(public)/(customer)/customer/account/_components/makeUserSchema';
+
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Separator } from '@/components/ui/separator';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { UserProfileResponseDTO } from '@/features/account/profile/profile.dto';
+import {
+  makeUserProfileSchema,
+  UserProfileFormValues,
+} from '@/features/account/components/makeUserSchema';
+import { updateProfileAction } from '@/features/account/profile/profile.action';
 type Props = {
   defaultValues: UserProfileResponseDTO;
 };
