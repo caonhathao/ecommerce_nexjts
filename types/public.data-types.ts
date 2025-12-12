@@ -1,6 +1,5 @@
-import { VoucherDto } from '@/features/voucher/voucher.dto';
+import { VoucherDTO } from '@/features/voucher/voucher.dto';
 import { $Enums } from '@/lib/generated/prisma';
-import VoucherType = $Enums.VoucherType;
 
 export interface productDataResponse {
   data: productItemType[];
@@ -29,7 +28,7 @@ export interface productItemType {
 }
 
 export interface productDetailType {
-  VoucherProduct: VoucherDto[];
+  VoucherProduct: VoucherDTO[];
   attributes: string | null;
   description: string;
   id: string;

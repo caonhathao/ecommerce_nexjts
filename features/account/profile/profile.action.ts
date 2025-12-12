@@ -1,7 +1,6 @@
 'use server';
 
 import { auth, getCurrentUserId, getSessionUser } from '@/lib/auth';
-import { updateUserProfile } from '@/features/account/profile/profile.data';
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 import { paths } from '@/lib/path';

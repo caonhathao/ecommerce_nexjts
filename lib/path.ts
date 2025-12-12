@@ -11,6 +11,7 @@ export const paths = {
   customer: {
     account: {
       edit: '/customer/account/edit',
+      address: '/customer/account/address',
     },
   },
 

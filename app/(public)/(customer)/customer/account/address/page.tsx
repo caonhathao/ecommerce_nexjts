@@ -1,7 +1,10 @@
 'use client';
 
-import { AddressCard } from '@/app/(public)/(customer)/customer/account/address/_components/table-address';
-import { createAddress, getAddress } from '@/app/actions/address';
+import { AddressCard } from '@/features/account/components/table-address';
+import {
+  createAddress,
+  getAddress,
+} from '@/features/account/address/address.action';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -28,7 +31,7 @@ import {
   provinceResponse,
   wardResponse,
 } from '@/types/customer.data-types';
-import { AddressDTO } from '@/types/dtos/address.dto';
+import { AddressDTO } from '@/features/account/address/address.dto';
 import { SelectContent, SelectGroup } from '@radix-ui/react-select';
 import { MapPin, MapPinX, MapPlus } from 'lucide-react';
 import { useActionState, useEffect, useState, useTransition } from 'react';
@@ -98,8 +101,8 @@ export default function AddressPage() {
 
   useEffect(() => {
     startTransition(async () => {
-      const data = await getAddress();
-      if (data.success) setAddress(data.addresses);
+      const res = await getAddress();
+      if (res?.success && res.data) setAddress(res.data);
     });
 
     fetchData({
@@ -144,8 +147,8 @@ export default function AddressPage() {
         setAddress((prev) => [state.newAddress!, ...prev]);
       } else {
         startTransition(async () => {
-          const data = await getAddress();
-          if (data?.success) setAddress(data.addresses);
+          const res = await getAddress();
+          if (res?.success && res.data) setAddress(res.data);
         });
       }
     }

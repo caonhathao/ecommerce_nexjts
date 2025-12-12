@@ -8,9 +8,9 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { AddressDTO } from '@/types/dtos/address.dto';
+import { AddressDTO } from '@/features/account/address/address.dto';
 import { Check, Loader2 } from 'lucide-react';
-import { setAsDefault } from '@/app/actions/address';
+import { setAsDefault } from '@/features/account/address/address.action';
 import { toast } from 'sonner';
 import { useTransition } from 'react';
 
