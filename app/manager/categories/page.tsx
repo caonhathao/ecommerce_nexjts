@@ -21,6 +21,7 @@ import {
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { paths } from '@/lib/path';
+import { formatDay } from '@/lib/utils';
 import {
   categoryDataResponse,
   categoryItemData,
@@ -61,14 +62,13 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
+import { IoMdCloseCircle } from 'react-icons/io';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
+import TabTableView from '../_components/tab-table-view';
 import { NewCategoryForm } from './_components/new-category-form';
-import TabCategory from './_components/tab-category';
 import TableCellViewer from './_components/table-cell-viewer';
 import { handleDelete } from './_funcs/funcs';
-import { formatDay } from '@/lib/utils';
-import { IoMdCloseCircle } from 'react-icons/io';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
@@ -406,8 +406,9 @@ const CategoryManagePage = () => {
           value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <TabCategory
-            activeFilter=""
+          <TabTableView<categoryItemData>
+            filter=""
+            baseUrl={paths.manager.category.fetch_all}
             isReset={isReset}
             sensors={sensors}
             sortableId={sortableId}
@@ -415,8 +416,8 @@ const CategoryManagePage = () => {
             columns={columns}
             data={data}
             setData={setData}
-            categoryList={categoryList}
-            setCategoryList={setCategoryList}
+            list={categoryList}
+            setList={setCategoryList}
             isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
@@ -427,8 +428,9 @@ const CategoryManagePage = () => {
           value="all-active"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <TabCategory
-            activeFilter="true"
+          <TabTableView<categoryItemData>
+            filter="true"
+            baseUrl={paths.manager.category.fetch_all}
             isReset={isReset}
             sensors={sensors}
             sortableId={sortableId}
@@ -436,8 +438,8 @@ const CategoryManagePage = () => {
             columns={columns}
             data={data}
             setData={setData}
-            categoryList={categoryList}
-            setCategoryList={setCategoryList}
+            list={categoryList}
+            setList={setCategoryList}
             isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
@@ -448,8 +450,9 @@ const CategoryManagePage = () => {
           value="all-inactive"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <TabCategory
-            activeFilter="false"
+          <TabTableView<categoryItemData>
+            filter="false"
+            baseUrl={paths.manager.category.fetch_all}
             isReset={isReset}
             sensors={sensors}
             sortableId={sortableId}
@@ -457,8 +460,8 @@ const CategoryManagePage = () => {
             columns={columns}
             data={data}
             setData={setData}
-            categoryList={categoryList}
-            setCategoryList={setCategoryList}
+            list={categoryList}
+            setList={setCategoryList}
             isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}

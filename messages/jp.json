@@ -534,6 +534,13 @@
     "t_ownerId": "オーナーID",
     "t_email": "メール"
   },
+  "admin_tab_table_view": {
+    "t_no_category_found": "カテゴリーが見つかりません",
+    "t_of": "/",
+    "t_rows_selected": "行を選択中。",
+    "t_rows_per_page": "ページあたりの行数",
+    "t_page": "ページ"
+  },
   "admin_category_page": {
     "t_search_placeholder": "検索キーワードを入力...",
     "t_action_not": "操作",
@@ -555,13 +562,7 @@
     "t_tab_inactive": "無効",
     "t_showing": "表示中",
     "t_column": "列",
-    "category_tab": {
-      "t_no_category_found": "カテゴリーが見つかりません",
-      "t_of": "/",
-      "t_rows_selected": "行を選択中。",
-      "t_rows_per_page": "ページあたりの行数",
-      "t_page": "ページ"
-    },
+
     "category_drawer": {
       "t_action_not": "操作",
       "t_update_desc_not": "カテゴリー情報の更新に成功しました！",
@@ -638,13 +639,7 @@
     "t_tab_unlisted": "禁止",
     "t_showing": "表示中",
     "t_column": "列",
-    "product_tab": {
-      "t_no_product_found": "商品が見つかりません",
-      "t_of": "/",
-      "t_rows_selected": "行を選択中。",
-      "t_rows_per_page": "ページあたりの行数",
-      "t_page": "ページ"
-    },
+
     "product_drawer": {
       "t_process_failed_not": "処理に失敗しました",
       "t_conn_failed_desc_not": "サーバーに接続できません！",
@@ -701,13 +696,7 @@
     "t_tab_closed": "閉店",
     "t_showing": "表示中",
     "t_column": "列",
-    "shop_tab": {
-      "t_no_shop_found": "ショップが見つかりません",
-      "t_of": "/",
-      "t_rows_selected": "行を選択中。",
-      "t_rows_per_page": "ページあたりの行数",
-      "t_page": "ページ"
-    },
+
     "shop_drawer": {
       "t_process_failed_not": "処理に失敗しました",
       "t_conn_failed_desc_not": "サーバーに接続できません！",
@@ -768,13 +757,6 @@
     "t_tab_banned": "停止中",
     "t_showing": "表示中",
     "t_column": "列",
-    "user_tab": {
-      "t_no_shop_found": "結果が見つかりません",
-      "t_of": "/",
-      "t_rows_selected": "行を選択中。",
-      "t_rows_per_page": "ページあたりの行数",
-      "t_page": "ページ"
-    },
     "user_drawer": {
       "t_process_failed_not": "処理に失敗しました",
       "t_conn_failed_desc_not": "サーバーに接続できません！",
@@ -852,13 +834,6 @@
       "t_data_from": "データ期間:",
       "t_most_recent": "直近",
       "t_label_1": "数量"
-    },
-    "product_tab": {
-      "t_no_product_found": "商品が見つかりません",
-      "t_of": "/",
-      "t_rows_selected": "行を選択中。",
-      "t_rows_per_page": "ページあたりの行数",
-      "t_page": "ページ"
     },
     "product_drawer": {
       "t_process_failed_not": "処理に失敗しました",

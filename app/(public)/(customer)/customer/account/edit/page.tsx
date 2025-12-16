@@ -1,6 +1,6 @@
 import { getCurrentUserId } from '@/lib/auth';
-import { getUserProfile } from '@/app/data/user.data';
-import EditUserProfileForm from '@/app/(public)/(customer)/customer/account/_components/edit-user-profile-form';
+import { getUserProfile } from '@/features/account/profile/profile.data';
+import EditUserProfileForm from '@/features/account/components/edit-user-profile-form';
 
 export default async function AccountPage() {
   const userId = await getCurrentUserId();
@@ -9,7 +9,8 @@ export default async function AccountPage() {
     throw new Error('Unauthorized');
   }
 
-  const profile = await getUserProfile(userId);
+  const res = await getUserProfile(userId);
+  const profile = res.success ? res.data : null;
 
   // console.log('Fetched profile:', profile);
 

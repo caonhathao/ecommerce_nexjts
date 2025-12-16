@@ -16,15 +16,15 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import { fetchApi } from '@/lib/client-fetch';
-import { VoucherDto } from '@/features/voucher/voucher.dto';
+import { VoucherDTO } from '@/features/voucher/voucher.dto';
 import { Separator } from '@/components/ui/separator';
 
 interface VoucherSelectorProps {
   shopId: string;
   productId?: string;
   currentPrice: number; // Added to validate minSubtotal
-  selectedVouchers: VoucherDto[]; // Changed from string[] to object[]
-  onApply: (vouchers: VoucherDto[]) => void;
+  selectedVouchers: VoucherDTO[]; // Changed from string[] to object[]
+  onApply: (vouchers: VoucherDTO[]) => void;
 }
 
 export function VoucherSelector({
@@ -36,11 +36,11 @@ export function VoucherSelector({
 }: VoucherSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [availableVouchers, setAvailableVouchers] = useState<VoucherDto[]>([]);
+  const [availableVouchers, setAvailableVouchers] = useState<VoucherDTO[]>([]);
 
   // Local state for the sheet before applying
   const [tempSelected, setTempSelected] =
-    useState<VoucherDto[]>(selectedVouchers);
+    useState<VoucherDTO[]>(selectedVouchers);
 
   useEffect(() => {
     if (isOpen) {
@@ -56,7 +56,7 @@ export function VoucherSelector({
       const params = new URLSearchParams({ shopId });
       if (productId) params.append('productId', productId);
 
-      fetchApi<VoucherDto[]>(`/api/vouchers?${params.toString()}`)
+      fetchApi<VoucherDTO[]>(`/api/vouchers?${params.toString()}`)
         .then((res) => {
           if (res.success && res.data) {
             setAvailableVouchers(res.data);
@@ -66,7 +66,7 @@ export function VoucherSelector({
     }
   }, [isOpen, shopId, productId]);
 
-  const handleToggle = (voucher: VoucherDto) => {
+  const handleToggle = (voucher: VoucherDTO) => {
     // 1. Check Min Subtotal Condition
     if (currentPrice < voucher.minSubtotal) {
       toast.warning(
@@ -112,7 +112,7 @@ export function VoucherSelector({
   // Helper to render groups
   const renderVoucherList = (
     title: string,
-    vouchers: VoucherDto[],
+    vouchers: VoucherDTO[],
     icon: React.ReactNode
   ) => {
     if (vouchers.length === 0) return null;

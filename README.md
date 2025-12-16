@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 E-Commerce Next.js Platform
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 
-First, run the development server:
+A modern, multilingual multi-vendor e-commerce application built with **Next.js (App Router)**. This project features comprehensive role management (Admin, Seller, Customer), real-time functionality, and AI-powered image search.
 
+---
+
+# Images of the website
+![Home Page](public/readme/home.png)
+
+## ✨ Key Features
+
+* **🤖 AI-Powered Search:** Image analysis and product search using Google GenAI.
+* **🌍 Multilingual Support:** Built-in internationalization for global access.
+* **🔐 Advanced Authentication:** Secure auth flows with email verification and password reset.
+* **👥 Multi-Role System:** Dedicated dashboards for **Admins**, **Sellers**, and **Customers**.
+* **📦 Order Management:** Full checkout flow, voucher system, and order tracking.
+* **⚡ Real-time Updates:** Powered by **Pusher** for instant notifications.
+* **🚀 Performance:** Redis caching and Cloudinary image optimization.
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+| :--- | :--- |
+| **Framework** | Next.js (App Router) |
+| **Styling** | Tailwind CSS |
+| **Database** | PostgreSQL, Prisma ORM |
+| **Caching** | Redis |
+| **Real-time** | Pusher |
+| **Storage** | Cloudinary |
+| **Email** | Resend |
+| **AI** | Google GenAI |
+
+## ⚙️ Prerequisites
+
+Before you begin, ensure you have the following installed:
+* **Node.js** (v22 or higher)
+* **pnpm** (Recommended package manager)
+* A running **PostgreSQL** instance
+
+## 🚀 Getting Started
+
+Follow these steps to set up the project locally.
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <your-repo-url>
+cd <your-project-folder>
+````
+### 2. Install Dependencies
+Bash
+
+```pnpm install```
+
+### 3. Configure Environment Variables
+```bash
+Create a .env file in the root directory. You must configure the keys validated in lib/env.ts:
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Run the Development Server
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```pnpm dev```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

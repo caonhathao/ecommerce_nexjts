@@ -1,7 +1,7 @@
 import { getCurrentUserId } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
@@ -103,12 +103,15 @@ export async function GET(req: Request) {
     });
 
     // --- Process Images data (Combine all sub-arrays into one large array) ---
-    // imagesResult is an array of objects: [{ images: ["url1", "url2"] }, { images: ["url3"] }]
-    // Need to convert to: ["url1", "url2", "url3"]
+    // imagesResult is an array of objects: item.images = [{ url: "...", publicId: "..." }, ...]
+    // Need to convert to: allImages = [{ url: "..." }, { url: "..." }, ...]
     const allImages = imagesResult
-      .map((item) => item.images) // Get the value of the images field (json array or undefined)
-      .flat() // Làm phẳng mảng lồng nhau
-      .filter((img) => img !== null && img !== undefined); // filter trash values
+      .map((item) => item.images) // 1. get field images (type Json)
+      .flat() // 2. Flatten nested arrays
+      .filter((img) => img && typeof img === 'object' && 'url' in img) // 3. filter
+      .map((img: any) => ({
+        url: img.url, // 4. get field url obly
+      }));
 
     return NextResponse.json({
       success: true,
@@ -140,8 +143,8 @@ export async function POST(req: NextRequest) {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Unauthorized', 401)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Unauthorized', 401)
       );
     }
     const data = await req.json();
@@ -165,13 +168,13 @@ export async function POST(req: NextRequest) {
             : null,
       },
     });
-    return ActionResponse.toNextResponse(
-      ActionResponse.success(review, 'Review successful', 201)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(review, 'Review successful', 201)
     );
   } catch (error) {
     console.error('POST /api/reviews error:', error);
-    return ActionResponse.toNextResponse(
-      ActionResponse.error('failed', 400, { errorDetail: [String(error)] })
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error('failed', 400, { errorDetail: [String(error)] })
     );
   }
 }

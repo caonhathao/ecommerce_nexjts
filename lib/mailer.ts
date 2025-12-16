@@ -42,12 +42,20 @@ export async function sendVerificationEmail(to: string, otp: string) {
   const html = renderOtpEmail(otp);
 
   try {
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: fromAddress,
       to,
       subject: `${webName} - Verify your email`,
       html,
     });
+
+    if (info.accepted.includes(to)) {
+      console.log(`✅ Email sent successfully. Message ID: ${info.messageId}`);
+      return { success: true, messageId: info.messageId };
+    } else {
+      console.warn(`⚠️ Email sent but not accepted by: ${to}`);
+      return { success: false, error: 'Recipient rejected by SMTP server' };
+    }
   } catch (err) {
     console.error('Error sending email via SMTP:', err);
     throw new Error('Error sending email');

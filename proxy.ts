@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSessionUser } from '@/lib/auth';
 import { paths } from '@/lib/path';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const publicPaths = [
@@ -79,6 +79,5 @@ export async function middleware(request: NextRequest) {
 // }
 
 export const config = {
-  runtime: 'nodejs',
-  matcher: ['/((?!_next|.*\\..*|api/auth/callback|api|auth).*)'],
+  matcher: ['/((?!_next|.*\\..*|api/auth/callback|api|auth).*)']
 };

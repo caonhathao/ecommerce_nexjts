@@ -1,0 +1,51 @@
+'use server';
+
+import { requireRole, requireSeller } from '@/lib/require-role';
+import { ResponseFactory } from '@/lib/api-response';
+import { ApiResponse } from '@/types/api';
+import { disableVoucherService } from '@/features/voucher/voucher.service';
+
+export const disableVoucherAction = async (
+  voucherId: string
+): Promise<ApiResponse<{ success: boolean }>> => {
+  try {
+    // Get the usr session
+    const session = await requireSeller();
+
+    if (!session?.user?.id) {
+      return ResponseFactory.error('Unauthorized', 401);
+    }
+
+    const result = await disableVoucherService(
+      voucherId,
+      session.user.id,
+      false
+    );
+
+    return ResponseFactory.success(result, 'Voucher disabled successfully');
+  } catch (error) {
+    return ResponseFactory.handleError(error);
+  }
+};
+
+export const disableVoucherByAdminAction = async (
+  voucherId: string
+): Promise<ApiResponse<{ success: boolean }>> => {
+  try {
+    const session = await requireRole();
+
+    if (!session?.user?.id) {
+      return ResponseFactory.error('Unauthorized', 401);
+    }
+
+    const result = await disableVoucherService(
+      voucherId,
+      session.user.id,
+      true
+    );
+
+    return ResponseFactory.success(result, 'Voucher disabled successfully');
+  } catch (error) {
+    return ResponseFactory.handleError(error);
+  }
+};

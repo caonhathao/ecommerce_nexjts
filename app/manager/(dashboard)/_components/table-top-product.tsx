@@ -41,6 +41,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
+import { formatDay, formatPrice } from '@/lib/utils';
 import {
   productDataResponse,
   productDetail,
@@ -84,8 +85,7 @@ import React, { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
-import TabProduct from './tab-product';
-import { formatDay, formatPrice } from '@/lib/utils';
+import TabTableView from '../../_components/tab-table-view';
 
 const TableTopProduct = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
@@ -628,19 +628,22 @@ const TableTopProduct = () => {
           value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <TabProduct
-            visibilityFilter="PUBLIC"
+          <TabTableView<productItemData>
+            filter="PUBLIC"
+            baseUrl={paths.manager.product.fetch_all}
             sensors={sensors}
             sortableId={sortableId}
             table={table}
             columns={columns}
             data={data}
             setData={setData}
-            productList={productList}
-            setProductList={setProductList}
+            list={productList}
+            setList={setProductList}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}
+            isReset={false}
+            isFalse={false}
           />
         </TabsContent>
       </Tabs>

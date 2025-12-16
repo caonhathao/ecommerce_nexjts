@@ -11,7 +11,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     const limit = Number(searchParams.get('limit')) || 10;
     const skip = (page - 1) * limit;
 
-    const lockStatus = searchParams.get('lock')?.toString();
+    const lockStatus = searchParams.get('filter')?.toString();
 
     const whereClause: Prisma.UserWhereInput = {};
 

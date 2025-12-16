@@ -1,4 +1,5 @@
 'use client';
+import TabTableView from '@/app/manager/_components/tab-table-view';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -84,7 +85,6 @@ import React, { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
-import TabProduct from './tab-product';
 
 const TableTopProduct = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
@@ -313,8 +313,8 @@ const TableTopProduct = () => {
             <Image
               src={value.image}
               alt={value.image || index.toString()}
-              width={0}
-              height={0}
+              width={500}
+              height={500}
               className="w-[50%]"
             />
           </div>
@@ -362,7 +362,7 @@ const TableTopProduct = () => {
         <DrawerTrigger asChild>
           <Button
             variant="link"
-            className="text-foreground w-fit px-0 text-left"
+            className="text-foreground w-fit px-0 text-left hover:cursor-pointer"
             onClick={() => {
               fetchDetail();
             }}
@@ -402,8 +402,8 @@ const TableTopProduct = () => {
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
+                  <CarouselPrevious className="hover:cursor-pointer" />
+                  <CarouselNext className="hover:cursor-pointer" />
                 </Carousel>
               </div>
 
@@ -419,13 +419,25 @@ const TableTopProduct = () => {
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant={'outline'}>
+                      <Button
+                        variant={'outline'}
+                        className="hover:cursor-pointer"
+                      >
                         <BsThreeDotsVertical />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem>{t('t_watch_shop')}</DropdownMenuItem>
-                      <DropdownMenuItem>{t('t_copy_action')}</DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="hover:cursor-pointer"
+                        onClick={() =>
+                          window.open(`/shop/${detail?.shop.slug}`, '_blank')
+                        }
+                      >
+                        {t('t_watch_shop')}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="hover:cursor-pointer">
+                        {t('t_copy_action')}
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
@@ -479,13 +491,28 @@ const TableTopProduct = () => {
               <div className="flex flex-col gap-3">
                 <Label htmlFor="visibility">{t('t_visibility')}</Label>
                 <Select value={defaultVisibility}>
-                  <SelectTrigger id="visibility" className="w-full">
+                  <SelectTrigger
+                    id="visibility"
+                    className="w-full hover:cursor-pointer"
+                  >
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="UNLISTED">{t('c_public')}</SelectItem>
-                    <SelectItem value="PRIVATE">{t('c_private')}</SelectItem>
-                    <SelectItem value="PUBLIC">{t('c_unlisted')}</SelectItem>
+                    <SelectItem
+                      value="UNLISTED"
+                      className="hover:cursor-pointer"
+                    >
+                      {t('c_public')}
+                    </SelectItem>
+                    <SelectItem
+                      value="PRIVATE"
+                      className="hover:cursor-pointer"
+                    >
+                      {t('c_private')}
+                    </SelectItem>
+                    <SelectItem value="PUBLIC" className="hover:cursor-pointer">
+                      {t('c_unlisted')}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -519,6 +546,7 @@ const TableTopProduct = () => {
                               setOpenIndex(openIndex !== index ? index : null)
                             }
                             type="button"
+                            className="hover:cursor-pointer"
                           >
                             <div
                               className={`${
@@ -544,7 +572,9 @@ const TableTopProduct = () => {
           </div>
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button variant="outline">Done</Button>
+              <Button variant="outline" className="hover:cursor-pointer">
+                Done
+              </Button>
             </DrawerClose>
           </DrawerFooter>
         </DrawerContent>
@@ -627,19 +657,22 @@ const TableTopProduct = () => {
           value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <TabProduct
-            visibilityFilter="PUBLIC"
+          <TabTableView<productItemData>
+            filter="PUBLIC"
+            baseUrl={paths.manager.product.fetch_all}
             sensors={sensors}
             sortableId={sortableId}
             table={table}
             columns={columns}
             data={data}
             setData={setData}
-            productList={productList}
-            setProductList={setProductList}
+            list={productList}
+            setList={setProductList}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
             handleDragEnd={handleDragEnd}
+            isReset={false}
+            isFalse={false}
           />
         </TabsContent>
       </Tabs>

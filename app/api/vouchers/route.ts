@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 import {
   createVoucherService,
   getAvailableVouchersService,
@@ -17,8 +17,8 @@ export async function GET(req: NextRequest) {
     const productId = searchParams.get('productId');
 
     if (!shopId) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Missing shopId parameter', 400)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Missing shopId parameter', 400)
       );
     }
 
@@ -27,11 +27,11 @@ export async function GET(req: NextRequest) {
       productId || undefined
     );
 
-    return ActionResponse.toNextResponse(ActionResponse.success(vouchers));
+    return ResponseFactory.toNextResponse(ResponseFactory.success(vouchers));
   } catch (error: any) {
     console.error('API Error fetching vouchers:', error);
-    return ActionResponse.toNextResponse(
-      ActionResponse.error(error.message || 'Internal Server Error', 500)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(error.message || 'Internal Server Error', 500)
     );
   }
 }
@@ -41,8 +41,8 @@ export async function POST(req: NextRequest) {
     const userId = await getCurrentUserId();
 
     if (!userId) {
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('Unauthorized', 401)
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Unauthorized', 401)
       );
     }
     //console.log('--- [DEBUG] 1. UserId:', userId);
@@ -57,8 +57,8 @@ export async function POST(req: NextRequest) {
       //   '--- [DEBUG] 3. Zod Error Detail:',
       //   JSON.stringify(validation.error.format(), null, 2)
       // );
-      return ActionResponse.toNextResponse(
-        ActionResponse.error('validation data', 400, {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('validation data', 400, {
           errors: validation.error.issues.map((issue) => issue.message),
         })
       );
@@ -77,8 +77,8 @@ export async function POST(req: NextRequest) {
     if (currentUser!.role === Role.seller) {
       if (!data.productIds || data.productIds.length === 0) {
         //console.log('--- [DEBUG] 6. Seller Error: No Products');
-        return ActionResponse.toNextResponse(
-          ActionResponse.error('validation role', 401, {
+        return ResponseFactory.toNextResponse(
+          ResponseFactory.error('validation role', 401, {
             errors: {
               message:
                 'Voucher của Shop bắt buộc phải áp dụng cho ít nhất 1 sản phẩm.',
@@ -98,11 +98,11 @@ export async function POST(req: NextRequest) {
 
     const result = await createVoucherService(data);
 
-    return ActionResponse.toNextResponse(
-      ActionResponse.success(result, 'successful', 200)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(result, 'successful', 200)
     );
   } catch (error: any) {
     // console.error('--- [DEBUG] 7. CATCH ERROR:', error);
-    return ActionResponse.toNextResponse(ActionResponse.error(error));
+    return ResponseFactory.toNextResponse(ResponseFactory.error(error));
   }
 }

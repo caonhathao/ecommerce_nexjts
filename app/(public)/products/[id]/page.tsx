@@ -26,7 +26,7 @@ import { TicketPercent } from 'lucide-react';
 import { ChatButton } from '@/components/chat/chat-button';
 
 import { VoucherSelector } from '@/features/voucher/_components/voucher-selector';
-import { VoucherDto } from '@/features/voucher/voucher.dto';
+import { VoucherDTO } from '@/features/voucher/voucher.dto';
 import Desc from './_components/desc';
 import { ReviewsServer } from './_components/reviews-server';
 import SlideImg from './_components/slide-img';
@@ -43,6 +43,7 @@ interface SelectedVariant {
   id: string;
   price: string;
   amount: number;
+  image: string;
 }
 
 type ItemType = {
@@ -59,7 +60,7 @@ const DetailPage = () => {
   const [data, setData] = useState<productDetailType | null>(null);
   const [selVariant, setSelVariant] = useState<SelectedVariant | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [selectedVouchers, setSelectedVouchers] = useState<VoucherDto[]>([]);
+  const [selectedVouchers, setSelectedVouchers] = useState<VoucherDTO[]>([]);
 
   const t = useTranslations('product_detail');
   const c = useTranslations('general');
@@ -83,6 +84,7 @@ const DetailPage = () => {
               id: res.variants[0].id,
               price: res.variants[0].price,
               amount: 1,
+              image: res.variants[0].image,
             });
           }
         }
@@ -147,9 +149,10 @@ const DetailPage = () => {
     id: string,
     name: string,
     price: string,
-    amount: number = 1
+    amount: number = 1,
+    image: string
   ) => {
-    setSelVariant({ name, id, price, amount });
+    setSelVariant({ name, id, price, amount, image });
   };
 
   const handleMinus = () => {
@@ -388,7 +391,8 @@ const DetailPage = () => {
                             value.id,
                             value.name,
                             value.price,
-                            1
+                            1,
+                            value.image
                           )
                         }
                       >
@@ -500,8 +504,15 @@ const DetailPage = () => {
 
             {/* Selection Summary */}
             <div className="flex flex-col gap-3">
-              <div className="p-2.5 rounded-md bg-muted/40 text-center font-medium text-sm border border-dashed">
+              <div className="p-2.5 rounded-md bg-muted/40 text-center font-medium text-sm border border-dashed items-center justify-center flex flex-col gap-1">
                 {selVariant?.name}
+                <Image
+                  className="rounded"
+                  src={selVariant.image}
+                  width={100}
+                  height={100}
+                  alt="product-image"
+                />
               </div>
 
               {/* Quantity */}

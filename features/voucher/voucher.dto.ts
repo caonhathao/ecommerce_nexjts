@@ -2,7 +2,7 @@ import { $Enums } from '@/lib/generated/prisma';
 import VoucherType = $Enums.VoucherType;
 import Currency = $Enums.Currency;
 
-export interface VoucherDto {
+export interface VoucherDTO {
   id: string;
   code: string;
   type: VoucherType;

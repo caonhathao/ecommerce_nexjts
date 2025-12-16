@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import { manageProductSchema } from '@/app/(seller)/seller/products/_components/productSchema';
 import { Prisma } from '@/lib/generated/prisma';
 import { requireSeller } from '@/lib/require-role';
-import { ActionResponse } from '@/lib/service-response';
+import { ResponseFactory } from '@/lib/api-response';
 
 export async function GET() {
   const sellerSession = await requireSeller();
@@ -147,10 +147,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return ActionResponse.toNextResponse(ActionResponse.success({ product }));
+    return ResponseFactory.toNextResponse(ResponseFactory.success({ product }));
   } catch (error: any) {
-    return ActionResponse.toNextResponse(
-      ActionResponse.error(error.message, 400)
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(error.message, 400)
     );
   }
 }

@@ -61,7 +61,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { toast } from 'sonner';
 import SearchBar from '../_components/search-bar';
-import TabUser from './_components/tab-user';
+import TabTableView from '../_components/tab-table-view';
 import { TableCellViewer } from './_components/table-cell-viewer';
 
 const UsersPage = () => {
@@ -359,7 +359,11 @@ const UsersPage = () => {
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hover:cursor-pointer"
+                >
                   <IconLayoutColumns />
                   <span className="hidden lg:inline">{t('t_showing')}</span>
                   <span className="lg:hidden">{t('t_column')}</span>
@@ -378,7 +382,7 @@ const UsersPage = () => {
                     return (
                       <DropdownMenuCheckboxItem
                         key={column.id}
-                        className="capitalize"
+                        className="capitalize hover:cursor-pointer"
                         checked={column.getIsVisible()}
                         onCheckedChange={(value) =>
                           column.toggleVisibility(!!value)
@@ -396,8 +400,9 @@ const UsersPage = () => {
           value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
         >
-          <TabUser
-            statusFilter=""
+          <TabTableView<userItemData>
+            filter=""
+            baseUrl={paths.manager.user.fetch_all}
             isReset={isReset}
             sensors={sensors}
             sortableId={sortableId}
@@ -405,8 +410,8 @@ const UsersPage = () => {
             columns={columns}
             data={data}
             setData={setData}
-            userList={userList}
-            setUserList={setUserList}
+            list={userList}
+            setList={setUserList}
             isFalse={isFalse}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
@@ -418,8 +423,9 @@ const UsersPage = () => {
           className="flex flex-col px-4 lg:px-6"
         >
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabUser
-              statusFilter="false"
+            <TabTableView<userItemData>
+              filter="false"
+              baseUrl={paths.manager.user.fetch_all}
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -427,8 +433,8 @@ const UsersPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              userList={userList}
-              setUserList={setUserList}
+              list={userList}
+              setList={setUserList}
               isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}
@@ -438,8 +444,9 @@ const UsersPage = () => {
         </TabsContent>
         <TabsContent value="all-banned" className="flex flex-col px-4 lg:px-6">
           <div className="aspect-video w-full flex-1 rounded-lg border border-dashed">
-            <TabUser
-              statusFilter="true"
+            <TabTableView<userItemData>
+              filter="true"
+              baseUrl={paths.manager.user.fetch_all}
               isReset={isReset}
               sensors={sensors}
               sortableId={sortableId}
@@ -447,8 +454,8 @@ const UsersPage = () => {
               columns={columns}
               data={data}
               setData={setData}
-              userList={userList}
-              setUserList={setUserList}
+              list={userList}
+              setList={setUserList}
               isFalse={isFalse}
               dataIds={dataIds}
               DraggableRow={DraggableRow}

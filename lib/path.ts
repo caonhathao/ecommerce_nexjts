@@ -8,6 +8,13 @@ export const paths = {
     detail_slug: (slug: string) => `/products/slug/${slug}`,
   },
 
+  customer: {
+    account: {
+      edit: '/customer/account/edit',
+      address: '/customer/account/address',
+    },
+  },
+
   orders: {
     order_detail_customer: (id: string) => `/customer/account/orders/${id}`,
   },
@@ -18,8 +25,24 @@ export const paths = {
       `/seller/shops/${shopId}/messages/${conversationId}`,
   },
 
+  seller: {
+    account: {
+      edit: '/seller/account/edit',
+    },
+    shops: {
+      dashboard: '/seller/shops',
+      create: '/seller/shops/create',
+      edit: (shopId: string) => `/seller/shops/${shopId}/edit`,
+      message_shop: (shopId: string) => `/seller/shops/${shopId}/messages`,
+      members: (shopId: string) => `/seller/shops/${shopId}/members`,
+    },
+  },
+
   //admin's api
   manager: {
+    account: {
+      edit: '/manager/account/edit',
+    },
     category: {
       search: '/api/manager/category/search',
       fetch_all: '/api/manager/category',
@@ -55,15 +78,5 @@ export const paths = {
   shop: {
     fetch_all: '/api/product/query',
     accept_invite: (token: string) => '/shop/accept-invite/' + token,
-  },
-
-  seller: {
-    shops: {
-      dashboard: '/seller/shops',
-      create: '/seller/shops/create',
-      edit: (shopId: string) => `/seller/shops/${shopId}/edit`,
-      message_shop: (shopId: string) => `/seller/shops/${shopId}/messages`,
-      members: (shopId: string) => `/seller/shops/${shopId}/members`,
-    },
   },
 };

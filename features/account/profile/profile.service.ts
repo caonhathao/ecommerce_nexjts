@@ -4,11 +4,12 @@ import {
   mapToUserProfileResponseDTO,
   UpdateUserProfileRequestDTO,
   UserProfileResponseDTO,
-} from '@/types/dtos/user.dto';
+} from '@/features/account/profile/profile.dto';
+import { ServiceError } from '@/lib/service-error';
 
-export async function getUserProfile(
+export const getUserProfileService = async (
   userId: string
-): Promise<UserProfileResponseDTO | null> {
+): Promise<UserProfileResponseDTO | null> => {
   const [profile, user] = await Promise.all([
     prisma.userProfile.findUnique({
       where: { userId },
@@ -21,16 +22,18 @@ export async function getUserProfile(
   ]);
 
   if (!profile || !user) {
-    return null;
+    throw new ServiceError(
+      "User profile doesn't exist. Please register first."
+    );
   }
 
   return mapToUserProfileResponseDTO(profile, user);
-}
+};
 
-export async function updateUserProfile(
+export const updateUserProfileService = async (
   userId: string,
   req: UpdateUserProfileRequestDTO
-) {
+): Promise<UserProfileResponseDTO> => {
   const result = await prisma.$transaction(async (tx) => {
     const profile = await prisma.userProfile.upsert({
       where: { userId },
@@ -39,12 +42,12 @@ export async function updateUserProfile(
       select: userProfileSelect,
     });
 
-    console.log(
-      'Request to update user profile:',
-      req,
-      'Updated profile:',
-      profile
-    );
+    // console.log(
+    //   'Request to update user profile:',
+    //   req,
+    //   'Updated profile:',
+    //   profile
+    // );
 
     if (req.image !== undefined) {
       await tx.user.update({
@@ -62,7 +65,6 @@ export async function updateUserProfile(
       });
     }
 
-    // Re-fetch updated user
     const user = await tx.user.findUnique({
       where: { id: userId },
       select: userSelect,
@@ -72,7 +74,7 @@ export async function updateUserProfile(
   });
 
   return mapToUserProfileResponseDTO(result.profile, result.user);
-}
+};
 
 const userProfileSelect = {
   id: true,
