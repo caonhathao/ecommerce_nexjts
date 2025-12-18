@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db';
 import { Decimal } from '@/lib/generated/prisma/runtime/library';
 import getRedisClient from '@/lib/redis';
 import { vndToUsdCents } from '@/lib/currency-helper';
+import { createPaymentService } from '@/features/payment/payment.service';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -69,21 +70,19 @@ export async function POST(req: NextRequest) {
       ],
     });
 
-    const payment = await prisma.payment.create({
-      data: {
-        provider: 'STRIPE',
-        method: 'CARD',
-        amount: new Decimal(totalUsdCent),
-        status: 'PENDING',
-        currency: 'USD',
-        externalId: session.id,
-        rawPayload: {
-          id: session.id,
-          url: session.url,
-          payment_status: session.payment_status,
-          amount_total: session.amount_total,
-          metadata: session.metadata,
-        },
+    const payment = await createPaymentService({
+      provider: 'STRIPE',
+      method: 'CARD',
+      amount: totalUsdCent,
+      status: 'PENDING',
+      currency: 'USD',
+      externalId: session.id,
+      rawPayload: {
+        id: session.id,
+        url: session.url,
+        payment_status: session.payment_status,
+        amount_total: session.amount_total,
+        metadata: session.metadata,
       },
     });
     if (!payment) {

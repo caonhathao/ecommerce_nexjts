@@ -80,6 +80,7 @@ enum PaymentProvider {
   STRIPE
   PAYPAL
   CASSO
+  VNPAY
   OTHER
 }
 
@@ -112,6 +113,18 @@ enum MessageRole {
   USER
   SHOP
   ADMIN
+}
+
+enum LedgerType {
+  ORDER_PAID // khách trả tiền
+  VOUCHER_SUBSIDY // sàn bù tiền
+  ADJUSTMENT_IN // chỉnh tay +
+
+  PLATFORM_FEE // phí sàn
+  SHIPPING_FEE // phí ship
+  PAYOUT // chuyển tiền cho shop
+  REFUND // hoàn tiền cho khách
+  ADJUSTMENT_OUT // chỉnh tay -
 }
 
 model User {
@@ -288,6 +301,8 @@ model Shop {
   deletedAt     DateTime?
 
   //Relation
+  LedgerEntries           LedgerEntry[]
+  Balance                 ShopBalance?
   members                 ShopMember[]
   followers               ShopFollower[]
   products                Product[]
@@ -634,6 +649,59 @@ model OrderPayment {
 
   @@unique([orderId, paymentId])
   @@map("order_payment")
+}
+
+model PaymentIntent {
+  id        String   @id @default(uuid()) @db.Uuid
+  vnpTxnRef String   @unique
+  payload   Json
+  expiresAt DateTime
+}
+
+model LedgerEntry {
+  id            String     @id @default(uuid()) @db.Uuid
+  shopId        String     @db.Uuid
+  amount        Decimal    @db.Decimal(14, 2)
+  balanceBefore Decimal    @default(0) @db.Decimal(14, 2)
+  balanceAfter  Decimal    @default(0) @db.Decimal(14, 2)
+  type          LedgerType
+  createdAt     DateTime   @default(now())
+
+  description String?
+  paymentId   String?
+  orderId     String? @db.Uuid
+  Shop        Shop    @relation(fields: [shopId], references: [id])
+
+  @@index([shopId, createdAt])
+  @@index([type])
+  @@index([orderId])
+  @@index([paymentId])
+}
+
+model ShopBalance {
+  shopId    String   @id @db.Uuid
+  pending   Decimal  @default(0) // Tiền đang chờ xử lý (ví dụ: khách đã trả nhưng chưa nhận hàng)
+  available Decimal  @default(0) // Tiền có thể rút/tiêu
+  frozen    Decimal  @default(0) // Tiền đang bị đóng băng (ví dụ: đang yêu cầu rút)
+  version   Int      @default(0) // Dùng cho Optimistic Locking
+  updatedAt DateTime @updatedAt
+  shop      Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@index([shopId])
+}
+
+model SettlementQueue {
+  id        String   @id @default(uuid())
+  shopId    String
+  orderId   String   @unique // 1 đơn 1 lần trả
+  amount    Decimal
+
+  status    String   // PENDING, PROCESSED, CANCELLED
+  dueAt     DateTime // Ngày đến hạn (settleDate)
+
+  createdAt DateTime @default(now())
+
+  @@index([status, dueAt])
 }
 
 model Shipment {
