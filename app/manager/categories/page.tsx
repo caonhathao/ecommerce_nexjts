@@ -20,6 +20,8 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { NewCategoryForm } from '@/features/manager/category/components/new-category-form';
+import TableCellViewer from '@/features/manager/category/components/table-cell-viewer';
 import { paths } from '@/lib/path';
 import { formatDay } from '@/lib/utils';
 import {
@@ -64,11 +66,9 @@ import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { toast } from 'sonner';
+import { handleDelete } from '../../../features/manager/category/funcs/funcs';
 import SearchBar from '../_components/search-bar';
 import TabTableView from '../_components/tab-table-view';
-import { NewCategoryForm } from './_components/new-category-form';
-import TableCellViewer from './_components/table-cell-viewer';
-import { handleDelete } from './_funcs/funcs';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);

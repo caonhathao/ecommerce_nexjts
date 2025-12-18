@@ -18,7 +18,7 @@ export function SiteHeader() {
    * You can customize this logic as much as you need.
    */
   function getTitleFromPath(path: string): string {
-    console.log(path);
+    //console.log(path);
     // 1. Create a map for your specific routes
     const titleMap: Record<string, string> = {
       '/manager/categories': 't_category_management',

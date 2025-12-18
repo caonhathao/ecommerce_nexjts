@@ -131,7 +131,7 @@ const TabTableView = <T,>({
       params: { page: 1, limit: rows, filter: filter },
       setData: setData,
     });
-  }, [filter, isReset, rows, setData]);
+  }, [baseUrl, filter, isReset, rows, setData]);
 
   useEffect(() => {
     if (data) {

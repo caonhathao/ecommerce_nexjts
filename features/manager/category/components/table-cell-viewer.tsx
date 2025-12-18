@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { handleDelete } from '@/features/manager/category/funcs/funcs';
 import { putData } from '@/funcs/put';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
@@ -51,7 +52,6 @@ import { useForm } from 'react-hook-form';
 import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
 import z from 'zod';
-import { handleDelete } from '../_funcs/funcs';
 
 const formSchema = z.object({
   id: z.string(),
@@ -163,6 +163,7 @@ function TableCellViewer({
       const data = await putData({
         url: paths.manager.category.update,
         body: formData,
+        t: t,
       });
       if (data.status === 200) {
         toast(t('t_action_noti'), {

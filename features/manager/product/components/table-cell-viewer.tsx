@@ -131,6 +131,7 @@ export function TableCellViewer({
           visibility: value,
         },
         contentType: 'application/json',
+        t: t,
       });
       if (response.status === 200) {
         toast(t('t_action_noti'), {
@@ -251,8 +252,11 @@ export function TableCellViewer({
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious
+                  type="button"
+                  className="hover:cursor-pointer"
+                />
+                <CarouselNext type="button" className="hover:cursor-pointer" />
               </Carousel>
             </div>
 
@@ -268,7 +272,10 @@ export function TableCellViewer({
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant={'outline'}>
+                    <Button
+                      variant={'outline'}
+                      className="hover:cursor-pointer"
+                    >
                       <BsThreeDotsVertical />
                     </Button>
                   </DropdownMenuTrigger>
@@ -277,6 +284,7 @@ export function TableCellViewer({
                       <Button
                         variant={'ghost'}
                         onClick={() => handleCopy(detail?.shop.id ?? '')}
+                        className="hover:cursor-pointer"
                       >
                         {t('t_copy_action')}
                       </Button>
@@ -341,9 +349,15 @@ export function TableCellViewer({
                   <SelectValue placeholder={t('t_visibility_placeholder')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="UNLISTED">{t('c_unlisted')}</SelectItem>
-                  <SelectItem value="PRIVATE">{t('c_private')}</SelectItem>
-                  <SelectItem value="PUBLIC">{t('c_public')}</SelectItem>
+                  <SelectItem value="UNLISTED" className="hover:cursor-pointer">
+                    {t('c_unlisted')}
+                  </SelectItem>
+                  <SelectItem value="PRIVATE" className="hover:cursor-pointer">
+                    {t('c_private')}
+                  </SelectItem>
+                  <SelectItem value="PUBLIC" className="hover:cursor-pointer">
+                    {t('c_public')}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -377,6 +391,7 @@ export function TableCellViewer({
                             setOpenIndex(openIndex !== index ? index : null)
                           }
                           type="button"
+                          className="hover:cursor-pointer"
                         >
                           <div
                             className={`${
@@ -401,11 +416,16 @@ export function TableCellViewer({
           </form>
         </div>
         <DrawerFooter>
-          <Button onClick={() => handleSubmit(value)}>
+          <Button
+            onClick={() => handleSubmit(value)}
+            className="hover:cursor-pointer"
+          >
             {t('t_submit_action')}
           </Button>
           <DrawerClose asChild>
-            <Button variant="outline">{t('t_cancel_action')}</Button>
+            <Button variant="outline" className="hover:cursor-pointer">
+              {t('t_cancel_action')}
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

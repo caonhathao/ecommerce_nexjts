@@ -1,6 +1,7 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const data = await prisma.category.findMany({
@@ -19,6 +20,8 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
     },
   });
-
-  return NextResponse.json({ data: data });
+  const payload = data;
+  return ResponseFactory.toNextResponse(
+    ResponseFactory.success(payload, 't_success')
+  );
 });

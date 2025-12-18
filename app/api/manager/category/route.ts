@@ -1,8 +1,10 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { deleteFromCloudinary, uploadToCloudinary } from '@/lib/cloudinary';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { StatusCodeIdentify as StatusCode } from '@/types/api';
+import { NextRequest } from 'next/server';
 
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   try {
@@ -72,29 +74,27 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       prisma.category.count({ where }),
     ]);
 
-    // 4. Calculate Pagination Meta
-    const totalPages = Math.ceil(total / itemsPerPage);
-    const hasNextPage = currentPage < totalPages;
-    const hasPrevPage = currentPage > 1;
-
-    // 5. Return Response
-    return NextResponse.json(
-      {
-        data: categories,
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages: Math.ceil(total / limit),
-        },
+    const payload = {
+      data: categories,
+      pagination: {
+        page: currentPage,
+        limit: itemsPerPage,
+        total,
+        totalPages: Math.ceil(total / itemsPerPage),
       },
-      { status: 200 }
+    };
+
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(payload, 't_success', StatusCode.success)
     );
   } catch (error) {
     console.error('Error fetching categories:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(
+        't_internal_server_error',
+        StatusCode.internalServerError,
+        error instanceof Error ? { detail: error.message } : undefined
+      )
     );
   }
 });
@@ -108,12 +108,9 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
     const file = formData.get('image') as File | null;
 
     if (!file) {
-      return NextResponse.json({
-        success: 400,
-        data: {
-          message: 'Missing file',
-        },
-      });
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_missing_file', StatusCode.badRequest)
+      );
     }
 
     const arrBuffter = await file.arrayBuffer();
@@ -126,12 +123,9 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
     });
 
     if (upload.secure_url.length === 0)
-      return NextResponse.json({
-        success: 403,
-        data: {
-          message: 'Upload failed!',
-        },
-      });
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_upload_failed', StatusCode.forbidden)
+      );
 
     if (formData.get('parentId') === '') {
       const current = await prisma.category.count({
@@ -151,9 +145,8 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
       });
 
       if (!newCategory) {
-        return NextResponse.json(
-          { error: 'Failed to create category' },
-          { status: 403 }
+        return ResponseFactory.toNextResponse(
+          ResponseFactory.error('t_creation_failed', StatusCode.forbidden)
         );
       }
     } else {
@@ -167,9 +160,8 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
       });
 
       if (!parent) {
-        return NextResponse.json(
-          { error: 'Parent category not found' },
-          { status: 404 }
+        return ResponseFactory.toNextResponse(
+          ResponseFactory.error('t_parent_not_found', StatusCode.notFound)
         );
       }
 
@@ -185,25 +177,22 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
         },
       });
       if (!newCategory) {
-        return NextResponse.json(
-          { error: 'Failed to create category' },
-          { status: 403 }
+        return ResponseFactory.toNextResponse(
+          ResponseFactory.error('t_creation_failed', StatusCode.forbidden)
         );
       }
     }
-
-    return NextResponse.json(
-      {
-        message: 'Data received successfully',
-      },
-      { status: 200 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(null, 't_success', StatusCode.success)
     );
   } catch (error) {
     console.error('Error parsing JSON body:', error);
-    // This error will trigger if the body is not valid JSON
-    return NextResponse.json(
-      { error: 'Invalid request body' },
-      { status: 400 } // 400 Bad Request is more accurate here
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(
+        't_internal_server_error',
+        StatusCode.internalServerError,
+        error instanceof Error ? { detail: error.message } : undefined
+      )
     );
   }
 });
@@ -221,12 +210,9 @@ export const PUT = withAuth(async (userId: string, request: NextRequest) => {
     });
 
     if (!category)
-      return NextResponse.json({
-        success: 400,
-        data: {
-          message: 'Category not found!',
-        },
-      });
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_category_not_found', StatusCode.notFound)
+      );
 
     let update;
     if (file) {
@@ -276,22 +262,21 @@ export const PUT = withAuth(async (userId: string, request: NextRequest) => {
     }
 
     if (!update)
-      return NextResponse.json({
-        success: 400,
-        data: {
-          message: 'Update failed!',
-        },
-      });
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_update_failed', StatusCode.forbidden)
+      );
 
-    return NextResponse.json(
-      { message: 'Category updated successfully' },
-      { status: 200 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(null, 't_success', StatusCode.success)
     );
   } catch (error) {
     console.error('Error updating category:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(
+        't_internal_server_error',
+        StatusCode.internalServerError,
+        error instanceof Error ? { detail: error.message } : undefined
+      )
     );
   }
 });
@@ -301,9 +286,8 @@ export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
     const categoryId = searchParams.get('id');
     if (!categoryId) {
-      return NextResponse.json(
-        { error: 'Category ID is required' },
-        { status: 400 }
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_missing_id', StatusCode.badRequest)
       );
     }
     // Check if category exists
@@ -311,9 +295,8 @@ export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
       where: { id: categoryId },
     });
     if (!category) {
-      return NextResponse.json(
-        { error: 'Category not found' },
-        { status: 404 }
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_category_not_found', StatusCode.notFound)
       );
     }
 
@@ -327,9 +310,8 @@ export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
     });
 
     if (product.length !== 0)
-      return NextResponse.json(
-        { error: 'Deleted failed, this category is using by others' },
-        { status: 404 }
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_category_in_use', StatusCode.badRequest)
       );
 
     //delete from cloudinary first
@@ -341,15 +323,17 @@ export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
     await prisma.category.delete({
       where: { id: categoryId },
     });
-    return NextResponse.json(
-      { message: 'Category deleted successfully' },
-      { status: 200 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(null, 't_success', StatusCode.success)
     );
   } catch (error) {
     console.error('Error deleting category:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(
+        't_internal_server_error',
+        StatusCode.internalServerError,
+        error instanceof Error ? { detail: error.message } : undefined
+      )
     );
   }
 });

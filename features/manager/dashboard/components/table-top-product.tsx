@@ -1,5 +1,6 @@
 'use client';
 
+import TabTableView from '@/app/manager/_components/tab-table-view';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -85,7 +86,6 @@ import React, { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'sonner';
-import TabTableView from '../../_components/tab-table-view';
 
 const TableTopProduct = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
