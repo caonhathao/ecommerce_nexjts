@@ -1,7 +1,9 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { Prisma, Visibility } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { StatusCodeIdentify as StatusCode } from '@/types/api';
+import { NextRequest } from 'next/server';
 
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
@@ -54,8 +56,17 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     where: whereClause,
   });
 
-  return NextResponse.json({
-    success: true,
+  // return NextResponse.json({
+  //   success: true,
+  //   data: data,
+  //   pagination: {
+  //     page,
+  //     limit,
+  //     total,
+  //     totalPages: Math.ceil(total / limit),
+  //   },
+  // });
+  const payload = {
     data: data,
     pagination: {
       page,
@@ -63,7 +74,10 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       total,
       totalPages: Math.ceil(total / limit),
     },
-  });
+  };
+  return ResponseFactory.toNextResponse(
+    ResponseFactory.success(payload, 't_success', StatusCode.success)
+  );
 });
 
 //if pass, update status and visibility of product
@@ -73,16 +87,27 @@ export const PUT = withAuth(async (userId: string, request: NextRequest) => {
     const { id, visibility } = body;
 
     if (!id) {
-      return NextResponse.json(
-        { success: false, error: 'Missing id' },
-        { status: 400 }
+      // return NextResponse.json(
+      //   { success: false, error: 'Missing id' },
+      //   { status: 400 }
+      // );
+
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_missing_id', StatusCode.badRequest)
       );
     }
 
     if (!visibility) {
-      return NextResponse.json(
-        { success: false, error: 'Missing visibility field' },
-        { status: 400 }
+      // return NextResponse.json(
+      //   { success: false, error: 'Missing visibility field' },
+      //   { status: 400 }
+      // );
+
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error(
+          't_missing_visibility_field',
+          StatusCode.badRequest
+        )
       );
     }
 
@@ -94,12 +119,17 @@ export const PUT = withAuth(async (userId: string, request: NextRequest) => {
       },
     });
 
-    return NextResponse.json({ success: true });
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(null, 't_success', StatusCode.success)
+    );
   } catch (err) {
     console.error(err);
-    return NextResponse.json(
-      { success: false, error: 'Internal Server Error' },
-      { status: 500 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(
+        't_internal_server_error',
+        StatusCode.internalServerError,
+        err instanceof Error ? { detail: err.message } : undefined
+      )
     );
   }
 });

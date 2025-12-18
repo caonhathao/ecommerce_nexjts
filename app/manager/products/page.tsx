@@ -66,9 +66,9 @@ import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { toast } from 'sonner';
+import { TableCellViewer } from '../../../features/manager/product/components/table-cell-viewer';
 import SearchBar from '../_components/search-bar';
 import TabTableView from '../_components/tab-table-view';
-import { TableCellViewer } from './_components/table-cell-viewer';
 
 const ProductsPage = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
@@ -265,7 +265,7 @@ const ProductsPage = () => {
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+              className="data-[state=open]:bg-muted text-muted-foreground flex size-8 hover:cursor-pointer"
               size="icon"
             >
               <IconDotsVertical />
@@ -276,7 +276,7 @@ const ProductsPage = () => {
             <DropdownMenuItem className="flex justify-center items-center">
               <Button
                 variant={'ghost'}
-                className="text-left"
+                className="text-left hover:cursor-pointer"
                 onClick={() => handleCopy(row.original.id)}
               >
                 {t('t_copy_action')} {/* Use i18n key */}
@@ -505,7 +505,7 @@ function DragHandle({ id }: { id: string }) {
       {...listeners}
       variant="ghost"
       size="icon"
-      className="text-muted-foreground size-7 hover:bg-transparent"
+      className="text-muted-foreground size-7 hover:bg-transparent hover:cursor-move"
     >
       <IconGripVertical className="text-muted-foreground size-3" />
       <span className="sr-only">Drag to reorder</span>

@@ -1,4 +1,5 @@
 'use client';
+import { Loading } from '@/components/loading';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -41,10 +42,7 @@ import { fetchData } from '@/funcs/fetch';
 import { postData } from '@/funcs/post';
 import { paths } from '@/lib/path';
 import { cn } from '@/lib/utils';
-import {
-  categoryDataFormItem,
-  categoryDataFormResponse,
-} from '@/types/manager.data-types';
+import { categoryDataFormItem } from '@/types/manager.data-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IconPlus } from '@tabler/icons-react';
 import { Check, ChevronDown } from 'lucide-react';
@@ -60,9 +58,7 @@ export const NewCategoryForm = ({
   setIsReset: Dispatch<SetStateAction<boolean>>;
 }) => {
   const t = useTranslations('admin_category_page.category_new_form');
-  const [apiData, setApiData] = React.useState<categoryDataFormResponse | null>(
-    null
-  );
+  const [list, setList] = React.useState<categoryDataFormItem[] | null>(null);
   const [open, setOpen] = React.useState<boolean>(false);
   const [selected, setSelected] = useState<string>('');
 
@@ -214,6 +210,7 @@ export const NewCategoryForm = ({
     field: ControllerRenderProps<FormSchemaType, 'parentId'>;
     data: categoryDataFormItem[];
   }) => {
+    console.log('Rendering SubMenu with data:', data);
     return <>{renderCategoryItems(data, field)}</>;
   };
 
@@ -230,17 +227,23 @@ export const NewCategoryForm = ({
     fetchData({
       baseUrl: paths.manager.category.fetch_form,
       params: { id: form.watch('parentId') },
-      setData: setApiData,
+      setData: setList,
     });
-  }, [open]);
+  }, [form, open]);
 
-  const list: categoryDataFormItem[] = apiData?.data || [];
-  //console.log(list);
+  if (!list) {
+    return <Loading />;
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size={'sm'} onClick={() => form.reset()}>
+        <Button
+          variant="outline"
+          size={'sm'}
+          onClick={() => form.reset()}
+          className="hover:cursor-pointer"
+        >
           <IconPlus />
           {t('t_new_button')}
         </Button>
@@ -306,6 +309,7 @@ export const NewCategoryForm = ({
                       onClick={() =>
                         document.getElementById('input-image-file')?.click()
                       }
+                      className="hover:cursor-pointer"
                     >
                       {previewUrl ? t('t_change') : t('t_add')}
                     </Button>
@@ -363,10 +367,16 @@ export const NewCategoryForm = ({
                             </SelectTrigger>
                             <SelectContent>
                               <SelectGroup>
-                                <SelectItem value="true">
+                                <SelectItem
+                                  value="true"
+                                  className="hover:cursor-pointer"
+                                >
                                   {t('c_active')}
                                 </SelectItem>
-                                <SelectItem value="false">
+                                <SelectItem
+                                  value="false"
+                                  className="hover:cursor-pointer"
+                                >
                                   {t('c_inactive')}
                                 </SelectItem>
                               </SelectGroup>
@@ -422,11 +432,17 @@ export const NewCategoryForm = ({
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline" onClick={() => form.reset()}>
+                <Button
+                  variant="outline"
+                  onClick={() => form.reset()}
+                  className="hover:cursor-pointer"
+                >
                   {t('t_cancel_action')}
                 </Button>
               </DialogClose>
-              <Button type="submit">{t('t_submit_action')}</Button>
+              <Button type="submit" className="hover:cursor-pointer">
+                {t('t_submit_action')}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
