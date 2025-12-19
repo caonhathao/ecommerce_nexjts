@@ -65,7 +65,7 @@ export function TableCellViewer({
         cacheType: 'default',
       });
       if (res) {
-        setDetail(res.data);
+        setDetail(res.data.data);
       }
     } catch (err) {
       console.error(err);

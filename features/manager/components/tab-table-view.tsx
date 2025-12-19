@@ -136,6 +136,7 @@ const TabTableView = <T,>({
   useEffect(() => {
     if (data) {
       setList(data.data);
+      console.log(data.pagination);
     }
   }, [data, setList]);
 

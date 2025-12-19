@@ -1,13 +1,11 @@
 'use client';
 
-import { Loader2, Search, X } from 'lucide-react';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
-import { useEffect, useState, useCallback } from 'react';
+import { Loader2, Search, X } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/app/(public)/(customer)/customer/account/orders/_components/no-order-found';
-import { useTranslations } from 'next-intl';
-import { PaginationState } from '@tanstack/react-table';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -16,14 +14,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { fetchApi } from '@/lib/client-fetch';
+import { CreateVoucherDialog } from '@/features/manager/voucher/components/create-voucher-dialog';
+import { columns } from '@/features/manager/voucher/components/voucher-column-table';
+import { DataTable } from '@/features/manager/voucher/components/voucher-data-table';
 import {
   VoucherResponseData,
   VoucherResponseDTO,
 } from '@/features/voucher/voucher.dto';
-import { DataTable } from '@/app/manager/vouchers/_components/voucher-data-table';
-import { CreateVoucherDialog } from '@/app/manager/vouchers/_components/create-voucher-dialog';
-import { columns } from '@/app/manager/vouchers/_components/voucher-column-table';
+import { fetchApi } from '@/lib/client-fetch';
+import { PaginationState } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 
 const LIMIT = 12;
 

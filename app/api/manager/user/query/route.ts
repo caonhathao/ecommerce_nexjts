@@ -1,6 +1,8 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { StatusCodeIdentify as StatusCode } from '@/types/api';
+import { NextRequest } from 'next/server';
 
 //query api
 //get all data of one product
@@ -8,6 +10,13 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
   const id = String(searchParams.get('id'));
+
+  if (!id) {
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error('t_missing_id', StatusCode.badRequest)
+    );
+  }
+
   try {
     const data = await prisma.user.findFirst({
       where: {
@@ -53,54 +62,17 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
     });
 
-    return NextResponse.json({ data });
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(data, 't_success', StatusCode.success)
+    );
   } catch (err) {
     console.error(err);
-    return NextResponse.json({
-      success: false,
-      data: {
-        message: 'Not found',
-      },
-    });
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(
+        't_internal_server_error',
+        StatusCode.internalServerError,
+        err instanceof Error ? { detail: err.message } : undefined
+      )
+    );
   }
 });
-
-//if pass, update status and visibility of product
-// export const POST = withAuth(async (userId: string, request: NextRequest) => {
-//   const { searchParams } = new URL(request.url);
-
-//   const id = String(searchParams.get('id'));
-//   try {
-//     const body = await request.json();
-//     const { status } = body;
-
-//     if (!id) {
-//       return NextResponse.json(
-//         { success: false, error: 'Missing id' },
-//         { status: 400 }
-//       );
-//     }
-
-//     if (!status) {
-//       return NextResponse.json(
-//         { success: false, error: 'Missing status field' },
-//         { status: 400 }
-//       );
-//     }
-
-//     // Update product status and visibility (adjust values to match your schema/enums)
-//     await prisma.shop.update({
-//       where: { id },
-//       data: {
-//         status: status,
-//       },
-//     });
-
-//     return NextResponse.json({ success: true });
-//   } catch (err) {
-//     return NextResponse.json(
-//       { success: false, error: 'Internal Server Error' },
-//       { status: 500 }
-//     );
-//   }
-// });

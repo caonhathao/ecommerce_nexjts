@@ -23,7 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { NewCategoryForm } from '@/features/manager/category/components/new-category-form';
 import TableCellViewer from '@/features/manager/category/components/table-cell-viewer';
 import { paths } from '@/lib/path';
-import { formatDay } from '@/lib/utils';
+import { formatDay, LocaleType } from '@/lib/utils';
 import {
   categoryDataResponse,
   categoryItemData,
@@ -67,8 +67,8 @@ import { FiXCircle } from 'react-icons/fi';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { toast } from 'sonner';
 import { handleDelete } from '../../../features/manager/category/funcs/funcs';
-import SearchBar from '../_components/search-bar';
-import TabTableView from '../_components/tab-table-view';
+import SearchBar from '../../../features/manager/components/search-bar';
+import TabTableView from '../../../features/manager/components/tab-table-view';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
@@ -94,6 +94,7 @@ const CategoryManagePage = () => {
     [categoryList]
   );
   const t = useTranslations('admin_category_page');
+  const g = useTranslations('general');
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -233,7 +234,9 @@ const CategoryManagePage = () => {
         header: t('t_created_at'),
         cell: ({ row }) => {
           return (
-            <div className="w-32">{formatDay(row.original.createdAt)}</div>
+            <div className="w-32">
+              {formatDay(row.original.createdAt, g('t_region') as LocaleType)}
+            </div>
           );
         },
       },
@@ -242,7 +245,9 @@ const CategoryManagePage = () => {
         header: t('t_updated_at'),
         cell: ({ row }) => {
           return (
-            <div className="w-32">{formatDay(row.original.updatedAt)}</div>
+            <div className="w-32">
+              {formatDay(row.original.updatedAt, g('t_region') as LocaleType)}
+            </div>
           );
         },
       },

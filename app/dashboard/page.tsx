@@ -1,4 +1,3 @@
-import { AppSidebar } from '@/app/manager/_components/app-sidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,6 +12,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/features/manager/components/app-sidebar';
 
 export default function Page() {
   return (

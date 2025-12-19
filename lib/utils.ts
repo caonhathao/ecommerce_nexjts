@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -114,7 +116,37 @@ export function formatTime(isoString: string | Date): string {
   return `${timePart} - ${datePart}`;
 }
 
-export function formatDay(value: string | null | undefined) {
+dayjs.extend(utc);
+dayjs.extend(timezone);
+export type LocaleType = 'VN' | 'US' | 'JP';
+
+export function formatDay(
+  value: string | null | undefined,
+  locale: LocaleType = 'US', // Mặc định là US theo yêu cầu
+  customFormat?: string
+) {
   if (!value) return '';
-  return dayjs(value).format('DD/MM/YYYY HH:mm:ss');
+
+  // Cấu hình bản đồ múi giờ và định dạng mặc định cho từng nước
+  const localeConfig = {
+    VN: {
+      tz: 'Asia/Ho_Chi_Minh',
+      format: 'DD/MM/YYYY HH:mm:ss',
+    },
+    US: {
+      tz: 'America/New_York',
+      format: 'MM/DD/YYYY hh:mm:ss A', // Kiểu Mỹ thường dùng AM/PM
+    },
+    JP: {
+      tz: 'Asia/Tokyo',
+      format: 'YYYY/MM/DD HH:mm:ss', // Kiểu Nhật thường dùng Năm/Tháng/Ngày
+    },
+  };
+
+  const config = localeConfig[locale];
+
+  // Ưu tiên format tùy chỉnh nếu có, nếu không dùng format mặc định của locale đó
+  const finalFormat = customFormat || config.format;
+
+  return dayjs(value).tz(config.tz).format(finalFormat);
 }

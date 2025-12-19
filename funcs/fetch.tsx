@@ -59,6 +59,7 @@ export const fetchData = async <T,>({
 
     // Method 1: Internal State Update
     if (setData) setData(data.data);
+    //console.log(data.data);
 
     // Method 2: Return Data (So you can use it manually if you want)
     return data;

@@ -60,9 +60,9 @@ import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { toast } from 'sonner';
-import SearchBar from '../_components/search-bar';
-import TabTableView from '../_components/tab-table-view';
-import { TableCellViewer } from './_components/table-cell-viewer';
+import SearchBar from '../../../features/manager/components/search-bar';
+import TabTableView from '../../../features/manager/components/tab-table-view';
+import { TableCellViewer } from '../../../features/manager/users/components/table-cell-viewer';
 
 const UsersPage = () => {
   const [data, setData] = React.useState<userDataResponse | null>(null);
@@ -200,14 +200,22 @@ const UsersPage = () => {
       accessorKey: t('t_created_at'),
       header: t('t_created_at'),
       cell: ({ row }) => {
-        return <div className="w-32">{formatDay(row.original.createdAt)}</div>;
+        return (
+          <div className="w-32 overflow-hidden">
+            {formatDay(row.original.createdAt)}
+          </div>
+        );
       },
     },
     {
       accessorKey: t('t_updated_at'),
       header: t('t_updated_at'),
       cell: ({ row }) => {
-        return <div className="w-32">{formatDay(row.original.updatedAt)}</div>;
+        return (
+          <div className="w-32 overflow-hidden">
+            {formatDay(row.original.updatedAt)}
+          </div>
+        );
       },
     },
     {

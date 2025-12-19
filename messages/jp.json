@@ -11,7 +11,8 @@
   },
   "general": {
     "t_currency": "JPA",
-    "t_rate": "165"
+    "t_rate": "165",
+    "t_region": "JP"
   },
   "auth_layout": {
     "t_back_action": "戻る",

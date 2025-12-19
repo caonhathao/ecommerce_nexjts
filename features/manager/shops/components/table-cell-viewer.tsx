@@ -64,7 +64,7 @@ export function TableCellViewer({
         cacheType: 'default',
       });
       if (res) {
-        setDetail(res.data);
+        setDetail(res.data.data);
       }
     } catch (err) {
       console.error(err);
@@ -83,6 +83,7 @@ export function TableCellViewer({
           status: value,
         },
         contentType: 'application/json',
+        t: t,
       });
       if (response.status === 200) {
         toast(t('t_action_noti'), {
@@ -133,13 +134,15 @@ export function TableCellViewer({
                   />
                 ) : null}
                 <div className="absolute left-5 -bottom-5">
-                  <Image
-                    src={detail ? detail?.logoUrl : ''}
-                    alt="shop cover image"
-                    width={0}
-                    height={0}
-                    className="w-10 rounded-full border border-white"
-                  />
+                  {detail ? (
+                    <Image
+                      src={detail.logoUrl}
+                      alt="shop cover image"
+                      width={0}
+                      height={0}
+                      className="w-10 rounded-full border border-white"
+                    />
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -148,11 +151,15 @@ export function TableCellViewer({
               <Label htmlFor="shop">{t('t_shop')}</Label>
               <div className="w-full flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-row justify-start items-center gap-2">
-                  <Avatar>
-                    <AvatarImage src={detail?.logoUrl} alt="shopLogo" />
-                    <AvatarFallback>UK</AvatarFallback>
-                  </Avatar>
-                  <p>{detail?.name}</p>
+                  {detail ? (
+                    <>
+                      <Avatar>
+                        <AvatarImage src={detail.logoUrl} alt="shopLogo" />
+                        <AvatarFallback>UK</AvatarFallback>
+                      </Avatar>
+                      <p>{detail?.name}</p>
+                    </>
+                  ) : null}
                 </div>
                 <Button
                   variant={'outline'}
@@ -170,11 +177,18 @@ export function TableCellViewer({
               <Label htmlFor="shop">{t('t_owner_name')}</Label>
               <div className="w-full flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-row justify-start items-center gap-2">
-                  <Avatar>
-                    <AvatarImage src={detail?.owner.image} alt="ownerLogo" />
-                    <AvatarFallback>UK</AvatarFallback>
-                  </Avatar>
-                  <p>{detail?.owner.name}</p>
+                  {detail ? (
+                    <>
+                      <Avatar>
+                        <AvatarImage
+                          src={detail?.owner.image}
+                          alt="ownerLogo"
+                        />
+                        <AvatarFallback>UK</AvatarFallback>
+                      </Avatar>
+                      <p>{detail?.owner.name}</p>
+                    </>
+                  ) : null}
                 </div>
                 <Button
                   variant={'outline'}
