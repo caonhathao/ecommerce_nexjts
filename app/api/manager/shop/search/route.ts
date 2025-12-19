@@ -1,7 +1,9 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { StatusCodeIdentify as StatusCode } from '@/types/api';
+import { NextRequest } from 'next/server';
 import z from 'zod';
 
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
@@ -16,14 +18,8 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
 
   //check valid params (one of them)
   if (!id && !name && !ownerId)
-    return NextResponse.json(
-      {
-        success: false,
-        data: {
-          message: 'Missing search keyword',
-        },
-      },
-      { status: 400 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error('t_missing_search_params', StatusCode.badRequest)
     );
 
   const whereClause: Prisma.ShopWhereInput = {};
@@ -32,7 +28,9 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     const isValidUUID = z.string().uuid().safeParse(id).success;
 
     if (!isValidUUID) {
-      return NextResponse.json({ success: 400, data: [] });
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_invalid_id_format', StatusCode.badRequest)
+      );
     }
 
     whereClause.id = id;
@@ -45,7 +43,9 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     const isValidUUID = z.string().uuid().safeParse(ownerId).success;
 
     if (!isValidUUID) {
-      return NextResponse.json({ success: 400, data: [] });
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('t_invalid_id_format', StatusCode.badRequest)
+      );
     }
 
     whereClause.ownerId = ownerId;
@@ -73,9 +73,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     });
 
     const total = data.length;
-
-    return NextResponse.json({
-      success: true,
+    const payload = {
       data: data,
       pagination: {
         page,
@@ -83,17 +81,20 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
         total,
         totalPages: Math.ceil(total / limit),
       },
-    });
+    };
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(payload, 't_success', StatusCode.success)
+    );
   } catch (e) {
     // This catch block is still important for REAL errors
     // (e.g., database connection fails)
     console.error('Error fetching product:', e);
-    return NextResponse.json(
-      {
-        success: 500,
-        message: 'Internal Server Error',
-      },
-      { status: 500 } // 500 is for unexpected server errors
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(
+        't_internal_server_error',
+        StatusCode.internalServerError,
+        e instanceof Error ? { detail: e.message } : undefined
+      )
     );
   }
 });

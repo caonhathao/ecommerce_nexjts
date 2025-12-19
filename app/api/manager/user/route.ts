@@ -1,7 +1,9 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { StatusCodeIdentify as StatusCode } from '@/types/api';
+import { NextRequest } from 'next/server';
 
 //api to get list of user
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
@@ -39,8 +41,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       where: whereClause,
     });
 
-    return NextResponse.json({
-      success: true,
+    const payload = {
       data: data,
       pagination: {
         page,
@@ -48,9 +49,19 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
         total,
         totalPages: Math.ceil(total / limit),
       },
-    });
+    };
+
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(payload, 't_success', StatusCode.success)
+    );
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ success: 500, data: err });
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(
+        't_server_error',
+        StatusCode.internalServerError,
+        err instanceof Error ? { detail: err.message } : undefined
+      )
+    );
   }
 });

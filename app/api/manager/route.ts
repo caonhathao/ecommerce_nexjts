@@ -1,6 +1,7 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/with-auth';
-import { NextResponse } from 'next/server';
+import { StatusCodeIdentify as StatusCode } from '@/types/api';
 
 export const GET = withAuth(async (userId: string) => {
   try {
@@ -12,12 +13,17 @@ export const GET = withAuth(async (userId: string) => {
         image: true,
       },
     });
-    return NextResponse.json({ data: data });
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success(data, 't_success', StatusCode.success)
+    );
   } catch (err) {
     console.error(err);
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: 500 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error(
+        't_server_error',
+        StatusCode.internalServerError,
+        err instanceof Error ? { detail: err.message } : undefined
+      )
     );
   }
 });

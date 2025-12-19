@@ -69,7 +69,7 @@ const SearchBar = <T,>({
         setData(null);
         setIsFalse(true);
       } else {
-        setData(response);
+        setData(response.data);
         setIsFalse(false);
       }
     } catch (e) {

@@ -11,7 +11,8 @@
   },
   "general": {
     "t_currency": "VND",
-    "t_rate": "1"
+    "t_rate": "1",
+    "t_region": "VN"
   },
   "auth_layout": {
     "t_back_action": "Quay lại",

@@ -66,9 +66,9 @@ import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { toast } from 'sonner';
+import SearchBar from '../../../features/manager/components/search-bar';
+import TabTableView from '../../../features/manager/components/tab-table-view';
 import { TableCellViewer } from '../../../features/manager/product/components/table-cell-viewer';
-import SearchBar from '../_components/search-bar';
-import TabTableView from '../_components/tab-table-view';
 
 const ProductsPage = () => {
   const [data, setData] = React.useState<productDataResponse | null>(null);
