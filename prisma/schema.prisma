@@ -119,7 +119,7 @@ enum LedgerType {
   ORDER_PAID // khách trả tiền
   VOUCHER_SUBSIDY // sàn bù tiền
   ADJUSTMENT_IN // chỉnh tay +
-
+  SHOP_PAYOUT
   PLATFORM_FEE // phí sàn
   SHIPPING_FEE // phí ship
   PAYOUT // chuyển tiền cho shop

@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { ServiceError } from '@/lib/service-error';
 import { createOrder } from '@/app/actions/order';
 import { ResponseFactory } from '@/lib/api-response';
@@ -9,11 +9,11 @@ import crypto from 'crypto';
 import {
   createPaymentIntentService,
   createPaymentService,
-  getPaymentIntentByTxnRefService,
 } from '@/features/payment/payment.service';
 import { prisma } from '@/lib/db';
+import { customerPaidOrderSuccess } from '@/features/payment_transaction/payment_transaction.service';
 
-function sortObject(
+export function sortObject(
   obj: Record<string, string | number>
 ): Record<string, string> {
   const sorted: Record<string, string> = {};
@@ -29,8 +29,9 @@ function sortObject(
 
 type PaymentIntentPayload = {
   orderIds: string[];
+  paymentId: string;
 };
-
+//Send vnpay request
 export async function POST(req: NextRequest) {
   try {
     const { draftId, body } = await req.json();
@@ -111,10 +112,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    await prisma.orderPayment.createMany({
+      data: orderList.map((order) => ({
+        orderId: order.id,
+        paymentId: payment.id,
+      })),
+    });
+
     const expiresAt = dayjs().add(15, 'minute').toDate();
     await createPaymentIntentService({
       vnpTxnRef: TxnRef,
-      payload: { orderIds: orderList.map((o) => o.id) },
+      payload: { orderIds: orderList.map((o) => o.id), paymentId: payment.id },
       expiresAt: expiresAt,
     });
 
@@ -133,6 +141,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
+//Get webhook
 export async function GET(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
@@ -142,6 +151,8 @@ export async function GET(req: NextRequest) {
     }
 
     const secureHash = vnp_Params['vnp_SecureHash'];
+    const rspCode = vnp_Params['vnp_ResponseCode'];
+    const txnRef = vnp_Params['vnp_TxnRef'];
 
     delete vnp_Params['vnp_SecureHash'];
     delete vnp_Params['vnp_SecureHashType'];
@@ -152,42 +163,89 @@ export async function GET(req: NextRequest) {
     const hmac = crypto.createHmac('sha512', secretKey);
     const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
 
-    if (secureHash === signed) {
-      const TxnRef = vnp_Params['vnp_TxnRef'];
-      const rspCode = vnp_Params['vnp_ResponseCode'];
+    if (secureHash !== signed) {
+      return NextResponse.json({ RspCode: '97', Message: 'Fail checksum' });
+    }
 
-      const paymentIntent = await getPaymentIntentByTxnRefService(TxnRef);
-      const payload = paymentIntent?.payload as PaymentIntentPayload | null;
-      const orderIds = payload?.orderIds ?? [];
-
-      await prisma.payment.updateMany({
-        where: { externalId: TxnRef, provider: 'VNPAY' },
-        data: { status: 'PAID', updatedAt: new Date() },
-      });
-
-      await prisma.order.updateMany({
-        where: { id: { in: orderIds } },
-        data: {
-          paymentStatus: 'PAID',
-          status: 'PROCESSING',
-          updatedAt: new Date(),
+    const payment = await prisma.payment.findFirst({
+      where: {
+        externalId: txnRef,
+        provider: 'VNPAY',
+      },
+      include: {
+        orders: {
+          include: {
+            order: true,
+          },
         },
+      },
+    });
+
+    if (!payment) {
+      return NextResponse.json({ RspCode: '01', Message: 'Order not found' });
+    }
+
+    if (payment.status === 'PAID' && rspCode === '00') {
+      return NextResponse.json({ RspCode: '00', Message: 'Confirm Success' });
+    }
+
+    if (payment.status === 'FAILED' && rspCode === '00') {
+      return NextResponse.json({ RspCode: '00', Message: 'Confirm Success' });
+    }
+
+    const orderDetails = payment.orders.map((op) => op.order);
+    const orderIds = orderDetails.map((o) => o.id);
+
+    if (rspCode === '00') {
+      await prisma.$transaction(async (tx) => {
+        // A. Update Payment Status
+        await tx.payment.update({
+          where: { id: payment.id },
+          data: { status: 'PAID', updatedAt: new Date() },
+        });
+
+        // B. Update Order Status
+        await tx.order.updateMany({
+          where: { id: { in: orderIds } },
+          data: {
+            paymentStatus: 'PAID',
+            status: 'PROCESSING', // Hoặc trạng thái tiếp theo của bạn
+            updatedAt: new Date(),
+          },
+        });
       });
 
-      return ResponseFactory.toNextResponse(
-        ResponseFactory.success({ RspCode: rspCode, Message: 'success' })
-      );
+      for (const order of orderDetails) {
+        try {
+          await customerPaidOrderSuccess(
+            order.shopId!,
+            order.grandTotal,
+            order.id,
+            payment.id
+          );
+        } catch (e) {
+          console.error(`Lỗi cộng tiền ví cho order ${order}:`, e);
+        }
+      }
+      return NextResponse.json({ RspCode: '00', Message: 'Confirm Success' });
     } else {
-      return ResponseFactory.toNextResponse(
-        ResponseFactory.success({ RspCode: '97', Message: 'Fail checksum' })
-      );
+      await prisma.$transaction(async (tx) => {
+        await tx.payment.update({
+          where: { id: payment.id },
+          data: { status: 'FAILED', updatedAt: new Date() },
+        });
+        await tx.order.updateMany({
+          where: { id: { in: orderIds } },
+          data: { paymentStatus: 'CANCELED', updatedAt: new Date() },
+        });
+      });
+
+      return NextResponse.json({ RspCode: '00', Message: 'Confirm Success' });
     }
   } catch (error) {
-    return ResponseFactory.toNextResponse(
-      ResponseFactory.error(
-        error instanceof ServiceError ? error.message : 'Internal Server Error',
-        500
-      )
-    );
+    return NextResponse.json({
+      RspCode: '99',
+      Message: 'Unknown Error' + error,
+    });
   }
 }
