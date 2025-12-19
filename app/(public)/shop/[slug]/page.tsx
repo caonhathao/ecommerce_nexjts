@@ -1,4 +1,4 @@
-import { NewArrivals } from '../../(home)/_components/new-arrivals';
+import { NewArrivals } from '../../../../features/public/home/components/new-arrivals';
 import banner2 from '../../../../public/banners/banner-home-1.png';
 import Banner from '../../_components/banner';
 const ShopPage = () => {

@@ -27,16 +27,16 @@ import { ChatButton } from '@/components/chat/chat-button';
 
 import { VoucherSelector } from '@/features/voucher/_components/voucher-selector';
 import { VoucherDTO } from '@/features/voucher/voucher.dto';
-import Desc from './_components/desc';
-import { ReviewsServer } from './_components/reviews-server';
-import SlideImg from './_components/slide-img';
-import { SuggestDealToday } from './_components/suggest-deal-today';
+import Desc from '../../../../features/public/product/components/desc';
+import { ReviewsServer } from '../../../../features/public/product/components/reviews-server';
+import SlideImg from '../../../../features/public/product/components/slide-img';
+import { SuggestDealToday } from '../../../../features/public/product/components/suggest-deal-today';
 
-import { TopDealItems } from '@/app/(public)/(home)/_components/top-deal-items';
-import { RatingStars } from '@/app/(public)/_components/rating-starts';
+import { TopDealItems } from '@/features/public/home/components/top-deal-items';
 import logo from '@/public/logo.jpg';
 import Link from 'next/link';
 import Decimal = Prisma.Decimal;
+import { RatingStars } from '@/features/public/components/rating-starts';
 
 interface SelectedVariant {
   name: string;
