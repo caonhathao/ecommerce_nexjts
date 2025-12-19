@@ -37,8 +37,9 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
-import TabTableView from '@/features/manager/components/tab-table-view';
+import TabTableView from '@/features/manager/_components/tab-table-view';
 import { fetchData } from '@/funcs/fetch';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
 import { formatDay, formatPrice } from '@/lib/utils';
@@ -130,18 +131,7 @@ const TableTopProduct = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = (value: string) => {
-    navigator.clipboard
-      .writeText(value)
-      .then(() => {
-        toast(t('t_action_noti'), {
-          description: t('t_copy_desc_noti'),
-        });
-      })
-      .catch((err) => {
-        console.error('Failed to copy ID: ', err);
-      });
-  };
+  const handleCopy = useCopyToClipboard({ t: t });
 
   const columns: ColumnDef<productItemData>[] = [
     {

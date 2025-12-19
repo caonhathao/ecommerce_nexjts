@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Loading } from '../../../../components/loading';
-import { ProductItem } from '../../_components/product-item';
+import { ProductItem } from '../../components/product-item';
 
 type TopDealItemsProps = {
   size: string; // This acts as the "Limit" per page

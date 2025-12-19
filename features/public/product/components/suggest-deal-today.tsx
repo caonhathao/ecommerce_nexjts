@@ -9,7 +9,7 @@ import {
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { ProductItem } from '../../../_components/product-item';
+import { ProductItem } from '../../components/product-item';
 
 export const SuggestDealToday = () => {
   const t = useTranslations('home_layout.suggest_deal_today');

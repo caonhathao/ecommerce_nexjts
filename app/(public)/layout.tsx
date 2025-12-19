@@ -1,6 +1,6 @@
-import HeaderServer from '@/app/(public)/_components/header-server';
+import HeaderServer from '@/features/public/components/header-server';
 import { ReactNode } from 'react';
-import { Footer } from '@/app/(public)/_components/footer';
+import { Footer } from 'react-day-picker';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

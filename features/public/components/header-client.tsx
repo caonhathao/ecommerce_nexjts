@@ -1,6 +1,5 @@
 'use client';
 
-import SearchingBar from '@/app/(public)/_components/searching-bar';
 import { ModeToogle } from '@/components/custom/mode-toogle';
 import { SelectLanguage } from '@/components/custom/select-language';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -35,6 +34,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import SearchingBar from './searching-bar';
 
 type Role = 'USER' | 'SELLER' | 'ADMIN';
 type HeaderUser = {

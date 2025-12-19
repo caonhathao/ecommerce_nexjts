@@ -36,6 +36,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { fetchData } from '@/funcs/fetch';
 import { putData } from '@/funcs/put';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
 import { formatPrice } from '@/lib/utils';
@@ -54,11 +55,9 @@ import { toast } from 'sonner';
 export function TableCellViewer({
   item,
   setProductList,
-  handleCopy,
 }: {
   item: productItemData;
   setProductList: React.Dispatch<React.SetStateAction<productItemData[]>>;
-  handleCopy: (id: string) => void;
 }) {
   const isMobile = useIsMobile();
   const [detail, setDetail] = React.useState<productDetail | null>(null);
@@ -66,6 +65,7 @@ export function TableCellViewer({
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
   const t = useTranslations('admin_product_page.product_drawer');
   const c = useTranslations('general');
+  const handleCopy = useCopyToClipboard({ t: t });
   const [open, setOpen] = React.useState<boolean>(false);
 
   const [value, setValue] = React.useState<string>('');

@@ -1,5 +1,5 @@
-import HeaderClient from '@/app/(public)/_components/header-client';
 import { getSessionUser } from '@/lib/auth';
+import HeaderClient from './header-client';
 
 export default async function HeaderServer() {
   const session = await getSessionUser();

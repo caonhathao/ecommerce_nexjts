@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import Autoplay from 'embla-carousel-autoplay';
 import { Loading } from '../../../../components/loading';
-import { ProductItem } from '../../_components/product-item';
+
 import {
   Carousel,
   CarouselContent,
@@ -17,6 +17,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { ProductItem } from '../../components/product-item';
 
 type NewArrivalsProps = {
   size: string;

@@ -23,6 +23,7 @@ export function SiteHeader() {
     const titleMap: Record<string, string> = {
       '/manager/categories': 't_category_management',
       '/manager/product': 't_product_management',
+      '/manager/products/complaints': 't_complaint',
       '/manager/users': 't_user_management',
       '/manager/shops': 't_shop_management',
       '/manager/statistic/revenue': 't_revenue',

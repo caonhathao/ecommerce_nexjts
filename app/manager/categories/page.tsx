@@ -22,6 +22,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { NewCategoryForm } from '@/features/manager/category/components/new-category-form';
 import TableCellViewer from '@/features/manager/category/components/table-cell-viewer';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { paths } from '@/lib/path';
 import { formatDay, LocaleType } from '@/lib/utils';
 import {
@@ -62,13 +63,11 @@ import {
 } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import { FaCheck, FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
-import { IoMdCloseCircle } from 'react-icons/io';
-import { toast } from 'sonner';
+import SearchBar from '../../../features/manager/_components/search-bar';
+import TabTableView from '../../../features/manager/_components/tab-table-view';
 import { handleDelete } from '../../../features/manager/category/funcs/funcs';
-import SearchBar from '../../../features/manager/components/search-bar';
-import TabTableView from '../../../features/manager/components/tab-table-view';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
@@ -88,13 +87,13 @@ const CategoryManagePage = () => {
     pageIndex: 0,
     pageSize: 10,
   });
-
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => categoryList?.map(({ id }) => id) || [],
     [categoryList]
   );
   const t = useTranslations('admin_category_page');
   const g = useTranslations('general');
+  const handleCopy = useCopyToClipboard({ t: t });
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -112,38 +111,6 @@ const CategoryManagePage = () => {
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
-  );
-
-  const handleCopy = React.useCallback(
-    (value: string) => {
-      navigator.clipboard
-        .writeText(value)
-        .then(() => {
-          toast(t('t_action_noti'), {
-            description: t('t_copy_desc_noti'),
-            duration: 3000,
-            icon: <FaCheck />,
-            cancel: {
-              label: 'OK',
-              onClick: () => console.log(''),
-            },
-          });
-        })
-        .catch((err) => {
-          toast(t('t_action_failed_noti'), {
-            description: t('t_copy_failed_desc_noti'),
-            duration: 3000,
-            icon: <IoMdCloseCircle />,
-            cancel: {
-              label: 'OK',
-              onClick: () => console.log(''),
-            },
-          });
-
-          console.error('Failed to copy ID: ', err);
-        });
-    },
-    [t]
   );
 
   const columns: ColumnDef<categoryItemData>[] = React.useMemo(
@@ -186,11 +153,7 @@ const CategoryManagePage = () => {
         header: t('t_category_name'),
         cell: ({ row }) => {
           return (
-            <TableCellViewer
-              item={row.original}
-              handleCopy={handleCopy}
-              setIsReset={setIsReset}
-            />
+            <TableCellViewer item={row.original} setIsReset={setIsReset} />
           );
         },
         enableHiding: false,
@@ -296,7 +259,7 @@ const CategoryManagePage = () => {
         ),
       },
     ],
-    [handleCopy, t]
+    [g, handleCopy, t]
   );
 
   const table = useReactTable({
