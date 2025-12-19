@@ -1,6 +1,6 @@
 'use client';
 import { Loading } from '@/components/loading';
-import { ProductItem } from '@/app/(public)/_components/product-item';
+import { ProductItem } from '@/features/public/components/product-item';
 import { fetchData } from '@/funcs/fetch';
 import { paths } from '@/lib/path';
 import {

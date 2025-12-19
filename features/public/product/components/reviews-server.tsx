@@ -1,6 +1,5 @@
 'use client';
 
-import { RatingStars } from '@/app/(public)/_components/rating-starts';
 import Pagination from '@/components/custom/pagination';
 import { VolumeBar } from '@/components/custom/volume-bar';
 import { Loading } from '@/components/loading';
@@ -21,6 +20,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useEffect, useState } from 'react'; // Import hooks
 import { FaEye, FaWindowClose } from 'react-icons/fa';
+import { RatingStars } from '../../components/rating-starts';
 import { ReviewsClient } from './reviews-client';
 
 interface props {

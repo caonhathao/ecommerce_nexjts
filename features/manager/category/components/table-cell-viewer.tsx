@@ -36,6 +36,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { handleDelete } from '@/features/manager/category/funcs/funcs';
 import { putData } from '@/funcs/put';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
 import {
@@ -74,11 +75,9 @@ type FormSchemaType = z.infer<typeof formSchema>;
 function TableCellViewer({
   item,
   setIsReset,
-  handleCopy,
 }: {
   item: categoryItemData;
   setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
-  handleCopy: (id: string) => void;
 }) {
   const isMobile = useIsMobile();
   const [detail, setDetail] = React.useState<categoryDetail | null>(null);
@@ -193,6 +192,8 @@ function TableCellViewer({
     }
     return null;
   }, [selectedFile]);
+
+  const handleCopy = useCopyToClipboard({ t: t });
 
   const renderVariant = (index: number, value: categoryChildDetail) => {
     return (

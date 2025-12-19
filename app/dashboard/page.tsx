@@ -12,7 +12,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/features/manager/components/app-sidebar';
+import { AppSidebar } from '@/features/manager/_components/app-sidebar';
 
 export default function Page() {
   return (

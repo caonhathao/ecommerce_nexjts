@@ -1,5 +1,5 @@
-import { ChartAreaInteractive } from '@/features/manager/components/chart-area-interactive';
-import { SectionCards } from '@/features/manager/components/section-cards';
+import { ChartAreaInteractive } from '@/features/manager/_components/chart-area-interactive';
+import { SectionCards } from '@/features/manager/_components/section-cards';
 import TableTopProduct from '@/features/manager/dashboard/components/table-top-product';
 
 export default function Page() {

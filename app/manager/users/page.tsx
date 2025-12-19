@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { paths } from '@/lib/path';
 import { formatDay } from '@/lib/utils';
 import { userDataResponse, userItemData } from '@/types/manager.data-types';
@@ -59,9 +60,8 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
-import { toast } from 'sonner';
-import SearchBar from '../../../features/manager/components/search-bar';
-import TabTableView from '../../../features/manager/components/tab-table-view';
+import SearchBar from '../../../features/manager/_components/search-bar';
+import TabTableView from '../../../features/manager/_components/tab-table-view';
 import { TableCellViewer } from '../../../features/manager/users/components/table-cell-viewer';
 
 const UsersPage = () => {
@@ -105,24 +105,7 @@ const UsersPage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = (value: string | undefined) => {
-    if (!value) {
-      toast(t('t_action_failed_noti'), {
-        description: t('t_copy_failed_desc_noti'),
-      });
-    } else {
-      navigator.clipboard
-        .writeText(value)
-        .then(() => {
-          toast(t('t_action_noti'), {
-            description: t('t_copy_desc_noti'),
-          });
-        })
-        .catch((err) => {
-          console.error('Failed to copy ID: ', err);
-        });
-    }
-  };
+  const handleCopy = useCopyToClipboard({ t: t });
 
   const columns: ColumnDef<userItemData>[] = [
     {
@@ -163,11 +146,7 @@ const UsersPage = () => {
       header: t('t_user_name'),
       cell: ({ row }) => {
         return (
-          <TableCellViewer
-            item={row.original}
-            handleCopy={handleCopy}
-            setUserList={setUserList}
-          />
+          <TableCellViewer item={row.original} setUserList={setUserList} />
         );
       },
       enableHiding: false,

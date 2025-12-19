@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { fetchData } from '@/funcs/fetch';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
 import { formatDay } from '@/lib/utils';
@@ -41,16 +42,15 @@ import { toast } from 'sonner';
 export function TableCellViewer({
   item,
   setUserList,
-  handleCopy,
 }: {
   item: userItemData;
   setUserList: React.Dispatch<SetStateAction<userItemData[]>>;
-  handleCopy: (id: string) => void;
 }) {
   const isMobile = useIsMobile();
   const [detail, setDetail] = React.useState<userDetail | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
   const t = useTranslations('admin_user_page.user_drawer');
+  const handleCopy = useCopyToClipboard({ t: t });
 
   useEffect(() => {
     console.log(detail);

@@ -1,5 +1,4 @@
 'use client';
-import SearchingBar from '@/app/(public)/_components/searching-bar';
 import { Loading } from '@/components/loading';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,6 +10,7 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import { Separator } from '@/components/ui/separator';
+import SearchingBar from '@/features/public/components/searching-bar';
 import { fetchData } from '@/funcs/fetch';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { shopData } from '@/types/public.data-types';

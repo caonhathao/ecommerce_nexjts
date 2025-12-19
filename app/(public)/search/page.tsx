@@ -1,11 +1,11 @@
 'use client';
 
-import { ProductItem } from '@/app/(public)/_components/product-item';
 import { SearchFiltersPanel } from '@/app/(public)/search/_components/search-filters-panel';
 import { SearchSortBar } from '@/app/(public)/search/_components/search-sort-bar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ProductItem } from '@/features/public/components/product-item';
 import { useCategories } from '@/hooks/use-categories';
 import { SearchFilters, SearchProduct } from '@/types/product.data-types';
 import {

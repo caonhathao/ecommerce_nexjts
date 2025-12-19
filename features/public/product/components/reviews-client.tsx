@@ -1,5 +1,5 @@
 'use client';
-import { RatingStars } from '@/app/(public)/_components/rating-starts';
+
 import { Separator } from '@/components/ui/separator';
 import { formatDay } from '@/lib/utils';
 import { reviewDataResponse, reviewsItemType } from '@/types/public.data-types';
@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User2 } from 'lucide-react';
+import { RatingStars } from '../../components/rating-starts';
 
 interface props {
   initialResponse: reviewDataResponse;

@@ -100,7 +100,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
           },
           {
             title: t('t_complaint'),
-            url: '#',
+            url: '/manager/products/complaints',
           },
         ],
       },

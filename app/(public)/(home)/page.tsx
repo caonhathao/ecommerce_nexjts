@@ -7,7 +7,7 @@ import { SuggestDealToday } from '../../../features/public/home/components/sugge
 import { TopDealItems } from '../../../features/public/home/components/top-deal-items';
 import banner2 from '../../../public/banners/banner-home-1.png';
 import banner1 from '../../../public/banners/banner-home-2.png';
-import Banner from '../_components/banner';
+import Banner from '@/features/public/components/banner';
 export default function Home() {
   return (
     <div className="w-full h-full flex flex-col justify-start items-center gap-4">

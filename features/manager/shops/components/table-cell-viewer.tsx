@@ -22,6 +22,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { fetchData } from '@/funcs/fetch';
 import { putData } from '@/funcs/put';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
 import { formatDay } from '@/lib/utils';
@@ -39,18 +40,16 @@ import { toast } from 'sonner';
 export function TableCellViewer({
   item,
   setShopList,
-  handleCopy,
 }: {
   item: shopItemData;
   setShopList: React.Dispatch<SetStateAction<shopItemData[]>>;
-  handleCopy: (id: string) => void;
 }) {
   const isMobile = useIsMobile();
   const [detail, setDetail] = React.useState<shopDetail | null>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
   const [value, setValue] = React.useState<string>('');
   const t = useTranslations('admin_shop_page.shop_drawer');
-
+  const handleCopy = useCopyToClipboard({ t: t });
   // useEffect(() => {
   //   console.log(detail);
   // }, [detail]);
