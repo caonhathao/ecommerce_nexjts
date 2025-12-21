@@ -1,20 +1,36 @@
-export type StatusCode = 200 | 201 | 400 | 401 | 403 | 404 | 409 | 500 | 504;
-export const StatusCodeIdentify = {
-  success: 200,
-  created: 201,
-  badRequest: 400,
-  unauthorized: 401,
-  forbidden: 403,
-  notFound: 404,
-  conflict: 409,
-  internalServerError: 500,
-  gatewayTimeout: 504,
+export const HttpStatus = {
+  OK: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  CONFLICT: 409,
+  UNPROCESSABLE_ENTITY: 422,
+  INTERNAL_SERVER_ERROR: 500,
+  NOT_IMPLEMENTED: 501,
+  GATEWAY_TIMEOUT: 504,
 } as const;
+
+export type StatusCode = (typeof HttpStatus)[keyof typeof HttpStatus];
+
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
 
 export interface ApiResponse<T = null> {
   success: boolean;
   message: string;
   code: StatusCode;
   data?: T;
+  meta?: {
+    pagination?: PaginationMeta;
+  };
   errors?: Record<string, string[] | undefined> | null | object;
 }

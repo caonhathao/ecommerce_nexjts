@@ -3,7 +3,7 @@
 import { requireSeller } from '@/lib/require-role';
 import { prisma } from '@/lib/db';
 import { randomBytes } from 'node:crypto';
-import { ShopMemberRole } from '@/lib/generated/prisma';
+import { ShopMemberRole } from '@/lib/generated/prisma'; // Check this path
 import { env } from '@/lib/env';
 import { paths } from '@/lib/path';
 import { sendShopInvitationEmail } from '@/lib/mailer';
@@ -23,12 +23,19 @@ export async function inviteMember({
   const parsed = InviteMemberSchema.safeParse({ email, shopId, role });
   if (!parsed.success) {
     const errors = parsed.error.flatten().fieldErrors;
-    return ResponseFactory.error('Validation failed', 400, errors);
+    return ResponseFactory.error({
+      message: 'Validation failed',
+      code: 400,
+      errors,
+    });
   }
 
   const session = await requireSeller();
   if (!session) {
-    return ResponseFactory.error('Unauthorized', 401);
+    return ResponseFactory.error({
+      message: 'Unauthorized',
+      code: 401,
+    });
   }
 
   const shop = await prisma.shop.findFirst({
@@ -36,7 +43,10 @@ export async function inviteMember({
   });
 
   if (!shop) {
-    return ResponseFactory.error('Shop not found or permission denied', 403);
+    return ResponseFactory.error({
+      message: 'Shop not found or permission denied',
+      code: 403,
+    });
   }
 
   const existingMember = await prisma.shopMember.findFirst({
@@ -46,7 +56,10 @@ export async function inviteMember({
     },
   });
   if (existingMember) {
-    return ResponseFactory.error('User is already a member of this shop', 400);
+    return ResponseFactory.error({
+      message: 'User is already a member of this shop',
+      code: 400,
+    });
   }
 
   try {
@@ -70,6 +83,7 @@ export async function inviteMember({
     const invitationLink = `${env.NEXT_PUBLIC_BASE_URL}${paths.shop.accept_invite(
       token
     )}?email=${encodeURIComponent(email)}`;
+
     await sendShopInvitationEmail(
       email,
       shop.name,
@@ -79,21 +93,30 @@ export async function inviteMember({
 
     revalidatePath(`/seller/shops/${shopId}/members`);
 
-    return ResponseFactory.success(null, 'Invitation sent successfully', 200);
+    return ResponseFactory.success({
+      message: 'Invitation sent successfully',
+    });
   } catch (err) {
     console.error('inviteMember error', err);
-    return ResponseFactory.error('Failed to send invitation', 500);
+    return ResponseFactory.error({
+      message: 'Failed to send invitation',
+      code: 500,
+    });
   }
 }
 
 export async function removeMember(shopId: string, memberId: string) {
   const session = await requireSeller();
-  if (!session) return ResponseFactory.error('Unauthorized', 401);
+  if (!session) {
+    return ResponseFactory.error({ message: 'Unauthorized', code: 401 });
+  }
 
   const shop = await prisma.shop.findFirst({
     where: { id: shopId, ownerId: session.user.id },
   });
-  if (!shop) return ResponseFactory.error('Permission denied', 403);
+  if (!shop) {
+    return ResponseFactory.error({ message: 'Permission denied', code: 403 });
+  }
 
   try {
     await prisma.shopMember.delete({
@@ -101,8 +124,15 @@ export async function removeMember(shopId: string, memberId: string) {
     });
 
     revalidatePath(`/seller/shops/${shopId}/members`);
-    return ResponseFactory.success(null, 'Member removed successfully');
+
+    return ResponseFactory.success({
+      data: null,
+      message: 'Member removed successfully',
+    });
   } catch (error) {
-    return ResponseFactory.error('Failed to remove member', 500);
+    return ResponseFactory.error({
+      message: 'Failed to remove member',
+      code: 500,
+    });
   }
 }

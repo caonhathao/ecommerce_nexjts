@@ -1,0 +1,73 @@
+{
+  "layout": {
+    "language": "Ngôn ngữ",
+    "label": "Tiếng Việt",
+    "icon": "https://img.icons8.com/color/48/vietnam.png",
+    "search_button": "Tìm kiếm",
+    "search_placeholder": "Tìm kiếm...",
+    "light_mode": "Sáng",
+    "dark_mode": "Tối",
+    "system_mode": "Hệ thống"
+  },
+  "general": {
+    "t_currency": "VND",
+    "t_rate": "1",
+    "t_region": "VN"
+  },
+
+  "not_found_page": {
+    "t_not_found": "Trang không tồn tại",
+    "t_desc": "Trang mà bạn đang tìm kiếm không tồn tại nữa!.",
+    "t_return": "Quay lại"
+  },
+
+  "footer": {
+    "customer_support": "Hỗ trợ khách hàng",
+    "hotline": "Hotline",
+    "hotline_rate": "(1000 đ/phút, 8-21h kể cả Thứ 7, Chủ nhật)",
+    "faq": "Câu hỏi thường gặp",
+    "support_request": "Yêu cầu hỗ trợ",
+    "ordering_guide": "Hướng dẫn đặt hàng",
+    "shipping_methods": "Các phương thức vận chuyển",
+    "return_policy": "Chính sách trả hàng",
+    "installment_guide": "Hướng dẫn mua trả góp",
+    "import_policy": "Chính sách nhập hàng",
+    "support_email": "Hỗ trợ",
+    "security_email": "Bảo mật",
+    "about_us": "Về chúng tôi",
+    "about_company": "Về 2T3H",
+    "blog": "Blog 2T3H",
+    "careers": "Cơ hội việc làm",
+    "privacy_payment": "Chính sách Thanh toán Riêng tư",
+    "privacy_personal": "Chính sách Bảo vệ Thông tin Cá nhân",
+    "complaint_settlement": "Chính sách Giải quyết Khiếu nại",
+    "terms_of_use": "Điều khoản Sử dụng",
+    "sell_with_us": "Bán hàng với 2T3H",
+    "enterprise_sales": "Bán hàng Doanh nghiệp",
+    "partnership": "Hợp tác",
+    "operation_regulations": "Quy định Hoạt động",
+    "sell_on_platform": "Bán trên 2T3H",
+    "certifications": "Chứng chỉ",
+    "payment_methods": "Phương thức Thanh toán",
+    "delivery_services": "Dịch vụ Giao hàng",
+    "delivery_now": "2T3H NOW",
+    "connect": "Kết nối với chúng tôi",
+    "download_app": "Tải Ứng dụng",
+    "company_name": "CÔNG TY CỔ PHẦN 2T3H",
+    "company_address": "Địa chỉ",
+    "address_full": "123 Đường Công nghệ, Phường Phần mềm, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
+    "business_license": "Giấy chứng nhận Đăng ký Kinh doanh số 0309532909 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp ngày 06/01/2010.",
+    "slogan": "2T3H - Nhanh, Chất lượng, Rẻ",
+    "has_it_all": "2T3H có tất cả",
+    "has_it_all_desc": "Với hàng triệu sản phẩm từ các thương hiệu uy tín, hàng ngàn mặt hàng từ Điện thoại thông minh đến Thực phẩm tươi sống, kết hợp với dịch vụ giao hàng siêu tốc 2T3HNOW, 2T3H mang đến cho bạn trải nghiệm mua sắm trực tuyến hoàn chỉnh với giá cực rẻ. Ngoài ra, tại 2T3H bạn có thể dễ dàng sử dụng các tiện ích như thẻ cào, thanh toán điện nước, và dịch vụ bảo hiểm.",
+    "promotions_overflow": "Khuyến mãi và Ưu đãi tràn ngập",
+    "promotions_desc": "Bạn muốn săn lùng những mức giá sốc? 2T3H có những deal sốc hàng ngày cho bạn! Bạn yêu thích các thương hiệu? Chúng tôi có Cửa hàng Chính thức chờ đón bạn. Không tìm được mã freeship? 2T3H có chương trình Freeship+, cho phép giảm phí vận chuyển không giới hạn. Mua nhiều với Tiết kiệm 2T3HNOW để nhận 100% freeship trong 2h.",
+    "smartphones": "Điện thoại thông minh",
+    "fresh_foods": "Thực phẩm tươi sống",
+    "utilities": "thẻ cào, thanh toán điện nước, và dịch vụ bảo hiểm",
+    "shocking_deals": "những deal sốc hàng ngày",
+    "official_stores": "Cửa hàng Chính thức",
+    "freeship_plus": "chương trình Freeship+",
+    "savings_program": "Tiết kiệm 2T3HNOW"
+  }
+}

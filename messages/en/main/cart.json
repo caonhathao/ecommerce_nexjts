@@ -1,0 +1,22 @@
+{
+  "cart_page": {
+    "t_remove_item_confirm": "Are you sure you want to remove this item?",
+    "t_remove_item_failed": "Failed to remove item. Please try again.",
+    "t_failed": "An error occurred. Please try again.",
+    "t_remove_all": "Are you sure you want to clear your cart?",
+    "t_remove_all_failed": "Failed to clear cart.",
+    "t_select_warning": "You must select at least one item to checkout.",
+    "t_pending_payment": "You have a pending order. Redirecting to payment...",
+    "t_direct_payment": "Redirecting to checkout...",
+    "t_title": "Shopping Cart",
+    "t_select_all": "Select All",
+    "t_unit_price": "Unit Price",
+    "t_quantity": "Quantity",
+    "t_total": "Subtotal",
+    "t_empty_cart": "Your cart is empty.",
+    "t_promotion": "Promotion",
+    "t_discount": "Direct Discount",
+    "t_total_payment": "Total Payment",
+    "t_by_action": "Checkout"
+  }
+}

@@ -2,134 +2,102 @@ import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { Prisma, Visibility } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
-import { StatusCodeIdentify as StatusCode } from '@/types/api';
 import { NextRequest } from 'next/server';
+import { HttpStatus } from '@/types/api';
 
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
-  // Lấy pagination params
-  const page = Number(searchParams.get('page')) || 1;
-  const limit = Number(searchParams.get('limit')) || 10;
+  const page = Math.max(1, Number(searchParams.get('page')) || 1);
+  const limit = Math.max(1, Number(searchParams.get('limit')) || 10);
   const skip = (page - 1) * limit;
 
-  const visible = searchParams.get('filter')?.toString();
-
+  const visibleFilter = searchParams.get('filter');
   const whereClause: Prisma.ProductWhereInput = {};
 
-  // Conditionally add the visibility filter
-  if (visible !== null) {
-    const check = visible?.toUpperCase();
-    if (check && check in Visibility)
+  if (visibleFilter) {
+    const check = visibleFilter.toUpperCase();
+    if (check in Visibility) {
       whereClause.visibility = check as Visibility;
+    }
   }
 
-  const data = await prisma.product.findMany({
-    where: whereClause,
-    select: {
-      id: true,
-      shop: {
-        select: {
-          id: true,
-          name: true,
-          logoUrl: true,
+  const [data, total] = await prisma.$transaction([
+    prisma.product.findMany({
+      where: whereClause,
+      select: {
+        id: true,
+        title: true,
+        status: true,
+        visibility: true,
+        soldCount: true,
+        createdAt: true,
+        updatedAt: true,
+        shop: {
+          select: {
+            id: true,
+            name: true,
+            logoUrl: true,
+          },
+        },
+        _count: {
+          select: { variants: true },
         },
       },
-      title: true,
-      status: true,
-      visibility: true,
-      _count: {
-        select: {
-          variants: true,
-        },
-      },
-      soldCount: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-    skip,
-    take: limit,
-    orderBy: { soldCount: 'desc' },
+      skip,
+      take: limit,
+      orderBy: { soldCount: 'desc' },
+    }),
+    prisma.product.count({ where: whereClause }),
+  ]);
+
+  const response = ResponseFactory.paginated({
+    data,
+    page,
+    limit,
+    total,
+    message: 't_success',
+    code: HttpStatus.OK,
   });
 
-  const total = await prisma.product.count({
-    where: whereClause,
-  });
-
-  // return NextResponse.json({
-  //   success: true,
-  //   data: data,
-  //   pagination: {
-  //     page,
-  //     limit,
-  //     total,
-  //     totalPages: Math.ceil(total / limit),
-  //   },
-  // });
-  const payload = {
-    data: data,
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
-  };
-  return ResponseFactory.toNextResponse(
-    ResponseFactory.success(payload, 't_success', StatusCode.success)
-  );
+  return ResponseFactory.toNextResponse(response);
 });
 
-//if pass, update status and visibility of product
 export const PUT = withAuth(async (userId: string, request: NextRequest) => {
   try {
     const body = await request.json();
     const { id, visibility } = body;
 
     if (!id) {
-      // return NextResponse.json(
-      //   { success: false, error: 'Missing id' },
-      //   { status: 400 }
-      // );
-
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('t_missing_id', StatusCode.badRequest)
+        ResponseFactory.error({
+          message: 't_missing_id',
+          code: HttpStatus.BAD_REQUEST,
+        })
       );
     }
 
     if (!visibility) {
-      // return NextResponse.json(
-      //   { success: false, error: 'Missing visibility field' },
-      //   { status: 400 }
-      // );
-
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error(
-          't_missing_visibility_field',
-          StatusCode.badRequest
-        )
+        ResponseFactory.error({
+          message: 't_missing_visibility_field',
+          code: HttpStatus.BAD_REQUEST,
+        })
       );
     }
 
-    // Update product status and visibility (adjust values to match your schema/enums)
     await prisma.product.update({
       where: { id },
-      data: {
-        visibility: visibility,
-      },
+      data: { visibility },
     });
 
     return ResponseFactory.toNextResponse(
-      ResponseFactory.success(null, 't_success', StatusCode.success)
+      ResponseFactory.success({
+        message: 't_success',
+        code: HttpStatus.OK,
+      })
     );
   } catch (err) {
-    console.error(err);
-    return ResponseFactory.toNextResponse(
-      ResponseFactory.error(
-        't_internal_server_error',
-        StatusCode.internalServerError,
-        err instanceof Error ? { detail: err.message } : undefined
-      )
-    );
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
   }
 });

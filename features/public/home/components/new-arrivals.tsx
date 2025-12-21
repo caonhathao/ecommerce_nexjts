@@ -1,14 +1,12 @@
 'use client';
-import { fetchData } from '@/funcs/fetch';
-import {
-  productDataResponse,
-  productItemType,
-} from '@/types/public.data-types';
+
+import { fetchApi } from '@/lib/client-fetch';
+import { productItemType } from '@/types/public.data-types';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Autoplay from 'embla-carousel-autoplay';
-import { Loading } from '../../../../components/loading';
+import { Skeleton } from '@/components/ui/skeleton'; // Ensure you have this component
 
 import {
   Carousel,
@@ -34,23 +32,68 @@ const basisClasses = {
 
 export const NewArrivals = ({ size }: NewArrivalsProps) => {
   const t = useTranslations('home_layout.new_arrivals');
-  const [response, setResponse] = useState<productDataResponse | null>(null);
+  const [data, setData] = useState<productItemType[] | null>(null);
+
   const basisClass =
     basisClasses[size as keyof typeof basisClasses] || 'lg:basis-1/4';
 
   useEffect(() => {
-    fetchData({
-      baseUrl: '/api/product',
-      params: { page: 1, limit: 15, type: 'new' },
-      setData: setResponse,
-    });
-  }, [size]);
+    const loadNewArrivals = async () => {
+      try {
+        const res = await fetchApi<productItemType[]>('/api/product', {
+          params: { page: 1, limit: 15, type: 'new' },
+        });
 
-  const data: productItemType[] = useMemo(() => {
-    return response?.data || [];
-  }, [response]);
+        if (res.success && res.data) {
+          setData(res.data);
+        }
+      } catch (error) {
+        console.error('Failed to load new arrivals:', error);
+      }
+    };
 
-  if (!data) return <Loading />;
+    loadNewArrivals();
+  }, []);
+
+  // --- SKELETON LOADING STATE ---
+  if (!data) {
+    return (
+      <div className="w-full flex flex-col justify-start items-start gap-1 p-4 bg-background-secondary rounded-lg">
+        {/* Header Skeleton */}
+        <div className="w-full flex flex-row justify-between items-center p-2 mb-2">
+          <Skeleton className="h-7 w-40 rounded-md" /> {/* Title */}
+          <Skeleton className="h-5 w-24 rounded-md" /> {/* Watch More */}
+        </div>
+
+        {/* Carousel Items Skeleton */}
+        <div className="w-full px-2 overflow-hidden">
+          <div className="flex -ml-2 md:-ml-4">
+            {/* Render 6 skeleton items to fill the view */}
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className={`pl-2 md:pl-4 basis-1/2 md:basis-1/3 ${basisClass} shrink-0`}
+              >
+                <div className="flex flex-col space-y-3">
+                  {/* Product Image */}
+                  <Skeleton className="aspect-square w-full rounded-xl" />
+                  <div className="space-y-2">
+                    {/* Product Title */}
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-[80%]" />
+                    {/* Price */}
+                    <Skeleton className="h-5 w-[40%] mt-2" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- ACTUAL CONTENT ---
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-4 bg-background-secondary rounded-lg">
       {/* Top Title */}
@@ -81,7 +124,7 @@ export const NewArrivals = ({ size }: NewArrivalsProps) => {
         className="w-full px-2"
       >
         <CarouselContent className="-ml-2 md:-ml-4">
-          {data.map((item: productItemType, index) => (
+          {data.map((item, index) => (
             <CarouselItem
               key={index}
               className={`pl-2 md:pl-4 basis-1/2 md:basis-1/3 ${basisClass}`}

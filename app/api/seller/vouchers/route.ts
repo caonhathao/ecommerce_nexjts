@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
 
     if (!sellerSession) {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('Unauthorized', 401)
+        ResponseFactory.error({ message: 'Unauthorized', code: 401 })
       );
     }
 
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
     });
 
     return ResponseFactory.toNextResponse(
-      ResponseFactory.success(result, 'fetchSuccesful', 200)
+      ResponseFactory.success({ data: result })
     );
   } catch (error) {
     const errorResponse = ResponseFactory.handleError(error);

@@ -11,32 +11,18 @@ import { columns } from '@/app/(seller)/seller/orders/_components/order-column-t
 import { fetchApi } from '@/lib/client-fetch';
 import { OrderDTO } from '@/types/dtos/order.dto';
 
-// Define response type (same as used in OrderPage)
-type OrderResponseData = {
-  orders: OrderDTO[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-};
-
 export function DataTableSeller() {
-  const t = useTranslations('seller.order_page'); // Reuse the same translation namespace
+  const t = useTranslations('seller.order_page');
 
-  // State for data
   const [data, setData] = useState<OrderDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
 
-  // Pagination state (Default to showing 5 items for dashboard view)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 5,
   });
 
-  // Fetch Logic
   const fetchRecentOrders = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -46,17 +32,19 @@ export function DataTableSeller() {
       params.append('limit', pagination.pageSize.toString());
       params.append('page', apiPage.toString());
       params.append('timeRange', 'month');
-      // params.append('status', 'PROCESSING'); // Optional: If you only want to show 'To Do' orders on dashboard
+      // params.append('status', 'PROCESSING');
 
-      const res = await fetchApi<OrderResponseData>(
+      const res = await fetchApi<OrderDTO[]>(
         `/api/seller/orders?${params.toString()}`,
         { cache: 'no-store' }
       );
 
       if (res.success && res.data) {
-        console.log(res.data.orders);
-        setData(res.data.orders);
-        setPageCount(res.data.pagination.totalPages);
+        setData(res.data);
+
+        if (res.meta?.pagination) {
+          setPageCount(res.meta.pagination.totalPages);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch dashboard orders', error);
@@ -70,7 +58,6 @@ export function DataTableSeller() {
     fetchRecentOrders();
   }, [fetchRecentOrders]);
 
-  // Callback for when an order status is updated via the Action Menu
   const handleRefresh = () => {
     fetchRecentOrders();
   };
@@ -92,10 +79,6 @@ export function DataTableSeller() {
         </p>
       </div>
 
-      {/* REUSING THE TABLE:
-         We pass the columns (generated with t and update handler)
-         and the generic DataTable component.
-      */}
       <DataTable
         columns={columns(t, handleRefresh)}
         data={data}

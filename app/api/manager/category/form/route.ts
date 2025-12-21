@@ -20,8 +20,8 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
     },
   });
-  const payload = data;
+
   return ResponseFactory.toNextResponse(
-    ResponseFactory.success(payload, 't_success')
+    ResponseFactory.success({ data: data, message: 't_success' })
   );
 });

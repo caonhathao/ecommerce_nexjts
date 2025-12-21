@@ -6,12 +6,16 @@ import { ResponseFactory } from '@/lib/api-response';
 import { paths } from '@/lib/path';
 import { redirect } from 'next/navigation';
 import { upgradeToSeller } from '@/app/actions/role';
+import { HttpStatus } from '@/types/api';
 
 export async function acceptShopInvitation(token: string) {
   const session = await getSessionUser();
 
   if (!session) {
-    return ResponseFactory.error('Unauthorized', 401);
+    return ResponseFactory.error({
+      message: 'Unauthorized',
+      code: HttpStatus.UNAUTHORIZED,
+    });
   }
 
   const invitation = await prisma.shopInvitation.findUnique({
@@ -19,17 +23,17 @@ export async function acceptShopInvitation(token: string) {
   });
 
   if (!invitation || invitation.expiresAt < new Date()) {
-    return ResponseFactory.error(
-      'This invitation is invalid or has expired.',
-      400
-    );
+    return ResponseFactory.error({
+      message: 'This invitation is invalid or has expired.',
+      code: HttpStatus.BAD_REQUEST,
+    });
   }
 
   if (session.user.email !== invitation.email) {
-    return ResponseFactory.error(
-      `This invitation belongs to ${invitation.email}, but you are logged in as ${session.user.email}.`,
-      403
-    );
+    return ResponseFactory.error({
+      message: `This invitation belongs to ${invitation.email}, but you are logged in as ${session.user.email}.`,
+      code: HttpStatus.FORBIDDEN,
+    });
   }
 
   const existingMember = await prisma.shopMember.findFirst({
@@ -40,7 +44,8 @@ export async function acceptShopInvitation(token: string) {
   });
 
   if (existingMember) {
-    await prisma.shopInvitation.delete({ where: { token } });
+    // If already a member, just cleanup and redirect
+    await prisma.shopInvitation.delete({ where: { token } }).catch(() => null);
     redirect(paths.seller.shops.dashboard);
   }
 
@@ -60,9 +65,9 @@ export async function acceptShopInvitation(token: string) {
 
     await upgradeToSeller();
   } catch (error) {
-    console.error('Accept Invite Error:', error);
-    return ResponseFactory.error('Failed to process invitation', 500);
+    return ResponseFactory.handleError(error);
   }
 
+  // Redirect after successful transaction
   redirect(paths.seller.shops.dashboard);
 }

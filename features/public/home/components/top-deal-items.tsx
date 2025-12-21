@@ -1,15 +1,13 @@
 'use client';
-import { fetchData } from '@/funcs/fetch';
-import {
-  productDataResponse,
-  productItemType,
-} from '@/types/public.data-types';
+
+import { fetchApi } from '@/lib/client-fetch';
+import { productItemType } from '@/types/public.data-types';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Autoplay from 'embla-carousel-autoplay';
 import { AiFillLike } from 'react-icons/ai';
-import { Loading } from '../../../../components/loading';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import {
   Carousel,
@@ -45,25 +43,70 @@ export const TopDealItems = ({
   showFooter,
 }: TopDealItemsProps) => {
   const t = useTranslations('home_layout.top_deal_items');
-  const [response, setResponse] = useState<productDataResponse | null>(null);
+
+  // FIX 1: Store array directly
+  const [data, setData] = useState<productItemType[] | null>(null);
 
   const basisClass =
     basisClasses[size as keyof typeof basisClasses] || 'lg:basis-1/4';
 
   useEffect(() => {
-    fetchData({
-      baseUrl: '/api/product',
-      params: { page: 1, limit: limitItem, type: 'deal' },
-      setData: setResponse,
-    });
-  }, [size, limitItem]);
+    const loadDeals = async () => {
+      try {
+        // FIX 2: Use correct generic type for array response
+        const res = await fetchApi<productItemType[]>('/api/product', {
+          params: { page: 1, limit: limitItem, type: 'deal' },
+        });
 
-  const data: productItemType[] = useMemo(() => {
-    return response?.data || [];
-  }, [response]);
+        if (res.success && res.data) {
+          setData(res.data);
+        }
+      } catch (error) {
+        console.error('Failed to load top deals:', error);
+      }
+    };
 
-  if (!data) return <Loading />;
+    loadDeals();
+  }, [limitItem]);
 
+  // --- SKELETON LOADING STATE ---
+  if (!data) {
+    return (
+      <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-background-secondary rounded-lg">
+        {/* Header Skeleton */}
+        <div className="w-full flex flex-row justify-between items-center p-2 mb-2">
+          <div className="flex flex-row gap-2 items-center">
+            <Skeleton className="h-6 w-6 rounded-full" /> {/* Icon */}
+            <Skeleton className="h-7 w-40 rounded-md" /> {/* Title */}
+          </div>
+          <Skeleton className="h-5 w-24 rounded-md" /> {/* Watch More */}
+        </div>
+
+        {/* Carousel Items Skeleton */}
+        <div className="w-full px-2 overflow-hidden">
+          <div className="flex -ml-2 md:-ml-4">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className={`pl-2 md:pl-4 basis-1/2 md:basis-1/3 ${basisClass} shrink-0`}
+              >
+                <div className="flex flex-col space-y-3">
+                  <Skeleton className="aspect-square w-full rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-[80%]" />
+                    <Skeleton className="h-5 w-[40%] mt-2" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- ACTUAL CONTENT ---
   return (
     <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-background-secondary rounded-lg">
       {/* top title */}
@@ -92,10 +135,9 @@ export const TopDealItems = ({
         className="w-full px-2"
       >
         <CarouselContent className="-ml-2 md:-ml-4">
-          {data.map((item: productItemType, index) => (
+          {data.map((item, index) => (
             <CarouselItem
               key={index}
-              // Mobile: 2 items, Tablet: 3 items, Desktop: based on 'size' prop
               className={`pl-2 md:pl-4 basis-1/2 md:basis-1/3 ${basisClass}`}
             >
               <div className="h-full">
