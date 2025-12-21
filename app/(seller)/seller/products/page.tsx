@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -58,6 +58,8 @@ import { TableCellViewerSellerProduct } from './_components/table-cell-viewer-se
 
 export default function SellerProductsDashboard() {
   const [products, setProducts] = useState<SellerProductListItem[]>([]);
+  // 1. Add state to track the active tab
+  const [activeTab, setActiveTab] = useState('all-status');
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,17 +74,32 @@ export default function SellerProductsDashboard() {
 
   const router = useRouter();
 
+  // 2. Compute filtered products based on the active tab
+  const filteredProducts = useMemo(() => {
+    if (activeTab === 'all-status') return products;
+    if (activeTab === 'published')
+      return products.filter((p) => p.status === 'PUBLISHED');
+    if (activeTab === 'draft')
+      return products.filter((p) => p.status === 'DRAFT');
+    if (activeTab === 'archived')
+      return products.filter((p) => p.status === 'ARCHIVED');
+    return products;
+  }, [products, activeTab]);
+
   const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => products?.map(({ id }) => id) || [],
-    [products]
+    () => filteredProducts?.map(({ id }) => id) || [],
+    [filteredProducts]
   );
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active && over && active.id !== over.id) {
       setProducts((data) => {
-        const oldIndex = dataIds.indexOf(active.id);
-        const newIndex = dataIds.indexOf(over.id);
+        // Find indices in the main 'products' array to ensure correct reordering
+        // Note: DND filtering adds complexity; this basic logic reorders the filtered view
+        // Ideally, you map IDs back to the main array.
+        const oldIndex = data.findIndex((item) => item.id === active.id);
+        const newIndex = data.findIndex((item) => item.id === over.id);
         return arrayMove(data, oldIndex, newIndex);
       });
     }
@@ -99,17 +116,23 @@ export default function SellerProductsDashboard() {
     let active = true;
     (async () => {
       try {
-        const res = await fetchApi('/api/seller/products');
-        if (!res.success) {
-          toast.error(res.message || 'Failed to fetch products');
-        }
-        const data = (res.data as SellerProductListItem[]) ?? [];
+        const res = await fetchApi<SellerProductListItem[]>(
+          '/api/seller/products'
+        );
+
         if (active) {
-          setProducts(data);
+          if (res.success && res.data) {
+            setProducts(res.data);
+          } else {
+            const msg = res.message || 'Failed to fetch products';
+            toast.error(msg);
+            setError(msg);
+          }
           setLoading(false);
         }
       } catch (e: any) {
         if (active) {
+          console.error(e);
           setError(e.message || 'Error');
           setLoading(false);
         }
@@ -265,8 +288,9 @@ export default function SellerProductsDashboard() {
     },
   ];
 
+  // 3. Initialize table with FILTERED products
   const table = useReactTable({
-    data: products,
+    data: filteredProducts, // <--- Using filteredProducts instead of products
     columns,
     state: {
       sorting,
@@ -337,7 +361,8 @@ export default function SellerProductsDashboard() {
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <Tabs
-        defaultValue="all-status"
+        value={activeTab} // 4. Bind value to state
+        onValueChange={setActiveTab} // 5. Update state on change
         className="w-full flex-col justify-start gap-6"
       >
         <div className="flex items-center justify-between px-4 lg:px-6 mb-4">
@@ -362,6 +387,7 @@ export default function SellerProductsDashboard() {
             <TabsTrigger value="draft">Draft</TabsTrigger>
             <TabsTrigger value="archived">Archived</TabsTrigger>
           </TabsList>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
@@ -402,6 +428,10 @@ export default function SellerProductsDashboard() {
           </div>
         )}
 
+        {/* 6. Tabs Content now simply renders the component.
+            Since 'filteredProducts' is passed to useReactTable,
+            the 'table' instance already contains ONLY the filtered rows. */}
+
         <TabsContent
           value="all-status"
           className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
@@ -412,7 +442,7 @@ export default function SellerProductsDashboard() {
             sortableId={sortableId}
             table={table}
             columns={columns}
-            productList={products}
+            productList={filteredProducts}
             setProductList={setProducts}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
@@ -431,7 +461,7 @@ export default function SellerProductsDashboard() {
             sortableId={sortableId}
             table={table}
             columns={columns}
-            productList={products.filter((p) => p.status === 'PUBLISHED')}
+            productList={filteredProducts}
             setProductList={setProducts}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
@@ -450,7 +480,7 @@ export default function SellerProductsDashboard() {
             sortableId={sortableId}
             table={table}
             columns={columns}
-            productList={products.filter((p) => p.status === 'DRAFT')}
+            productList={filteredProducts}
             setProductList={setProducts}
             dataIds={dataIds}
             DraggableRow={DraggableRow}
@@ -469,7 +499,7 @@ export default function SellerProductsDashboard() {
             sortableId={sortableId}
             table={table}
             columns={columns}
-            productList={products.filter((p) => p.status === 'ARCHIVED')}
+            productList={filteredProducts}
             setProductList={setProducts}
             dataIds={dataIds}
             DraggableRow={DraggableRow}

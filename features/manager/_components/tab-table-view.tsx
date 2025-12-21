@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { fetchApi } from '@/lib/client-fetch'; // Changed import
+import { fetchApi } from '@/lib/client-fetch';
 import { baseDataResponse } from '@/types/manager.data-types';
 import {
   closestCenter,
@@ -129,22 +129,28 @@ const TabTableView = <T,>({
   // Helper function to handle fetching
   const loadData = async (page: number, limit: number) => {
     try {
-      const res = await fetchApi<baseDataResponse<T>>(baseUrl, {
+      const res = await fetchApi<T[]>(baseUrl, {
         params: { page, limit, filter },
       });
 
       if (res.success && res.data) {
-        setData(res.data);
+        setData({
+          data: res.data,
+          pagination: res.meta?.pagination || {
+            page: 1,
+            limit: rows,
+            total: 0,
+            totalPages: 1,
+          },
+        });
       }
     } catch (error) {
       console.error('Failed to load table data:', error);
     }
   };
 
-  // Initial load or when dependencies change
   useEffect(() => {
     loadData(1, rows);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [baseUrl, filter, isReset, rows]);
 
   useEffect(() => {
@@ -249,9 +255,10 @@ const TabTableView = <T,>({
               </SelectContent>
             </Select>
           </div>
+          {/* FIX 3: Added Optional Chaining (?.) for safety */}
           <div className="flex w-fit items-center justify-center text-sm font-medium">
-            {t('t_page')} {data?.pagination.page || 0} {t('t_of')}{' '}
-            {data?.pagination.totalPages || 0}
+            {t('t_page')} {data?.pagination?.page || 0} {t('t_of')}{' '}
+            {data?.pagination?.totalPages || 0}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Button
@@ -261,7 +268,7 @@ const TabTableView = <T,>({
                 table.setPageIndex(0);
                 loadData(1, rows);
               }}
-              disabled={data ? data?.pagination.page - 1 <= 0 : true}
+              disabled={data?.pagination ? data.pagination.page - 1 <= 0 : true}
             >
               <span className="sr-only">Go to first page</span>
               <IconChevronsLeft />
@@ -272,10 +279,12 @@ const TabTableView = <T,>({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                const prevPage = data ? data.pagination.page - 1 : 1;
+                const prevPage = data?.pagination
+                  ? data.pagination.page - 1
+                  : 1;
                 loadData(prevPage, rows);
               }}
-              disabled={data ? data.pagination.page - 1 <= 0 : true}
+              disabled={data?.pagination ? data.pagination.page - 1 <= 0 : true}
             >
               <span className="sr-only">Go to previous page</span>
               <IconChevronLeft />
@@ -286,11 +295,13 @@ const TabTableView = <T,>({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                const nextPage = data ? data.pagination.page + 1 : 1;
+                const nextPage = data?.pagination
+                  ? data.pagination.page + 1
+                  : 1;
                 loadData(nextPage, rows);
               }}
               disabled={
-                data
+                data?.pagination
                   ? data.pagination.page + 1 > data.pagination.totalPages
                   : true
               }
@@ -304,11 +315,13 @@ const TabTableView = <T,>({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                const lastPage = data ? data.pagination.totalPages : 1;
+                const lastPage = data?.pagination
+                  ? data.pagination.totalPages
+                  : 1;
                 loadData(lastPage, rows);
               }}
               disabled={
-                data
+                data?.pagination
                   ? data.pagination.page + 1 > data.pagination.totalPages
                   : true
               }

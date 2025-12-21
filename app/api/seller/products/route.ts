@@ -58,7 +58,7 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     });
 
-    // Normalize Decimals to Numbers for JSON
+    // Normalize Decimals to Numbers for JSON serialization
     const normalized = products.map((p) => ({
       ...p,
       minPrice: Number(p.minPrice),
@@ -75,7 +75,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    // FIX 1: Added missing 'await'
+    // FIX: Added missing await
     const sellerSession = await requireSeller();
     if (!sellerSession) {
       return ResponseFactory.toNextResponse(
@@ -87,9 +87,21 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const parsed = manageProductSchema.parse(body);
+    const parsed = manageProductSchema.safeParse(body);
 
-    if (!parsed.variants || parsed.variants.length === 0) {
+    if (!parsed.success) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 'Invalid product data',
+          code: HttpStatus.BAD_REQUEST,
+          errors: parsed.error.flatten().fieldErrors,
+        })
+      );
+    }
+
+    const data = parsed.data;
+
+    if (!data.variants || data.variants.length === 0) {
       return ResponseFactory.toNextResponse(
         ResponseFactory.error({
           message: 'At least one product variant is required',
@@ -98,7 +110,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!parsed.shopId) {
+    if (!data.shopId) {
       return ResponseFactory.toNextResponse(
         ResponseFactory.error({
           message: 'Shop ID is required',
@@ -107,8 +119,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const numericMinPrice = Math.min(...parsed.variants.map((v) => v.price));
-    const numericMaxPrice = Math.max(...parsed.variants.map((v) => v.price));
+    const numericMinPrice = Math.min(...data.variants.map((v) => v.price));
+    const numericMaxPrice = Math.max(...data.variants.map((v) => v.price));
 
     const minPriceDecimal = new Prisma.Decimal(numericMinPrice.toString());
     const maxPriceDecimal = new Prisma.Decimal(numericMaxPrice.toString());
@@ -116,21 +128,21 @@ export async function POST(req: NextRequest) {
     // Create product
     const product = await prisma.product.create({
       data: {
-        title: parsed.title,
-        slug: parsed.slug,
-        origin: parsed.origin,
-        description: parsed.description,
-        status: parsed.status,
-        visibility: parsed.visibility,
-        attributes: parsed.attributes ?? {},
+        title: data.title,
+        slug: data.slug,
+        origin: data.origin,
+        description: data.description,
+        status: data.status,
+        visibility: data.visibility,
+        attributes: data.attributes ?? {},
         minPrice: minPriceDecimal,
         maxPrice: maxPriceDecimal,
-        categoryId: parsed.categoryId,
-        currency: parsed.currency,
-        shopId: parsed.shopId,
+        categoryId: data.categoryId,
+        currency: data.currency,
+        shopId: data.shopId,
         images: {
           create:
-            parsed.images?.map((img) => ({
+            data.images?.map((img) => ({
               url: img.url,
               publicId: img.publicId,
               alt: img.alt,
@@ -139,7 +151,7 @@ export async function POST(req: NextRequest) {
         },
         variants: {
           create:
-            parsed.variants?.map((variant) => ({
+            data.variants?.map((variant) => ({
               sku: variant.sku,
               name: variant.name,
               price: variant.price,
@@ -157,7 +169,7 @@ export async function POST(req: NextRequest) {
               isActive: variant.isActive,
             })) ?? [],
         },
-        keywords: parsed.keywords ?? [],
+        keywords: data.keywords ?? [],
       },
     });
 
