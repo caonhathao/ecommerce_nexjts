@@ -14,18 +14,15 @@ import { OrderDTO } from '@/types/dtos/order.dto';
 export function DataTableSeller() {
   const t = useTranslations('seller.order_page');
 
-  // State for data
   const [data, setData] = useState<OrderDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
 
-  // Pagination state (Default to showing 5 items for dashboard view)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 5,
   });
 
-  // Fetch Logic
   const fetchRecentOrders = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -37,19 +34,16 @@ export function DataTableSeller() {
       params.append('timeRange', 'month');
       // params.append('status', 'PROCESSING');
 
-      // FIX 1: The generic type is OrderDTO[], because ResponseFactory puts the array in 'data'
       const res = await fetchApi<OrderDTO[]>(
         `/api/seller/orders?${params.toString()}`,
         { cache: 'no-store' }
       );
 
       if (res.success && res.data) {
-        // FIX 2: Set data directly (it is the array)
         setData(res.data);
 
-        // FIX 3: Access pagination from the root response object
-        if (res.pagination) {
-          setPageCount(res.pagination.totalPages);
+        if (res.meta?.pagination) {
+          setPageCount(res.meta.pagination.totalPages);
         }
       }
     } catch (error) {
