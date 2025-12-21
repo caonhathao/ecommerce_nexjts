@@ -1,0 +1,45 @@
+{
+  "product_detail": {
+    "t_price_after": "Price after discount",
+    "t_sold": "Sold",
+    "t_variant_type": "Variation",
+    "t_delivery_info": "Shipping Information",
+    "t_other_promotion": "Other offers",
+    "t_discount_code": "Voucher Code",
+    "t_more_action": "View More",
+    "t_more_services": "Add-on Services",
+    "t_tiki_card": "Save up to 600k with TikiCard",
+    "t_pay_later": "Buy now, pay later",
+    "t_slogan_1": "Shop with confidence",
+    "t_slogan_2": "Inspect goods upon delivery",
+    "t_slogan_3": "200% refund if proven fake",
+    "t_slogan_4": "Free returns up to 365 days. Change of mind allowed.",
+    "t_review": "reviews",
+    "t_chat": "Chat",
+    "t_visit": "Visit store",
+    "t_quantity": "Quantity",
+    "t_total": "Subtotal",
+    "t_buy_action": "Buy Now",
+    "t_add_action": "Add to Cart",
+    "detail_desc": {
+      "t_desc": "Product Description"
+    },
+    "detail_review": {
+      "t_review_at": "Reviewed at: ",
+      "t_customer_review": "Customer Reviews",
+      "t_summary": "Overview",
+      "c_reviews": "reviews",
+      "t_filter_by": "Filter by",
+      "c_newest": "Newest",
+      "c_have_img": "With photos",
+      "c_buy_again": "Repurchase",
+      "c_5_stars": "5 stars",
+      "c_4_stars": "4 stars",
+      "c_3_stars": "3 stars",
+      "c_2_stars": "2 stars",
+      "c_1_star": "1 star",
+      "t_more_action": "View More"
+    },
+    "t_chat_will_seller": "Chat will seller"
+  }
+}

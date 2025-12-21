@@ -1,0 +1,22 @@
+{
+  "cart_page": {
+    "t_remove_item_confirm": "Bạn có chắc muốn xóa sản phẩm này?",
+    "t_remove_item_failed": "Xóa thất bại. Vui lòng thử lại.",
+    "t_failed": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "t_remove_all": "Bạn có chắc muốn xóa toàn bộ giỏ hàng?",
+    "t_remove_all_failed": "Xóa giỏ hàng thất bại.",
+    "t_select_warning": "Bạn phải chọn ít nhất một sản phẩm để đặt hàng",
+    "t_pending_payment": "Bạn có đơn hàng đang chờ xử lý. Chuyển đến trang thanh toán...",
+    "t_direct_payment": "Đang chuyển đến trang thanh toán...",
+    "t_title": "Giỏ hàng",
+    "t_select_all": "Chọn tất cả",
+    "t_unit_price": "Đơn giá",
+    "t_quantity": "Số lượng",
+    "t_total": "Thành tiền",
+    "t_empty_cart": "Không có sản phẩm trong giỏ hàng.",
+    "t_promotion": "Khuyến mãi",
+    "t_discount": "Giảm giá trực tiếp",
+    "t_total_payment": "Tổng thanh toán",
+    "t_by_action": "Mua hàng"
+  }
+}

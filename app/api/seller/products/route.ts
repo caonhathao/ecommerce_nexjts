@@ -1,95 +1,109 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
 import { manageProductSchema } from '@/app/(seller)/seller/products/_components/productSchema';
 import { Prisma } from '@/lib/generated/prisma';
 import { requireSeller } from '@/lib/require-role';
 import { ResponseFactory } from '@/lib/api-response';
+import { HttpStatus } from '@/types/api';
 
 export async function GET() {
-  const sellerSession = await requireSeller();
-  if (!sellerSession) {
-    return NextResponse.json(
-      { success: false, error: 'Unauthorized' },
-      { status: 401 }
+  try {
+    const sellerSession = await requireSeller();
+    if (!sellerSession) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 'Unauthorized',
+          code: HttpStatus.UNAUTHORIZED,
+        })
+      );
+    }
+
+    // Find all shops owned by this seller
+    const shops = await prisma.shop.findMany({
+      where: { ownerId: sellerSession.user.id },
+      select: { id: true },
+    });
+    const shopIds = shops.map((s) => s.id);
+
+    // Get products for these shops
+    const products = await prisma.product.findMany({
+      where: { shopId: { in: shopIds } },
+      select: {
+        id: true,
+        title: true,
+        status: true,
+        visibility: true,
+        minPrice: true,
+        maxPrice: true,
+        currency: true,
+        keywords: true,
+        createdAt: true,
+        updatedAt: true,
+        shop: {
+          select: {
+            id: true,
+            name: true,
+            logoUrl: true,
+          },
+        },
+        images: {
+          select: {
+            url: true,
+            alt: true,
+          },
+          orderBy: { position: 'asc' },
+          take: 1,
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // Normalize Decimals to Numbers for JSON
+    const normalized = products.map((p) => ({
+      ...p,
+      minPrice: Number(p.minPrice),
+      maxPrice: Number(p.maxPrice),
+    }));
+
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success({ data: normalized })
     );
+  } catch (error) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(error));
   }
-
-  // Find all shops owned by this seller
-  const shops = await prisma.shop.findMany({
-    where: { ownerId: sellerSession.user.id },
-    select: { id: true },
-  });
-  const shopIds = shops.map((s) => s.id);
-
-  // Get products for these shops
-  const products = await prisma.product.findMany({
-    where: { shopId: { in: shopIds } },
-    select: {
-      id: true,
-      title: true,
-      status: true,
-      visibility: true,
-      minPrice: true,
-      maxPrice: true,
-      currency: true,
-      keywords: true,
-      createdAt: true,
-      updatedAt: true,
-      shop: {
-        select: {
-          id: true,
-          name: true,
-          logoUrl: true,
-        },
-      },
-      images: {
-        select: {
-          url: true,
-          alt: true,
-        },
-        orderBy: { position: 'asc' },
-        take: 1,
-      },
-    },
-    orderBy: { createdAt: 'desc' },
-  });
-
-  return NextResponse.json({
-    success: true,
-    data: products,
-  });
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const sellerSession = requireSeller();
+    // FIX 1: Added missing 'await'
+    const sellerSession = await requireSeller();
     if (!sellerSession) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 'Unauthorized',
+          code: HttpStatus.UNAUTHORIZED,
+        })
       );
     }
 
     const body = await req.json();
     const parsed = manageProductSchema.parse(body);
-    if (!parsed) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid product data' },
-        { status: 400 }
-      );
-    }
 
     if (!parsed.variants || parsed.variants.length === 0) {
-      return NextResponse.json(
-        { success: false, error: 'At least one product variant is required' },
-        { status: 400 }
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 'At least one product variant is required',
+          code: HttpStatus.BAD_REQUEST,
+        })
       );
     }
 
     if (!parsed.shopId) {
-      return NextResponse.json(
-        { success: false, error: 'Shop ID is required' },
-        { status: 400 }
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 'Shop ID is required',
+          code: HttpStatus.BAD_REQUEST,
+        })
       );
     }
 
@@ -147,10 +161,14 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return ResponseFactory.toNextResponse(ResponseFactory.success({ product }));
-  } catch (error: any) {
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error(error.message, 400)
+      ResponseFactory.success({
+        data: product,
+        message: 'Product created successfully',
+        code: HttpStatus.CREATED,
+      })
     );
+  } catch (error: any) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(error));
   }
 }

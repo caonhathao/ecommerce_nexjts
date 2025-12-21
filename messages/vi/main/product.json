@@ -1,0 +1,45 @@
+{
+  "product_detail": {
+    "t_price_after": "Giá sau áp dụng khuyến mãi",
+    "t_sold": "Đã bán",
+    "t_variant_type": "Kiểu sản phẩm",
+    "t_delivery_info": "Thông tin vận chuyển",
+    "t_other_promotion": "Ưu đãi khác",
+    "t_discount_code": "Mã Giảm Giá",
+    "t_more_action": "Xem Thêm",
+    "t_more_services": "Dịch vụ bổ sung",
+    "t_tiki_card": "Ưu đãi đến 600k với thẻ TikiCard",
+    "t_pay_later": "Mua trước trả sau",
+    "t_slogan_1": "An tâm mua sắm",
+    "t_slogan_2": "Được đồng kiểm khi nhận hàng",
+    "t_slogan_3": "Được hoàn tiền 200% nếu là hàng giả",
+    "t_slogan_4": "Đổi trả miển phí lên đến 365 ngày. Được đổi ý.",
+    "t_review": "đánh giá",
+    "t_chat": "Trò chuyện",
+    "t_visit": "Ghé xem cửa hàng",
+    "t_quantity": "Số lượng",
+    "t_total": "Tạm tính",
+    "t_buy_action": "Mua ngay",
+    "t_add_action": "Thêm vào giỏ",
+    "detail_desc": {
+      "t_desc": "Mô tả sản phẩm"
+    },
+    "detail_review": {
+      "t_review_at": "Đánh giá lúc: ",
+      "t_customer_review": "Khách hàng đánh giá",
+      "t_summary": "Tổng quan",
+      "c_reviews": "đánh giá",
+      "t_filter_by": "Lọc theo",
+      "c_newest": "Mới nhất",
+      "c_have_img": "Có hình ảnh",
+      "c_buy_again": "Mua lại",
+      "c_5_stars": "5 sao",
+      "c_4_stars": "4 sao",
+      "c_3_stars": "3 sao",
+      "c_2_stars": "2 sao",
+      "c_1_star": "1 sao",
+      "t_more_action": "Xem Thêm"
+    },
+    "t_chat_will_seller": "Liên hệ nhà bán hàng"
+  }
+}

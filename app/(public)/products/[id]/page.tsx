@@ -28,7 +28,7 @@ import { ChatButton } from '@/components/chat/chat-button';
 import { VoucherSelector } from '@/features/voucher/_components/voucher-selector';
 import { VoucherDTO } from '@/features/voucher/voucher.dto';
 import Desc from '../../../../features/public/product/components/desc';
-import { ReviewsServer } from '../../../../features/public/product/components/reviews-server';
+import { ReviewsServer } from '../../../../features/review/components/reviews-server';
 import SlideImg from '../../../../features/public/product/components/slide-img';
 import { SuggestDealToday } from '../../../../features/public/product/components/suggest-deal-today';
 

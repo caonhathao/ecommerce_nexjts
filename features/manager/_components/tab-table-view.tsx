@@ -1,4 +1,5 @@
 'use client';
+
 import { Loading } from '@/components/loading';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -17,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { fetchData } from '@/funcs/fetch';
+import { fetchApi } from '@/lib/client-fetch'; // Changed import
 import { baseDataResponse } from '@/types/manager.data-types';
 import {
   closestCenter,
@@ -125,18 +126,30 @@ const TabTableView = <T,>({
   const [rows, setRows] = React.useState<number>(10);
   const t = useTranslations('admin_tab_table_view');
 
+  // Helper function to handle fetching
+  const loadData = async (page: number, limit: number) => {
+    try {
+      const res = await fetchApi<baseDataResponse<T>>(baseUrl, {
+        params: { page, limit, filter },
+      });
+
+      if (res.success && res.data) {
+        setData(res.data);
+      }
+    } catch (error) {
+      console.error('Failed to load table data:', error);
+    }
+  };
+
+  // Initial load or when dependencies change
   useEffect(() => {
-    fetchData({
-      baseUrl: baseUrl,
-      params: { page: 1, limit: rows, filter: filter },
-      setData: setData,
-    });
-  }, [baseUrl, filter, isReset, rows, setData]);
+    loadData(1, rows);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseUrl, filter, isReset, rows]);
 
   useEffect(() => {
     if (data) {
       setList(data.data);
-      console.log(data.pagination);
     }
   }, [data, setList]);
 
@@ -208,17 +221,10 @@ const TabTableView = <T,>({
             <Select
               value={rows.toString()}
               onValueChange={(value) => {
-                table.setPageSize(Number(value));
-                setRows(Number(value));
-                fetchData({
-                  baseUrl: baseUrl,
-                  params: {
-                    page: 1,
-                    limit: Number(value),
-                    filter: filter,
-                  },
-                  setData: setData,
-                });
+                const newRows = Number(value);
+                table.setPageSize(newRows);
+                setRows(newRows);
+                loadData(1, newRows);
               }}
             >
               <SelectTrigger
@@ -253,11 +259,7 @@ const TabTableView = <T,>({
               className="hidden h-8 w-8 p-0 lg:flex hover:cursor-pointer"
               onClick={() => {
                 table.setPageIndex(0);
-                fetchData({
-                  baseUrl: baseUrl,
-                  params: { page: 1, limit: rows, isActive: filter },
-                  setData: setData,
-                });
+                loadData(1, rows);
               }}
               disabled={data ? data?.pagination.page - 1 <= 0 : true}
             >
@@ -270,15 +272,8 @@ const TabTableView = <T,>({
               size="icon"
               onClick={() => {
                 table.previousPage();
-                fetchData({
-                  baseUrl: baseUrl,
-                  params: {
-                    page: data ? data.pagination.page - 1 : 1,
-                    limit: rows,
-                    filter: filter,
-                  },
-                  setData: setData,
-                });
+                const prevPage = data ? data.pagination.page - 1 : 1;
+                loadData(prevPage, rows);
               }}
               disabled={data ? data.pagination.page - 1 <= 0 : true}
             >
@@ -291,15 +286,8 @@ const TabTableView = <T,>({
               size="icon"
               onClick={() => {
                 table.nextPage();
-                fetchData({
-                  baseUrl: baseUrl,
-                  params: {
-                    page: data ? data.pagination.page + 1 : 1,
-                    limit: rows,
-                    filter: filter,
-                  },
-                  setData: setData,
-                });
+                const nextPage = data ? data.pagination.page + 1 : 1;
+                loadData(nextPage, rows);
               }}
               disabled={
                 data
@@ -316,15 +304,8 @@ const TabTableView = <T,>({
               size="icon"
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
-                fetchData({
-                  baseUrl: baseUrl,
-                  params: {
-                    page: data ? data.pagination.totalPages : 1,
-                    limit: rows,
-                    filter: filter,
-                  },
-                  setData: setData,
-                });
+                const lastPage = data ? data.pagination.totalPages : 1;
+                loadData(lastPage, rows);
               }}
               disabled={
                 data

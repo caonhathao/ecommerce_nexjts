@@ -13,7 +13,7 @@ export const disableVoucherAction = async (
     const session = await requireSeller();
 
     if (!session?.user?.id) {
-      return ResponseFactory.error('Unauthorized', 401);
+      return ResponseFactory.error({ message: 'Unauthorized', code: 401 });
     }
 
     const result = await disableVoucherService(
@@ -22,7 +22,10 @@ export const disableVoucherAction = async (
       false
     );
 
-    return ResponseFactory.success(result, 'Voucher disabled successfully');
+    return ResponseFactory.success({
+      data: result,
+      message: 'Voucher disabled successfully',
+    });
   } catch (error) {
     return ResponseFactory.handleError(error);
   }
@@ -35,7 +38,7 @@ export const disableVoucherByAdminAction = async (
     const session = await requireRole();
 
     if (!session?.user?.id) {
-      return ResponseFactory.error('Unauthorized', 401);
+      return ResponseFactory.error({ message: 'Unauthorized', code: 401 });
     }
 
     const result = await disableVoucherService(
@@ -44,7 +47,10 @@ export const disableVoucherByAdminAction = async (
       true
     );
 
-    return ResponseFactory.success(result, 'Voucher disabled successfully');
+    return ResponseFactory.success({
+      data: result,
+      message: 'Voucher disabled successfully',
+    });
   } catch (error) {
     return ResponseFactory.handleError(error);
   }

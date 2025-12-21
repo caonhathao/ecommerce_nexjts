@@ -2,14 +2,17 @@
 
 import { Separator } from '@/components/ui/separator';
 import { formatDay } from '@/lib/utils';
-import { reviewDataResponse, reviewsItemType } from '@/types/public.data-types';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useMemo } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User2 } from 'lucide-react';
-import { RatingStars } from '../../components/rating-starts';
+import { RatingStars } from '../../public/components/rating-starts';
+import {
+  reviewDataResponse,
+  reviewsItemType,
+} from '@/features/review/components/reviews-server';
 
 interface props {
   initialResponse: reviewDataResponse;

@@ -1,7 +1,7 @@
 import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/with-auth';
-import { StatusCodeIdentify as StatusCode } from '@/types/api';
+import { HttpStatus } from '@/types/api';
 
 export const GET = withAuth(async (userId: string) => {
   try {
@@ -13,17 +13,15 @@ export const GET = withAuth(async (userId: string) => {
         image: true,
       },
     });
+
     return ResponseFactory.toNextResponse(
-      ResponseFactory.success(data, 't_success', StatusCode.success)
+      ResponseFactory.success({
+        data,
+        message: 't_success',
+        code: HttpStatus.OK,
+      })
     );
   } catch (err) {
-    console.error(err);
-    return ResponseFactory.toNextResponse(
-      ResponseFactory.error(
-        't_server_error',
-        StatusCode.internalServerError,
-        err instanceof Error ? { detail: err.message } : undefined
-      )
-    );
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
   }
 });

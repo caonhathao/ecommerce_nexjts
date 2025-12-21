@@ -6,29 +6,80 @@ import {
   toTypedPrismaError,
 } from '@/lib/prisma-errors';
 import { ServiceError } from '@/lib/service-error';
-import { ApiResponse, StatusCode } from '@/types/api';
+import { ApiResponse, HttpStatus, StatusCode } from '@/types/api';
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
+interface SuccessOptions<T> {
+  data?: T;
+  message?: string;
+  code?: StatusCode;
+  meta?: ApiResponse<T>['meta'];
+}
+
+interface PaginatedOptions<T> {
+  data?: T;
+  page: number;
+  limit: number;
+  total: number;
+  message?: string;
+  code?: StatusCode;
+}
+
+interface ErrorOptions {
+  message?: string;
+  code?: StatusCode;
+  errors?: Record<string, string[] | undefined> | null | object;
+}
+
 export class ResponseFactory {
-  static success<T>(
-    data: T,
+  static success<T = null>({
+    data,
     message = 'success',
-    code: StatusCode = 200
-  ): ApiResponse<T> {
+    code = HttpStatus.OK,
+    meta,
+  }: SuccessOptions<T>): ApiResponse<T> {
     return {
       success: true,
       message,
       code,
       data,
+      meta,
     };
   }
 
-  static error(
+  static paginated<T = null>({
+    data,
+    page,
+    limit,
+    total,
+    message = 'success',
+    code = HttpStatus.OK,
+  }: PaginatedOptions<T>): ApiResponse<T> {
+    const totalPages = Math.ceil(total / (limit || 1));
+
+    return ResponseFactory.success({
+      data,
+      message,
+      code,
+      meta: {
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1,
+        },
+      },
+    });
+  }
+
+  static error({
     message = 'error',
-    code: StatusCode = 400,
-    errors?: Record<string, string[] | undefined> | null | object
-  ): ApiResponse<never> {
+    code = HttpStatus.BAD_REQUEST,
+    errors,
+  }: ErrorOptions = {}): ApiResponse<never> {
     return {
       success: false,
       message,
@@ -41,69 +92,76 @@ export class ResponseFactory {
     console.error('Operation failed:', error);
 
     if (error instanceof ServiceError) {
-      return ResponseFactory.error(
-        error.message,
-        error.statusCode,
-        error.errors
-      );
+      return ResponseFactory.error({
+        message: error.message,
+        code: error.statusCode,
+        errors: error.errors,
+      });
     }
+
     if (error instanceof ZodError) {
-      return ResponseFactory.error(
-        'Validation Error',
-        400,
-        error.flatten().fieldErrors
-      );
+      return ResponseFactory.error({
+        message: 'Validation Error',
+        code: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: error.flatten().fieldErrors,
+      });
     }
 
     const prismaError = toTypedPrismaError(error);
 
     if (prismaError) {
-      // Unique Constraint Violation (e.g., Duplicate Email)
       if (prismaError instanceof PrismaUniqueConstraintError) {
-        // Extract the field name if possible, e.g. "meta": { "target": [ "email" ] }
         const target =
           (prismaError.meta as { target?: string[] })?.target?.join(', ') ||
           'field';
-        return ResponseFactory.error(
-          `Value for ${target} already exists.`,
-          409 // Conflict
-        );
+        return ResponseFactory.error({
+          message: `Value for ${target} already exists.`,
+          code: HttpStatus.CONFLICT,
+        });
       }
 
-      // P2025: Operation Failed (Commonly "Record to update not found")
-      // P2001: Record does not exist
       if (
         prismaError instanceof PrismaOperationFailedError ||
         prismaError instanceof PrismaRecordDoesNotExistError
       ) {
-        return ResponseFactory.error('Requested record not found.', 404);
+        return ResponseFactory.error({
+          message: 'Requested record not found.',
+          code: HttpStatus.NOT_FOUND,
+        });
       }
 
-      // Foreign Key Constraint (e.g., Invalid Category ID when creating Product)
       if (prismaError instanceof PrismaForeignKeyConstraintError) {
         const field =
           (prismaError.meta as { field_name?: string })?.field_name ||
           'reference';
-        return ResponseFactory.error(
-          `Invalid reference: ${field} does not exist.`,
-          400 // Bad Request
-        );
+        return ResponseFactory.error({
+          message: `Invalid reference: ${field} does not exist.`,
+          code: HttpStatus.BAD_REQUEST,
+        });
       }
 
-      // Value too long for column
       if (prismaError.code === 'P2000') {
-        return ResponseFactory.error('Input value is too long.', 400);
+        return ResponseFactory.error({
+          message: 'Input value is too long.',
+          code: HttpStatus.BAD_REQUEST,
+        });
       }
 
-      // Database Timeout
       if (prismaError.code === 'P1008') {
-        return ResponseFactory.error('Database operation timed out.', 504);
+        return ResponseFactory.error({
+          message: 'Database operation timed out.',
+          code: HttpStatus.GATEWAY_TIMEOUT,
+        });
       }
     }
-    return ResponseFactory.error('Internal Server Error', 500);
+
+    // Default to 500
+    return ResponseFactory.error({
+      message: 'Internal Server Error',
+      code: HttpStatus.INTERNAL_SERVER_ERROR,
+    });
   }
 
-  /** Convert a ServiceResponse to a NextResponse */
   static toNextResponse<T>(response: ApiResponse<T>) {
     return NextResponse.json(response, { status: response.code });
   }

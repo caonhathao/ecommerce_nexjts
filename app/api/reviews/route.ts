@@ -2,23 +2,26 @@ import { getCurrentUserId } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
 import { ResponseFactory } from '@/lib/api-response';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { HttpStatus } from '@/types/api';
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
     const id = searchParams.get('id') || '';
     const filterBy = searchParams.get('filterBy');
-    const page = Number(searchParams.get('page')) || 1;
-    const limit = Number(searchParams.get('limit')) || 10;
+    const page = Math.max(1, Number(searchParams.get('page')) || 1);
+    const limit = Math.max(1, Number(searchParams.get('limit')) || 10);
     const skip = (page - 1) * limit;
 
     if (!id) {
-      return NextResponse.json({
-        status: 403,
-        data: { message: 'Missing id' },
-      });
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 'Missing id',
+          code: HttpStatus.BAD_REQUEST,
+        })
+      );
     }
 
     const whereClause: Prisma.ReviewWhereInput = {
@@ -33,16 +36,10 @@ export async function GET(req: Request) {
       whereClause.rating = Number(filterBy);
     }
 
-    if (filterBy === 'newesst') orderClause.createdAt = 'desc';
+    if (filterBy === 'newest') orderClause.createdAt = 'desc';
 
-    // Using Promise.all to run database queries in parallel makes API faster
     const [total, reviews, ratingGroups, imagesResult] = await Promise.all([
-      // 1. Count total number of reviews (for pagination)
-      prisma.review.count({
-        where: { productId: id },
-      }),
-
-      // 2. Get the list of paginated reviews (for display list)
+      prisma.review.count({ where: { productId: id } }),
       prisma.review.findMany({
         where: whereClause,
         select: {
@@ -52,13 +49,7 @@ export async function GET(req: Request) {
           body: true,
           likes: true,
           images: true,
-          user: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-            },
-          },
+          user: { select: { id: true, name: true, image: true } },
           createdAt: true,
           updatedAt: true,
         },
@@ -66,76 +57,52 @@ export async function GET(req: Request) {
         take: limit,
         orderBy: orderClause,
       }),
-
-      // 3. Group by rating to count the number of each star
       prisma.review.groupBy({
         by: ['rating'],
         where: { productId: id },
-        _count: {
-          _all: true, // hoặc rating: true
-        },
+        _count: { _all: true },
       }),
-
-      // 4. Get all the photos of this product (to make a Gallery)
       prisma.review.findMany({
         where: {
           productId: id,
-          images: {
-            not: undefined, // Only take reviews with pictures
-          },
+          images: { not: Prisma.JsonNull },
         },
-        select: {
-          images: true, // Only get the images field to lighten the query
-        },
+        select: { images: true },
         orderBy: { createdAt: 'desc' },
       }),
     ]);
-    // --- Process Rating data (Reformat for easy use in Frontend) ---
-    // Create default object { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
-    const ratingBreakdown = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
+    const ratingBreakdown = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     ratingGroups.forEach((group) => {
-      // group sẽ có dạng: { rating: 5, _count: { _all: 10 } }
       if (group.rating >= 1 && group.rating <= 5) {
         ratingBreakdown[group.rating as keyof typeof ratingBreakdown] =
           group._count._all;
       }
     });
 
-    // --- Process Images data (Combine all sub-arrays into one large array) ---
-    // imagesResult is an array of objects: item.images = [{ url: "...", publicId: "..." }, ...]
-    // Need to convert to: allImages = [{ url: "..." }, { url: "..." }, ...]
     const allImages = imagesResult
-      .map((item) => item.images) // 1. get field images (type Json)
-      .flat() // 2. Flatten nested arrays
-      .filter((img) => img && typeof img === 'object' && 'url' in img) // 3. filter
-      .map((img: any) => ({
-        url: img.url, // 4. get field url obly
-      }));
+      .map((item) => item.images)
+      .flat()
+      .filter((img: any) => img && typeof img === 'object' && 'url' in img)
+      .map((img: any) => ({ url: img.url }));
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        reviews, // List of reviews by page
-        summary: {
-          ratingBreakdown, // Object to count stars: { 5: 12, 4: 2 ... }
-          totalImages: allImages.length,
-          allImages, // Array containing all image links
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.paginated({
+        data: {
+          reviews,
+          summary: {
+            ratingBreakdown,
+            totalImages: allImages.length,
+            allImages,
+          },
         },
-      },
-      pagination: {
+        total,
         page,
         limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
-    });
+      })
+    );
   } catch (error) {
-    console.error('GET /api/reviews/[id] error:', error);
-    return new Response(JSON.stringify({ message: 'Internal Server Error' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(error));
   }
 }
 
@@ -144,7 +111,10 @@ export async function POST(req: NextRequest) {
     const userId = await getCurrentUserId();
     if (!userId) {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('Unauthorized', 401)
+        ResponseFactory.error({
+          message: 'Unauthorized',
+          code: HttpStatus.UNAUTHORIZED,
+        })
       );
     }
     const data = await req.json();
@@ -165,16 +135,18 @@ export async function POST(req: NextRequest) {
                 alt: i.alt,
                 position: i.position,
               }))
-            : null,
+            : Prisma.JsonNull,
       },
     });
+
     return ResponseFactory.toNextResponse(
-      ResponseFactory.success(review, 'Review successful', 201)
+      ResponseFactory.success({
+        data: review,
+        message: 'Review successful',
+        code: HttpStatus.CREATED,
+      })
     );
   } catch (error) {
-    console.error('POST /api/reviews error:', error);
-    return ResponseFactory.toNextResponse(
-      ResponseFactory.error('failed', 400, { errorDetail: [String(error)] })
-    );
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(error));
   }
 }

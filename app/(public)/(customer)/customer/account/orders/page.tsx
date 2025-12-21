@@ -7,22 +7,10 @@ import { getOrder } from '@/app/actions/order';
 import { $Enums } from '@/lib/generated/prisma';
 import OrderStatus = $Enums.OrderStatus;
 import { Loading } from '@/components/loading';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { formatPrice } from '@/lib/utils';
-import { DialogReview } from '@/app/(public)/(customer)/customer/account/orders/_components/dialogReview';
-import { OrderDTO, OrderItemsDTO } from '@/types/dtos/order.dto';
+
+import { OrderDTO } from '@/types/dtos/order.dto';
 import { OrderCardItem } from '@/app/(public)/(customer)/customer/account/orders/_components/order-card-item';
 
 export default function OrderPage() {

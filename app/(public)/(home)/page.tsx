@@ -2,9 +2,9 @@
 
 import { CarouselPanel } from '@/features/public/home/components/carousel-panel';
 import { CategoryPromotionPanel } from '@/features/public/home/components/category-promotion-panel';
-import { NewArrivals } from '../../../features/public/home/components/new-arrivals';
-import { SuggestDealToday } from '../../../features/public/home/components/suggest-deal-today';
-import { TopDealItems } from '../../../features/public/home/components/top-deal-items';
+import { NewArrivals } from '@/features/public/home/components/new-arrivals';
+import { SuggestDealToday } from '@/features/public/home/components/suggest-deal-today';
+import { TopDealItems } from '@/features/public/home/components/top-deal-items';
 import banner2 from '../../../public/banners/banner-home-1.png';
 import banner1 from '../../../public/banners/banner-home-2.png';
 import Banner from '@/features/public/components/banner';

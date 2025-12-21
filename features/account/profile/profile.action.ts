@@ -13,7 +13,7 @@ export async function updateProfileAction(formData: FormData) {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
-      return ResponseFactory.error('Unauthorized', 401);
+      return ResponseFactory.error({ message: 'Unauthorized', code: 401 });
     }
 
     const data: UpdateUserProfileRequestDTO = {
@@ -45,7 +45,10 @@ export async function updateProfileAction(formData: FormData) {
     } else {
       revalidatePath(paths.customer.account.edit);
     }
-    return ResponseFactory.success(profile, 'Profile updated successfully');
+    return ResponseFactory.success({
+      data: profile,
+      message: 'Profile updated successfully',
+    });
   } catch (error) {
     return ResponseFactory.handleError(error);
   }

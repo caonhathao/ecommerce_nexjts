@@ -11,19 +11,8 @@ import { columns } from '@/app/(seller)/seller/orders/_components/order-column-t
 import { fetchApi } from '@/lib/client-fetch';
 import { OrderDTO } from '@/types/dtos/order.dto';
 
-// Define response type (same as used in OrderPage)
-type OrderResponseData = {
-  orders: OrderDTO[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-};
-
 export function DataTableSeller() {
-  const t = useTranslations('seller.order_page'); // Reuse the same translation namespace
+  const t = useTranslations('seller.order_page');
 
   // State for data
   const [data, setData] = useState<OrderDTO[]>([]);
@@ -46,17 +35,22 @@ export function DataTableSeller() {
       params.append('limit', pagination.pageSize.toString());
       params.append('page', apiPage.toString());
       params.append('timeRange', 'month');
-      // params.append('status', 'PROCESSING'); // Optional: If you only want to show 'To Do' orders on dashboard
+      // params.append('status', 'PROCESSING');
 
-      const res = await fetchApi<OrderResponseData>(
+      // FIX 1: The generic type is OrderDTO[], because ResponseFactory puts the array in 'data'
+      const res = await fetchApi<OrderDTO[]>(
         `/api/seller/orders?${params.toString()}`,
         { cache: 'no-store' }
       );
 
       if (res.success && res.data) {
-        console.log(res.data.orders);
-        setData(res.data.orders);
-        setPageCount(res.data.pagination.totalPages);
+        // FIX 2: Set data directly (it is the array)
+        setData(res.data);
+
+        // FIX 3: Access pagination from the root response object
+        if (res.pagination) {
+          setPageCount(res.pagination.totalPages);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch dashboard orders', error);
@@ -70,7 +64,6 @@ export function DataTableSeller() {
     fetchRecentOrders();
   }, [fetchRecentOrders]);
 
-  // Callback for when an order status is updated via the Action Menu
   const handleRefresh = () => {
     fetchRecentOrders();
   };
@@ -92,10 +85,6 @@ export function DataTableSeller() {
         </p>
       </div>
 
-      {/* REUSING THE TABLE:
-         We pass the columns (generated with t and update handler)
-         and the generic DataTable component.
-      */}
       <DataTable
         columns={columns(t, handleRefresh)}
         data={data}

@@ -1,24 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireSeller } from '@/lib/require-role';
 import { manageProductSchema } from '@/app/(seller)/seller/products/_components/productSchema';
 import { ResponseFactory } from '@/lib/api-response';
+import { HttpStatus } from '@/types/api';
 
 export async function GET(req: NextRequest) {
   const sellerSession = await requireSeller();
   if (!sellerSession) {
-    return NextResponse.json(
-      { success: false, error: 'Unauthorized' },
-      { status: 403 }
+    // FIX 1: Use ResponseFactory with object args
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error({
+        message: 'Unauthorized',
+        code: HttpStatus.FORBIDDEN,
+      })
     );
   }
+
   const { productId } = req.nextUrl.searchParams.has('productId')
     ? { productId: req.nextUrl.searchParams.get('productId') }
     : { productId: req.url.split('/').pop() };
 
   if (!productId) {
+    // FIX 2: Pass object args
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error('Missing productId', 400)
+      ResponseFactory.error({
+        message: 'Missing productId',
+        code: HttpStatus.BAD_REQUEST,
+      })
     );
   }
 
@@ -34,8 +43,12 @@ export async function GET(req: NextRequest) {
   });
 
   if (!product) {
+    // FIX 3: Pass object args
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error('Product not found', 404)
+      ResponseFactory.error({
+        message: 'Product not found',
+        code: HttpStatus.NOT_FOUND,
+      })
     );
   }
 
@@ -51,7 +64,10 @@ export async function GET(req: NextRequest) {
     keywords: product.keywords ?? [],
   };
 
-  return ResponseFactory.toNextResponse(ResponseFactory.success(normalized));
+  // FIX 4: Pass object args ({ data: ... })
+  return ResponseFactory.toNextResponse(
+    ResponseFactory.success({ data: normalized })
+  );
 }
 
 export async function PUT(
@@ -116,10 +132,12 @@ export async function PUT(
       data: updateData,
     });
 
-    return ResponseFactory.toNextResponse(ResponseFactory.success(product));
-  } catch (error: any) {
+    // FIX 5: Pass object args
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error(error.message, 400)
+      ResponseFactory.success({ data: product })
     );
+  } catch (error: any) {
+    // FIX 6: Use handleError to catch Zod/Prisma errors automatically
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(error));
   }
 }

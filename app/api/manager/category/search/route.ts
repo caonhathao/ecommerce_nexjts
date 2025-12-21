@@ -2,7 +2,7 @@ import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
-import { StatusCodeIdentify as StatusCode } from '@/types/api';
+import { HttpStatus } from '@/types/api';
 import { NextRequest } from 'next/server';
 import z from 'zod';
 
@@ -12,14 +12,20 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const id = searchParams.get('id');
   const name = searchParams.get('name');
 
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
+  // Ensure valid integers for pagination
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
+  const limit = Math.max(1, parseInt(searchParams.get('limit') || '10'));
+  const skip = (page - 1) * limit;
 
-  //check valid params (one of them)
-  if (!id && !name)
+  // Check valid params (one of them must exist)
+  if (!id && !name) {
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error('t_missing_search_params', StatusCode.badRequest)
+      ResponseFactory.error({
+        message: 't_missing_search_params',
+        code: HttpStatus.BAD_REQUEST,
+      })
     );
+  }
 
   const whereClause: Prisma.CategoryWhereInput = {};
 
@@ -28,61 +34,60 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
 
     if (!isValidUUID) {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('t_invalid_id_format', StatusCode.badRequest)
+        ResponseFactory.error({
+          message: 't_invalid_id_format',
+          code: HttpStatus.BAD_REQUEST,
+        })
       );
     }
-
     whereClause.id = id;
-  } else if (name)
+  } else if (name) {
     whereClause.name = {
       contains: name,
       mode: 'insensitive',
     };
+  }
 
   try {
-    const data = await prisma.category.findMany({
-      where: whereClause,
-      select: {
-        id: true,
-        isActive: true,
-        name: true,
-        parentId: true,
-        slug: true,
-        position: true,
-        createdAt: true,
-        updatedAt: true,
-        _count: {
-          select: {
-            children: true,
+    // Run Count and Find in parallel for performance
+    const [total, data] = await prisma.$transaction([
+      prisma.category.count({ where: whereClause }),
+      prisma.category.findMany({
+        where: whereClause,
+        select: {
+          id: true,
+          isActive: true,
+          name: true,
+          parentId: true,
+          slug: true,
+          position: true,
+          createdAt: true,
+          updatedAt: true,
+          _count: {
+            select: {
+              children: true,
+            },
           },
         },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+        orderBy: {
+          createdAt: 'desc',
+        },
+        skip,
+        take: limit,
+      }),
+    ]);
 
-    const total = data.length;
-    const payload = {
-      data: data,
-      pagination: {
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.paginated({
+        data,
+        total,
         page,
         limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
-    };
-    return ResponseFactory.toNextResponse(
-      ResponseFactory.success(payload, 't_success', StatusCode.success)
+        message: 't_success',
+        code: HttpStatus.OK,
+      })
     );
   } catch (e) {
-    console.error('Error searching category:', e);
-    return ResponseFactory.toNextResponse(
-      ResponseFactory.error(
-        't_internal_server_error',
-        StatusCode.internalServerError,
-        e instanceof Error ? { detail: e.message } : undefined
-      )
-    );
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(e));
   }
 });

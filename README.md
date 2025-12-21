@@ -65,3 +65,6 @@ Create a .env file in the root directory. You must configure the keys validated 
 
 ```pnpm dev```
 
+
+## Project Structure
+### Read project structure of this project at [here](PROJECT_STRUCTURE.md)

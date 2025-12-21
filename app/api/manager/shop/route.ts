@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import { Prisma, ShopStatus } from '@/lib/generated/prisma';
 import { sendShopStatusChangeEmail } from '@/lib/mailer';
 import { withAuth } from '@/lib/with-auth';
-import { StatusCodeIdentify as StatusCode } from '@/types/api';
+import { HttpStatus } from '@/types/api';
 import { NextRequest } from 'next/server';
 
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
@@ -17,7 +17,6 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
 
   const whereClause: Prisma.ShopWhereInput = {};
 
-  // Conditionally add the visibility filter
   if (status !== null) {
     const check = status?.toUpperCase();
     if (check && check in ShopStatus) whereClause.status = check as ShopStatus;
@@ -50,22 +49,18 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     where: whereClause,
   });
 
-  const payload = {
-    data: data,
-    pagination: {
+  return ResponseFactory.toNextResponse(
+    ResponseFactory.paginated({
+      data,
       page,
       limit,
       total,
-      totalPages: Math.ceil(total / limit),
-    },
-  };
-
-  return ResponseFactory.toNextResponse(
-    ResponseFactory.success(payload, 't_success', StatusCode.success)
+      message: 't_success',
+      code: HttpStatus.OK,
+    })
   );
 });
 
-//if pass, update status and visibility of product
 export const PUT = withAuth(async (userId: string, request: NextRequest) => {
   try {
     const body = await request.json();
@@ -73,17 +68,22 @@ export const PUT = withAuth(async (userId: string, request: NextRequest) => {
 
     if (!id) {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('t_missing_id', StatusCode.badRequest)
+        ResponseFactory.error({
+          message: 't_missing_id',
+          code: HttpStatus.BAD_REQUEST,
+        })
       );
     }
 
     if (!status) {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('t_missing_status', StatusCode.badRequest)
+        ResponseFactory.error({
+          message: 't_missing_status',
+          code: HttpStatus.BAD_REQUEST,
+        })
       );
     }
 
-    // Update product status (adjust values to match your schema/enums)
     const shop = await prisma.shop.update({
       where: { id },
       data: {
@@ -99,7 +99,6 @@ export const PUT = withAuth(async (userId: string, request: NextRequest) => {
       },
     });
 
-    // send email to owner
     await sendShopStatusChangeEmail(
       shop.owner.email,
       shop.name,
@@ -108,16 +107,12 @@ export const PUT = withAuth(async (userId: string, request: NextRequest) => {
     );
 
     return ResponseFactory.toNextResponse(
-      ResponseFactory.success(null, 't_success', StatusCode.success)
+      ResponseFactory.success({
+        message: 't_success',
+        code: HttpStatus.OK,
+      })
     );
   } catch (err) {
-    console.error(err);
-    return ResponseFactory.toNextResponse(
-      ResponseFactory.error(
-        't_internal_server_error',
-        StatusCode.internalServerError,
-        err instanceof Error ? { detail: err.message } : undefined
-      )
-    );
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
   }
 });

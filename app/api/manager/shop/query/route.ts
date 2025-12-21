@@ -1,18 +1,21 @@
 import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/with-auth';
-import { StatusCodeIdentify as StatusCode } from '@/types/api';
+import { HttpStatus } from '@/types/api';
 import { NextRequest } from 'next/server';
-//query api
-//get all data of one product
+
+// Query api: Get all data of one shop
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
-  const id = String(searchParams.get('id'));
+  const id = searchParams.get('id');
 
   if (!id) {
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error('t_missing_id', StatusCode.badRequest)
+      ResponseFactory.error({
+        message: 't_missing_id',
+        code: HttpStatus.BAD_REQUEST,
+      })
     );
   }
 
@@ -61,17 +64,23 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
     });
 
+    if (!data) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 'Shop not found',
+          code: HttpStatus.NOT_FOUND,
+        })
+      );
+    }
+
     return ResponseFactory.toNextResponse(
-      ResponseFactory.success({ data }, 't_success', StatusCode.success)
+      ResponseFactory.success({
+        data,
+        message: 't_success',
+        code: HttpStatus.OK,
+      })
     );
   } catch (err) {
-    console.error(err);
-    return ResponseFactory.toNextResponse(
-      ResponseFactory.error(
-        't_internal_server_error',
-        StatusCode.internalServerError,
-        err instanceof Error ? { detail: err.message } : undefined
-      )
-    );
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
   }
 });

@@ -2,7 +2,7 @@ import {
   UpdateUserProfileRequestDTO,
   UserProfileResponseDTO,
 } from '@/features/account/profile/profile.dto';
-import { ApiResponse } from '@/types/api';
+import { ApiResponse, HttpStatus } from '@/types/api';
 import {
   getUserProfileService,
   updateUserProfileService,
@@ -16,27 +16,38 @@ export async function getUserProfile(
   try {
     const profile = await getUserProfileService(userId);
     if (!profile) {
-      return ResponseFactory.error('Profile not found', 404);
+      return ResponseFactory.error({
+        message: 'Profile not found',
+        code: HttpStatus.NOT_FOUND,
+      });
     }
-    return ResponseFactory.success(profile, 'Profile retrieved successfully');
+    return ResponseFactory.success({
+      data: profile,
+      message: 'Profile retrieved successfully',
+    });
   } catch (error) {
     return ResponseFactory.handleError(error);
   }
 }
 
-export async function updateUserProfile(req: UpdateUserProfileRequestDTO) {
+export async function updateUserProfile(
+  req: UpdateUserProfileRequestDTO
+): Promise<ApiResponse<UserProfileResponseDTO>> {
   try {
     const currentUserId = await getCurrentUserId();
     if (!currentUserId) {
-      return ResponseFactory.error('Unauthorized', 401);
+      return ResponseFactory.error({
+        message: 'Unauthorized',
+        code: HttpStatus.UNAUTHORIZED,
+      });
     }
 
     const profile = await updateUserProfileService(currentUserId, req);
-    return ResponseFactory.success(
-      profile,
-      'Profile updated successfully',
-      200
-    );
+    return ResponseFactory.success({
+      data: profile,
+      message: 'Profile updated successfully',
+      code: HttpStatus.OK,
+    });
   } catch (error) {
     return ResponseFactory.handleError(error);
   }
