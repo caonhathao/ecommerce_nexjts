@@ -6,12 +6,16 @@ import dayjs from 'dayjs';
 import { Decimal } from '@prisma/client/runtime/library';
 import qs from 'qs';
 import crypto from 'crypto';
-import {
-  createPaymentIntentService,
-  createPaymentService,
-} from '@/features/payment/payment.service';
+import { createPaymentService } from '@/features/payment/services/payment.service';
 import { prisma } from '@/lib/db';
-import { customerPaidOrderSuccess } from '@/features/payment_transaction/payment_transaction.service';
+import { customerPaidOrderSuccessUsecase } from '@/features/payment_transaction/payment_transaction.usecases';
+import { createCheckoutRequestUseCase } from '@/features/payment/payment.usecases';
+import { $Enums } from '@/lib/generated/prisma';
+import PaymentProvider = $Enums.PaymentProvider;
+import PaymentStatus = $Enums.PaymentStatus;
+import Currency = $Enums.Currency;
+import { createPaymentIntentService } from '@/features/payment/services/payment_intent.service';
+import IntentStatus = $Enums.IntentStatus;
 
 export function sortObject(
   obj: Record<string, string | number>
@@ -44,6 +48,14 @@ export async function POST(req: NextRequest) {
     }
 
     const orderList = result.order;
+
+    if (orderList.some((o) => o.paymentStatus === 'PAID')) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error('Đơn hàng đã được thanh toán', 400)
+      );
+    }
+
+    const orderIds = Array.from(orderList, (item) => item.id);
     const amountVNPay = orderList.reduce(
       (total, order) => total.plus(order.grandTotal),
       new Decimal(0)
@@ -53,8 +65,7 @@ export async function POST(req: NextRequest) {
 
     // VNPay payment integration is not implemented yet
     const ipAddr =
-      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '0.0.0.0';
-
+      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1';
     const tmnCode = process.env.VNPAY_TERMINAL_ID!;
     const secretKey = process.env.VNPAY_SECRET_KEY!;
     let vnpUrl = process.env.VNPAY_URL!;
@@ -65,9 +76,7 @@ export async function POST(req: NextRequest) {
     const TxnRef = `${draftId}${date}${random}`;
     const amount = Number(amountVNPay);
     const bankCode = body.bankCode;
-    const orderInfo = `Thanh toan don hang: ${orderList
-      .map((o) => o.id)
-      .join(',')}`;
+    const orderInfo = `Thanh toan don hang qua VNPAY`;
     const orderType = '200000';
     const locale = body.language || 'vn';
     const currency = 'VND';
@@ -97,32 +106,42 @@ export async function POST(req: NextRequest) {
       .update(Buffer.from(signData, 'utf-8'))
       .digest('hex');
 
-    const payment = await createPaymentService({
-      provider: 'VNPAY',
-      method: bankCode,
-      amount: amount,
-      status: 'PENDING',
-      currency: 'VND',
-      externalId: TxnRef,
-    });
+    await createCheckoutRequestUseCase(prisma, {
+      params: {
+        provider: PaymentProvider.VNPAY,
+        method: 'CARD',
+        amount: amount,
+        status: PaymentStatus.PENDING,
+        currency: Currency.VND,
+        externalId: TxnRef,
+        rawPayload: {
+          provider: 'VNPAY',
+          vnp_TxnRef: TxnRef,
+          vnp_Amount: amount * 100,
+          vnp_OrderInfo: orderInfo,
+          vnp_OrderType: orderType,
+          vnp_TmnCode: tmnCode,
+          vnp_CurrCode: 'VND',
+          vnp_Locale: locale,
+          vnp_IpAddr: ipAddr,
+          vnp_BankCode: bankCode,
+          vnp_CreateDate: createDate,
+          vnp_ReturnUrl: returnUrl,
 
-    if (!payment) {
-      return ResponseFactory.toNextResponse(
-        ResponseFactory.error('Failed to create payment record')
-      );
-    }
-
-    await prisma.orderPayment.createMany({
-      data: orderList.map((order) => ({
-        orderId: order.id,
-        paymentId: payment.id,
-      })),
+          orderIds: orderIds,
+          draftId,
+        },
+      },
+      orderList: orderIds,
     });
 
     const expiresAt = dayjs().add(15, 'minute').toDate();
-    await createPaymentIntentService({
-      vnpTxnRef: TxnRef,
-      payload: { orderIds: orderList.map((o) => o.id), paymentId: payment.id },
+    await createPaymentIntentService(prisma, {
+      gatewayRef: TxnRef,
+      provider: PaymentProvider.VNPAY,
+      orderIds: { orderIds: orderIds },
+      status: IntentStatus.ACTIVE,
+      amount: new Decimal(amount),
       expiresAt: expiresAt,
     });
 
@@ -209,24 +228,32 @@ export async function GET(req: NextRequest) {
           where: { id: { in: orderIds } },
           data: {
             paymentStatus: 'PAID',
-            status: 'PROCESSING', // Hoặc trạng thái tiếp theo của bạn
+            status: 'PROCESSING',
             updatedAt: new Date(),
           },
         });
+
+        await tx.paymentIntent.update({
+          where: { gatewayRef: txnRef },
+          data: {
+            status: 'SUCCEEDED',
+          },
+        });
+
+        for (const order of orderDetails) {
+          try {
+            await customerPaidOrderSuccessUsecase(
+              order.shopId!,
+              order.grandTotal,
+              order.id,
+              payment.id
+            );
+          } catch (e) {
+            console.error(`Lỗi cộng tiền ví cho order ${order}:`, e);
+          }
+        }
       });
 
-      for (const order of orderDetails) {
-        try {
-          await customerPaidOrderSuccess(
-            order.shopId!,
-            order.grandTotal,
-            order.id,
-            payment.id
-          );
-        } catch (e) {
-          console.error(`Lỗi cộng tiền ví cho order ${order}:`, e);
-        }
-      }
       return NextResponse.json({ RspCode: '00', Message: 'Confirm Success' });
     } else {
       await prisma.$transaction(async (tx) => {
@@ -236,7 +263,14 @@ export async function GET(req: NextRequest) {
         });
         await tx.order.updateMany({
           where: { id: { in: orderIds } },
-          data: { paymentStatus: 'CANCELED', updatedAt: new Date() },
+          data: { paymentStatus: 'FAILED', updatedAt: new Date() },
+        });
+
+        await tx.paymentIntent.update({
+          where: { gatewayRef: txnRef },
+          data: {
+            status: 'FAILED',
+          },
         });
       });
 

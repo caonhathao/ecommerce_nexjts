@@ -1,3 +1,5 @@
+import { Prisma, PrismaClient } from '@/lib/generated/prisma';
+
 export type StatusCode = 200 | 201 | 400 | 401 | 403 | 404 | 409 | 500 | 504;
 
 export interface ApiResponse<T = null> {
@@ -7,3 +9,4 @@ export interface ApiResponse<T = null> {
   data?: T;
   errors?: Record<string, string[] | undefined> | null | object;
 }
+export type DbClient = Prisma.TransactionClient | PrismaClient;
