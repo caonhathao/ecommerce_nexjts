@@ -8,7 +8,7 @@ export async function GET(req: Request) {
     const session = await requireSeller();
     if (!session?.user?.id) {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('Unauthorized', 401)
+        ResponseFactory.error({ message: 'Unauthorized', code: 401 })
       );
     }
 
@@ -23,21 +23,20 @@ export async function GET(req: Request) {
 
     if (!validation.success) {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error(
-          'Invalid parameters',
-          400,
-          validation.error.flatten().fieldErrors
-        )
+        ResponseFactory.error({
+          message: 'Invalid parameters',
+          code: 400,
+          errors: validation.error.flatten().fieldErrors,
+        })
       );
     }
 
     const stats = await getOrderStats(session.user.id, validation.data);
 
-    return ResponseFactory.toNextResponse(ResponseFactory.success(stats));
-  } catch (err: any) {
-    const status = err?.message === 'Unauthorized' ? 401 : 500;
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error(err.message, status)
+      ResponseFactory.success({ data: stats })
     );
+  } catch (err) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
   }
 }

@@ -1,0 +1,33 @@
+{
+  "shop_layout": {
+    "t_review": "Reviews",
+    "t_chat": "Chat",
+    "t_shop": "Shop",
+    "c_see_review": "See Reviews",
+    "c_info_general": "General Info",
+    "t_product": "Products",
+    "c_all": "All",
+    "c_new": "New Arrivals",
+    "c_special": "Featured",
+    "t_profile": "Profile"
+  },
+  "shop_product_page": {
+    "t_title_new": "New Arrivals",
+    "t_title_top": "Best Sellers",
+    "t_title_all": "All Products",
+    "pagination": {
+      "t_first_page": "First page",
+      "t_lastest_page": "Last page"
+    }
+  },
+  "shop_profile_page": {
+    "t_main_category": "Main Category",
+    "t_unknow": "Unknown",
+    "t_joined_time": "Joined",
+    "t_delivery": "Ships within",
+    "t_cancel_rate": "Cancellation Rate",
+    "t_chat": "Chat",
+    "t_response_rate": "Response Rate",
+    "t_time_response": "Response Time"
+  }
+}

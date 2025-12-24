@@ -9,6 +9,7 @@ import { createVoucherSchema } from '@/lib/validation/voucher';
 import { prisma } from '@/lib/db';
 import { $Enums } from '@/lib/generated/prisma';
 import Role = $Enums.Role;
+import { HttpStatus } from '@/types/api';
 
 export async function GET(req: NextRequest) {
   try {
@@ -18,7 +19,10 @@ export async function GET(req: NextRequest) {
 
     if (!shopId) {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('Missing shopId parameter', 400)
+        ResponseFactory.error({
+          message: 'Missing shopId parameter',
+          code: HttpStatus.BAD_REQUEST,
+        })
       );
     }
 
@@ -27,12 +31,11 @@ export async function GET(req: NextRequest) {
       productId || undefined
     );
 
-    return ResponseFactory.toNextResponse(ResponseFactory.success(vouchers));
-  } catch (error: any) {
-    console.error('API Error fetching vouchers:', error);
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error(error.message || 'Internal Server Error', 500)
+      ResponseFactory.success({ data: vouchers })
     );
+  } catch (error: any) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(error));
   }
 }
 
@@ -42,55 +45,48 @@ export async function POST(req: NextRequest) {
 
     if (!userId) {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('Unauthorized', 401)
+        ResponseFactory.error({
+          message: 'Unauthorized',
+          code: HttpStatus.UNAUTHORIZED,
+        })
       );
     }
-    //console.log('--- [DEBUG] 1. UserId:', userId);
 
     const rawData = await req.json().catch(() => ({}));
 
-    //console.log('--- [DEBUG] 2. Raw Body:', JSON.stringify(rawData, null, 2));
-
     const validation = createVoucherSchema.safeParse(rawData);
     if (!validation.success) {
-      // console.log(
-      //   '--- [DEBUG] 3. Zod Error Detail:',
-      //   JSON.stringify(validation.error.format(), null, 2)
-      // );
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('validation data', 400, {
-          errors: validation.error.issues.map((issue) => issue.message),
+        ResponseFactory.error({
+          message: 'Validation failed',
+          code: HttpStatus.BAD_REQUEST,
+          errors: validation.error.flatten().fieldErrors, // Better error structure
         })
       );
     }
 
     const data = validation.data;
 
-    //console.log('--- [DEBUG] 4. Validated Data:', data);
-
     const currentUser = await prisma.user.findUnique({
       where: { id: userId },
     });
 
-    //console.log('--- [DEBUG] 5. User Role:', currentUser?.role);
-
-    if (currentUser!.role === Role.seller) {
+    if (currentUser?.role === Role.seller) {
       if (!data.productIds || data.productIds.length === 0) {
-        //console.log('--- [DEBUG] 6. Seller Error: No Products');
         return ResponseFactory.toNextResponse(
-          ResponseFactory.error('validation role', 401, {
-            errors: {
-              message:
-                'Voucher của Shop bắt buộc phải áp dụng cho ít nhất 1 sản phẩm.',
-              path: ['productIds'],
-            },
+          ResponseFactory.error({
+            message: 'Shop vouchers must apply to at least one product.',
+            code: HttpStatus.BAD_REQUEST, // Changed 401 to 400 (it's a logic error, not auth)
+            errors: { productIds: ['Required for seller vouchers'] },
           })
         );
       }
-      if (data.categoryIds && data.categoryIds!.length > 0) {
+      // Sellers cannot set categories globally
+      if (data.categoryIds && data.categoryIds.length > 0) {
         data.categoryIds = undefined;
       }
-    } else if (currentUser!.role === Role.admin) {
+    } else if (currentUser?.role === Role.admin) {
+      // Admins creating platform vouchers (shopId null)
       if (!data.shopId) {
         data.shopId = null;
       }
@@ -99,10 +95,13 @@ export async function POST(req: NextRequest) {
     const result = await createVoucherService(data);
 
     return ResponseFactory.toNextResponse(
-      ResponseFactory.success(result, 'successful', 200)
+      ResponseFactory.success({
+        data: result,
+        message: 'Voucher created successfully',
+        code: HttpStatus.CREATED,
+      })
     );
   } catch (error: any) {
-    // console.error('--- [DEBUG] 7. CATCH ERROR:', error);
-    return ResponseFactory.toNextResponse(ResponseFactory.error(error));
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(error));
   }
 }

@@ -1,0 +1,73 @@
+{
+  "layout": {
+    "language": "Language",
+    "label": "Vietnamese",
+    "icon": "https://img.icons8.com/color/48/vietnam.png",
+    "search_button": "Search",
+    "search_placeholder": "Search...",
+    "light_mode": "Light",
+    "dark_mode": "Dark",
+    "system_mode": "System"
+  },
+  "general": {
+    "t_currency": "USD",
+    "t_rate": "25400",
+    "t_region": "US"
+  },
+
+  "not_found_page": {
+    "t_not_found": "Page Not Found",
+    "t_desc": "The page you are looking for no longer exists.",
+    "t_return": "Go Back"
+  },
+
+  "footer": {
+    "customer_support": "Customer Support",
+    "hotline": "Hotline",
+    "hotline_rate": "(1000 đ/minute, 8-21h including Sat, Sun)",
+    "faq": "Frequently Asked Questions",
+    "support_request": "Support Request",
+    "ordering_guide": "Ordering Guide",
+    "shipping_methods": "Shipping Methods",
+    "return_policy": "Return Policy",
+    "installment_guide": "Installment Guide",
+    "import_policy": "Import Policy",
+    "support_email": "Support",
+    "security_email": "Security",
+    "about_us": "About Us",
+    "about_company": "About 2T3H",
+    "blog": "2T3H Blog",
+    "careers": "Careers",
+    "privacy_payment": "Privacy Payment Policy",
+    "privacy_personal": "Privacy Personal Info Policy",
+    "complaint_settlement": "Complaint Settlement Policy",
+    "terms_of_use": "Terms of Use",
+    "sell_with_us": "Sell with 2T3H",
+    "enterprise_sales": "Enterprise Sales",
+    "partnership": "Partnership",
+    "operation_regulations": "Operation Regulations",
+    "sell_on_platform": "Sell on 2T3H",
+    "certifications": "Certifications",
+    "payment_methods": "Payment Methods",
+    "delivery_services": "Delivery Services",
+    "delivery_now": "2T3H NOW",
+    "connect": "Connect with us",
+    "download_app": "Download App",
+    "company_name": "2T3H COMPANY LIMITED",
+    "company_address": "Address",
+    "address_full": "123 Tech Street, Software Ward, District 1, Ho Chi Minh City, Vietnam",
+    "business_license": "Business Registration Certificate No. 0309532909 issued by Department of Planning and Investment of Ho Chi Minh City on 06/01/2010.",
+    "slogan": "2T3H - Fast, Quality, Affordable",
+    "has_it_all": "2T3H has it all",
+    "has_it_all_desc": "With millions of products from reputable brands, thousands of items from Smartphones to Fresh Foods, combined with super-fast delivery 2T3HNOW, 2T3H brings you a complete online shopping experience starting with cheap prices. Additionally, at 2T3H you can easily utilize utilities such as scratch cards, electricity & water bill payments, and insurance services.",
+    "promotions_overflow": "Promotions and Offers overflow",
+    "promotions_desc": "Do you want to hunt for shocking prices? 2T3H has shocking deals every day for you! You are a brand believer? We have Official Stores waiting for you. Can't find free shipping codes? 2T3H has Freeship+ program, allowing infinite shipping fee reductions. Buy more with 2T3HNOW Savings to receive 100% free ship in 2h.",
+    "smartphones": "Smartphones",
+    "fresh_foods": "Fresh Foods",
+    "utilities": "scratch cards, electricity & water bill payments, and insurance services",
+    "shocking_deals": "shocking deals every day",
+    "official_stores": "Official Stores",
+    "freeship_plus": "Freeship+ program",
+    "savings_program": "2T3HNOW Savings"
+  }
+}

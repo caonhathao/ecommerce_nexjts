@@ -1,36 +1,31 @@
 'use server';
 
 import { getCurrentUserId } from '@/lib/auth';
-import { prisma } from '@/lib/db';
-import {
-  AddressDTO,
-  GetAddressResult,
-} from '@/features/account/address/address.dto';
+import { AddressDTO } from '@/features/account/address/address.dto';
 import { revalidatePath } from 'next/cache';
 import { paths } from '@/lib/path';
 import { ResponseFactory } from '@/lib/api-response';
 import { AddressService } from '@/features/account/address/address.service';
-import { ApiResponse } from '@/types/api';
-
-type ActionResponse = {
-  success: boolean;
-  message?: string;
-  data?: any;
-  code?: number;
-};
+import { ApiResponse, HttpStatus } from '@/types/api';
 
 export async function createAddress(
   formData: FormData
-): Promise<ActionResponse> {
+): Promise<ApiResponse<AddressDTO>> {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
-      return ResponseFactory.error('Unauthorized', 401);
+      return ResponseFactory.error({
+        message: 'Unauthorized',
+        code: HttpStatus.UNAUTHORIZED,
+      });
     }
 
     const rawData = Object.fromEntries(formData.entries());
     if (!rawData.data) {
-      return ResponseFactory.error("Missing 'data' field", 400);
+      return ResponseFactory.error({
+        message: "Missing 'data' field",
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
 
     const data = JSON.parse(rawData.data as string);
@@ -38,11 +33,11 @@ export async function createAddress(
 
     revalidatePath(paths.customer.account.address);
 
-    return ResponseFactory.success(
-      newAddress,
-      'Address created successfully',
-      201
-    );
+    return ResponseFactory.success({
+      data: newAddress,
+      message: 'Address created successfully',
+      code: HttpStatus.CREATED,
+    });
   } catch (error) {
     return ResponseFactory.handleError(error);
   }
@@ -52,14 +47,18 @@ export async function getAddress(): Promise<ApiResponse<AddressDTO[]>> {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
-      return ResponseFactory.error('Unauthorized', 401);
+      return ResponseFactory.error({
+        message: 'Unauthorized',
+        code: HttpStatus.UNAUTHORIZED,
+      });
     }
 
     const addresses = await AddressService.getAddress(userId);
-    return ResponseFactory.success(
-      addresses,
-      'Addresses retrieved successfully'
-    );
+
+    return ResponseFactory.success({
+      data: addresses,
+      message: 'Addresses retrieved successfully',
+    });
   } catch (error) {
     return ResponseFactory.handleError(error);
   }
@@ -71,13 +70,18 @@ export async function setAsDefault(
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
-      return ResponseFactory.error('Unauthorized', 401);
+      return ResponseFactory.error({
+        message: 'Unauthorized',
+        code: HttpStatus.UNAUTHORIZED,
+      });
     }
 
     await AddressService.setAsDefault(userId, addressId);
     revalidatePath(paths.customer.account.address);
 
-    return ResponseFactory.success(null, 'Address set as default successfully');
+    return ResponseFactory.success({
+      message: 'Address set as default successfully',
+    });
   } catch (error) {
     return ResponseFactory.handleError(error);
   }

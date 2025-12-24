@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { fetchData } from '@/funcs/fetch';
+import { fetchApi } from '@/lib/client-fetch';
 import { env } from '@/lib/env';
 import {
   districtResponse,
@@ -59,12 +59,17 @@ export default function AddressPage() {
   const callBackUrl = searchParams.get('callbackUrl');
   const route = useRouter();
 
-  const [cityResponse, setCityResponse] = useState<provinceResponse | null>(
+  // FIX 1: The state should hold the Array (data property of the response type)
+  // We use indexed access types ['data'] to get the array type from the wrapper
+  const [cityResponse, setCityResponse] = useState<
+    provinceResponse['data'] | null
+  >(null);
+  const [districtResponse, setDistrictResponse] = useState<
+    districtResponse['data'] | null
+  >(null);
+  const [wardResponse, setWardResponse] = useState<wardResponse['data'] | null>(
     null
   );
-  const [districtResponse, setDistrictResponse] =
-    useState<districtResponse | null>(null);
-  const [wardResponse, setWardResponse] = useState<wardResponse | null>(null);
 
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     async (prevState, formData) => {
@@ -105,44 +110,71 @@ export default function AddressPage() {
       if (res?.success && res.data) setAddress(res.data);
     });
 
-    fetchData({
-      baseUrl: `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces`,
-      params: { limit: 63 },
-      setData: setCityResponse,
-    });
+    const loadProvinces = async () => {
+      try {
+        // FIX 2: Pass the Array type to fetchApi
+        const res = await fetchApi<provinceResponse['data']>(
+          `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces`,
+          { params: { limit: 63 } }
+        );
+        if (res.success && res.data) setCityResponse(res.data);
+      } catch (error) {
+        console.error('Failed to load provinces', error);
+      }
+    };
+
+    loadProvinces();
   }, []);
 
-  const handleSelectCity = ({ province }: { province: string }) => {
-    const provinceCode = cityResponse?.data.find(
-      (item) => item.name === province
+  const handleSelectCity = async (provinceName: string) => {
+    setDistrictResponse(null);
+    setWardResponse(null);
+
+    // FIX 3: Find directly on the array (removed .data)
+    const provinceCode = cityResponse?.find(
+      (item) => item.name === provinceName
     );
-    if (provinceCode)
-      fetchData({
-        baseUrl: `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces/${provinceCode?.code}/districts`,
-        params: { limit: 100 },
-        setData: setDistrictResponse,
-      });
+
+    if (provinceCode) {
+      try {
+        const res = await fetchApi<districtResponse['data']>(
+          `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces/${provinceCode.code}/districts`,
+          { params: { limit: 100 } }
+        );
+        if (res.success && res.data) setDistrictResponse(res.data);
+      } catch (error) {
+        console.error('Failed to load districts', error);
+      }
+    }
   };
 
-  const handleSelectDistrict = ({ district }: { district: string }) => {
-    const districtCode = districtResponse?.data.find(
-      (item) => item.name === district
-    );
-    if (districtCode)
-      fetchData({
-        baseUrl: `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/districts/${districtCode?.code}/wards`,
-        params: { limit: 100 },
-        setData: setWardResponse,
-      });
-  };
+  const handleSelectDistrict = async (districtName: string) => {
+    setWardResponse(null);
 
-  useEffect(() => {
-    console.log(cityResponse);
-  }, [cityResponse]);
+    // FIX 4: Find directly on the array (removed .data)
+    const districtCode = districtResponse?.find(
+      (item) => item.name === districtName
+    );
+
+    if (districtCode) {
+      try {
+        const res = await fetchApi<wardResponse['data']>(
+          `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/districts/${districtCode.code}/wards`,
+          { params: { limit: 100 } }
+        );
+        if (res.success && res.data) setWardResponse(res.data);
+      } catch (error) {
+        console.error('Failed to load wards', error);
+      }
+    }
+  };
 
   useEffect(() => {
     if (state.success) {
       setDialogOpen(false);
+      setDistrictResponse(null);
+      setWardResponse(null);
+
       if (state.newAddress) {
         setAddress((prev) => [state.newAddress!, ...prev]);
       } else {
@@ -195,21 +227,19 @@ export default function AddressPage() {
                 </div>
                 <div className="grid gap-3">
                   <Label htmlFor="city">{t('city')}</Label>
-                  {/* <Input id="city" name="city" required /> */}
                   <Select
                     name="city"
                     required={true}
-                    onValueChange={(value) => {
-                      handleSelectCity({ province: value });
-                    }}
+                    onValueChange={(value) => handleSelectCity(value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder={t('t_city_placeholder')} />
                     </SelectTrigger>
                     <SelectContent className="shadow shadow-primary rounded-lg bg-background">
                       <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                        {/* FIX 5: Map directly over cityResponse (removed .data) */}
                         {cityResponse ? (
-                          cityResponse?.data.map((value, index) => (
+                          cityResponse.map((value, index) => (
                             <SelectItem
                               key={value.code + index}
                               value={value.name}
@@ -227,21 +257,20 @@ export default function AddressPage() {
                 </div>
                 <div className="grid gap-3">
                   <Label htmlFor="district">{t('district')}</Label>
-                  {/* <Input id="district" name="district" required /> */}
                   <Select
                     name="district"
                     required={true}
-                    onValueChange={(value) => {
-                      handleSelectDistrict({ district: value });
-                    }}
+                    disabled={!districtResponse}
+                    onValueChange={(value) => handleSelectDistrict(value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder={t('t_district_placeholder')} />
                     </SelectTrigger>
                     <SelectContent className="shadow shadow-primary rounded-lg bg-background">
                       <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                        {/* FIX 6: Map directly over districtResponse (removed .data) */}
                         {districtResponse ? (
-                          districtResponse?.data.map((value, index) => (
+                          districtResponse.map((value, index) => (
                             <SelectItem
                               key={value.code + index}
                               value={value.name}
@@ -259,21 +288,15 @@ export default function AddressPage() {
 
                 <div className="grid gap-3">
                   <Label htmlFor="ward">{t('ward')}</Label>
-                  {/* <Input id="ward" name="ward" required /> */}
-                  <Select
-                    name="ward"
-                    required={true}
-                    onValueChange={(value) => {
-                      handleSelectDistrict({ district: value });
-                    }}
-                  >
+                  <Select name="ward" required={true} disabled={!wardResponse}>
                     <SelectTrigger>
                       <SelectValue placeholder={t('t_ward_placeholder')} />
                     </SelectTrigger>
                     <SelectContent className="shadow shadow-primary rounded-lg bg-background">
                       <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                        {/* FIX 7: Map directly over wardResponse (removed .data) */}
                         {wardResponse ? (
-                          wardResponse?.data.map((value, index) => (
+                          wardResponse.map((value, index) => (
                             <SelectItem
                               key={value.code + index}
                               value={value.name}

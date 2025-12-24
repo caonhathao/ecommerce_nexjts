@@ -1,11 +1,16 @@
+import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+
 export const putData = async ({
   url,
   body,
   contentType = undefined,
+  t,
 }: {
   url: string;
   body: FormData | Record<string, string | number>;
   contentType?: string | undefined;
+  t: ReturnType<typeof useTranslations>;
 }) => {
   const headers: HeadersInit = {
     Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
@@ -23,10 +28,10 @@ export const putData = async ({
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `HTTP error! status: ${response.status}, message: ${errorText}`
-      );
+      const errorText = await response.json();
+      toast(t('t_action_failed_not'), {
+        description: t(errorText.message || 't_unknown_error_noti'),
+      });
     }
     return response;
   } catch (e) {

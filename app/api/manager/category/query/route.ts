@@ -1,84 +1,102 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { HttpStatus } from '@/types/api';
+import { NextRequest } from 'next/server';
 
-//query api
-//get all data of one product
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
 
-  const id = String(searchParams.get('id'));
+  if (!id) {
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error({
+        message: 't_missing_id',
+        code: HttpStatus.BAD_REQUEST,
+      })
+    );
+  }
 
-  const data = await prisma.category.findFirst({
-    where: {
-      id,
-    },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      parent: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
+  try {
+    const data = await prisma.category.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        isActive: true,
+        parentId: true,
+        imageUrl: true,
+        parent: {
+          select: { id: true, name: true, slug: true },
         },
-      },
-      isActive: true,
-      parentId: true,
-      imageUrl: true,
-      children: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
+        children: {
+          select: { id: true, name: true, slug: true },
         },
+        createdAt: true,
+        updatedAt: true,
       },
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+    });
 
-  return NextResponse.json({ data });
+    if (!data) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 't_not_found',
+          code: HttpStatus.NOT_FOUND,
+        })
+      );
+    }
+
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success({
+        data,
+        message: 't_success',
+        code: HttpStatus.OK,
+      })
+    );
+  } catch (err) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
+  }
 });
 
-//if pass, update status and visibility of product
 export const POST = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
 
-  const id = String(searchParams.get('id'));
+  if (!id) {
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error({
+        message: 't_missing_id',
+        code: HttpStatus.BAD_REQUEST,
+      })
+    );
+  }
+
   try {
     const body = await request.json();
     const { isActive } = body;
 
-    if (!id) {
-      return NextResponse.json(
-        { success: false, error: 'Missing id' },
-        { status: 400 }
+    if (typeof isActive !== 'boolean') {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 't_invalid_active_status',
+          code: HttpStatus.BAD_REQUEST,
+        })
       );
     }
 
-    if (!isActive) {
-      return NextResponse.json(
-        { success: false, error: 'Missing visibility field' },
-        { status: 400 }
-      );
-    }
-
-    // Update product status and visibility (adjust values to match your schema/enums)
     await prisma.category.update({
       where: { id },
-      data: {
-        isActive: isActive,
-      },
+      data: { isActive },
     });
 
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json(
-      { success: false, error: 'Internal Server Error' },
-      { status: 500 }
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success({
+        message: 't_success',
+        code: HttpStatus.OK,
+      })
     );
+  } catch (err) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
   }
 });

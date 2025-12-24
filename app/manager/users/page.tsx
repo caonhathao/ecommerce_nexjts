@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { paths } from '@/lib/path';
 import { formatDay } from '@/lib/utils';
 import { userDataResponse, userItemData } from '@/types/manager.data-types';
@@ -59,10 +60,9 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
-import { toast } from 'sonner';
-import SearchBar from '../_components/search-bar';
-import TabTableView from '../_components/tab-table-view';
-import { TableCellViewer } from './_components/table-cell-viewer';
+import SearchBar from '../../../features/manager/_components/search-bar';
+import TabTableView from '../../../features/manager/_components/tab-table-view';
+import { TableCellViewer } from '../../../features/manager/users/components/table-cell-viewer';
 
 const UsersPage = () => {
   const [data, setData] = React.useState<userDataResponse | null>(null);
@@ -105,24 +105,7 @@ const UsersPage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = (value: string | undefined) => {
-    if (!value) {
-      toast(t('t_action_failed_noti'), {
-        description: t('t_copy_failed_desc_noti'),
-      });
-    } else {
-      navigator.clipboard
-        .writeText(value)
-        .then(() => {
-          toast(t('t_action_noti'), {
-            description: t('t_copy_desc_noti'),
-          });
-        })
-        .catch((err) => {
-          console.error('Failed to copy ID: ', err);
-        });
-    }
-  };
+  const handleCopy = useCopyToClipboard({ t: t });
 
   const columns: ColumnDef<userItemData>[] = [
     {
@@ -163,11 +146,7 @@ const UsersPage = () => {
       header: t('t_user_name'),
       cell: ({ row }) => {
         return (
-          <TableCellViewer
-            item={row.original}
-            handleCopy={handleCopy}
-            setUserList={setUserList}
-          />
+          <TableCellViewer item={row.original} setUserList={setUserList} />
         );
       },
       enableHiding: false,
@@ -200,14 +179,22 @@ const UsersPage = () => {
       accessorKey: t('t_created_at'),
       header: t('t_created_at'),
       cell: ({ row }) => {
-        return <div className="w-32">{formatDay(row.original.createdAt)}</div>;
+        return (
+          <div className="w-32 overflow-hidden">
+            {formatDay(row.original.createdAt)}
+          </div>
+        );
       },
     },
     {
       accessorKey: t('t_updated_at'),
       header: t('t_updated_at'),
       cell: ({ row }) => {
-        return <div className="w-32">{formatDay(row.original.updatedAt)}</div>;
+        return (
+          <div className="w-32 overflow-hidden">
+            {formatDay(row.original.updatedAt)}
+          </div>
+        );
       },
     },
     {

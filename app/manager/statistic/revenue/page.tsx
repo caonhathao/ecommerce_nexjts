@@ -1,9 +1,9 @@
 'use client';
 
-import ChartAreaRevenue from './_components/chart-area-revenue';
-import OrderStatusRate from './_components/chart-order-status-rate';
-import TopProduct from './_components/chart-top-products';
-import TableTopProduct from './_components/table-top-product';
+import ChartAreaRevenue from '../../../../features/manager/statistic/revenue/components/chart-area-revenue';
+import OrderStatusRate from '../../../../features/manager/statistic/revenue/components/chart-order-status-rate';
+import TopProduct from '../../../../features/manager/statistic/revenue/components/chart-top-products';
+import TableTopProduct from '../../../../features/manager/statistic/revenue/components/table-top-product';
 
 const RevenuePage = () => {
   return (

@@ -1,0 +1,26 @@
+{
+  "checkout_page": {
+    "t_not_found_order": "Không tìm thấy đơn hàng",
+    "t_address": "Địa chỉ nhận hàng",
+    "t_check_info": "Vui lòng kiểm tra lại thông tin trước khi thanh toán.",
+    "t_receiver": "Người nhận",
+    "t_number_phone": "Số điện thoại",
+    "t_house_street": "Số nhà/đường",
+    "t_ward": "Phường/Xã",
+    "t_district": "Quận/Huyện",
+    "t_city": "Thành phố",
+    "t_list_item": "Danh sách sản phẩm",
+    "t_quantity": "Số lượng",
+    "t_subtotal": "Tạm tính",
+    "t_delivery_fee": "Phí vận chuyển",
+    "t_discount": "Giảm giá",
+    "t_payment": " Tổng thanh toán",
+    "payment_client": {
+      "t_payment_session_failed": "Không thể tạo phiên thanh toán",
+      "t_payment_direct": "Đang chuyển đến cổng thanh toán Stripe...",
+      "t_payment_create_session_failed": "Lỗi khi tạo phiên thanh toán",
+      "t_processing": "Đang xử lý...",
+      "t_payment": " Thanh toán"
+    }
+  }
+}

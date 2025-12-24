@@ -63,9 +63,9 @@ import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { toast } from 'sonner';
-import SearchBar from '../_components/search-bar';
-import TabTableView from '../_components/tab-table-view';
-import { TableCellViewer } from './_components/table-cell-viewer';
+import SearchBar from '../../../features/manager/_components/search-bar';
+import TabTableView from '../../../features/manager/_components/tab-table-view';
+import { TableCellViewer } from '../../../features/manager/shops/components/table-cell-viewer';
 
 const ShopsPage = () => {
   const [data, setData] = React.useState<shopDataResponse | null>(null);
@@ -124,7 +124,7 @@ const ShopsPage = () => {
       navigator.clipboard
         .writeText(value)
         .then(() => {
-          toast(t('t_action_not'), {
+          toast(t('t_action_noti'), {
             description: t('t_copy_desc_not'),
             duration: 3000,
             icon: <FaCheck />,
@@ -188,11 +188,7 @@ const ShopsPage = () => {
       header: t('t_shop_name'),
       cell: ({ row }) => {
         return (
-          <TableCellViewer
-            item={row.original}
-            handleCopy={handleCopy}
-            setShopList={setShopList}
-          />
+          <TableCellViewer item={row.original} setShopList={setShopList} />
         );
       },
       enableHiding: false,
@@ -241,14 +237,22 @@ const ShopsPage = () => {
       accessorKey: t('t_created_at'),
       header: t('t_created_at'),
       cell: ({ row }) => {
-        return <div className="w-32">{formatDay(row.original.createdAt)}</div>;
+        return (
+          <div className="w-32 overflow-hidden">
+            {formatDay(row.original.createdAt)}
+          </div>
+        );
       },
     },
     {
       accessorKey: t('t_updated_at'),
       header: t('t_updated_at'),
       cell: ({ row }) => {
-        return <div className="w-32">{formatDay(row.original.updatedAt)}</div>;
+        return (
+          <div className="w-32 overflow-hidden">
+            {formatDay(row.original.updatedAt)}
+          </div>
+        );
       },
     },
     {

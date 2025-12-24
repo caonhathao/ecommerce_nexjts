@@ -1,0 +1,26 @@
+{
+  "checkout_page": {
+    "t_not_found_order": "Order not found",
+    "t_address": "Shipping Address",
+    "t_check_info": "Please review your information before payment.",
+    "t_receiver": "Recipient Name",
+    "t_number_phone": "Phone Number",
+    "t_house_street": "House No. / Street",
+    "t_ward": "Ward / Commune",
+    "t_district": "District",
+    "t_city": "City / Province",
+    "t_list_item": "Product List",
+    "t_quantity": "Quantity",
+    "t_subtotal": "Subtotal",
+    "t_delivery_fee": "Shipping Fee",
+    "t_discount": "Discount",
+    "t_payment": "Total Payment",
+    "payment_client": {
+      "t_payment_session_failed": "Unable to create payment session",
+      "t_payment_direct": "Redirecting to Stripe payment gateway...",
+      "t_payment_create_session_failed": "Error creating payment session",
+      "t_processing": "Processing...",
+      "t_payment": "Pay Now"
+    }
+  }
+}

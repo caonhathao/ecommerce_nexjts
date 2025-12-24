@@ -1,0 +1,159 @@
+'use client';
+
+import { fetchApi } from '@/lib/client-fetch';
+import { productItemType } from '@/types/public.data-types';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import Autoplay from 'embla-carousel-autoplay';
+import { AiFillLike } from 'react-icons/ai';
+import { Skeleton } from '@/components/ui/skeleton';
+
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { ProductItem } from '../../components/product-item';
+
+type TopDealItemsProps = {
+  size: string;
+  limitItem?: number;
+  showDesc?: boolean;
+  showRating?: boolean;
+  showFooter?: boolean;
+};
+
+const basisClasses = {
+  '1': 'lg:basis-full',
+  '2': 'lg:basis-1/2',
+  '3': 'lg:basis-1/3',
+  '4': 'lg:basis-1/4',
+  '5': 'lg:basis-1/5',
+  '6': 'lg:basis-1/6',
+};
+
+export const TopDealItems = ({
+  size,
+  limitItem = 15,
+  showDesc,
+  showRating,
+  showFooter,
+}: TopDealItemsProps) => {
+  const t = useTranslations('home_layout.top_deal_items');
+
+  // FIX 1: Store array directly
+  const [data, setData] = useState<productItemType[] | null>(null);
+
+  const basisClass =
+    basisClasses[size as keyof typeof basisClasses] || 'lg:basis-1/4';
+
+  useEffect(() => {
+    const loadDeals = async () => {
+      try {
+        // FIX 2: Use correct generic type for array response
+        const res = await fetchApi<productItemType[]>('/api/product', {
+          params: { page: 1, limit: limitItem, type: 'deal' },
+        });
+
+        if (res.success && res.data) {
+          setData(res.data);
+        }
+      } catch (error) {
+        console.error('Failed to load top deals:', error);
+      }
+    };
+
+    loadDeals();
+  }, [limitItem]);
+
+  // --- SKELETON LOADING STATE ---
+  if (!data) {
+    return (
+      <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-background-secondary rounded-lg">
+        {/* Header Skeleton */}
+        <div className="w-full flex flex-row justify-between items-center p-2 mb-2">
+          <div className="flex flex-row gap-2 items-center">
+            <Skeleton className="h-6 w-6 rounded-full" /> {/* Icon */}
+            <Skeleton className="h-7 w-40 rounded-md" /> {/* Title */}
+          </div>
+          <Skeleton className="h-5 w-24 rounded-md" /> {/* Watch More */}
+        </div>
+
+        {/* Carousel Items Skeleton */}
+        <div className="w-full px-2 overflow-hidden">
+          <div className="flex -ml-2 md:-ml-4">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className={`pl-2 md:pl-4 basis-1/2 md:basis-1/3 ${basisClass} shrink-0`}
+              >
+                <div className="flex flex-col space-y-3">
+                  <Skeleton className="aspect-square w-full rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-[80%]" />
+                    <Skeleton className="h-5 w-[40%] mt-2" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- ACTUAL CONTENT ---
+  return (
+    <div className="w-full flex flex-col justify-start items-start gap-1 p-2 bg-background-secondary rounded-lg">
+      {/* top title */}
+      <div className="w-full flex flex-row justify-between items-center p-2 mb-2">
+        <p className="w-fit flex flex-row gap-2 text-error font-bold select-none items-center">
+          <AiFillLike color="red" size={20} />
+          {t('title')}
+        </p>
+        <Link href="/search" className="text-primary hover:cursor-pointer">
+          {t('watch_more')}
+        </Link>
+      </div>
+
+      {/* item list */}
+      <Carousel
+        opts={{
+          align: 'start',
+          loop: true,
+        }}
+        plugins={[
+          Autoplay({
+            delay: 4000,
+            stopOnInteraction: true,
+          }),
+        ]}
+        className="w-full px-2"
+      >
+        <CarouselContent className="-ml-2 md:-ml-4">
+          {data.map((item, index) => (
+            <CarouselItem
+              key={index}
+              className={`pl-2 md:pl-4 basis-1/2 md:basis-1/3 ${basisClass}`}
+            >
+              <div className="h-full">
+                <ProductItem
+                  item={item}
+                  showDesc={showDesc}
+                  showRating={showRating}
+                  showFooter={showFooter}
+                />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious className="left-0 -ml-2" />
+        <CarouselNext className="right-0 -mr-2" />
+      </Carousel>
+    </div>
+  );
+};

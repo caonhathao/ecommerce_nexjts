@@ -1,13 +1,24 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { HttpStatus } from '@/types/api';
+import { NextRequest } from 'next/server';
 
-//query api
-//get all data of one product
+// Query api: Get all data of one shop
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
-  const id = String(searchParams.get('id'));
+  const id = searchParams.get('id');
+
+  if (!id) {
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error({
+        message: 't_missing_id',
+        code: HttpStatus.BAD_REQUEST,
+      })
+    );
+  }
+
   try {
     const data = await prisma.shop.findFirst({
       where: {
@@ -53,14 +64,23 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
     });
 
-    return NextResponse.json({ data });
+    if (!data) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 'Shop not found',
+          code: HttpStatus.NOT_FOUND,
+        })
+      );
+    }
+
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success({
+        data,
+        message: 't_success',
+        code: HttpStatus.OK,
+      })
+    );
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({
-      success: false,
-      data: {
-        message: 'Not found',
-      },
-    });
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
   }
 });

@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     });
     if (!session || session.user.role !== 'admin') {
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('Unathorized', 401)
+        ResponseFactory.error({ message: 'Unathorized', code: 401 })
       );
     }
 
@@ -32,8 +32,10 @@ export async function GET(req: NextRequest) {
       type,
     });
 
-    return ResponseFactory.toNextResponse(ResponseFactory.success(result));
-  } catch (error: any) {
-    return ResponseFactory.toNextResponse(ResponseFactory.error(error));
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success({ data: result })
+    );
+  } catch (error) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(error));
   }
 }

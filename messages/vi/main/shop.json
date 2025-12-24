@@ -1,0 +1,33 @@
+{
+  "shop_layout": {
+    "t_review": "Đánh giá",
+    "t_chat": "Trò chuyện",
+    "t_shop": "Cửa hàng",
+    "c_see_review": "Xem đánh giá",
+    "c_info_general": "Thông tin chung",
+    "t_product": "Sản phẩm",
+    "c_all": "Tất cả",
+    "c_new": "Sản phẩm mới",
+    "c_special": "Nổi bật",
+    "t_profile": "Hô sơ"
+  },
+  "shop_product_page": {
+    "t_title_new": "Sẩn phẩm mới",
+    "t_title_top": "Sản phẩm bán chạy",
+    "t_title_all": "Tất cả sản phẩm",
+    "pagination": {
+      "t_first_page": "Trang đầu",
+      "t_lastest_page": "Trang cuối"
+    }
+  },
+  "shop_profile_page": {
+    "t_main_category": "Danh mục chính",
+    "t_unknow": "Không rõ",
+    "t_joined_time": "Đã tham gia",
+    "t_delivery": "Vận chuyển trong giờ",
+    "t_cancel_rate": "Tỉ lệ hủy hàng",
+    "t_chat": "Trò chuyện",
+    "t_response_rate": "Tỉ lệ phản hồi",
+    "t_time_response": "Thời gian phản hồi"
+  }
+}

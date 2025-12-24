@@ -1,10 +1,11 @@
+import { ResponseFactory } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
 import { withAuth } from '@/lib/with-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { HttpStatus } from '@/types/api';
+import { NextRequest } from 'next/server';
 import { z } from 'zod';
 
-//api to get list of user
 export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
@@ -12,17 +13,19 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
   const name = searchParams.get('name');
   const email = searchParams.get('email');
 
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
+  // Ensure valid integers for pagination
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
+  const limit = Math.max(1, parseInt(searchParams.get('limit') || '10'));
 
-  //check valid params (one of them)
-  if (!id && !name && !email)
-    return NextResponse.json({
-      success: 403,
-      data: {
-        message: 'Missing search keyword',
-      },
-    });
+  // Check valid params (one of them must exist)
+  if (!id && !name && !email) {
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error({
+        message: 't_missing_query_params',
+        code: HttpStatus.BAD_REQUEST,
+      })
+    );
+  }
 
   const whereClause: Prisma.UserWhereInput = {};
 
@@ -30,60 +33,52 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
     const isValidUUID = z.string().uuid().safeParse(id).success;
 
     if (!isValidUUID) {
-      return NextResponse.json({ success: 400, data: [] });
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 't_invalid_id_format',
+          code: HttpStatus.BAD_REQUEST,
+        })
+      );
     }
-
     whereClause.id = id;
-  } else if (name)
+  } else if (name) {
     whereClause.name = {
       contains: name,
       mode: 'insensitive',
     };
-  else if (email) whereClause.email = email;
+  } else if (email) {
+    whereClause.email = email;
+  }
 
   try {
-    const data = await prisma.user.findMany({
-      where: whereClause,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        emailVerified: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
-
-    const total = data.length;
-
-    if (data)
-      return NextResponse.json({
-        success: true,
-        data: data,
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages: Math.ceil(total / limit),
+    const [total, data] = await prisma.$transaction([
+      prisma.user.count({ where: whereClause }),
+      prisma.user.findMany({
+        where: whereClause,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          emailVerified: true,
+          createdAt: true,
+          updatedAt: true,
         },
-      });
-    else
-      return NextResponse.json({
-        success: 403,
-        data: {
-          message: 'No result',
-        },
-      });
-  } catch (e) {
-    // This catch block is still important for REAL errors
-    // (e.g., database connection fails)
-    console.error('Error fetching product:', e);
-    return NextResponse.json(
-      {
-        success: 500,
-        message: 'Internal Server Error',
-      },
-      { status: 500 } // 500 is for unexpected server errors
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+    ]);
+
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.paginated({
+        data,
+        page,
+        limit,
+        total,
+        message: 't_success',
+        code: HttpStatus.OK,
+      })
     );
+  } catch (e) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(e));
   }
 });

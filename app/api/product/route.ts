@@ -1,13 +1,14 @@
 import { prisma } from '@/lib/db';
 import { Prisma } from '@/lib/generated/prisma';
-import { NextResponse } from 'next/server';
+import { ResponseFactory } from '@/lib/api-response';
+import { HttpStatus } from '@/types/api';
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const page = Number(searchParams.get('page')) || 1;
-    const limit = Number(searchParams.get('limit')) || 10;
+    const page = Math.max(1, Number(searchParams.get('page')) || 1);
+    const limit = Math.max(1, Number(searchParams.get('limit')) || 10);
     const skip = (page - 1) * limit;
 
     const type = searchParams.get('type') || 'default';
@@ -28,53 +29,54 @@ export async function GET(req: Request) {
       };
     }
 
-    const products = await prisma.product.findMany({
-      where: whereCondition,
-      select: {
-        id: true,
-        title: true,
-        minPrice: true,
-        ratingAvg: true,
-        ratingCount: true,
-        soldCount: true,
-        description: true,
-        origin: true,
-        images: {
-          take: 1,
-          select: { url: true },
-        },
-        VoucherProduct: {
-          take: 1,
-          where: { voucher: { isActive: true } },
-          select: {
-            voucher: {
-              select: {
-                type: true,
-                value: true,
-                maxDiscount: true,
+    const [total, products] = await Promise.all([
+      prisma.product.count({ where: whereCondition }),
+      prisma.product.findMany({
+        where: whereCondition,
+        select: {
+          id: true,
+          title: true,
+          minPrice: true,
+          ratingAvg: true,
+          ratingCount: true,
+          soldCount: true,
+          description: true,
+          origin: true,
+          images: {
+            take: 1,
+            select: { url: true },
+          },
+          VoucherProduct: {
+            take: 1,
+            where: { voucher: { isActive: true } },
+            select: {
+              voucher: {
+                select: {
+                  type: true,
+                  value: true,
+                  maxDiscount: true,
+                },
               },
             },
           },
         },
-      },
-      skip,
-      take: limit,
-      orderBy:
-        type === 'deal'
-          ? { soldCount: 'desc' }
-          : type === 'new'
-            ? { createdAt: 'desc' }
-            : type === 'suggest'
-              ? { updatedAt: 'desc' }
-              : { createdAt: 'desc' },
-    });
-
-    const total = await prisma.product.count({ where: whereCondition });
+        skip,
+        take: limit,
+        orderBy:
+          type === 'deal'
+            ? { soldCount: 'desc' }
+            : type === 'new'
+              ? { createdAt: 'desc' }
+              : type === 'suggest'
+                ? { updatedAt: 'desc' }
+                : { createdAt: 'desc' },
+      }),
+    ]);
 
     const formatted = products.map((p) => ({
       id: p.id,
       title: p.title,
-      minPrice: p.minPrice,
+      minPrice: Number(p.minPrice),
       ratingAvg: p.ratingAvg,
       ratingCount: p.ratingCount,
       description: p.description,
@@ -83,21 +85,16 @@ export async function GET(req: Request) {
       origin: p.origin,
     }));
 
-    return NextResponse.json({
-      success: true,
-      data: formatted,
-      pagination: {
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.paginated({
+        data: formatted,
+        total,
         page,
         limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
-    });
-  } catch (error) {
-    console.error('GET /api/product error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Internal Server Error' },
-      { status: 500 }
+        code: HttpStatus.OK,
+      })
     );
+  } catch (error) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(error));
   }
 }

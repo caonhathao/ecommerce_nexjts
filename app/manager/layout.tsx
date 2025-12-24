@@ -1,7 +1,7 @@
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { ReactNode } from 'react';
-import AppSidebarServer from './_components/app-sidebar-server';
-import { SiteHeader } from './_components/site-header';
+import AppSidebarServer from '../../features/manager/_components/app-sidebar-server';
+import { SiteHeader } from '../../features/manager/_components/site-header';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
