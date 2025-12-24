@@ -16,6 +16,7 @@ import {
 } from '@/features/payment/services/payment_intent.service';
 import IntentStatus = $Enums.IntentStatus;
 import dayjs from 'dayjs';
+import { ResponseFactory } from '@/lib/api-response';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -115,12 +116,13 @@ export async function POST(req: NextRequest) {
       orderList: orderIds,
     });
 
-    return NextResponse.json({ url: session.url });
-  } catch (err: unknown) {
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success({ url: session.url })
+    );
+  } catch (err) {
     console.error('Error creating Stripe session:', err);
-    if (err instanceof Error) {
-      return NextResponse.json({ error: err.message }, { status: 500 });
-    }
-    return NextResponse.json({ error: 'Unknown error' }, { status: 500 });
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error('Unknown error', 500)
+    );
   }
 }

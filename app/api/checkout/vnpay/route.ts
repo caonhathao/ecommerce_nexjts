@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { Decimal } from '@prisma/client/runtime/library';
 import qs from 'qs';
 import crypto from 'crypto';
-import { createPaymentService } from '@/features/payment/services/payment.service';
 import { prisma } from '@/lib/db';
 import { customerPaidOrderSuccessUsecase } from '@/features/payment_transaction/payment_transaction.usecases';
 import { createCheckoutRequestUseCase } from '@/features/payment/payment.usecases';
@@ -31,17 +30,27 @@ export function sortObject(
   return sorted;
 }
 
-type PaymentIntentPayload = {
-  orderIds: string[];
-  paymentId: string;
-};
-//Send vnpay request
 export async function POST(req: NextRequest) {
+  // [DEBUG] 1. Bắt đầu request
+  console.log('--- [VNPAY-DEBUG] START POST REQUEST ---');
+
   try {
-    const { draftId, body } = await req.json();
+    const bodyJson = await req.json();
+    const { draftId, body } = bodyJson;
+
+    // [DEBUG] 2. Check input
+    console.log('--- [VNPAY-DEBUG] Input received:', {
+      draftId,
+      bankCode: body?.bankCode,
+    });
 
     const result = await createOrder(draftId);
+
+    // [DEBUG] 3. Check createOrder result
+    console.log('--- [VNPAY-DEBUG] createOrder success:', result.success);
+
     if (!result.success) {
+      console.error('--- [VNPAY-DEBUG] createOrder Failed:', result.error);
       return ResponseFactory.toNextResponse(
         ResponseFactory.error(result.error, 400)
       );
@@ -50,6 +59,7 @@ export async function POST(req: NextRequest) {
     const orderList = result.order;
 
     if (orderList.some((o) => o.paymentStatus === 'PAID')) {
+      console.warn('--- [VNPAY-DEBUG] Order already PAID');
       return ResponseFactory.toNextResponse(
         ResponseFactory.error('Đơn hàng đã được thanh toán', 400)
       );
@@ -60,23 +70,39 @@ export async function POST(req: NextRequest) {
       (total, order) => total.plus(order.grandTotal),
       new Decimal(0)
     );
+    console.log('--- [VNPAY-DEBUG] Amount calculated:', amountVNPay.toString());
 
     const random = Math.random().toString(36).substring(2, 6).toUpperCase();
 
-    // VNPay payment integration is not implemented yet
-    const ipAddr =
-      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1';
+    // [DEBUG] 4. Check Environment Variables (Rất hay lỗi ở đây)
     const tmnCode = process.env.VNPAY_TERMINAL_ID!;
     const secretKey = process.env.VNPAY_SECRET_KEY!;
     let vnpUrl = process.env.VNPAY_URL!;
     const returnUrl = process.env.VNPAY_RETURN_URL!;
 
+    console.log('--- [VNPAY-DEBUG] ENV Check:', {
+      HasTmnCode: !!tmnCode,
+      HasSecretKey: !!secretKey, // Không log giá trị thật để bảo mật
+      vnpUrl: vnpUrl,
+      returnUrl: returnUrl,
+    });
+
+    if (!tmnCode || !secretKey || !vnpUrl || !returnUrl) {
+      throw new Error(
+        'MISSING ENV VARIABLES (VNPAY_TERMINAL_ID, VNPAY_SECRET_KEY...)'
+      );
+    }
+
+    // VNPay payment integration is not implemented yet
+    const ipAddr =
+      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1';
+
     const date = new Date();
     const createDate = dayjs(date).format('YYYYMMDDHHmmss');
-    const TxnRef = `${draftId}${date}${random}`;
+    const TxnRef = `${draftId}_${date.getTime()}_${random}`;
     const amount = Number(amountVNPay);
     const bankCode = body.bankCode;
-    const orderInfo = `Thanh toan don hang qua VNPAY`;
+    const orderInfo = `Thanh_toan_don_hang_qua_VNPAY`;
     const orderType = '200000';
     const locale = body.language || 'vn';
     const currency = 'VND';
@@ -98,13 +124,22 @@ export async function POST(req: NextRequest) {
     if (bankCode !== null && bankCode !== '') {
       vnp_Params['vnp_BankCode'] = bankCode;
     }
+
+    // [DEBUG] 5. Trước khi gọi sortObject
+    console.log('--- [VNPAY-DEBUG] Params prepared. Calling sortObject...');
+    // Lưu ý: Nếu hàm sortObject chưa import hoặc chưa khai báo, nó sẽ Crash tại đây
     vnp_Params = sortObject(vnp_Params);
 
+    // [DEBUG] 6. Tạo Hash
+    console.log('--- [VNPAY-DEBUG] sortObject done. Creating Hash...');
     const signData = qs.stringify(vnp_Params, { encode: false });
     const hmac = crypto.createHmac('sha512', secretKey);
     vnp_Params['vnp_SecureHash'] = hmac
       .update(Buffer.from(signData, 'utf-8'))
       .digest('hex');
+
+    // [DEBUG] 7. Lưu DB
+    console.log('--- [VNPAY-DEBUG] Hash done. Saving to DB...');
 
     await createCheckoutRequestUseCase(prisma, {
       params: {
@@ -135,6 +170,10 @@ export async function POST(req: NextRequest) {
       orderList: orderIds,
     });
 
+    console.log(
+      '--- [VNPAY-DEBUG] Saved CheckoutRequest. Saving PaymentIntent...'
+    );
+
     const expiresAt = dayjs().add(15, 'minute').toDate();
     await createPaymentIntentService(prisma, {
       gatewayRef: TxnRef,
@@ -147,10 +186,17 @@ export async function POST(req: NextRequest) {
 
     vnpUrl += '?' + qs.stringify(vnp_Params, { encode: false });
 
+    console.log('--- [VNPAY-DEBUG] SUCCESS. URL created:', vnpUrl);
+
     return ResponseFactory.toNextResponse(
       ResponseFactory.success({ url: vnpUrl })
     );
-  } catch (error) {
+  } catch (error: any) {
+    // [DEBUG] CATCH BLOCK - QUAN TRỌNG NHẤT
+    console.error('--- [VNPAY-DEBUG] CRITICAL ERROR 500 ---');
+    console.error('Message:', error.message);
+    console.error('Stack Trace:', error.stack); // Xem dòng nào gây lỗi ở đây
+
     return ResponseFactory.toNextResponse(
       ResponseFactory.error(
         error instanceof ServiceError ? error.message : 'Internal Server Error',
@@ -159,12 +205,12 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
 //Get webhook
 export async function GET(req: NextRequest) {
+  console.log('--- [IPN-DEBUG] START IPN HANDLER ---');
   try {
     const searchParams = req.nextUrl.searchParams;
-    let vnp_Params: Record<string, string> = {};
+    const vnp_Params: Record<string, string> = {};
     for (const [key, value] of searchParams.entries()) {
       vnp_Params[key] = value;
     }
@@ -173,12 +219,25 @@ export async function GET(req: NextRequest) {
     const rspCode = vnp_Params['vnp_ResponseCode'];
     const txnRef = vnp_Params['vnp_TxnRef'];
 
+    console.log('[IPN-DEBUG] Received Params:', {
+      rspCode,
+      txnRef,
+      secureHash,
+    });
+
     delete vnp_Params['vnp_SecureHash'];
     delete vnp_Params['vnp_SecureHashType'];
 
-    vnp_Params = sortObject(vnp_Params);
+    const sortedKeys = Object.keys(vnp_Params).sort();
+    const signData = sortedKeys
+      .map((key) => {
+        return `${key}=${encodeURIComponent(vnp_Params[key]).replace(/%20/g, '+')}`;
+      })
+      .join('&');
+
+    // vnp_Params = sortObject(vnp_Params);
     const secretKey = process.env.VNPAY_SECRET_KEY!;
-    const signData = qs.stringify(vnp_Params, { encode: false });
+    // const signData = qs.stringify(vnp_Params, { encode: false });
     const hmac = crypto.createHmac('sha512', secretKey);
     const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
 
