@@ -138,6 +138,8 @@ enum NotificationRole {
   BUYER
   SELLER
   ADMIN
+}
+
 enum LedgerType {
   ORDER_PAID // khách trả tiền
   VOUCHER_SUBSIDY // sàn bù tiền
