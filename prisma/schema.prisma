@@ -114,6 +114,22 @@ enum MessageRole {
   ADMIN
 }
 
+enum NotificationType {
+  SYSTEM
+  ORDER_UPDATE
+  PAYMENT
+  SECURITY
+  SHOP_ACTIVITY
+  PROMOTION
+  WISHLIST
+}
+
+enum NotificationRole {
+  BUYER
+  SELLER
+  ADMIN
+}
+
 model User {
   id            String    @id @default(uuid()) @db.Uuid
   name          String
@@ -252,17 +268,24 @@ model Address {
 }
 
 model Notification {
-  id        String    @id @default(uuid()) @db.Uuid
-  userId    String    @db.Uuid
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type      String
-  title     String
-  body      String
-  metadata  Json?
-  readAt    DateTime?
-  createdAt DateTime  @default(now())
+  id            String           @id @default(uuid()) @db.Uuid
+  userId        String           @db.Uuid
+  recipientRole NotificationRole @default(BUYER)
+  type          NotificationType
+  referenceId   String?
+  referenceType String?
 
-  @@index([userId, readAt])
+  title    String
+  body     String
+  image    String?
+  metadata Json?
+
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, recipientRole, isRead])
   @@map("notification")
 }
 
