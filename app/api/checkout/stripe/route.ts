@@ -10,10 +10,7 @@ import { $Enums } from '@/lib/generated/prisma';
 import PaymentProvider = $Enums.PaymentProvider;
 import PaymentStatus = $Enums.PaymentStatus;
 import Currency = $Enums.Currency;
-import {
-  createPaymentIntentService,
-  getActiveIntent,
-} from '@/features/payment/services/payment_intent.service';
+import { createPaymentIntentService } from '@/features/payment/services/payment_intent.service';
 import IntentStatus = $Enums.IntentStatus;
 import dayjs from 'dayjs';
 import { ResponseFactory } from '@/lib/api-response';
@@ -117,12 +114,12 @@ export async function POST(req: NextRequest) {
     });
 
     return ResponseFactory.toNextResponse(
-      ResponseFactory.success({ url: session.url })
+      ResponseFactory.success({ data: { url: session.url } })
     );
   } catch (err) {
     console.error('Error creating Stripe session:', err);
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error('Unknown error', 500)
+      ResponseFactory.error({ message: 'Unknown error', code: 500 })
     );
   }
 }

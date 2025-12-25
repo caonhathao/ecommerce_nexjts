@@ -89,6 +89,7 @@ enum PaymentProvider {
   PAYPAL
   CASSO
   VNPAY
+  MOMO
   OTHER
 }
 
@@ -687,7 +688,7 @@ model PaymentIntent {
 
 model LedgerEntry {
   id            String          @id @default(uuid()) @db.Uuid
-  walletId      String          @db.Uuid // Có thể là ShopID hoặc UserID
+  walletId      String          @db.Uuid
   walletType    WalletType      @default(SHOP)
   amount        Decimal         @db.Decimal(19, 4)
   direction     LedgerDirection // CREDIT hoặc DEBIT
@@ -696,7 +697,7 @@ model LedgerEntry {
   type          LedgerType
   description   String?
 
-  transactionGroup String? @db.Uuid // ID gom nhóm các ledger liên quan
+  transactionGroup String?
   paymentId        String? @db.Uuid
   orderId          String? @db.Uuid
 

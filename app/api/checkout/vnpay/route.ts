@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     if (!result.success) {
       console.error('--- [VNPAY-DEBUG] createOrder Failed:', result.error);
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error(result.error, 400)
+        ResponseFactory.error({ message: result.error, code: 400 })
       );
     }
 
@@ -61,7 +61,10 @@ export async function POST(req: NextRequest) {
     if (orderList.some((o) => o.paymentStatus === 'PAID')) {
       console.warn('--- [VNPAY-DEBUG] Order already PAID');
       return ResponseFactory.toNextResponse(
-        ResponseFactory.error('Đơn hàng đã được thanh toán', 400)
+        ResponseFactory.error({
+          message: 'Đơn hàng đã được thanh toán',
+          code: 400,
+        })
       );
     }
 
@@ -189,7 +192,7 @@ export async function POST(req: NextRequest) {
     console.log('--- [VNPAY-DEBUG] SUCCESS. URL created:', vnpUrl);
 
     return ResponseFactory.toNextResponse(
-      ResponseFactory.success({ url: vnpUrl })
+      ResponseFactory.success({ data: { url: vnpUrl } })
     );
   } catch (error: any) {
     // [DEBUG] CATCH BLOCK - QUAN TRỌNG NHẤT
@@ -198,10 +201,13 @@ export async function POST(req: NextRequest) {
     console.error('Stack Trace:', error.stack); // Xem dòng nào gây lỗi ở đây
 
     return ResponseFactory.toNextResponse(
-      ResponseFactory.error(
-        error instanceof ServiceError ? error.message : 'Internal Server Error',
-        500
-      )
+      ResponseFactory.error({
+        message:
+          error instanceof ServiceError
+            ? error.message
+            : 'Internal Server Error',
+        code: 500,
+      })
     );
   }
 }
@@ -241,7 +247,14 @@ export async function GET(req: NextRequest) {
     const hmac = crypto.createHmac('sha512', secretKey);
     const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
 
+    console.log('[IPN-DEBUG] Checksum Verify:', {
+      MySign: signed,
+      VnpSign: secureHash,
+      Match: signed === secureHash,
+    });
+
     if (secureHash !== signed) {
+      console.error('[IPN-DEBUG] ❌ Checksum Failed!');
       return NextResponse.json({ RspCode: '97', Message: 'Fail checksum' });
     }
 
