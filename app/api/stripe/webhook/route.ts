@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { $Enums } from '@/lib/generated/prisma';
+import IntentStatus = $Enums.IntentStatus;
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.SECRET_WEBHOOK_STRIPE!;
@@ -32,81 +34,42 @@ export async function POST(req: NextRequest) {
         }
         const orderIds = orderId.split(',');
 
-        // 1. UPDATE STATUS (Giữ nguyên)
-        await prisma.payment.updateMany({
-          where: { externalId: session.id, provider: 'STRIPE' },
-          data: { status: 'PAID', updatedAt: new Date() },
-        });
-
-        await prisma.order.updateMany({
-          where: { id: { in: orderIds } },
-          data: {
-            paymentStatus: 'PAID',
-            status: 'PROCESSING',
-            updatedAt: new Date(),
+        const payment = await prisma.payment.findFirst({
+          where: {
+            externalId: session.id,
+            provider: 'STRIPE',
+          },
+          include: {
+            orders: {
+              include: {
+                order: true,
+              },
+            },
           },
         });
 
-        // 2. LẤY THÔNG TIN CHARGE TỪ STRIPE (Để lấy Charge ID làm nguồn tiền)
-        const paymentIntentId = session.payment_intent as string;
-        const paymentIntent =
-          await stripe.paymentIntents.retrieve(paymentIntentId);
-        const chargeId = paymentIntent.latest_charge as string;
+        await prisma.$transaction(async (tx) => {
+          await tx.paymentIntent.update({
+            where: { gatewayRef: session.payment_intent as string },
+            data: {
+              status: IntentStatus.SUCCEEDED,
+            },
+          });
 
-        // 3. PROCESS TRANSFERS
-        await Promise.all(
-          orderIds.map(async (oId) => {
-            try {
-              const orderDetails = await prisma.order.findUnique({
-                where: { id: oId },
-                select: { shopId: true },
-              });
+          await tx.payment.update({
+            where: { id: payment!.id },
+            data: { status: 'PAID', updatedAt: new Date() },
+          });
 
-              if (!orderDetails?.shopId) return;
-
-              const seller = await prisma.shop.findUnique({
-                where: { id: orderDetails.shopId! },
-                include: { owner: true },
-              });
-
-              if (!seller?.owner?.stripeAccount?.startsWith('acct_')) {
-                console.log(`🚫 Skipping invalid seller account: ${oId}`);
-                return;
-              }
-              const key = `_${oId}`;
-              const amountString = metadata[key];
-
-              if (!amountString) {
-                console.error(
-                  `❌ Không tìm thấy số tiền USD cho đơn ${oId} trong metadata`
-                );
-                return;
-              }
-              const grossAmountCents = parseInt(amountString, 10);
-              const platformFee = Math.ceil(grossAmountCents * 0.1);
-              const amountForShop = grossAmountCents - platformFee;
-
-              console.log(`💵 [Order ${oId}] Transfer Info:
-                - Gross (Khách trả): ${grossAmountCents} cents
-                - Fee (Phí sàn) : ${platformFee} cents
-                - Shop nhận: ${amountForShop} cents
-              `);
-
-              if (amountForShop <= 0) return;
-
-              await stripe.transfers.create({
-                amount: amountForShop,
-                currency: 'usd',
-                destination: seller.owner.stripeAccount,
-                source_transaction: chargeId,
-              });
-
-              console.log(`✅ Transfer Success for Order ${oId}`);
-            } catch (innerError) {
-              console.error(`🔥 Error processing order ${oId}:`, innerError);
-            }
-          })
-        );
+          await tx.order.updateMany({
+            where: { id: { in: orderIds } },
+            data: {
+              paymentStatus: 'PAID',
+              status: 'PROCESSING',
+              updatedAt: new Date(),
+            },
+          });
+        });
         break;
       }
 

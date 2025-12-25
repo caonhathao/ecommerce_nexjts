@@ -5,6 +5,15 @@ import { prisma } from '@/lib/db';
 import { Decimal } from '@/lib/generated/prisma/runtime/library';
 import getRedisClient from '@/lib/redis';
 import { vndToUsdCents } from '@/lib/currency-helper';
+import { createCheckoutRequestUseCase } from '@/features/payment/payment.usecases';
+import { $Enums } from '@/lib/generated/prisma';
+import PaymentProvider = $Enums.PaymentProvider;
+import PaymentStatus = $Enums.PaymentStatus;
+import Currency = $Enums.Currency;
+import { createPaymentIntentService } from '@/features/payment/services/payment_intent.service';
+import IntentStatus = $Enums.IntentStatus;
+import dayjs from 'dayjs';
+import { ResponseFactory } from '@/lib/api-response';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -32,6 +41,7 @@ export async function POST(req: NextRequest) {
     const metadata: Record<string, string> = {
       orderId: orderList.map((o) => o.id).join(','),
     };
+    const orderIds = Array.from(orderList.map((o) => o.id));
 
     let totalUsdCent = 0;
 
@@ -44,6 +54,11 @@ export async function POST(req: NextRequest) {
       totalUsdCent += usdCents;
       metadata[`_${order.id}`] = usdCents.toString();
     }
+
+    const totalGrand = orderList.reduce(
+      (total, order) => total.plus(order.grandTotal),
+      new Decimal(0)
+    );
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -69,14 +84,24 @@ export async function POST(req: NextRequest) {
       ],
     });
 
-    const payment = await prisma.payment.create({
-      data: {
-        provider: 'STRIPE',
+    const expiresAt = dayjs().add(15, 'minute').toDate();
+    await createPaymentIntentService(prisma, {
+      gatewayRef: session.payment_intent as string,
+      provider: PaymentProvider.STRIPE,
+      orderIds: { orderIds: orderIds },
+      status: IntentStatus.ACTIVE,
+      amount: totalGrand,
+      expiresAt: expiresAt,
+    });
+
+    await createCheckoutRequestUseCase(prisma, {
+      params: {
+        provider: PaymentProvider.STRIPE,
         method: 'CARD',
-        amount: new Decimal(totalUsdCent),
-        status: 'PENDING',
-        currency: 'USD',
-        externalId: session.id,
+        amount: totalUsdCent,
+        status: PaymentStatus.PENDING,
+        currency: Currency.USD,
+        externalId: session.payment_intent as string,
         rawPayload: {
           id: session.id,
           url: session.url,
@@ -85,34 +110,16 @@ export async function POST(req: NextRequest) {
           metadata: session.metadata,
         },
       },
-    });
-    if (!payment) {
-      throw new Error('Failed to create payment record');
-    }
-
-    await prisma.orderPayment.createMany({
-      data: orderList.map((order) => ({
-        orderId: order.id,
-        paymentId: payment.id,
-      })),
+      orderList: orderIds,
     });
 
-    return NextResponse.json({ url: session.url });
-  } catch (err: unknown) {
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success({ data: { url: session.url } })
+    );
+  } catch (err) {
     console.error('Error creating Stripe session:', err);
-    if (err instanceof Error) {
-      return NextResponse.json({ error: err.message }, { status: 500 });
-    }
-    return NextResponse.json({ error: 'Unknown error' }, { status: 500 });
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.error({ message: 'Unknown error', code: 500 })
+    );
   }
 }
-
-// const totalAmount = order.reduce(
-//   (acc: Decimal, item) => acc.plus(item.grandTotal),
-//   new Decimal(0)
-// );
-//
-// const usdTotal = vndToUsdCents(totalAmount, rateDcm);
-// const unitAmount = usdTotal.toDecimalPlaces(0).toNumber();
-
-// const orderIds = order.map((o) => o.id).join(',');

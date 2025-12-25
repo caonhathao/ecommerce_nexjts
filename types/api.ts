@@ -1,3 +1,5 @@
+import { Prisma, PrismaClient } from '@/lib/generated/prisma';
+
 export const HttpStatus = {
   OK: 200,
   CREATED: 201,
@@ -34,3 +36,4 @@ export interface ApiResponse<T = null> {
   };
   errors?: Record<string, string[] | undefined> | null | object;
 }
+export type DbClient = Prisma.TransactionClient | PrismaClient;
