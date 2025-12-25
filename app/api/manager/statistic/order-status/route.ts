@@ -72,7 +72,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
           placedAt: dateFilter,
           status: 'PENDING',
           paymentStatus: {
-            in: ['NOT_PAID', 'PENDING'],
+            in: ['PENDING'],
           },
           fulfillmentStatus: 'NOT_FULFILLED',
         },
