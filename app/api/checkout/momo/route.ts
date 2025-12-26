@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { createOrder } from '@/app/actions/order';
 import { ResponseFactory } from '@/lib/api-response';
-import { Decimal } from '@prisma/client/runtime/library';
 import { v4 } from 'uuid';
 import dayjs from 'dayjs';
 import crypto from 'crypto';
@@ -14,6 +13,7 @@ import Currency = $Enums.Currency;
 import { createPaymentIntentService } from '@/features/payment/services/payment_intent.service';
 import IntentStatus = $Enums.IntentStatus;
 import { ServiceError } from '@/lib/service-error';
+import { Decimal } from '@/lib/generated/prisma/runtime/client';
 
 export async function POST(req: NextRequest) {
   try {

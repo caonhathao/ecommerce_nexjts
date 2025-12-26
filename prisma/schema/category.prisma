@@ -1,0 +1,28 @@
+//================== Prisma Schema =================//
+// File: prisma/category.prisma
+// Schema for Category model in Prisma
+//==================================================//
+
+//=================== ENUMS ===================//
+
+//=================== MODELS ===================//
+model Category {
+    id        String     @id @default(uuid()) @db.Uuid
+    parentId  String?    @db.Uuid
+    parent    Category?  @relation("CategoryToCategory", fields: [parentId], references: [id], onDelete: SetNull)
+    children  Category[] @relation("CategoryToCategory")
+    name      String
+    slug      String     @unique
+    position  Int        @default(0)
+    imageUrl  String?
+    publicId  String?
+    isActive  Boolean    @default(true)
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @default(now()) @updatedAt
+
+    products        Product[]
+    VoucherCategory VoucherCategory[]
+
+    @@index([parentId, position])
+    @@map("category")
+}

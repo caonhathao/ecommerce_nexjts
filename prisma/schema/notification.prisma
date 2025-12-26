@@ -1,0 +1,44 @@
+//================== Prisma Schema =================//
+// File: prisma/notification.prisma
+// Schema for Notification models in Prisma
+//==================================================//
+
+//=================== ENUMS ===================//
+enum NotificationType {
+    SYSTEM
+    ORDER_UPDATE
+    PAYMENT
+    SECURITY
+    SHOP_ACTIVITY
+    PROMOTION
+    WISHLIST
+}
+
+enum NotificationRole {
+    BUYER
+    SELLER
+    ADMIN
+}
+
+//=================== MODELS ===================//
+model Notification {
+    id            String           @id @default(uuid()) @db.Uuid
+    userId        String           @db.Uuid
+    recipientRole NotificationRole @default(BUYER)
+    type          NotificationType
+    referenceId   String?
+    referenceType String?
+
+    title    String
+    body     String
+    image    String?
+    metadata Json?
+
+    isRead    Boolean  @default(false)
+    createdAt DateTime @default(now())
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId, recipientRole, isRead])
+    @@map("notification")
+}

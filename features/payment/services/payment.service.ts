@@ -1,6 +1,6 @@
 import { CreatePaymentInput } from '@/features/payment/payment.dto';
 import { prisma } from '@/lib/db';
-import { Decimal } from '@prisma/client/runtime/library';
+import { Decimal } from '@/lib/generated/prisma/runtime/client';
 import { DbClient } from '@/types/api';
 
 export const createPaymentService = async (
