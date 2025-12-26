@@ -3,7 +3,6 @@ import { ServiceError } from '@/lib/service-error';
 import { createOrder } from '@/app/actions/order';
 import { ResponseFactory } from '@/lib/api-response';
 import dayjs from 'dayjs';
-import { Decimal } from '@prisma/client/runtime/library';
 import qs from 'qs';
 import crypto from 'crypto';
 import { prisma } from '@/lib/db';
@@ -15,6 +14,7 @@ import PaymentStatus = $Enums.PaymentStatus;
 import Currency = $Enums.Currency;
 import { createPaymentIntentService } from '@/features/payment/services/payment_intent.service';
 import IntentStatus = $Enums.IntentStatus;
+import { Decimal } from '@/lib/generated/prisma/runtime/client';
 
 export function sortObject(
   obj: Record<string, string | number>

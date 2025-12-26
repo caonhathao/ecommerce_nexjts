@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Stripe } from 'stripe';
 import { createOrder } from '@/app/actions/order';
 import { prisma } from '@/lib/db';
-import { Decimal } from '@/lib/generated/prisma/runtime/library';
 import getRedisClient from '@/lib/redis';
 import { vndToUsdCents } from '@/lib/currency-helper';
 import { createCheckoutRequestUseCase } from '@/features/payment/payment.usecases';
@@ -14,6 +13,7 @@ import { createPaymentIntentService } from '@/features/payment/services/payment_
 import IntentStatus = $Enums.IntentStatus;
 import dayjs from 'dayjs';
 import { ResponseFactory } from '@/lib/api-response';
+import { Decimal } from '@/lib/generated/prisma/runtime/client';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 

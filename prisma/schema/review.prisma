@@ -1,0 +1,29 @@
+//================== Prisma Schema =================//
+// File: prisma/review.prisma
+// Schema for Review models in Prisma
+//==================================================//
+
+//=================== ENUMS ===================//
+
+//=================== MODELS ===================//
+model Review {
+    id          String   @id @default(uuid()) @db.Uuid
+    productId   String   @db.Uuid
+    userId      String   @db.Uuid
+    orderItemId String?  @unique @db.Uuid
+    rating      Int
+    title       String?
+    body        String?
+    images      Json?
+    likes       Int      @default(0)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
+
+    product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+    user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    orderItem OrderItem? @relation(fields: [orderItemId], references: [id], onDelete: SetNull)
+
+    @@unique([userId, productId, orderItemId])
+    @@index([productId, rating])
+    @@map("review")
+}

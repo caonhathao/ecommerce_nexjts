@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/db';
-import { Decimal } from '@prisma/client/runtime/library';
 import { ServiceError } from '@/lib/service-error';
 import {
   freezeShopBalanceForPayout,
@@ -25,6 +24,7 @@ import { $Enums, Prisma } from '@/lib/generated/prisma';
 import InputJsonValue = Prisma.InputJsonValue;
 import PayoutStatus = $Enums.PayoutStatus;
 import { getPaymentId } from '@/features/payment/services/order_payment.service';
+import { Decimal } from '@/lib/generated/prisma/runtime/client';
 
 const toDecimal = (val: Decimal | number) => new Decimal(val);
 

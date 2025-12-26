@@ -1,0 +1,61 @@
+//================== Prisma Schema =================//
+// File: prisma/payment.prisma
+// Schema for Payment models in Prisma
+//==================================================//
+
+//=================== ENUMS ===================//
+enum PaymentStatus {
+    PENDING //(Đang chờ xử lý)
+    PAID //(Đã thanh toán)
+    PARTIALLY_REFUNDED //(Hoàn tiền một phần)
+    REFUNDED //(Đã hoàn tiền toàn bộ)
+    FAILED //(Thất bại)
+}
+
+enum PaymentProvider {
+    CASH
+    STRIPE
+    PAYPAL
+    CASSO
+    VNPAY
+    MOMO
+    OTHER
+}
+
+//=================== MODELS ===================//
+model Payment {
+    id             String          @id @default(uuid()) @db.Uuid
+    userId         String?         @db.Uuid
+    provider       PaymentProvider
+    method         String?
+    amount         Decimal         @db.Decimal(19, 4)
+    currency       Currency        @default(VND)
+    status         PaymentStatus   @default(PENDING)
+    idempotencyKey String?         @unique
+    externalId     String?
+    reference      String?
+    rawPayload     Json?
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @default(now()) @updatedAt
+
+    orders OrderPayment[]
+    Refund Refund[]
+
+    @@unique([provider, idempotencyKey])
+    @@unique([provider, externalId])
+    @@index([userId, createdAt])
+    @@map("payment")
+}
+
+model PaymentIntent {
+    id         String          @id @default(uuid()) @db.Uuid
+    gatewayRef String          @unique
+    status     IntentStatus
+    provider   PaymentProvider
+    orderIds   Json
+    amount     Decimal
+    expiresAt  DateTime
+    createdAt  DateTime        @default(now())
+
+    @@map("payment_intent")
+}

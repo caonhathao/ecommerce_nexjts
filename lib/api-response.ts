@@ -5,7 +5,7 @@ import {
   PrismaUniqueConstraintError,
   toTypedPrismaError,
 } from '@/lib/prisma-errors';
-import { ServiceError } from '@/lib/service-error';
+import { ServiceError } from './service-error';
 import { ApiResponse, HttpStatus, StatusCode } from '@/types/api';
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
