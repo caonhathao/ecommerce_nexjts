@@ -69,6 +69,12 @@ export const paths = {
       fetch_all: '/api/manager/user',
       fetch_detail: `/api/manager/user/query`,
     },
+    warehouse: {
+      search: '',
+      fetch_all: '/api/manager/warehouse',
+      fetch_detail: 'api/manager/warehouse/query',
+      create: '/api/manager/warehouse',
+    },
   },
 
   reviews: {

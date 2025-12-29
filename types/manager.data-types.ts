@@ -245,3 +245,30 @@ export interface userDetail {
     };
   }[];
 }
+
+export interface warehouseDataResponse {
+  data: warehouseData[];
+  pagination: pagination;
+}
+
+export interface warehouseData {
+  id: string;
+  name: string;
+  region: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface warehouseDetail {
+  id: string;
+  name: string;
+  location: string;
+  size: number;
+  storageAreaSize: number;
+  slotSize: number;
+  region: string;
+  status: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

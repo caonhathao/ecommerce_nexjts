@@ -45,6 +45,8 @@ model User {
     ReturnRequest             ReturnRequest[]
     VoucherRedemption         VoucherRedemption[]
     OrderDraft                OrderDraft[]
+    Slot                      Slot[]
+    OrderSlot                 OrderSlot[]
 
     @@unique([email])
     @@map("user")

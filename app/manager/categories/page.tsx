@@ -92,8 +92,9 @@ const CategoryManagePage = () => {
     [categoryList]
   );
   const t = useTranslations('admin_category_page');
+  const n = useTranslations('admin_notification');
   const g = useTranslations('general');
-  const handleCopy = useCopyToClipboard({ t: t });
+  const handleCopy = useCopyToClipboard({ t: n });
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
