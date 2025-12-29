@@ -82,6 +82,7 @@ const UsersPage = () => {
   });
 
   const t = useTranslations('admin_user_page');
+  const n = useTranslations('admin_notification');
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => userList?.map(({ id }) => id) || [],
     [userList]
@@ -105,7 +106,7 @@ const UsersPage = () => {
     useSensor(KeyboardSensor, {})
   );
 
-  const handleCopy = useCopyToClipboard({ t: t });
+  const handleCopy = useCopyToClipboard({ t: n });
 
   const columns: ColumnDef<userItemData>[] = [
     {

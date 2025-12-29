@@ -37,6 +37,7 @@ export default getRequestConfig(async () => {
     import(`../messages/${locale}/main/shop.json`),
     // Other domains
     import(`../messages/${locale}/manager/admin.json`),
+    import(`../messages/${locale}/manager/notification.json`),
     import(`../messages/${locale}/seller/seller.json`),
   ]);
 

@@ -11,6 +11,12 @@ enum WarehouseStatus {
     FULL
 }
 
+enum Region {
+    NORTHERN_REGION
+    CENTRAL_REGION
+    SOURTHERN_REGION
+}
+
 enum StorageAreaType {
     COLD_STORAGE
     DRY_STORAGE
@@ -26,18 +32,30 @@ enum SlotStatus {
     DAMAGED
 }
 
+enum SpecialLabelDelivery {
+    FRAGILE
+    DRY_STOGARE
+    COLD_STORAGE
+    AVOID_STATIC_ELECTRICITY
+    NONE
+    FLAMMABLE
+}
+
 //==================== MODELS ===================//
 model Warehouse {
-    id        String          @id @default(uuid()) @db.Uuid
-    name      String
-    location  String
-    metadata  Json?
-    status    WarehouseStatus @default(OPEN)
-    createdAt DateTime        @default(now())
-    updatedAt DateTime        @updatedAt
+    id              String          @id @default(uuid()) @db.Uuid
+    name            String
+    location        String
+    size            Int
+    status          WarehouseStatus @default(OPEN)
+    storageAreaSize Int
+    region          Region
+    slotSize        Int
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
 
     //Relations
-    areas StorageArea[]
+    storageArea StorageArea[]
 
     @@index([status, id])
     @@map("warehouses")
@@ -49,6 +67,7 @@ model StorageArea {
     type        StorageAreaType @default(GENERAL_STORAGE)
     warehouseId String          @db.Uuid
     status      WarehouseStatus @default(OPEN)
+    slotSize    Int
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
 
@@ -66,13 +85,15 @@ model Slot {
     serial    String
     productId String?    @db.Uuid
     ownerId   String?    @db.Uuid
+    shopId    String?    @db.Uuid
     status    SlotStatus @default(AVAILABLE)
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
 
     //Relations
     area       StorageArea @relation(fields: [areaId], references: [id], onDelete: Cascade)
-    shop       Shop?       @relation(fields: [ownerId], references: [id])
+    shop       Shop?       @relation(fields: [shopId], references: [id])
+    user       User?       @relation(fields: [ownerId], references: [id])
     orderSlots OrderSlot[]
 
     @@index([id, status])
@@ -83,17 +104,44 @@ model Slot {
 //Store Order to use warehouse slots
 //===================
 model OrderSlot {
-    id        String   @id @default(uuid()) @db.Uuid
-    orderId   String   @db.Uuid
-    slotId    String   @db.Uuid
-    quantity  Int
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id            String                 @id @default(uuid()) @db.Uuid
+    ownerId       String                 @db.Uuid
+    orderId       String                 @db.Uuid
+    warehouseId   String                 @db.Uuid
+    storageAreaId String                 @db.Uuid
+    slotOrder     Int                    @default(1)
+    productId     String                 @db.Uuid
+    variantId     String                 @db.Uuid
+    baseUnit      String                 @default("pcs")
+    packUnit      String                 @default("pck")
+    shippingUnit  String                 @default("ctn")
+    quantity      Int
+    description   String
+    notice        String
+    specialLabel  SpecialLabelDelivery[]
+    createdAt     DateTime               @default(now())
+    expiredAt     DateTime
+    updatedAt     DateTime               @updatedAt
 
     //Relations
-    slot  Slot  @relation(fields: [slotId], references: [id], onDelete: Cascade)
-    order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    order  Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    user   User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    slot   Slot?   @relation(fields: [slotId], references: [id])
+    slotId String? @db.Uuid
 
-    @@index([orderId, slotId])
     @@map("order_slots")
+}
+
+//===================
+//UOM (unit of measure)
+//===================
+model Uom {
+    id           String @id @default(uuid()) @db.Uuid
+    name         String // Ví dụ: Piece, Box, Carton
+    abbreviation String // Viết tắt: pcs, bx, ctn
+
+    levelBaseUnit    Int   @default(1) // Có phải đơn vị nhỏ nhất không?
+    conversionFactor Float @default(1.0) // Tỷ lệ so với đơn vị gốc
+
+    @@map("uoms")
 }
