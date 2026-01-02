@@ -1,4 +1,8 @@
 {
+  "admin_explain": {
+    "t_title": "Thông tin thêm",
+    "t_accept": "Đồng ý"
+  },
   "admin_layout": {
     "admin_app_sidebar": {
       "t_quick_access": "Truy cập nhanh",
@@ -66,10 +70,11 @@
     "t_title": "Tên",
     "t_shopId": "Mã cửa hàng",
     "t_ownerId": "Mã chủ cửa hàng",
-    "t_email": "Email"
+    "t_email": "Email",
+    "t_region": "Vùng"
   },
   "admin_tab_table_view": {
-    "t_no_product_found": "Không có sản phẩm nào",
+    "t_no_product_found": "Không có dữ liệu.",
     "t_of": "của",
     "t_rows_selected": "số dòng đã chọn.",
     "t_rows_per_page": "Dòng mỗi trang",
@@ -285,28 +290,46 @@
     "t_search_action": "Tìm kiếm",
     "t_column": "Cột",
     "warehouse_new_form": {
-      "t_name_schema": "Tên không được để trống",
-      "t_location_schema": "Vị trí không được để trống",
-      "t_region_schema": "Vùng không được để trống",
-      "t_storage_size_schema": "Tổng số phân vùng không được để trống",
-      "t_slot_size_schema": "Tổng số ô chứa không được để trống",
       "t_status": "Trạng thái",
       "t_new_button": "Tạo mới",
       "t_new_warehouse": "Kho hàng mới",
       "t_desc": "Tạo mới kho hàng lưu trữ.",
       "t_name": "Tên kho hàng",
       "t_region": "Vùng",
-      "t_location": "Địa chỉ",
+      "t_empty": "Trống",
+      "t_street": "Tên đường, số nhà, số lô",
+      "t_ward": "Xã/phường",
+      "t_district": "Quận/huyện",
+      "t_city": "Tỉnh/Thành phố",
       "c_north": "Khu vực phía Bắc",
       "c_central": "Khu vực Trung tâm",
       "c_sourth": "Khu vực phía Nam",
-      "c_open": "Đang mở",
-      "c_closed": "Đã đóng",
+      "t_explain": "Mặc định kho hàng mới sẽ ở chế độ đóng, cần bổ sung thêm thông tin và thay đổi trạng thái thì kho hàng mới đi vào hoạt động.",
       "t_storage_size": "Tổng phân vùng",
       "t_slot_size": "Tổng ô chứa",
       "t_warehouse_size": "Kích thước kho hàng",
       "t_cancel_action": "Hủy",
       "t_submit_action": "Tạo mới"
+    },
+    "warehouse_drawer": {
+      "t_warehouse_desc": "Thông tin chi tiết nhà kho",
+      "t_name": "Tên kho",
+      "t_street": "Tên đường, số nhà, số lô",
+      "t_cancel_action": "Hủy",
+      "t_submit_action": "Tạo mới"
+    },
+    "warehouse_schema": {
+      "t_name_schema": "Tên không được để trống",
+      "t_street_schema": "Địa chỉ không được để trống",
+      "t_ward_schema": "Xã/phường không được để trống",
+      "t_district_schema": "Quận/huyện không được để trống",
+      "t_city_schema": "Tỉnh/Thành phố không được để trống",
+      "t_region_schema": "Vùng không được để trống",
+      "t_size_schema": "Kích thước kho hàng không được để trống",
+      "t_storage_size_schema": "Tổng số phân vùng không được để trống",
+      "t_slot_size_schema": "Tổng số ô chứa không được để trống",
+      "t_status_schema": "Trạng thái không được để trống",
+      "t_slot_size_error_message": "Tổng số slot quá nhỏ so với số phân vùng"
     }
   },
   "admin_statistic_page": {

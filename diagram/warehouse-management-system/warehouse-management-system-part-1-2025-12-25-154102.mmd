@@ -1,36 +1,37 @@
 sequenceDiagram
-        actor MAN as Manager
-        participant FE as FrontEnd
-        participant BE as BackEnd
-        participant DB as Databse
-        actor SEL as Seller
-        autonumber
-        par CORD from Manager to Databse
-            MAN->>FE: CORD with warehouse
-            FE->>BE:(POST) /warehouse
-            BE->>DB: Create new warehouse record
-            FE->>BE:(PUT) /warehouse
-            BE->>DB: Update warehouse record
-            FE->>BE:(DELETE) /warehouse
-            BE->>DB: Delete warehouse record
-        end
-        par Get and Create new order
-            SEL->>FE: Get warehouse's list
-            FE->>BE:(GET) /warehosue
-            BE->>DB: Get warehouse's list
-            DB-->>FE: Return Data
-            SEL->>FE: Create new order
-            FE->>BE: (POST) /order-warehosue
-            BE->>DB: Create new order warehouse record
-        end
-        BE->>MAN: Send message to Manager
-        par CORD with order warehouse
-            MAN->>FE:Get order list
-            FE->>BE: (GET) /order-warehouse
-            BE->>DB: Get order warehouse list
-            DB-->>FE: Return Data
-            MAN->>FE: Change order status
-            FE->>BE: (POST) /order-warehouse
-            BE->>DB: Update order status
-        end
-        BE->>SEL: Send message to seller
+    actor MAN as Manager
+    actor SEL as Seller
+    participant FE as FrontEnd
+    participant BE as BackEnd
+    participant DB as Database
+
+    autonumber
+
+    Note over MAN, DB: QUẢN LÝ KHO (CRUD Warehouse)
+    MAN->>FE: Nhập thông tin kho mới
+    FE->>BE: POST /warehouses
+    BE->>DB: Lưu Warehouse & tự động tạo Slots
+    DB-->>FE: Success 201
+    
+    Note over SEL, DB: ĐẶT CHỖ TRƯỚC (Pre-order Slots)
+    SEL->>FE: Tìm kho theo City/District
+    FE->>BE: GET /warehouses?city=...
+    BE->>DB: Truy vấn kho còn trống Slot
+    DB-->>FE: Trả về danh sách kho
+    
+    SEL->>FE: Chọn kho & số lượng sản phẩm
+    FE->>BE: POST /order-slots (Pre-order)
+    Note right of BE: Logic: Kiểm tra sức chứa (Volume/Weight)
+    BE->>DB: Create OrderSlot & Update Slot Status (RESERVED)
+    DB-->>FE: Trả về mã đặt chỗ (Booking ID)
+    
+    Note over MAN, DB: XỬ LÝ YÊU CẦU ĐẶT CHỖ
+    BE->>MAN: Thông báo có đơn đặt chỗ mới
+    MAN->>FE: Xem danh sách OrderSlot
+    FE->>BE: GET /order-slots?status=PENDING
+    BE->>DB: Lấy dữ liệu OrderSlot
+    
+    MAN->>FE: Duyệt đơn (Confirm)
+    FE->>BE: PATCH /order-slots/{id}/status
+    BE->>DB: Update Status (CONFIRMED)
+    BE->>SEL: Gửi thông báo: Đã phê duyệt, hãy gửi hàng!

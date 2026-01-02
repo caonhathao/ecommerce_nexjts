@@ -50,7 +50,7 @@ export const paths = {
       fetch_detail: (id: string) => `/api/manager/category/query?id=${id}`,
       create: '/api/manager/category',
       update: '/api/manager/category',
-      del_one: (id: string) => `/api/manager/category?id=${id}`,
+      del_one: (id: string | undefined) => `/api/manager/category?id=${id}`,
     },
     product: {
       search: '/api/manager/product/search',
@@ -70,10 +70,12 @@ export const paths = {
       fetch_detail: `/api/manager/user/query`,
     },
     warehouse: {
-      search: '',
+      search: '/api/manager/warehouse/search',
       fetch_all: '/api/manager/warehouse',
-      fetch_detail: 'api/manager/warehouse/query',
+      update: '/api/manager/warehouse',
+      fetch_detail: '/api/manager/warehouse/query',
       create: '/api/manager/warehouse',
+      del_one: (id: string) => `/api/manager/warehouse?id=${id}`,
     },
   },
 
