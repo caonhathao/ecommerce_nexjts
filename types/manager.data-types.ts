@@ -263,12 +263,21 @@ export interface warehouseData {
 export interface warehouseDetail {
   id: string;
   name: string;
-  location: string;
+  address: string;
+  street: string;
+  ward: string;
+  district: string;
+  city: string;
   size: number;
-  storageAreaSize: number;
-  slotSize: number;
+  totalStorageArea: number;
+  totalSlot: number;
   region: string;
   status: string;
+  storageArea: {
+    name: string;
+    type: string;
+    status: string;
+  }[];
   createdAt?: Date;
   updatedAt?: Date;
 }

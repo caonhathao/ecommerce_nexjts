@@ -24,6 +24,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -32,31 +33,63 @@ import { paths } from '@/lib/path';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IconPlus } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  startTransition,
+  useEffect,
+  useState,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
 import { CreateWarehouseResult } from '../warehouse.dto';
+import {
+  provinceResponse,
+  districtResponse,
+  wardResponse,
+} from '@/types/customer.data-types';
+import { fetchApi } from '@/lib/client-fetch';
+import { env } from '@/lib/env';
+import ExplainDialog from '../../_components/tool-tip';
 export const NewWarehouseForm = ({
   setIsReset,
 }: {
   setIsReset: Dispatch<SetStateAction<boolean>>;
 }) => {
   const t = useTranslations('admin_warehouse_page.warehouse_new_form');
+  const s = useTranslations('admin_warehouse_page.warehouse_schema');
   const n = useTranslations('admin_notification');
 
   const [open, setOpen] = useState<boolean>(false);
+  const [cityResponse, setCityResponse] = useState<
+    provinceResponse['data'] | null
+  >(null);
+  const [districtResponse, setDistrictResponse] = useState<
+    districtResponse['data'] | null
+  >(null);
+  const [wardResponse, setWardResponse] = useState<wardResponse['data'] | null>(
+    null
+  );
+  const [city, setCity] = useState<string>('');
+  const [district, setDistrict] = useState<string>('');
+  const [ward, setward] = useState<string>('');
 
   const formSchema = z.object({
-    name: z.string().min(1, {
-      message: t('t_name_schema'),
+    name: z.string().min(1, { message: s('t_name_schema') }),
+    street: z.string().min(1, { message: s('t_street_schema') }),
+    ward: z.string().min(1, { message: s('t_ward_schema') }),
+    district: z.string().min(1, {
+      message: s('t_district_schema'),
     }),
-    location: z.string().nonempty(t('t_location_schema')),
-    region: z.string().nonempty(t('t_region_schema')),
-    storageAreaSize: z.number().min(1, t('t_storage_size_schema')),
-    slotSize: z.number().min(1, t('t_slot_size_schema')),
-    status: z.string().nonempty(t('t_status')),
-    size: z.number().min(1, t('t_warehouse_size')),
+    city: z.string().min(1, {
+      message: s('t_city_schema'),
+    }),
+    region: z.string().nonempty(s('t_region_schema')),
+    status: z.string().nonempty(s('t_status_schema')),
+    totalStorageArea: z.number().int().min(1, s('t_storage_size_schema')), // Giữ nguyên int
+    totalSlot: z.number().int().min(1, s('t_slot_size_schema')), // Giữ nguyên int
+    size: z.number().min(1, s('t_size_schema')),
   });
   type FormSchemaType = z.infer<typeof formSchema>;
 
@@ -64,48 +97,151 @@ export const NewWarehouseForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      street: '',
+      ward: '',
+      district: '',
+      city: '',
       region: '',
-      location: '',
-      storageAreaSize: 1,
-      slotSize: 1,
-      status: '',
+      totalStorageArea: 1,
+      totalSlot: 1,
+      status: 'CLOSED',
       size: 1,
     },
   });
 
   async function onSubmit(values: FormSchemaType) {
-    try {
-      const formData = new FormData();
-      formData.append('name', values.name);
-      formData.append('region', values.region);
-      formData.append('location', values.location);
-      formData.append('storageAreaSize', values.storageAreaSize.toString());
-      formData.append('slotSize', values.slotSize.toString());
-      formData.append('status', values.status);
-      formData.append('size', values.size.toString());
-      const data = await postData({
-        url: paths.manager.warehouse.create,
-        body: formData,
-        contentType: undefined,
+    if (values.totalSlot < values.totalStorageArea) {
+      toast(n('t_action_noti'), {
+        description: n('t_slot_invalid'),
       });
-      const res: CreateWarehouseResult = await data.json();
-      console.log(res);
-      if (res.success) {
-        toast(n('t_action_noti'), {
-          description: n('t_create_desc_noti'),
+    } else
+      try {
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('street', values.street);
+        formData.append('ward', ward);
+        formData.append('district', district);
+        formData.append('city', city);
+        formData.append('region', values.region);
+        formData.append('totalStorageArea', values.totalStorageArea.toString());
+        formData.append('totalSlot', values.totalSlot.toString());
+        formData.append('status', values.status);
+        formData.append('size', values.size.toString());
+        formData.append(
+          'address',
+          values.street +
+            ', ' +
+            values.ward +
+            ', ' +
+            values.district +
+            ', ' +
+            values.city
+        );
+        const data = await postData({
+          url: paths.manager.warehouse.create,
+          body: formData,
+          contentType: undefined,
         });
-        setTimeout(() => {
-          setOpen(false);
-          setIsReset((prev) => !prev);
-        }, 1000);
+        const res: CreateWarehouseResult = await data.json();
+        console.log(res);
+        if (res.success) {
+          toast(n('t_action_noti'), {
+            description: n('t_create_desc_noti'),
+          });
+          setTimeout(() => {
+            setOpen(false);
+            setIsReset((prev) => !prev);
+          }, 1000);
+        }
+      } catch (error) {
+        console.error('Failed to create category:', error);
+        toast(n('t_action_failed_noti'), {
+          description: n('t_create_failed_desc_noti'),
+        });
       }
-    } catch (error) {
-      console.error('Failed to create category:', error);
-      toast(n('t_action_failed_noti'), {
-        description: n('t_create_failed_desc_noti'),
-      });
-    }
   }
+
+  useEffect(() => {
+    if (open) {
+      const loadProvinces = async () => {
+        try {
+          // FIX 2: Pass the Array type to fetchApi
+          const res = await fetchApi<provinceResponse['data']>(
+            `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces`,
+            { params: { limit: 63 } }
+          );
+          if (res.success && res.data) setCityResponse(res.data);
+        } catch (error) {
+          console.error('Failed to load provinces', error);
+        }
+      };
+
+      loadProvinces();
+    }
+  }, [open]);
+
+  const handleSelectCity = async (provinceName: string) => {
+    setDistrictResponse(null);
+    setWardResponse(null);
+
+    // FIX 3: Find directly on the array (removed .data)
+    const provinceCode = cityResponse?.find(
+      (item) => item.name === provinceName
+    );
+
+    if (provinceCode) {
+      startTransition(() => {
+        setCity(provinceCode.code);
+      });
+      try {
+        const res = await fetchApi<districtResponse['data']>(
+          `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces/${provinceCode.code}/districts`,
+          { params: { limit: 100 } }
+        );
+        if (res.success && res.data) setDistrictResponse(res.data);
+      } catch (error) {
+        console.error('Failed to load districts', error);
+      }
+    }
+  };
+
+  const handleSelectDistrict = async (districtName: string) => {
+    setWardResponse(null);
+
+    // FIX 4: Find directly on the array (removed .data)
+    const districtCode = districtResponse?.find(
+      (item) => item.name === districtName
+    );
+
+    if (districtCode) {
+      startTransition(() => {
+        setDistrict(districtCode.code);
+      });
+      try {
+        const res = await fetchApi<wardResponse['data']>(
+          `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/districts/${districtCode.code}/wards`,
+          { params: { limit: 100 } }
+        );
+        if (res.success && res.data) setWardResponse(res.data);
+      } catch (error) {
+        console.error('Failed to load wards', error);
+      }
+    }
+  };
+
+  const handleSelectWard = (wardName: string) => {
+    const wardCode = wardResponse?.find((item) => item.name === wardName);
+    if (wardCode)
+      startTransition(() => {
+        setward(wardCode?.code);
+      });
+  };
+
+  useEffect(() => {
+    console.log('city', cityResponse);
+    console.log('district', districtResponse);
+    console.log('ward', wardResponse);
+  }, [cityResponse, wardResponse, districtResponse]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -120,7 +256,7 @@ export const NewWarehouseForm = ({
           {t('t_new_button')}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[480px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
@@ -128,10 +264,10 @@ export const NewWarehouseForm = ({
               <DialogDescription>{t('t_desc')}</DialogDescription>
             </DialogHeader>
             <div className="flex flex-col gap-4 m-2">
+              {/* field name */}
               <div className="grid gap-3">
                 <Label htmlFor="name-1">{t('t_name')}</Label>
                 <FormField
-                  control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem className="flex-1 ">
@@ -144,29 +280,139 @@ export const NewWarehouseForm = ({
                   )}
                 />
               </div>
-
-              <div className="grid gap-3">
-                <Label htmlFor="location">{t('t_location')}</Label>
+              <div className="grid grid-cols-2 grid-rows-2 gap-3">
+                {/* select city */}
                 <FormField
-                  control={form.control}
-                  name="location"
+                  name="city"
                   render={({ field }) => (
-                    <FormItem className="flex-1 ">
-                      {' '}
-                      <FormControl>
-                        <Input {...field} className="" />
-                      </FormControl>
+                    <FormItem className="grid gap-3">
+                      <Label htmlFor="city">{t('t_city')}</Label>
+                      <Select
+                        name="city"
+                        onValueChange={(value) => {
+                          field.onChange(value); // Cập nhật giá trị vào form
+                          handleSelectCity(value); // Load danh sách quận huyện
+                        }}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={t('t_city')} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="shadow shadow-primary rounded-lg bg-background">
+                          <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                            {/* FIX 5: Map directly over cityResponse (removed .data) */}
+                            {cityResponse ? (
+                              cityResponse.map((value, index) => (
+                                <SelectItem
+                                  key={value.code + index}
+                                  value={value.name}
+                                  className="text-nowrap w-full"
+                                >
+                                  {value.name}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <SelectLabel>{t('t_empty')}</SelectLabel>
+                            )}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              </div>
-
-              <div className="w-full grid grid-cols-2 gap-3">
+                {/* select district */}
+                <div className="grid gap-3">
+                  <FormField
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem className="grid gap-3">
+                        <Label htmlFor="district">{t('t_district')}</Label>
+                        <Select
+                          name="district"
+                          onValueChange={(value) => {
+                            field.onChange(value); // Cập nhật giá trị vào form [cite: 65]
+                            handleSelectDistrict(value); // Load danh sách quận huyện [cite: 26]
+                          }}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={t('t_district')} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="shadow shadow-primary rounded-lg bg-background">
+                            <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                              {/* FIX 6: Map directly over districtResponse (removed .data) */}
+                              {districtResponse ? (
+                                districtResponse.map((value, index) => (
+                                  <SelectItem
+                                    key={value.code + index}
+                                    value={value.name}
+                                  >
+                                    {value.name}
+                                  </SelectItem>
+                                ))
+                              ) : (
+                                <SelectLabel>{t('t_empty')}</SelectLabel>
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                {/* select ward */}
+                <div className="grid gap-3">
+                  <FormField
+                    name="ward"
+                    render={({ field }) => (
+                      <FormItem className="grid gap-3">
+                        <Label htmlFor="ward">{t('t_ward')}</Label>
+                        <Select
+                          name="ward"
+                          onValueChange={(value) => {
+                            field.onChange(value); // Cập nhật giá trị vào form [cite: 65]
+                            handleSelectWard(value);
+                          }}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={t('t_ward')} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="shadow shadow-primary rounded-lg bg-background">
+                            <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                              {/* FIX 7: Map directly over wardResponse (removed .data) */}
+                              {wardResponse ? (
+                                wardResponse.map((value, index) => (
+                                  <SelectItem
+                                    key={value.code + index}
+                                    value={value.name}
+                                  >
+                                    {value.name}
+                                  </SelectItem>
+                                ))
+                              ) : (
+                                <SelectLabel>{t('t_empty')}</SelectLabel>
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                {/* select region */}
                 <div className="w-full grid gap-3">
                   <Label htmlFor="region">{t('t_region')}</Label>
                   <FormField
-                    control={form.control}
                     name="region"
                     render={({ field }) => (
                       <FormItem className="flex-1">
@@ -214,67 +460,65 @@ export const NewWarehouseForm = ({
                     )}
                   />
                 </div>
+              </div>
 
-                <div className="w-full grid gap-3">
-                  <Label htmlFor="active-1">{t('t_status')}</Label>
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem className="flex-1 ">
-                        <FormControl>
-                          <Select
+              {/* field street */}
+              <div className="grid gap-3">
+                <Label htmlFor="street">{t('t_street')}</Label>
+                <FormField
+                  name="street"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 ">
+                      <FormControl>
+                        <Input {...field} className="" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="w-fit flex gap-3 flex-col">
+                <Label htmlFor="active-1">{t('t_status')}</Label>
+                <FormField
+                  name="status"
+                  render={({ field }) => (
+                    <div className="flex flex-col justify-center items-start">
+                      <FormItem className="flex flex-row justify-start items-center">
+                        <FormControl className="">
+                          <Input
                             {...field}
-                            name="status"
-                            defaultValue={field.value}
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <SelectTrigger
-                              className="flex w-fit @4xl/main:hidden"
-                              size="sm"
-                              id="active-1"
-                            >
-                              <SelectValue placeholder={t('t_status')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectItem
-                                  value="OPEN"
-                                  className="hover:cursor-pointer"
-                                >
-                                  {t('c_open')}
-                                </SelectItem>
-                                <SelectItem
-                                  value="CLOSED"
-                                  className="hover:cursor-pointer"
-                                >
-                                  {t('c_closed')}
-                                </SelectItem>
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
+                            disabled={true}
+                            className="hover:cursor-not-allowed w-fit"
+                          />
                         </FormControl>
-                        <FormMessage />
+                        <ExplainDialog explain={t('t_explain')} />
                       </FormItem>
-                    )}
-                  />
-                </div>
+                      <FormMessage />
+                    </div>
+                  )}
+                />
               </div>
               <div className="w-full flex flex-row gap-3">
                 <div className="">
                   <div className="grid gap-3">
-                    <Label htmlFor="storageAreaSize">
+                    <Label htmlFor="totalStorageArea">
                       {t('t_storage_size')}
                     </Label>
                     <FormField
-                      control={form.control}
-                      name="storageAreaSize"
+                      name="totalStorageArea"
                       render={({ field }) => (
                         <FormItem className="flex-1 ">
-                          {' '}
                           <FormControl>
-                            <Input {...field} className="" type="number" />
+                            <Input
+                              {...field}
+                              className=""
+                              type="number"
+                              step={'1'}
+                              onChange={(e) =>
+                                field.onChange(e.target.valueAsNumber)
+                              }
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -284,14 +528,21 @@ export const NewWarehouseForm = ({
                 </div>
                 <div className="">
                   <div className="grid gap-3">
-                    <Label htmlFor="slotSize">{t('t_slot_size')}</Label>
+                    <Label htmlFor="totalSlot">{t('t_slot_size')}</Label>
                     <FormField
-                      control={form.control}
-                      name="slotSize"
+                      name="totalSlot"
                       render={({ field }) => (
                         <FormItem className="flex-1 ">
                           <FormControl>
-                            <Input {...field} className="" type="number" />
+                            <Input
+                              {...field}
+                              className=""
+                              step={'1'}
+                              type="number"
+                              onChange={(e) =>
+                                field.onChange(e.target.valueAsNumber)
+                              }
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -300,19 +551,24 @@ export const NewWarehouseForm = ({
                   </div>
                 </div>
               </div>
-
               <div className="">
                 <div className="grid gap-3">
                   <Label htmlFor="size">
                     {t('t_warehouse_size') + '(m2)'}{' '}
                   </Label>
                   <FormField
-                    control={form.control}
                     name="size"
                     render={({ field }) => (
                       <FormItem className="flex-1 ">
                         <FormControl>
-                          <Input {...field} className="" />
+                          <Input
+                            {...field}
+                            className=""
+                            type="number"
+                            step={'any'}
+                            placeholder="0.0"
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -336,6 +592,7 @@ export const NewWarehouseForm = ({
               </Button>
             </DialogFooter>
           </form>
+          {/* <pre>{JSON.stringify(form.formState.errors, null, 2)}</pre> */}
         </Form>
       </DialogContent>
     </Dialog>

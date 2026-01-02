@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/select';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { NewCategoryForm } from '@/features/manager/category/components/new-category-form';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { paths } from '@/lib/path';
 import {
@@ -102,6 +101,7 @@ const WarehouseManagePage = () => {
   const columns = useWarehouseColumns({
     t: t,
     g: g,
+    n: n,
     setIsReset,
     handleCopy,
   });
@@ -137,13 +137,13 @@ const WarehouseManagePage = () => {
   return (
     <div className="w-full h-full p-3 flex flex-col justify-start items-center">
       <SearchBar
-        baseUrl={paths.manager.category.search}
+        baseUrl={paths.manager.warehouse.search}
         placeholder={t('t_search_placeholder')}
         setData={setData}
         setIsReset={setIsReset}
         isReset={isReset}
         setIsFalse={setIsFalse}
-        keyQueryList={['name', 'id']}
+        keyQueryList={['name', 'id', 'region']}
       />
       <Tabs
         defaultValue="all-status"
