@@ -268,16 +268,20 @@ export interface warehouseDetail {
   ward: string;
   district: string;
   city: string;
-  size: number;
-  totalStorageArea: number;
-  totalSlot: number;
+  size: string;
+  totalStorageArea: string;
+  totalSlot: string;
   region: string;
   status: string;
-  storageArea: {
-    name: string;
-    type: string;
-    status: string;
-  }[];
+  storageArea: storageAreaDetail[];
   createdAt?: Date;
   updatedAt?: Date;
+}
+export interface storageAreaDetail {
+  name: string;
+  type: string;
+  status: string;
+  totalSlots: string;
+  totalFloors: string;
+  totalRows: string;
 }

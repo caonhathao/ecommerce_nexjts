@@ -129,19 +129,31 @@ export const POST = withAuth(async (userId: string, request: NextRequest) => {
     }
 
     //craete empty storage by all amount of storage area in one warehouse
-    Array.from({ length: totalStorageArea }).map(() => {
-      prisma.storageArea.create({
-        data: {
-          warehouseId: newWarehouse.id,
-          name: 'STORAGE',
-          type: 'GENERAL_STORAGE',
-          status: 'CLOSED',
-          totalSlot: 1,
-          totalRows: 1,
-          totalFloor: 1,
-        },
-      });
+    const storageAreasData: Prisma.StorageAreaCreateManyInput[] = Array.from({
+      length: totalStorageArea,
+    }).map(() => ({
+      warehouseId: newWarehouse.id,
+      name: 'STORAGE',
+      type: 'GENERAL_STORAGE',
+      status: 'CLOSED',
+      totalSlots: 1,
+      totalRows: 1,
+      totalFloors: 1,
+    }));
+
+    // 2. Dùng createMany và phải có AWAIT
+    const newStorageArea = await prisma.storageArea.createMany({
+      data: storageAreasData,
     });
+
+    if (!newStorageArea) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 't_create_failed_desc_noti',
+          code: HttpStatus.BAD_REQUEST,
+        })
+      );
+    }
 
     return ResponseFactory.toNextResponse(
       ResponseFactory.success({

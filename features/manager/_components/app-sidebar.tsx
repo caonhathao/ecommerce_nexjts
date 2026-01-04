@@ -163,6 +163,10 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
             title: t('t_warehouse_list'),
             url: '/manager/warehouse',
           },
+          {
+            title: t('t_region_list'),
+            url: '#',
+          },
         ],
       },
       {

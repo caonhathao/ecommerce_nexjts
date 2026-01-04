@@ -18,6 +18,8 @@
     "t_create_failed_desc_noti": "Tạo mới đối tượng không thành công",
     "t_missing_query": "Thiếu dữ liệu truy vấn.",
     "t_not_found": "Không có dữ liệu",
-    "t_slot_invalid": "Tổng ô chứa phái lớn tổng phân vùng"
+
+    "t_slot_invalid": "Tổng ô chứa phái lớn tổng phân vùng",
+    "t_number_invalid": "Sai định dạng: yêu cầu số, nhận chuỗi kí tự"
   }
 }
