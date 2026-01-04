@@ -71,9 +71,9 @@ model StorageArea {
     name        String
     type        StorageAreaType @default(GENERAL_STORAGE)
     status      WarehouseStatus @default(OPEN)
-    totalSlot   Int //Tổng số ô
+    totalSlots  Int //Tổng số ô
     totalRows   Int //Tổng số dãy
-    totalFloor  Int //Tổng số tầng
+    totalFloors Int //Tổng số tầng
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @updatedAt
 

@@ -87,9 +87,9 @@ export const NewWarehouseForm = ({
     }),
     region: z.string().nonempty(s('t_region_schema')),
     status: z.string().nonempty(s('t_status_schema')),
-    totalStorageArea: z.number().int().min(1, s('t_storage_size_schema')), // Giữ nguyên int
-    totalSlot: z.number().int().min(1, s('t_slot_size_schema')), // Giữ nguyên int
-    size: z.number().min(1, s('t_size_schema')),
+    totalStorageArea: z.string().nonempty(s('t_storage_size_schema')), // Giữ nguyên int
+    totalSlot: z.string().nonempty(s('t_slot_size_schema')), // Giữ nguyên int
+    size: z.string().nonempty(s('t_size_schema')),
   });
   type FormSchemaType = z.infer<typeof formSchema>;
 
@@ -102,15 +102,23 @@ export const NewWarehouseForm = ({
       district: '',
       city: '',
       region: '',
-      totalStorageArea: 1,
-      totalSlot: 1,
+      totalStorageArea: '',
+      totalSlot: '',
       status: 'CLOSED',
-      size: 1,
+      size: '',
     },
   });
 
   async function onSubmit(values: FormSchemaType) {
-    if (values.totalSlot < values.totalStorageArea) {
+    if (
+      isNaN(Number(values.totalSlot)) ||
+      isNaN(Number(values.totalStorageArea)) ||
+      isNaN(Number(values.size))
+    ) {
+      toast(n('t_action_noti'), {
+        description: n('t_number_invalid'),
+      });
+    } else if (values.totalSlot < values.totalStorageArea) {
       toast(n('t_action_noti'), {
         description: n('t_slot_invalid'),
       });
@@ -510,15 +518,7 @@ export const NewWarehouseForm = ({
                       render={({ field }) => (
                         <FormItem className="flex-1 ">
                           <FormControl>
-                            <Input
-                              {...field}
-                              className=""
-                              type="number"
-                              step={'1'}
-                              onChange={(e) =>
-                                field.onChange(e.target.valueAsNumber)
-                              }
-                            />
+                            <Input {...field} className="" type="text" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -534,15 +534,7 @@ export const NewWarehouseForm = ({
                       render={({ field }) => (
                         <FormItem className="flex-1 ">
                           <FormControl>
-                            <Input
-                              {...field}
-                              className=""
-                              step={'1'}
-                              type="number"
-                              onChange={(e) =>
-                                field.onChange(e.target.valueAsNumber)
-                              }
-                            />
+                            <Input {...field} className="" type="text" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -564,10 +556,8 @@ export const NewWarehouseForm = ({
                           <Input
                             {...field}
                             className=""
-                            type="number"
-                            step={'any'}
+                            type="text"
                             placeholder="0.0"
-                            onChange={(e) => field.onChange(e.target.value)}
                           />
                         </FormControl>
                         <FormMessage />
