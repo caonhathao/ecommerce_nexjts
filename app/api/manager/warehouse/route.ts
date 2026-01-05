@@ -228,3 +228,95 @@ export const DELETE = withAuth(async (userId: string, request: NextRequest) => {
     return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
   }
 });
+
+export const PATCH = withAuth(async (userId: string, request: NextRequest) => {
+  try {
+    if (!userId) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 't_unauthorized_desc_noti',
+          code: HttpStatus.UNAUTHORIZED,
+        })
+      );
+    }
+
+    const formData = await request.formData();
+
+    console.log(formData);
+
+    const id = formData.get('id') as string;
+
+    if (!id) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 't_missing_data',
+          code: HttpStatus.BAD_REQUEST,
+        })
+      );
+    }
+
+    const updateData: any = {};
+    if (formData.has('name')) updateData.name = formData.get('name');
+    if (formData.has('street')) updateData.street = formData.get('street');
+    if (formData.has('ward')) updateData.ward = formData.get('ward');
+    if (formData.has('district'))
+      updateData.district = formData.get('district');
+    if (formData.has('city')) updateData.city = formData.get('city');
+    if (formData.has('region')) updateData.region = formData.get('region');
+    if (formData.has('status')) updateData.status = formData.get('status');
+
+    // Chuyển đổi kiểu dữ liệu số
+    if (formData.has('size'))
+      updateData.size = parseFloat(formData.get('size') as string);
+    if (formData.has('totalStorageArea'))
+      updateData.totalStorageArea = parseInt(
+        formData.get('totalStorageArea') as string
+      );
+    if (formData.has('totalSlot'))
+      updateData.totalSlot = parseInt(formData.get('totalSlot') as string);
+
+    // 3. Xử lý cập nhật quan hệ storageArea
+    const storageAreaRaw = formData.get('storageArea') as string;
+    if (storageAreaRaw) {
+      const storageAreas = JSON.parse(storageAreaRaw);
+
+      updateData.storageArea = {
+        update: storageAreas.map((area: any) => ({
+          where: { id: area.id }, // Xác định bản ghi dựa trên ID
+          data: {
+            name: area.name,
+            type: area.type,
+            status: area.status,
+            totalSlots: area.totalSlots,
+            totalRows: area.totalRows,
+            totalFloors: area.totalFloors,
+          },
+        })),
+      };
+    }
+
+    const updatedWarehouse = await prisma.warehouse.update({
+      where: { id: id },
+      data: updateData,
+    });
+
+    if (!updatedWarehouse) {
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 't_craate_failed_desc_noti',
+          code: HttpStatus.BAD_REQUEST,
+        })
+      );
+    }
+
+    return ResponseFactory.toNextResponse(
+      ResponseFactory.success({
+        data: null,
+        message: 't_del_desc_noti',
+        code: HttpStatus.OK,
+      })
+    );
+  } catch (err) {
+    return ResponseFactory.toNextResponse(ResponseFactory.handleError(err));
+  }
+});

@@ -48,6 +48,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
             warehouseId: id,
           },
           select: {
+            id: true,
             name: true,
             type: true,
             status: true,
