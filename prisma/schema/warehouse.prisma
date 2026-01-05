@@ -6,6 +6,7 @@
 //=================== ENUMS ===================//
 enum WarehouseStatus {
     OPEN
+    READY
     CLOSED
     UNDER_MAINTENANCE
     FULL

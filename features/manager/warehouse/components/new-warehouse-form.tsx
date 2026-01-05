@@ -52,6 +52,7 @@ import {
 import { fetchApi } from '@/lib/client-fetch';
 import { env } from '@/lib/env';
 import ExplainDialog from '../../_components/tool-tip';
+
 export const NewWarehouseForm = ({
   setIsReset,
 }: {
@@ -288,6 +289,7 @@ export const NewWarehouseForm = ({
                   )}
                 />
               </div>
+              {/* warehouse administrative unit */}
               <div className="grid grid-cols-2 grid-rows-2 gap-3">
                 {/* select city */}
                 <FormField
@@ -469,7 +471,6 @@ export const NewWarehouseForm = ({
                   />
                 </div>
               </div>
-
               {/* field street */}
               <div className="grid gap-3">
                 <Label htmlFor="street">{t('t_street')}</Label>
@@ -485,7 +486,6 @@ export const NewWarehouseForm = ({
                   )}
                 />
               </div>
-
               <div className="w-fit flex gap-3 flex-col">
                 <Label htmlFor="active-1">{t('t_status')}</Label>
                 <FormField
@@ -507,6 +507,7 @@ export const NewWarehouseForm = ({
                   )}
                 />
               </div>
+              {/* warehouse spetifications */}
               <div className="w-full flex flex-row gap-3">
                 <div className="">
                   <div className="grid gap-3">

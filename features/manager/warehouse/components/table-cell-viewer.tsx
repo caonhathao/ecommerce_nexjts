@@ -22,7 +22,9 @@ import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -31,7 +33,13 @@ import { fetchData } from '@/funcs/fetch';
 import { patchData } from '@/funcs/patch';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { fetchApi } from '@/lib/client-fetch';
 import { paths } from '@/lib/path';
+import {
+  provinceResponse,
+  districtResponse,
+  wardResponse,
+} from '@/types/customer.data-types';
 import {
   storageAreaDetail,
   warehouseData,
@@ -39,12 +47,20 @@ import {
 } from '@/types/manager.data-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import React, { useEffect } from 'react';
+import React, {
+  startTransition,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import { IoIosArrowUp } from 'react-icons/io';
 import { MdOutlineCopyAll } from 'react-icons/md';
 import { toast } from 'sonner';
 import z from 'zod';
+import { env } from '@/lib/env';
+import { Loading } from '@/components/loading';
+import ExplainDialog from '../../_components/tool-tip';
 
 interface WarehouseFormData {
   id: string;
@@ -86,6 +102,20 @@ export function TableCellViewer({
   const n = useTranslations('admin_notification');
   const s = useTranslations('admin_warehouse_page.warehouse_schema');
   const handleCopy = useCopyToClipboard({ t: n });
+
+  //storing administrative unit
+  const [cityResponse, setCityResponse] = useState<
+    provinceResponse['data'] | null
+  >(null);
+  const [districtResponse, setDistrictResponse] = useState<
+    districtResponse['data'] | null
+  >(null);
+  const [wardResponse, setWardResponse] = useState<wardResponse['data'] | null>(
+    null
+  );
+  const [city, setCity] = useState<string>('');
+  const [district, setDistrict] = useState<string>('');
+  const [ward, setward] = useState<string>('');
 
   const formSchema = z.object({
     id: z.string(),
@@ -258,15 +288,25 @@ export function TableCellViewer({
       formData.append('id', values.id);
       formData.append('name', values.name);
       formData.append('street', values.street);
-      formData.append('ward', values.ward);
-      formData.append('district', values.district);
-      formData.append('city', values.city);
+      formData.append('ward', ward);
+      formData.append('district', district);
+      formData.append('city', city);
       formData.append('region', values.region);
       formData.append('size', values.size.toString());
       formData.append('totalStorageArea', values.totalStorageArea.toString());
       formData.append('totalSlot', values.totalSlot.toString());
       formData.append('status', values.status);
       formData.append('storageArea', JSON.stringify(values.storageArea));
+      formData.append(
+        'address',
+        values.street +
+          ', ' +
+          values.ward +
+          ', ' +
+          values.district +
+          ' ,' +
+          values.city
+      );
 
       const data = await patchData({
         url: paths.manager.warehouse.update,
@@ -289,52 +329,6 @@ export function TableCellViewer({
       });
     }
   };
-
-  useEffect(() => {
-    // Only run if an item was OPENED
-    if (openIndex !== null) {
-      // We must wait for your 300ms animation to finish
-      const timer = setTimeout(() => {
-        const container = scrollContainerRef.current;
-
-        // Find the specific <li> element we want to scroll to
-        const element = document.getElementById(`variant-item-${openIndex}`);
-
-        if (container && element) {
-          // This calculates the <li>'s position *inside* the scroll container
-          const scrollToPosition = element.offsetTop - container.offsetTop;
-
-          // Scroll the container to the element
-          container.scrollTo({
-            top: scrollToPosition,
-            behavior: 'smooth',
-          });
-        }
-      }, 300); // 300ms matches your animation
-
-      // Clean up the timer
-      return () => clearTimeout(timer);
-    }
-  }, [openIndex]);
-
-  useEffect(() => {
-    if (detail) {
-      form.reset({
-        id: detail.id,
-        name: detail.name,
-        street: detail.street,
-        ward: detail.ward,
-        district: detail.district,
-        city: detail.city,
-        region: detail.region,
-        size: detail.size,
-        totalStorageArea: detail.totalStorageArea,
-        totalSlot: detail.totalSlot,
-        status: detail.status,
-        storageArea: detail.storageArea,
-      });
-    }
-  }, [detail, form]);
 
   const renderVariant = (index: number, value: storageAreaDetail) => {
     const filedName = `storageArea.${index}` as const;
@@ -410,24 +404,15 @@ export function TableCellViewer({
               name={`${filedName}.status`}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('t_status')} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="OPEN">{t('c_open')}</SelectItem>
-                      <SelectItem value="CLOSED">{t('c_closed')}</SelectItem>
-                      <SelectItem value="FULL">{t('c_full')}</SelectItem>
-                      <SelectItem value="UNDER_MAINTENANCE">
-                        {t('c_maintenance')}
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      defaultValue={value.status}
+                      placeholder={t('t_storage_status')}
+                      disabled={true}
+                    />
+                  </FormControl>
+                  <ExplainDialog explain={t('t_explain')} />
                   <FormMessage />
                 </FormItem>
               )}
@@ -511,6 +496,172 @@ export function TableCellViewer({
     );
   };
 
+  //handle administrative unit
+  const handleSelectCity = useCallback(
+    async (provinceName: string) => {
+      setDistrictResponse(null);
+      setWardResponse(null);
+
+      const provinceCode = cityResponse?.find(
+        (item) => item.name === provinceName
+      );
+
+      console.log('district res:', provinceCode);
+
+      if (provinceCode) {
+        startTransition(() => {
+          setCity(provinceCode.code);
+        });
+        try {
+          const res = await fetchApi<districtResponse['data']>(
+            `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces/${provinceCode.code}/districts`,
+            { params: { limit: 100 } }
+          );
+          if (res.success && res.data) setDistrictResponse(res.data);
+        } catch (error) {
+          console.error('Failed to load districts', error);
+        }
+      }
+    },
+    [cityResponse]
+  );
+
+  const handleSelectDistrict = useCallback(
+    async (districtName: string) => {
+      setWardResponse(null);
+
+      const districtCode = districtResponse?.find(
+        (item) => item.name === districtName
+      );
+      console.log(districtCode);
+      if (districtCode) {
+        startTransition(() => {
+          setDistrict(districtCode.code);
+        });
+        try {
+          const res = await fetchApi<wardResponse['data']>(
+            `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/districts/${districtCode.code}/wards`,
+            { params: { limit: 100 } }
+          );
+          if (res.success && res.data) setWardResponse(res.data);
+        } catch (error) {
+          console.error('Failed to load wards', error);
+        }
+      }
+    },
+    [districtResponse]
+  );
+
+  const handleSelectWard = useCallback(
+    (wardName: string) => {
+      const wardCode = wardResponse?.find((item) => item.name === wardName);
+      if (wardCode)
+        startTransition(() => {
+          setward(wardCode?.code);
+        });
+    },
+    [wardResponse]
+  );
+
+  useEffect(() => {
+    // Only run if an item was OPENED
+    if (openIndex !== null) {
+      // We must wait for your 300ms animation to finish
+      const timer = setTimeout(() => {
+        const container = scrollContainerRef.current;
+
+        // Find the specific <li> element we want to scroll to
+        const element = document.getElementById(`variant-item-${openIndex}`);
+
+        if (container && element) {
+          // This calculates the <li>'s position *inside* the scroll container
+          const scrollToPosition = element.offsetTop - container.offsetTop;
+
+          // Scroll the container to the element
+          container.scrollTo({
+            top: scrollToPosition,
+            behavior: 'smooth',
+          });
+        }
+      }, 300); // 300ms matches your animation
+
+      // Clean up the timer
+      return () => clearTimeout(timer);
+    }
+  }, [openIndex]);
+
+  useEffect(() => {
+    if (detail) {
+      const arrAdministrative = detail.address.split(', ');
+      console.log(arrAdministrative);
+      form.reset({
+        id: detail.id,
+        name: detail.name,
+        street: detail.street,
+        ward: arrAdministrative[arrAdministrative.length - 3],
+        district: arrAdministrative[arrAdministrative.length - 2],
+        city: arrAdministrative[arrAdministrative.length - 1],
+        region: detail.region,
+        size: detail.size,
+        totalStorageArea: detail.totalStorageArea,
+        totalSlot: detail.totalSlot,
+        status: detail.status,
+        storageArea: detail.storageArea,
+      });
+    }
+  }, [detail, form]);
+
+  useEffect(() => {
+    if (open) {
+      const loadProvinces = async () => {
+        try {
+          const res = await fetchApi<provinceResponse['data']>(
+            `${env.NEXT_PUBLIC_ADDRESS_BASE_URL}/api/v1/provinces`,
+            { params: { limit: 63 } }
+          );
+          if (res.success && res.data) setCityResponse(res.data);
+        } catch (error) {
+          console.error('Failed to load provinces', error);
+        }
+      };
+
+      loadProvinces();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (cityResponse) {
+      const load = async () => {
+        await handleSelectCity(form.getValues('city'));
+      };
+      load();
+    }
+  }, [cityResponse, form, handleSelectCity]);
+
+  useEffect(() => {
+    if (districtResponse) {
+      const load = async () => {
+        await handleSelectDistrict(form.getValues('district'));
+      };
+      load();
+    }
+  }, [cityResponse, districtResponse, form, handleSelectDistrict]);
+
+  useEffect(() => {
+    if (wardResponse) {
+      handleSelectWard(form.getValues('ward'));
+    }
+  }, [cityResponse, form, handleSelectWard, wardResponse]);
+
+  useEffect(() => {
+    console.log('city', cityResponse);
+    console.log('district', districtResponse);
+    console.log('ward', wardResponse);
+  }, [cityResponse, wardResponse, districtResponse]);
+
+  if ((!districtResponse || !wardResponse || !cityResponse) && open)
+    return <Loading />;
+
   return (
     <Drawer
       direction={isMobile ? 'bottom' : 'right'}
@@ -573,7 +724,7 @@ export function TableCellViewer({
                   </div>
                 </div>
 
-                {/* Address Information */}
+                {/* Address Information + administrative unit*/}
                 <div className="grid grid-cols-1 grid-rows-2 gap-3">
                   <Label>{t('t_address')}</Label>
                   <div className="">
@@ -583,10 +734,7 @@ export function TableCellViewer({
                         <FormItem>
                           <Label htmlFor="street">{t('t_street')}</Label>
                           <FormControl>
-                            <Input
-                              {...field}
-                              placeholder={t('t_street_placeholder')}
-                            />
+                            <Input {...field} placeholder={t('t_street')} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -596,31 +744,82 @@ export function TableCellViewer({
                   <div className="grid grid-cols-2 grid-rows-1 gap-3">
                     <div className="grid gap-3">
                       <FormField
-                        name="ward"
+                        name="city"
                         render={({ field }) => (
-                          <FormItem>
-                            <Label htmlFor="ward">{t('t_ward')}</Label>
-                            <FormControl>
-                              <Input
-                                {...field}
-                                placeholder={t('t_ward_placeholder')}
-                              />
-                            </FormControl>
+                          <FormItem className="grid gap-3">
+                            <Label htmlFor="city">{t('t_city')}</Label>
+                            <Select
+                              name="city"
+                              onValueChange={(value) => {
+                                field.onChange(value); // Cập nhật giá trị vào form
+                                handleSelectCity(value); // Load danh sách quận huyện
+                              }}
+                              value={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={t('t_city')} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent className="shadow shadow-primary rounded-lg bg-background">
+                                <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                                  {cityResponse ? (
+                                    cityResponse.map((value, index) => (
+                                      <SelectItem
+                                        key={value.code + index}
+                                        value={value.name}
+                                        className="text-nowrap w-full"
+                                      >
+                                        {value.name}
+                                      </SelectItem>
+                                    ))
+                                  ) : (
+                                    <SelectLabel>{t('t_empty')}</SelectLabel>
+                                  )}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+
                       <FormField
                         name="district"
                         render={({ field }) => (
-                          <FormItem>
+                          <FormItem className="grid gap-3">
                             <Label htmlFor="district">{t('t_district')}</Label>
-                            <FormControl>
-                              <Input
-                                {...field}
-                                placeholder={t('t_district_placeholder')}
-                              />
-                            </FormControl>
+                            <Select
+                              name="district"
+                              onValueChange={(value) => {
+                                field.onChange(value); // Cập nhật giá trị vào form
+                                handleSelectDistrict(value); // Load danh sách quận huyện
+                              }}
+                              value={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={t('t_district')} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent className="shadow shadow-primary rounded-lg bg-background">
+                                <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                                  {districtResponse ? (
+                                    districtResponse.map((value, index) => (
+                                      <SelectItem
+                                        key={value.code + index}
+                                        value={value.name}
+                                        className="text-nowrap w-full"
+                                      >
+                                        {value.name}
+                                      </SelectItem>
+                                    ))
+                                  ) : (
+                                    <SelectLabel>{t('t_empty')}</SelectLabel>
+                                  )}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -628,16 +827,41 @@ export function TableCellViewer({
                     </div>
                     <div className="grid gap-3">
                       <FormField
-                        name="city"
+                        name="ward"
                         render={({ field }) => (
-                          <FormItem>
-                            <Label htmlFor="city">{t('t_city')}</Label>
-                            <FormControl>
-                              <Input
-                                {...field}
-                                placeholder={t('t_city_placeholder')}
-                              />
-                            </FormControl>
+                          <FormItem className="grid gap-3">
+                            <Label htmlFor="ward">{t('t_ward')}</Label>
+                            <Select
+                              name="ward"
+                              onValueChange={(value) => {
+                                field.onChange(value); // Cập nhật giá trị vào form
+                                handleSelectWard(value); // Load danh sách quận huyện
+                              }}
+                              value={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={t('t_ward')} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent className="shadow shadow-primary rounded-lg bg-background">
+                                <SelectGroup className="max-h-[200px] overflow-y-scroll">
+                                  {wardResponse ? (
+                                    wardResponse.map((value, index) => (
+                                      <SelectItem
+                                        key={value.code + index}
+                                        value={value.name}
+                                        className="text-nowrap w-full"
+                                      >
+                                        {value.name}
+                                      </SelectItem>
+                                    ))
+                                  ) : (
+                                    <SelectLabel>{t('t_empty')}</SelectLabel>
+                                  )}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -645,13 +869,46 @@ export function TableCellViewer({
                       <FormField
                         name="region"
                         render={({ field }) => (
-                          <FormItem>
-                            <Label htmlFor="region">{t('t_region')}</Label>
+                          <FormItem className="flex-1">
+                            <Label htmlFor="ward">{t('t_region')}</Label>
                             <FormControl>
-                              <Input
+                              <Select
                                 {...field}
-                                placeholder={t('t_region_placeholder')}
-                              />
+                                name="region"
+                                defaultValue={field.value}
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <SelectTrigger
+                                  className="flex w-fit @4xl/main:hidden"
+                                  size="sm"
+                                  id="active-1"
+                                >
+                                  <SelectValue placeholder={t('t_region')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectItem
+                                      value="NORTHERN_REGION"
+                                      className="hover:cursor-pointer"
+                                    >
+                                      {t('c_north')}
+                                    </SelectItem>
+                                    <SelectItem
+                                      value="CENTRAL_REGION"
+                                      className="hover:cursor-pointer"
+                                    >
+                                      {t('c_central')}
+                                    </SelectItem>
+                                    <SelectItem
+                                      value="SOURTHERN_REGION"
+                                      className="hover:cursor-pointer"
+                                    >
+                                      {t('c_sourth')}
+                                    </SelectItem>
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -742,7 +999,9 @@ export function TableCellViewer({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="OPEN">{t('c_open')}</SelectItem>
+                            <SelectItem value="READY">
+                              {t('c_ready')}
+                            </SelectItem>
                             <SelectItem value="CLOSED">
                               {t('c_closed')}
                             </SelectItem>

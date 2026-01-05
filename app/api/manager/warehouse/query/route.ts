@@ -62,7 +62,7 @@ export const GET = withAuth(async (userId: string, request: NextRequest) => {
       },
     });
 
-    console.log(data);
+    //console.log(data);
 
     if (!data) {
       return ResponseFactory.toNextResponse(
