@@ -242,7 +242,7 @@ export const PATCH = withAuth(async (userId: string, request: NextRequest) => {
 
     const formData = await request.formData();
 
-    console.log(formData);
+    // console.log(formData);
 
     const id = formData.get('id') as string;
 

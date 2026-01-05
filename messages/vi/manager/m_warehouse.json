@@ -42,24 +42,26 @@
       "t_warehouse_id": "Mã kho hàng",
       "t_address": "Địa chỉ",
       "t_street": "Tên đường, số nhà, số lô",
-      "t_street_placeholder": "Tên đường, số nhà, số lô",
       "t_ward": "Xã/phường",
-      "t_ward_placeholder": "Xã/phường",
       "t_district": "Quận/huyện",
-      "t_district_placeholder": "Quận/huyện",
       "t_city": "Tỉnh/Thành phố",
-      "t_city_placeholder": "Tỉnh/Thành phố",
+      "t_empty": "Trống",
+
       "t_specifications": "Thông số kĩ thuật",
       "t_size": "Kích thước kho hàng",
       "t_size_placeholder": "Diện tích (m2)",
+
       "t_region": "Vùng",
-      "t_region_placeholder": "Vùng",
+      "c_north": "Khu vực phía Bắc",
+      "c_central": "Khu vực Trung tâm",
+      "c_sourth": "Khu vực phía Nam",
+
       "t_total_storage_area": "Tổng phân vùng",
       "t_total_slot": "Tổng ô chứa",
       "t_status": "Trạng thái",
       "t_storage_areas": "Danh sách phân vùng",
 
-      "c_open": "Mở",
+      "c_ready": "Sẵn sàng",
       "c_closed": "Dừng hoạt động",
       "c_full": "Đủ công suất",
       "c_maintenance": "Đang bảo trì",
@@ -69,7 +71,7 @@
       "t_storage_status": "Tình trạng phân vùng",
       "c_total_slots": "Tổng số slot",
       "c_total_rows": "Tổng số hàng",
-      "c_total_floors": "Tổng số cột",
+      "c_total_floors": "Tổng số tầng",
 
       "t_type": "Loại phân vùng",
       "c_general": "Kho tổng hợp",
@@ -77,6 +79,8 @@
       "c_electrical": "Kho điện tử",
       "c_dry": "Kho khô",
       "c_hazardous": "Kho vật liệu nguy hiểm",
+
+      "t_explain": "Mặc định kho hàng mới sẽ ở chế độ đóng, cần được xác nhận bởi nhân viên kho hàng để đi vào hoạt động.",
 
       "t_cancel_action": "Hủy",
       "t_submit_action": "Cập nhật"
