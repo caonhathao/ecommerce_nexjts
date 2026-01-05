@@ -11,11 +11,6 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
   Form,
   FormControl,
   FormField,
@@ -33,11 +28,10 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { fetchData } from '@/funcs/fetch';
-import { putData } from '@/funcs/put';
+import { patchData } from '@/funcs/patch';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { paths } from '@/lib/path';
-import { formatDay } from '@/lib/utils';
 import {
   storageAreaDetail,
   warehouseData,
@@ -45,15 +39,35 @@ import {
 } from '@/types/manager.data-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import React, { SetStateAction, useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { FaCheckCircle } from 'react-icons/fa';
-import { FiXCircle } from 'react-icons/fi';
 import { IoIosArrowUp } from 'react-icons/io';
 import { MdOutlineCopyAll } from 'react-icons/md';
 import { toast } from 'sonner';
 import z from 'zod';
+
+interface WarehouseFormData {
+  id: string;
+  name: string;
+  street: string;
+  ward: string;
+  district: string;
+  city: string;
+  region: string;
+  size: number;
+  totalStorageArea: number;
+  totalSlot: number;
+  status: string;
+  storageArea: Array<{
+    id: string;
+    name: string;
+    type: string;
+    status: string;
+    totalSlots: number;
+    totalRows: number;
+    totalFloors: number;
+  }>;
+}
 
 export function TableCellViewer({
   item,
@@ -87,15 +101,33 @@ export function TableCellViewer({
       message: s('t_city_schema'),
     }),
     // Sử dụng coerce để tự động chuyển string từ input sang number
-    size: z.string().nonempty({
-      message: s('t_size_schema'),
-    }),
-    totalStorageArea: z.string().nonempty({
-      message: s('t_storage_size_schema'),
-    }),
-    totalSlot: z.string().nonempty({
-      message: s('t_slot_size_schema'),
-    }),
+    size: z.preprocess(
+      (val) => {
+        const num = Number(val);
+        return isNaN(num) ? undefined : num;
+      },
+      z.number().min(1, {
+        message: s('t_size_schema'),
+      })
+    ),
+    totalStorageArea: z.preprocess(
+      (val) => {
+        const num = Number(val);
+        return isNaN(num) ? undefined : num;
+      },
+      z.number().min(1, {
+        message: s('t_storage_size_schema'),
+      })
+    ),
+    totalSlot: z.preprocess(
+      (val) => {
+        const num = Number(val);
+        return isNaN(num) ? undefined : num;
+      },
+      z.number().min(1, {
+        message: s('t_slot_size_schema'),
+      })
+    ),
     region: z.string().min(1, {
       message: s('t_region_schema'),
     }),
@@ -105,6 +137,7 @@ export function TableCellViewer({
     // Định nghĩa mảng storageArea theo interface
     storageArea: z.array(
       z.object({
+        id: z.string(),
         name: z.string().min(1, {
           message: s('t_name_schema'),
         }),
@@ -114,22 +147,40 @@ export function TableCellViewer({
         status: z.string().min(1, {
           message: s('t_status_schema'),
         }),
-        totalSlots: z.string().min(1, {
-          message: s('t_slot_size_schema'),
-        }),
-        totalRows: z.string().min(1, {
-          message: s('t_row_size_schema'),
-        }),
-        totalFloors: z.string().min(1, {
-          message: s('t_floor_size_schema'),
-        }),
+        totalSlots: z.preprocess(
+          (val) => {
+            const num = Number(val);
+            return isNaN(num) ? undefined : num;
+          },
+          z.number().min(1, {
+            message: s('t_slot_size_schema'),
+          })
+        ),
+        totalRows: z.preprocess(
+          (val) => {
+            const num = Number(val);
+            return isNaN(num) ? undefined : num;
+          },
+          z.number().min(1, {
+            message: s('t_row_size_schema'),
+          })
+        ),
+        totalFloors: z.preprocess(
+          (val) => {
+            const num = Number(val);
+            return isNaN(num) ? undefined : num;
+          },
+          z.number().min(1, {
+            message: s('t_floor_size_schema'),
+          })
+        ),
       })
     ),
   });
 
   type FormSchemaType = z.infer<typeof formSchema>;
-  const form = useForm<FormSchemaType>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<WarehouseFormData>({
+    resolver: zodResolver(formSchema) as any,
     defaultValues: {
       id: '',
       name: '',
@@ -138,10 +189,10 @@ export function TableCellViewer({
       district: '',
       city: '',
       region: '',
-      totalStorageArea: '',
-      totalSlot: '',
+      totalStorageArea: 1,
+      totalSlot: 1,
       status: '',
-      size: '',
+      size: 1,
       storageArea: [],
     },
   });
@@ -170,18 +221,18 @@ export function TableCellViewer({
     }
   }
 
-  async function handleSubmit(values: FormSchemaType) {
-    if (
-      isNaN(Number(values.totalSlot)) ||
-      isNaN(Number(values.totalStorageArea)) ||
-      isNaN(Number(values.size))
-    ) {
-      toast(n('t_action_noti'), {
-        description: n('t_number_invalid'),
-      });
-      return;
-    }
-    if (Number(values.totalSlot) < Number(values.totalStorageArea)) {
+  const handleSubmit = async (values: FormSchemaType) => {
+    // if (
+    //   isNaN(Number(values.totalSlot)) ||
+    //   isNaN(Number(values.totalStorageArea)) ||
+    //   isNaN(Number(values.size))
+    // ) {
+    //   toast(n('t_action_noti'), {
+    //     description: n('t_number_invalid'),
+    //   });
+    //   return;
+    // }
+    if (values.totalSlot < values.totalStorageArea) {
       toast(n('t_action_noti'), {
         description: n('t_slot_invalid'),
       });
@@ -189,18 +240,18 @@ export function TableCellViewer({
     }
 
     // check validation of storageArea array
-    values.storageArea.forEach((item, index) => {
-      if (
-        isNaN(Number(item.totalSlots)) ||
-        isNaN(Number(item.totalRows)) ||
-        isNaN(Number(item.totalFloors))
-      ) {
-        toast(n('t_action_noti'), {
-          description: n('t_number_invalid'),
-        });
-        return;
-      }
-    });
+    // values.storageArea.forEach((item, index) => {
+    //   if (
+    //     isNaN(Number(item.totalSlots)) ||
+    //     isNaN(Number(item.totalRows)) ||
+    //     isNaN(Number(item.totalFloors))
+    //   ) {
+    //     toast(n('t_action_noti'), {
+    //       description: n('t_number_invalid'),
+    //     });
+    //     return;
+    //   }
+    // });
 
     try {
       const formData = new FormData();
@@ -217,14 +268,14 @@ export function TableCellViewer({
       formData.append('status', values.status);
       formData.append('storageArea', JSON.stringify(values.storageArea));
 
-      const data = await putData({
+      const data = await patchData({
         url: paths.manager.warehouse.update,
         body: formData,
         t: t,
       });
       if (data.status === 200) {
-        toast(t('t_action_noti'), {
-          description: t('t_update_desc_noti'),
+        toast(n('t_action_noti'), {
+          description: n('t_update_desc_noti'),
         });
         setTimeout(() => {
           setOpen(false);
@@ -233,11 +284,11 @@ export function TableCellViewer({
       }
     } catch (error) {
       console.error('Failed to update warehouse:', error);
-      toast(t('t_action_failed_noti'), {
-        description: t('t_update_failed_desc_noti'),
+      toast(n('t_action_failed_noti'), {
+        description: n('t_update_failed_desc_noti'),
       });
     }
-  }
+  };
 
   useEffect(() => {
     // Only run if an item was OPENED
@@ -276,9 +327,9 @@ export function TableCellViewer({
         district: detail.district,
         city: detail.city,
         region: detail.region,
-        size: detail.size.toString(),
-        totalStorageArea: detail.totalStorageArea.toString(),
-        totalSlot: detail.totalSlot.toString(),
+        size: detail.size,
+        totalStorageArea: detail.totalStorageArea,
+        totalSlot: detail.totalSlot,
         status: detail.status,
         storageArea: detail.storageArea,
       });
@@ -396,7 +447,13 @@ export function TableCellViewer({
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormControl>
-                      <Input {...field} placeholder={t('c_total_slots')} />
+                      <Input
+                        {...field}
+                        placeholder={t('c_total_slots')}
+                        type="number"
+                        min={1}
+                        step={1}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -412,7 +469,13 @@ export function TableCellViewer({
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormControl>
-                      <Input {...field} placeholder={t('c_total_rows')} />
+                      <Input
+                        {...field}
+                        placeholder={t('c_total_rows')}
+                        type="number"
+                        min={1}
+                        step={1}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -428,7 +491,13 @@ export function TableCellViewer({
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormControl>
-                      <Input {...field} placeholder={t('c_total_floors')} />
+                      <Input
+                        {...field}
+                        placeholder={t('c_total_floors')}
+                        type="number"
+                        min={1}
+                        step={1}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -481,10 +550,7 @@ export function TableCellViewer({
                     render={({ field }) => (
                       <FormItem className="flex-1">
                         <FormControl>
-                          <Input
-                            {...field}
-                            placeholder={t('t_name_placeholder')}
-                          />
+                          <Input {...field} placeholder={t('t_name')} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -607,6 +673,9 @@ export function TableCellViewer({
                           <Input
                             {...field}
                             placeholder={t('t_size_placeholder')}
+                            type="number"
+                            min={0.1}
+                            step={0.1}
                           />
                         </FormControl>
                         <FormMessage />
@@ -625,6 +694,9 @@ export function TableCellViewer({
                             <Input
                               {...field}
                               placeholder={t('t_total_storage_area')}
+                              type="number"
+                              min={1}
+                              step={1}
                             />
                           </FormControl>
                           <FormMessage />
@@ -637,7 +709,13 @@ export function TableCellViewer({
                         <FormItem>
                           <Label htmlFor="totalSlot">{t('t_total_slot')}</Label>
                           <FormControl>
-                            <Input {...field} placeholder={t('t_total_slot')} />
+                            <Input
+                              {...field}
+                              placeholder={t('t_total_slot')}
+                              type="number"
+                              min={1}
+                              step={1}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

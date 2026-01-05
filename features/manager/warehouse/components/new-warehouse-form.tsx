@@ -245,11 +245,11 @@ export const NewWarehouseForm = ({
       });
   };
 
-  useEffect(() => {
-    console.log('city', cityResponse);
-    console.log('district', districtResponse);
-    console.log('ward', wardResponse);
-  }, [cityResponse, wardResponse, districtResponse]);
+  // useEffect(() => {
+  //   console.log('city', cityResponse);
+  //   console.log('district', districtResponse);
+  //   console.log('ward', wardResponse);
+  // }, [cityResponse, wardResponse, districtResponse]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

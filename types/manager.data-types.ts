@@ -268,9 +268,9 @@ export interface warehouseDetail {
   ward: string;
   district: string;
   city: string;
-  size: string;
-  totalStorageArea: string;
-  totalSlot: string;
+  size: number;
+  totalStorageArea: number;
+  totalSlot: number;
   region: string;
   status: string;
   storageArea: storageAreaDetail[];
@@ -278,10 +278,11 @@ export interface warehouseDetail {
   updatedAt?: Date;
 }
 export interface storageAreaDetail {
+  id: string;
   name: string;
   type: string;
   status: string;
-  totalSlots: string;
-  totalFloors: string;
-  totalRows: string;
+  totalSlots: number;
+  totalFloors: number;
+  totalRows: number;
 }

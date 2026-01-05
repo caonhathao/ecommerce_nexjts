@@ -39,7 +39,6 @@
     "warehouse_drawer": {
       "t_warehouse_desc": "Thông tin chi tiết nhà kho",
       "t_name": "Tên kho",
-      "t_name_placehoder": "Tên kho",
       "t_warehouse_id": "Mã kho hàng",
       "t_address": "Địa chỉ",
       "t_street": "Tên đường, số nhà, số lô",
@@ -80,7 +79,7 @@
       "c_hazardous": "Kho vật liệu nguy hiểm",
 
       "t_cancel_action": "Hủy",
-      "t_submit_action": "Tạo mới"
+      "t_submit_action": "Cập nhật"
     },
     "warehouse_schema": {
       "t_name_schema": "Tên không được để trống",
@@ -95,7 +94,9 @@
       "t_row_size_schema": "Tổng số hàng không được để trống",
       "t_floor_size_schema": "Tổng số tầng không được để trống",
       "t_status_schema": "Trạng thái không được để trống",
-      "t_slot_size_error_message": "Tổng số slot quá nhỏ so với số phân vùng"
+      "t_slot_size_error_message": "Tổng số slot quá nhỏ so với số phân vùng",
+      "t_type_schema": "Phân loại không hợp lệ",
+      "t_type_data_schema": "Sai định dạng dữ liệu"
     }
   }
 }
