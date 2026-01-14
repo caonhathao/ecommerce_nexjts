@@ -26,6 +26,14 @@ interface PaginatedOptions<T> {
   code?: StatusCode;
 }
 
+interface CursorPaginatedOptions<T> {
+  data?: T;
+  nextCursor: string | null | undefined;
+  message?: string;
+  code?: StatusCode;
+  meta?: Record<string, any>;
+}
+
 interface ErrorOptions {
   message?: string;
   code?: StatusCode;
@@ -70,6 +78,27 @@ export class ResponseFactory {
           totalPages,
           hasNextPage: page < totalPages,
           hasPrevPage: page > 1,
+        },
+      },
+    });
+  }
+
+  static cursorPaginated<T = null>({
+    data,
+    nextCursor,
+    message = 'success',
+    code = HttpStatus.OK,
+    meta = {},
+  }: CursorPaginatedOptions<T>): ApiResponse<T> {
+    return ResponseFactory.success({
+      data,
+      message,
+      code,
+      meta: {
+        ...meta,
+        cursor: {
+          nextCursor: nextCursor || null,
+          hasNextPage: !!nextCursor,
         },
       },
     });

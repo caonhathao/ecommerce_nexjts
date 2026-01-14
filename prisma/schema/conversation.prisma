@@ -1,95 +1,78 @@
-//================== Prisma Schema =================//
-// File: prisma/conversation.prisma
-// Schema for Conversation models in Prisma
-//==================================================//
-
-//=================== ENUMS ===================//
-enum ConversationType {
-    ORDER_INQUIRY // User <-> Seller (Linked to a specific product/order?)
-    SUPPORT_TICKET // User/Seller <-> Admin
-    GENERAL // General chat
-}
-
-enum ConversationStatus {
-    OPEN
-    RESOLVED
-    ARCHIVED
-}
-
-enum MessageType {
-    TEXT
-    IMAGE
-    SYSTEM
-    PRODUCT_CARD
-    ORDER_CARD
-}
-
-enum MessageRole {
-    USER
-    SHOP
-    ADMIN
-}
-
-//=================== MODELS ===================//
 model Conversation {
-    id      String             @id @default(uuid()) @db.Uuid
-    Shop    Shop?              @relation(fields: [shopId], references: [id])
-    shopId  String?            @db.Uuid
-    type    ConversationType   @default(GENERAL)
-    status  ConversationStatus @default(OPEN)
-    subject String?
+  id           String                    @id @default(uuid()) @db.Uuid
+  shopId       String?                   @db.Uuid
+  type         ConversationType          @default(GENERAL)
+  status       ConversationStatus        @default(OPEN)
+  subject      String?
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @default(now()) @updatedAt
+  Shop         Shop?                     @relation(fields: [shopId], references: [id])
+  participants ConversationParticipant[]
+  messages     Message[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now()) @updatedAt
-
-    participants ConversationParticipant[]
-    messages     Message[]
-
-    @@index([updatedAt])
-    @@map("conversation")
+  @@index([updatedAt])
+  @@map("conversation")
 }
 
 model ConversationParticipant {
-    id             String @id @default(uuid()) @db.Uuid
-    conversationId String @db.Uuid
+  id             String       @id @default(uuid()) @db.Uuid
+  conversationId String       @db.Uuid
+  userId         String?      @db.Uuid
+  shopId         String?      @db.Uuid
+  lastReadAt     DateTime?
+  joinedAt       DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  shop           Shop?        @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  user           User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    // logic: A participant is EITHER a User (Customer/Admin) OR a Shop (Seller)
-    userId     String?   @db.Uuid
-    shopId     String?   @db.Uuid
-    lastReadAt DateTime?
-    joinedAt   DateTime  @default(now())
-
-    conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-    user         User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-    shop         Shop?        @relation(fields: [shopId], references: [id], onDelete: Cascade)
-
-    @@unique([conversationId, userId, shopId])
-    @@map("conversation_participant")
+  @@unique([conversationId, userId, shopId])
+  @@map("conversation_participant")
 }
 
 model Message {
-    id             String      @id @default(uuid()) @db.Uuid
-    conversationId String      @db.Uuid
-    senderRole     MessageRole @default(USER)
-    senderUserId   String?     @db.Uuid
-    senderShopId   String?     @db.Uuid
+  id               String       @id @default(uuid()) @db.Uuid
+  conversationId   String       @db.Uuid
+  senderRole       MessageRole  @default(USER)
+  senderUserId     String?      @db.Uuid
+  senderShopId     String?      @db.Uuid
+  type             MessageType  @default(TEXT)
+  content          String
+  attachments      Json?
+  relatedProductId String?      @db.Uuid
+  relatedOrderId   String?      @db.Uuid
+  createdAt        DateTime     @default(now())
+  conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  relatedOrder     Order?       @relation(fields: [relatedOrderId], references: [id])
+  relatedProduct   Product?     @relation(fields: [relatedProductId], references: [id])
+  senderShop       Shop?        @relation(fields: [senderShopId], references: [id])
+  senderUser       User?        @relation("MessageFromUser", fields: [senderUserId], references: [id])
 
-    type        MessageType @default(TEXT)
-    content     String
-    attachments Json? // Array of { url, type, name }
+  @@index([conversationId, createdAt])
+  @@map("message")
+}
 
-    relatedProductId String? @db.Uuid
-    relatedOrderId   String? @db.Uuid
+enum ConversationType {
+  ORDER_INQUIRY
+  SUPPORT_TICKET
+  GENERAL
+}
 
-    relatedProduct Product? @relation(fields: [relatedProductId], references: [id])
-    relatedOrder   Order?   @relation(fields: [relatedOrderId], references: [id])
+enum ConversationStatus {
+  OPEN
+  RESOLVED
+  ARCHIVED
+}
 
-    createdAt DateTime @default(now())
+enum MessageType {
+  TEXT
+  IMAGE
+  SYSTEM
+  PRODUCT_CARD
+  ORDER_CARD
+}
 
-    conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-    senderUser   User?        @relation("MessageFromUser", fields: [senderUserId], references: [id], onDelete: SetNull)
-    senderShop   Shop?        @relation(fields: [senderShopId], references: [id], onDelete: SetNull)
-
-    @@index([conversationId, createdAt])
-    @@map("message")
+enum MessageRole {
+  USER
+  SHOP
+  ADMIN
 }

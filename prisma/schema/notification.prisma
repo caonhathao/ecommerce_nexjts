@@ -1,44 +1,60 @@
-//================== Prisma Schema =================//
-// File: prisma/notification.prisma
-// Schema for Notification models in Prisma
-//==================================================//
-
-//=================== ENUMS ===================//
 enum NotificationType {
-    SYSTEM
-    ORDER_UPDATE
-    PAYMENT
-    SECURITY
-    SHOP_ACTIVITY
-    PROMOTION
-    WISHLIST
+  SYSTEM
+  SECURITY
+  VERIFICATION
+  MAINTENANCE
+
+  ORDER_CREATED
+  ORDER_CONFIRMED
+  ORDER_SHIPPED
+  ORDER_DELIVERED
+  ORDER_CANCELLED
+
+  PAYMENT_SUCCESS
+  PAYMENT_FAILED
+  REFUND_PROCESSED
+  PAYOUT_COMPLETED
+
+  REVIEW_RECEIVED
+  QUESTION_ANSWERED
+  MESSAGE
+
+  SHOP_ACTIVITY
+  INVENTORY_LOW
+
+  PROMOTION
+  WISHLIST_PRICE_DROP
+  ABANDONED_CART
 }
 
 enum NotificationRole {
-    BUYER
-    SELLER
-    ADMIN
+  BUYER
+  SELLER
+  ADMIN
+  SUPPORT
 }
 
-//=================== MODELS ===================//
 model Notification {
-    id            String           @id @default(uuid()) @db.Uuid
-    userId        String           @db.Uuid
-    recipientRole NotificationRole @default(BUYER)
-    type          NotificationType
-    referenceId   String?
-    referenceType String?
+  id            String           @id @default(uuid()) @db.Uuid
+  userId        String           @db.Uuid
+  recipientRole NotificationRole @default(BUYER)
+  type          NotificationType
 
-    title    String
-    body     String
-    image    String?
-    metadata Json?
+  referenceId   String?
+  referenceType String?
 
-    isRead    Boolean  @default(false)
-    createdAt DateTime @default(now())
+  title    String
+  body     String
+  image    String?
+  metadata Json?
 
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([userId, recipientRole, isRead])
-    @@map("notification")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, recipientRole, isRead])
+  @@index([createdAt])
+  @@map("notification")
 }
