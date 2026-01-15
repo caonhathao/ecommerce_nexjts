@@ -67,7 +67,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import SearchBar from '../../../features/manager/_components/search-bar';
 import TabTableView from '../../../features/manager/_components/tab-table-view';
-import { handleDelete } from '../../../features/manager/category/funcs/funcs';
+import { handleDelete } from '@/features/manager/category/funcs/funcs';
 
 const CategoryManagePage = () => {
   const [data, setData] = React.useState<categoryDataResponse | null>(null);
@@ -173,7 +173,7 @@ const CategoryManagePage = () => {
         header: t('t_is_active'),
         cell: ({ row }) => (
           <Badge variant="outline" className="text-muted-foreground px-1.5">
-            {row.original.isActive === false ? (
+            {!row.original.isActive ? (
               <FiXCircle className="fill-red-500 dark:fill-red-400" />
             ) : (
               <FaCheckCircle className="fill-green-500 dark:fill-green-400" />

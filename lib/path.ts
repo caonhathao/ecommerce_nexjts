@@ -87,4 +87,8 @@ export const paths = {
     fetch_all: '/api/product/query',
     accept_invite: (token: string) => '/shop/accept-invite/' + token,
   },
+
+  notifications: {
+    default: '/api/notification',
+  },
 };
