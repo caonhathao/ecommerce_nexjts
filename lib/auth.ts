@@ -8,9 +8,9 @@ import { headers } from 'next/headers';
 import { nextCookies } from 'better-auth/next-js';
 import { getUserNameOrEmailPrefix } from '@/lib/utils';
 import { NotificationRole, NotificationType } from '@/lib/generated/prisma';
-import { sendNotification } from '@/features/notification/controller/notification.action';
+import { sendNotification } from '@/features/notification/server/controller/notification.action';
 
-import { ChannelType } from '@/features/notification/server/notification.type';
+import { ChannelType } from '@/features/notification/types/notification.type';
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {

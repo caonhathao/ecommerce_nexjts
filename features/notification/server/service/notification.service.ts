@@ -1,4 +1,4 @@
-import { GetNotificationsDTO } from '@/features/notification/notification.dto';
+import { GetNotificationsDTO } from '@/features/notification/types/notification.dto';
 import { ServiceError } from '@/lib/service-error';
 // use clean without server-only for worker compatibility
 import { prisma_clean } from '@/lib/queue/prisma-clean';

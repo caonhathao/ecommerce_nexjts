@@ -3,10 +3,10 @@ import {
   GetNotificationsDTO,
   NotificationItemDTO,
   NotificationMeta,
-} from '../notification.dto';
+} from '../types/notification.dto';
 import { paths } from '@/lib/path';
 
-export const notificationApi = {
+export const notificationClientApi = {
   // (Infinite Scroll)
   getAll: async (params: GetNotificationsDTO) => {
     return fetchApi<NotificationItemDTO[], NotificationMeta>(

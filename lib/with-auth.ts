@@ -10,10 +10,12 @@ export function withAuth(
     const userId = session?.user?.id;
 
     if (!userId) {
-      return ResponseFactory.error({
-        message: 'Unauthorized',
-        code: 401,
-      });
+      return ResponseFactory.toNextResponse(
+        ResponseFactory.error({
+          message: 'Unauthorized',
+          code: 401,
+        })
+      );
     }
 
     return handler(userId, request);

@@ -10,7 +10,7 @@ import {
   NotificationPayload,
   OtpPayload,
   PasswordResetPayload,
-} from './notification.type';
+} from '../../types/notification.type';
 import { NotificationType } from '@/lib/generated/prisma';
 
 export class EmailSender implements INotificationSender {

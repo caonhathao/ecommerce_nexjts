@@ -1,6 +1,6 @@
 import { Queue } from 'bullmq';
 import { connection } from '@/lib/queue/ioredis-connection';
-import { NotificationPayload } from '@/features/notification/server/notification.type';
+import { NotificationPayload } from '@/features/notification/types/notification.type';
 
 export const NOTIFICATION_QUEUE_NAME = 'notification-queue';
 

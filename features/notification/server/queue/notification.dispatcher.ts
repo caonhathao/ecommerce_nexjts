@@ -1,5 +1,8 @@
 import { EmailSender, InAppSender } from './notification.senders';
-import { INotificationSender, NotificationPayload } from './notification.type';
+import {
+  INotificationSender,
+  NotificationPayload,
+} from '../../types/notification.type';
 
 export class NotificationDispatcher {
   private senders: INotificationSender[];

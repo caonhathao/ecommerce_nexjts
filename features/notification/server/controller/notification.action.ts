@@ -1,7 +1,7 @@
 'use server';
 
-import { notificationQueue } from '../queue';
-import { NotificationPayload } from '../server/notification.type';
+import { notificationQueue } from '../queue/notification.queue';
+import { NotificationPayload } from '../../types/notification.type';
 
 /**
  * Enqueues a notification to be processed by the worker.

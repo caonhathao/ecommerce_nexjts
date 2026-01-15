@@ -7,11 +7,11 @@ import {
   useQueryClient,
   InfiniteData,
 } from '@tanstack/react-query';
-import { notificationApi } from '@/features/notification/controller/notification.api';
+import { notificationClientApi } from '@/features/notification/client-api/notification.client-api';
 import {
   NotificationItemDTO,
   NotificationListResponse,
-} from '@/features/notification/notification.dto';
+} from '@/features/notification/types/notification.dto';
 
 /**
  * Define centralized query keys to ensure consistent cache management.
@@ -52,7 +52,7 @@ export const useNotifications = (
     initialPageParam: undefined as string | undefined,
 
     queryFn: async ({ pageParam }) => {
-      const res = await notificationApi.getAll({
+      const res = await notificationClientApi.getAll({
         role,
         limit: 10,
         cursor: pageParam as string | undefined,
@@ -82,7 +82,7 @@ export const useNotifications = (
   const unreadCount = data?.pages[0]?.meta?.unreadCount ?? 0;
 
   const markReadMutation = useMutation({
-    mutationFn: (id: string) => notificationApi.markRead(id),
+    mutationFn: (id: string) => notificationClientApi.markRead(id),
 
     /**
      * Optimistic Update Strategy:
@@ -142,7 +142,7 @@ export const useNotifications = (
   });
 
   const markAllAsReadMutation = useMutation({
-    mutationFn: () => notificationApi.markAllRead(role),
+    mutationFn: () => notificationClientApi.markAllRead(role),
 
     onMutate: async () => {
       await queryClient.cancelQueries({

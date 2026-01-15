@@ -14,7 +14,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
-import { NotificationItemDTO } from '@/features/notification/notification.dto';
+import { NotificationItemDTO } from '@/features/notification/types/notification.dto';
 import { useNotifications } from '@/features/notification/hooks/use-notifications';
 
 interface NotificationBellProps {
